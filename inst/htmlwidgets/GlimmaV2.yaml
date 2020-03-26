@@ -1,0 +1,9 @@
+# (uncomment to add a dependency)
+ dependencies:
+  - name: vega
+    version: 1.0
+    src: htmlwidgets/lib/vega
+    script:
+      - vega.js
+    stylesheet:
+      - vega_plots.css
