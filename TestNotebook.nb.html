@@ -43971,187 +43971,38 @@ color: rgb(3, 106, 7);
 </script>
 <script>HTMLWidgets.widget({
 
-  name: 'glimmaWidget',
+  name: 'GlimmaV2',
 
   type: 'output',
 
-  factory: function (el, width, height) {
+  factory: function(el, width, height) {
 
     // TODO: define shared variables for this instance
-
+ 
     return {
 
-      renderValue: function (x) {
-
-        var elId = '#' + el.id;
+      renderValue: function(x) {
 
         console.log(x);
 
         var widget = document.getElementById(el.id);
-
-        // set up containers
         var plotContainer = document.createElement("div");
         plotContainer.setAttribute("id", "plotContainer");
-
         var controlContainer = document.createElement("div");
         controlContainer.setAttribute("id", "controlContainer");
-
         widget.appendChild(plotContainer);
         widget.appendChild(controlContainer);
 
 
         var view;
-        var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
+        mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
 
+        // TODO: extract this data from dataframe
+        dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
+        sampleList = ["lane", "genotype"];
 
-        function createSpec(x, y) {
-          return {
-            "$schema": "https://vega.github.io/schema/vega/v5.json",
-            "description": "Testing ground for GlimmaV2",
-            "width": width * 0.5,
-            "height": height * 0.6,
-            "padding": 0,
-            "signals":
-              [
-                {
-                  "name": "x_axis",
-                  "value": "dim1",
-                  "bind": {
-                    "input": "select", "options":
-                      ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"]
-                  }
-                },
-                {
-                  "name": "y_axis",
-                  "value": "dim2",
-                  "bind": {
-                    "input": "select", "options":
-                      ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"]
-                  }
-                },
-                {
-                  "name": "colour_by",
-                  "value": "lane",
-                  "bind": {
-                    "input": "select", "options":
-                      ["lane", "genotype"]
-                  }
-                },
-              ],
-            "data": [
-              {
-                "name": "source",
-                "values": mdsData,
-                "transform": [{
-                  "type": "formula",
-                  "expr": "datum.x",
-                  "as": "tooltip"
-                }]
-              }
-            ],
-            "scales": [
-              {
-                "name": "x",
-                "type": "linear",
-                "round": true,
-                "nice": true,
-                "zero": true,
-                "domain": { "data": "source", "field": { "signal": "x_axis" } },
-                "range": "width"
-              },
-              {
-                "name": "y",
-                "type": "linear",
-                "round": true,
-                "nice": true,
-                "zero": true,
-                "domain": { "data": "source", "field": { "signal": "y_axis" } },
-                "range": "height"
-              },
-              {
-                "name": "size",
-                "type": "linear",
-                "round": true,
-                "nice": false,
-                "zero": true,
-                "domain": { "data": "source", "field": "libsize" },
-                "range": [4, 361]
-              },
-              {
-                "name": "color",
-                "type": "ordinal",
-                "domain": { "data": "source", "field": { "signal": "colour_by" } },
-                "range": { "scheme": "category10" }
-              }
-            ],
-
-            "axes": [
-              {
-                "scale": "x",
-                "grid": true,
-                "domain": false,
-                "orient": "bottom",
-                "tickCount": 5,
-                "title": { "signal": "x_axis" }
-              },
-              {
-                "scale": "y",
-                "grid": true,
-                "domain": false,
-                "orient": "left",
-                "titlePadding": 5,
-                "title": { "signal": "y_axis" }
-              }
-            ],
-
-            "legends": [
-              {
-                "size": "size",
-                "title": "Library Size",
-                "format": "s",
-                "symbolStrokeColor": "#4682b4",
-                "symbolStrokeWidth": 2,
-                "symbolOpacity": 0.7,
-                "symbolType": "circle"
-              },
-              {
-                "fill": "color",
-                "title": "Colour",
-                "symbolStrokeColor": "#4682b4",
-                "symbolStrokeWidth": 2,
-                "symbolOpacity": 0.7,
-                "symbolType": "circle"
-              }
-            ],
-
-            "marks": [
-              {
-                "name": "marks",
-                "type": "symbol",
-                "from": { "data": "source" },
-                "enter": {
-                  "tooltip": { "field": "tooltip" }
-                },
-                "encode": {
-                  "update": {
-                    "x": { "scale": "x", "field": { "signal": "x_axis" } },
-                    "y": { "scale": "y", "field": { "signal": "y_axis" } },
-                    "size": { "scale": "size", "field": "libsize" },
-                    "shape": { "value": "circle" },
-                    "strokeWidth": { "value": 2 },
-                    "opacity": { "value": 0.7 },
-                    "stroke": { "value": "#4682b4" },
-                    "fill": { "scale": "color", "field": { "signal": "colour_by" } },
-                    "tooltip": { "field": "tooltip" }
-                  }
-                }
-              }
-            ]
-          };
-        }
-
-
-        render(createSpec("dim5", "dim6"));
+        render(createVegaSpec(dimList, sampleList, mdsData,
+                width, height));
 
         // plotContainer as the container to the view
         function render(spec) {
@@ -44163,7 +44014,8 @@ color: rgb(3, 106, 7);
           });
           return view.runAsync();
         }
-
+        
+        // save to PNG button
         var downloadButton = document.createElement("BUTTON");
         downloadButton.setAttribute("id", "savePNGBtn");
         downloadButton.innerHTML = "Save to PNG";
@@ -44179,20 +44031,19 @@ color: rgb(3, 106, 7);
           }
         controlContainer.appendChild(downloadButton);
 
-
         // modify the vega-bound control elements
         bindNames = document.getElementsByClassName("vega-bind-name");
         for (i = 0; i < bindNames.length; i++) {
           bindNames[i].innerHTML += ":";
         }
-
+        // color_by input on next line
         binds = document.getElementsByClassName("vega-bind");
         binds[2].className += " display-block";
 
 
       },
 
-      resize: function (width, height) {
+      resize: function(width, height) {
 
         // TODO: code to re-render the widget with a new size
 
@@ -44202,8 +44053,144 @@ color: rgb(3, 106, 7);
   }
 });
 
+// parametrise a vega graph encoding
+function createVegaSpec(dimList, sampleList, mdsData, width, height) {
+  return {
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "Testing ground for GlimmaV2",
+    "width": width * 0.9,
+    "height": height * 0.6,
+    "padding": 0,
+    "signals":
+      [
+        {
+          "name": "x_axis",
+          "value": "dim1",
+          "bind": { "input": "select", "options": dimList }
+        },
+        {
+          "name": "y_axis",
+          "value": "dim2",
+          "bind": { "input": "select", "options": dimList }
+        },
+        {
+          "name": "colour_by",
+          "value": "lane",
+          "bind": { "input": "select", "options": sampleList }
+        },
+      ],
+    "data": 
+      [
+        {
+          "name": "source",
+          "values": mdsData,
+          "transform": [{
+            "type": "formula",
+            "expr": "datum.x",
+            "as": "tooltip"
+          }]
+        }
+      ],
+    "scales": [
+      {
+        "name": "x",
+        "type": "linear",
+        "round": true,
+        "nice": true,
+        "zero": true,
+        "domain": { "data": "source", "field": { "signal": "x_axis" } },
+        "range": "width"
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "round": true,
+        "nice": true,
+        "zero": true,
+        "domain": { "data": "source", "field": { "signal": "y_axis" } },
+        "range": "height"
+      },
+      {
+        "name": "size",
+        "type": "linear",
+        "round": true,
+        "nice": false,
+        "zero": true,
+        "domain": { "data": "source", "field": "libsize" },
+        "range": [4, 361]
+      },
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": { "data": "source", "field": { "signal": "colour_by" } },
+        "range": { "scheme": "category10" }
+      }
+    ],
 
-</script>
+    "axes": [
+      {
+        "scale": "x",
+        "grid": true,
+        "domain": false,
+        "orient": "bottom",
+        "tickCount": 5,
+        "title": { "signal": "x_axis" }
+      },
+      {
+        "scale": "y",
+        "grid": true,
+        "domain": false,
+        "orient": "left",
+        "titlePadding": 5,
+        "title": { "signal": "y_axis" }
+      }
+    ],
+
+    "legends": [
+      {
+        "size": "size",
+        "title": "Library Size",
+        "format": "s",
+        "symbolStrokeColor": "#4682b4",
+        "symbolStrokeWidth": 2,
+        "symbolOpacity": 0.7,
+        "symbolType": "circle"
+      },
+      {
+        "fill": "color",
+        "title": "Colour",
+        "symbolStrokeColor": "#4682b4",
+        "symbolStrokeWidth": 2,
+        "symbolOpacity": 0.7,
+        "symbolType": "circle"
+      }
+    ],
+
+    "marks": [
+      {
+        "name": "marks",
+        "type": "symbol",
+        "from": { "data": "source" },
+        "enter": {
+          "tooltip": { "field": "tooltip" }
+        },
+        "encode": {
+          "update": {
+            "x": { "scale": "x", "field": { "signal": "x_axis" } },
+            "y": { "scale": "y", "field": { "signal": "y_axis" } },
+            "size": { "scale": "size", "field": "libsize" },
+            "shape": { "value": "circle" },
+            "strokeWidth": { "value": 2 },
+            "opacity": { "value": 0.7 },
+            "stroke": { "value": "#4682b4" },
+            "fill": { "scale": "color", "field": { "signal": "colour_by" } },
+            "tooltip": { "field": "tooltip" }
+          }
+        }
+      }
+    ]
+  };
+}</script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -44406,14 +44393,17 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShsaW1tYSlcbmxpYnJhcnkoR2xpbW1hKVxubGlicmFyeShlZGdlUilcbmBgYCJ9 -->
-<pre class="r"><code>library(limma)
-library(Glimma)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShsaW1tYSlcbmBgYCJ9 -->
+<pre class="r"><code>library(limma)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlOlxucGFja2FnZSDigJhlZGdlUuKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNi4xIFxuIn0= -->
+<pre><code>Warning message:
+package ‘edgeR’ was built under R version 3.6.1 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShHbGltbWEpXG5saWJyYXJ5KGVkZ2VSKVxuYGBgIn0= -->
+<pre class="r"><code>library(Glimma)
 library(edgeR)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDjpLzjuLFlZGdlUuOkvOO4siB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNi4xXG4ifQ== -->
-<pre><code>package 㤼㸱edgeR㤼㸲 was built under R version 3.6.1</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -44579,28 +44569,19 @@ points</code></pre>
 library(GlimmaV2)
 GlimmaV2(plotType=&quot;MDS&quot;, data = list(mdsData = points))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdodG1sdG9vbHMnOlxuICBtZXRob2QgICAgICAgICAgICAgICBmcm9tICAgICAgICAgXG4gIHByaW50Lmh0bWwgICAgICAgICAgIHRvb2xzOnJzdHVkaW9cbiAgcHJpbnQuc2hpbnkudGFnICAgICAgdG9vbHM6cnN0dWRpb1xuICBwcmludC5zaGlueS50YWcubGlzdCB0b29sczpyc3R1ZGlvXG5SZWdpc3RlcmVkIFMzIG1ldGhvZCBvdmVyd3JpdHRlbiBieSAnaHRtbHdpZGdldHMnOlxuICBtZXRob2QgICAgICAgICAgIGZyb20gICAgICAgICBcbiAgcHJpbnQuaHRtbHdpZGdldCB0b29sczpyc3R1ZGlvXG5pbmNvbXBsZXRlIGZpbmFsIGxpbmUgZm91bmQgb24gJ0M6L1VzZXJzL2hrYXJpL09uZURyaXZlL29uZW5vdGUvUi93aW4tbGlicmFyeS8zLjYvZ2xpbW1hV2lkZ2V0L2h0bWx3aWRnZXRzL2dsaW1tYVdpZGdldC55YW1sJ2luY29tcGxldGUgZmluYWwgbGluZSBmb3VuZCBvbiAnQzovVXNlcnMvaGthcmkvT25lRHJpdmUvb25lbm90ZS9SL3dpbi1saWJyYXJ5LzMuNi9nbGltbWFXaWRnZXQvaHRtbHdpZGdldHMvZ2xpbW1hV2lkZ2V0LnlhbWwnaW5jb21wbGV0ZSBmaW5hbCBsaW5lIGZvdW5kIG9uICdDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L2dsaW1tYVdpZGdldC9odG1sd2lkZ2V0cy9nbGltbWFXaWRnZXQueWFtbCdcbiJ9 -->
-<pre><code>Registered S3 methods overwritten by &#39;htmltools&#39;:
-  method               from         
-  print.html           tools:rstudio
-  print.shiny.tag      tools:rstudio
-  print.shiny.tag.list tools:rstudio
-Registered S3 method overwritten by &#39;htmlwidgets&#39;:
-  method           from         
-  print.htmlwidget tools:rstudio
-incomplete final line found on &#39;C:/Users/hkari/OneDrive/onenote/R/win-library/3.6/glimmaWidget/htmlwidgets/glimmaWidget.yaml&#39;incomplete final line found on &#39;C:/Users/hkari/OneDrive/onenote/R/win-library/3.6/glimmaWidget/htmlwidgets/glimmaWidget.yaml&#39;incomplete final line found on &#39;C:/Users/hkari/OneDrive/onenote/R/win-library/3.6/glimmaWidget/htmlwidgets/glimmaWidget.yaml&#39;</code></pre>
-<!-- rnb-output-end -->
-
-<!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6Imh0bWx3aWRnZXRzIiwicGFja2FnZSI6W10sInNjcmlwdCI6Imh0bWx3aWRnZXRzLmpzIiwic3JjIjp7ImZpbGUiOiJDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L2h0bWx3aWRnZXRzL3d3dyJ9LCJzdHlsZXNoZWV0IjpbXSwidmVyc2lvbiI6IjEuNS4xIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6W10sIm5hbWUiOiJ2ZWdhIiwicGFja2FnZSI6W10sInNjcmlwdCI6InZlZ2EuanMiLCJzcmMiOnsiZmlsZSI6IkM6L1VzZXJzL2hrYXJpL09uZURyaXZlL29uZW5vdGUvUi93aW4tbGlicmFyeS8zLjYvZ2xpbW1hV2lkZ2V0L2h0bWx3aWRnZXRzL2xpYi92ZWdhIn0sInN0eWxlc2hlZXQiOiJ2ZWdhX3Bsb3RzLmNzcyIsInZlcnNpb24iOiIxIn0seyJhbGxfZmlsZXMiOmZhbHNlLCJhdHRhY2htZW50IjpbXSwiaGVhZCI6W10sIm1ldGEiOltdLCJuYW1lIjoiZ2xpbW1hV2lkZ2V0LWJpbmRpbmciLCJwYWNrYWdlIjpbXSwic2NyaXB0IjoiZ2xpbW1hV2lkZ2V0LmpzIiwic3JjIjp7ImZpbGUiOiJDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L2dsaW1tYVdpZGdldC9odG1sd2lkZ2V0cyJ9LCJzdHlsZXNoZWV0IjpbXSwidmVyc2lvbiI6IjAuMC4wLjkwMDAifV0sIm1ldGFkYXRhIjp7ImNsYXNzZXMiOlsiZ2xpbW1hV2lkZ2V0IiwiaHRtbHdpZGdldCJdLCJzaXppbmdQb2xpY3kiOnsiYnJvd3NlciI6eyJkZWZhdWx0SGVpZ2h0IjpbXSwiZGVmYXVsdFdpZHRoIjpbXSwiZXh0ZXJuYWwiOltmYWxzZV0sImZpbGwiOltmYWxzZV0sInBhZGRpbmciOltdfSwiZGVmYXVsdEhlaWdodCI6W10sImRlZmF1bHRXaWR0aCI6W10sImtuaXRyIjp7ImRlZmF1bHRIZWlnaHQiOltdLCJkZWZhdWx0V2lkdGgiOltdLCJmaWd1cmUiOlt0cnVlXX0sInBhZGRpbmciOltdLCJ2aWV3ZXIiOnsiZGVmYXVsdEhlaWdodCI6W10sImRlZmF1bHRXaWR0aCI6W10sImZpbGwiOlt0cnVlXSwicGFkZGluZyI6W10sInBhbmVIZWlnaHQiOltdLCJzdXBwcmVzcyI6W2ZhbHNlXX0sInZpZXdlci5maWxsIjpbdHJ1ZV0sInZpZXdlci5wYWRkaW5nIjpbMF19fX0= -->
+<p>
+<!-- rnb-htmlwidget-begin eyJkZXBlbmRlbmNpZXMiOlt7ImFsbF9maWxlcyI6dHJ1ZSwiYXR0YWNobWVudCI6W10sImhlYWQiOltdLCJtZXRhIjpbXSwibmFtZSI6Imh0bWx3aWRnZXRzIiwicGFja2FnZSI6W10sInNjcmlwdCI6Imh0bWx3aWRnZXRzLmpzIiwic3JjIjp7ImZpbGUiOiJDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L2h0bWx3aWRnZXRzL3d3dyJ9LCJzdHlsZXNoZWV0IjpbXSwidmVyc2lvbiI6IjEuNS4xIn0seyJhbGxfZmlsZXMiOnRydWUsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6W10sIm5hbWUiOiJ2ZWdhIiwicGFja2FnZSI6W10sInNjcmlwdCI6InZlZ2EuanMiLCJzcmMiOnsiZmlsZSI6IkM6L1VzZXJzL2hrYXJpL09uZURyaXZlL29uZW5vdGUvUi93aW4tbGlicmFyeS8zLjYvR2xpbW1hVjIvaHRtbHdpZGdldHMvbGliL3ZlZ2EifSwic3R5bGVzaGVldCI6InZlZ2FfcGxvdHMuY3NzIiwidmVyc2lvbiI6IjEifSx7ImFsbF9maWxlcyI6ZmFsc2UsImF0dGFjaG1lbnQiOltdLCJoZWFkIjpbXSwibWV0YSI6W10sIm5hbWUiOiJHbGltbWFWMi1iaW5kaW5nIiwicGFja2FnZSI6W10sInNjcmlwdCI6IkdsaW1tYVYyLmpzIiwic3JjIjp7ImZpbGUiOiJDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L0dsaW1tYVYyL2h0bWx3aWRnZXRzIn0sInN0eWxlc2hlZXQiOltdLCJ2ZXJzaW9uIjoiMC4wLjAuOTAwMCJ9XSwibWV0YWRhdGEiOnsiY2xhc3NlcyI6WyJHbGltbWFWMiIsImh0bWx3aWRnZXQiXSwic2l6aW5nUG9saWN5Ijp7ImJyb3dzZXIiOnsiZGVmYXVsdEhlaWdodCI6W10sImRlZmF1bHRXaWR0aCI6W10sImV4dGVybmFsIjpbZmFsc2VdLCJmaWxsIjpbZmFsc2VdLCJwYWRkaW5nIjpbXX0sImRlZmF1bHRIZWlnaHQiOltdLCJkZWZhdWx0V2lkdGgiOltdLCJrbml0ciI6eyJkZWZhdWx0SGVpZ2h0IjpbXSwiZGVmYXVsdFdpZHRoIjpbXSwiZmlndXJlIjpbdHJ1ZV19LCJwYWRkaW5nIjpbXSwidmlld2VyIjp7ImRlZmF1bHRIZWlnaHQiOltdLCJkZWZhdWx0V2lkdGgiOltdLCJmaWxsIjpbdHJ1ZV0sInBhZGRpbmciOltdLCJwYW5lSGVpZ2h0IjpbXSwic3VwcHJlc3MiOltmYWxzZV19LCJ2aWV3ZXIuZmlsbCI6W3RydWVdLCJ2aWV3ZXIucGFkZGluZyI6WzBdfX19 -->
 
 <!-- htmlwidget-container-begin -->
-<div id="htmlwidget-27df914af61a71bea59b" style="width:500px;height:500px;" class="glimmaWidget html-widget"></div>
+<div id="htmlwidget-27df914af61a71bea59b" style="width:500px;height:500px;" class="GlimmaV2 html-widget"></div>
 <!-- htmlwidget-container-end -->
 <script type="application/json" data-for="htmlwidget-27df914af61a71bea59b">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[-172.097113832018,-374.240188886609,-728.573352874493,195.903292880721,-2125.75210623793,-576.146001938243,3780.90547088857],"dim2":[-1613.0805541282,-306.686292158076,285.334993682426,-452.74119991067,880.370682744399,639.68850153338,567.113868236737],"dim3":[659.189077050233,-710.46348911997,-715.082453636139,-405.182062736179,548.977054263006,408.742345835874,213.819528343177],"dim4":[-20.3866098342448,-761.262706382554,325.927869691805,608.626171337157,45.1755332946292,-154.871163397278,-43.2090947095165],"dim5":[269.804037434809,-190.976934291182,683.041157556285,-630.590156357752,-51.6449146618703,-180.728368232479,101.095178552191],"dim6":[-0.224732638231188,59.5703268649269,-51.4531913431717,10.1470276149101,224.609180736595,-316.194239069491,73.5456278344597],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853]}}},"evals":[],"jsHooks":[]}</script>
 <!-- htmlwidget-sizing-policy-base64 PHNjcmlwdCB0eXBlPSJhcHBsaWNhdGlvbi9odG1sd2lkZ2V0LXNpemluZyIgZGF0YS1mb3I9Imh0bWx3aWRnZXQtMjdkZjkxNGFmNjFhNzFiZWE1OWIiPnsidmlld2VyIjp7IndpZHRoIjo0NTAsImhlaWdodCI6MzUwLCJwYWRkaW5nIjoxNSwiZmlsbCI6dHJ1ZX0sImJyb3dzZXIiOnsid2lkdGgiOjk2MCwiaGVpZ2h0Ijo1MDAsInBhZGRpbmciOjQwLCJmaWxsIjpmYWxzZX19PC9zY3JpcHQ+ -->
 
 <!-- rnb-htmlwidget-end -->
-
+ <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 --></p>
+<pre class="r"><code>NA</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
 <div id="rmd-source-code">LS0tDQp0aXRsZTogIlRlc3ROb3RlYm9vayINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCg0KYGBge3J9DQpsaWJyYXJ5KGxpbW1hKQ0KbGlicmFyeShHbGltbWEpDQpsaWJyYXJ5KGVkZ2VSKQ0KYGBgDQoNCg0KYGBge3J9DQpkYXRhKGx5bXBob21hUk5Bc2VxKQ0Kcm5hc2VxIDwtIGx5bXBob21hUk5Bc2VxDQoNCmBgYA0KDQpgYGB7cn0NCg0KIyBmcm9tIEdsaW1tYToNCiMgZ2V0IGNvbHVtbiBvZiBtYXRyaXgNCmdldENvbHMgPC0gZnVuY3Rpb24oeCwgaW5kcykgew0KICAgIHhbLCBpbmRzLCBkcm9wPUZBTFNFXQ0KfQ0KDQoNCmdsTURTUGxvdCA8LSBmdW5jdGlvbih4LCAuLi4pIHsNCiAgICBVc2VNZXRob2QoImdsTURTUGxvdCIpDQp9DQoNCiMgQ29kZSB0YWtlbiBmcm9tIHBsb3RNRFMgb2YgbGltbWEgYmlvQ29uZHVjdG9yIHBhY2thZ2Ugd2l0aCBhbHRlcmF0aW9ucw0KZ2xNRFNQbG90LmRlZmF1bHQgPC0gZnVuY3Rpb24oDQogICAgeCwNCiAgICB0b3AgPSA1MDAsDQogICAgbGFiZWxzID0gc2VxX2xlbihuY29sKHgpKSwNCiAgICBncm91cHMgPSByZXAoMSwgbmNvbCh4KSksDQogICAgZ2VuZS5zZWxlY3Rpb24gPSBjKCJwYWlyd2lzZSIsICJjb21tb24iKSwNCiAgICBtYWluICA9Ik1EUyBQbG90IiwNCiAgICBwYXRoID0gZ2V0d2QoKSwNCiAgICBmb2xkZXIgPSAiZ2xpbW1hLXBsb3RzIiwNCiAgICBodG1sID0gIk1EUy1QbG90IiwNCiAgICBsYXVuY2ggPSBUUlVFLA0KICAgIC4uLg0KKSB7DQogICAgDQogICAgIyBDT0RFIFRBS0VOIEZST00gR0xJTU1BDQogICAgDQogICAgIyAgIE11bHRpLWRpbWVuc2lvbmFsIHNjYWxpbmcgd2l0aCB0b3AtZGlzdGFuY2UNCiAgICAjICAgRGkgV3UgYW5kIEdvcmRvbiBTbXl0aA0KICAgICMgICAxOSBNYXJjaCAyMDA5LiAgTGFzdCBtb2RpZmllZCAxNCBKYW4gMjAxNQ0KICAgICMgICBNb2RpZmllZCBieSBTaGlhbiBTdSBvbiAyNSBKYW4gMjAxNg0KDQogICAgIyMNCiAgICAjIENoZWNrIElucHV0cw0KDQogICAgeCA8LSBhcy5tYXRyaXgoeCkNCiAgICBuc2FtcGxlcyA8LSBuY29sKHgpDQogICAgbmRpbSA8LSBuc2FtcGxlcyAtIDENCg0KICAgIGlmIChuc2FtcGxlcyA8IDMpIHsNCiAgICAgICAgc3RvcChwYXN0ZSgiT25seSIsIG5zYW1wbGVzLCAiY29sdW1ucyBvZiBkYXRhOiBuZWVkIGF0IGxlYXN0IDMiKSkNCiAgICB9DQoNCiAgICBjbiA8LSBjb2xuYW1lcyh4KQ0KICAgIGJhZCA8LSByb3dTdW1zKGlzLmZpbml0ZSh4KSkgPCBuc2FtcGxlcw0KDQogICAgaWYgKGFueShiYWQpKSB7DQogICAgICAgIHdhcm5pbmcoIlJvd3MgY29udGFpbmluZyBpbmZpbml0ZSB2YWx1ZXMgaGF2ZSBiZWVuIHJlbW92ZWQiKQ0KICAgICAgICB4IDwtIHhbIWJhZCwgLCBkcm9wPUZBTFNFXQ0KICAgIH0NCg0KICAgIG5wcm9iZXMgPC0gbnJvdyh4KQ0KICAgIHRvcCA8LSBtaW4odG9wLCBucHJvYmVzKQ0KDQogICAgIw0KICAgICMjDQoNCiAgICBnZW5lLnNlbGVjdGlvbiA8LSBtYXRjaC5hcmcoZ2VuZS5zZWxlY3Rpb24sIGMoInBhaXJ3aXNlIiwgImNvbW1vbiIpKQ0KDQogICAgIyBEaXN0YW5jZSBtYXRyaXggZnJvbSBwYWlyd2lzZSBsZWFkaW5nIGZvbGQgY2hhbmdlcw0KICAgIGRkIDwtIG1hdHJpeCgwLCBucm93PW5zYW1wbGVzLCBuY29sPW5zYW1wbGVzLCBkaW1uYW1lcz1saXN0KGNuLCBjbikpDQogICAgaWYgKGdlbmUuc2VsZWN0aW9uID09ICJwYWlyd2lzZSIpIHsNCiAgICAjIERpc3RhbmNlIG1lYXN1cmUgaXMgbWVhbiBvZiB0b3Agc3F1YXJlZCBkZXZpYXRpb25zIGZvciBlYWNoIHBhaXIgb2YgYXJyYXlzDQogICAgICAgIHRvcGluZGV4IDwtIG5wcm9iZXMgLSB0b3AgKyAxTA0KICAgICAgICBmb3IgKGkgaW4gMkw6KG5zYW1wbGVzKSkgew0KICAgICAgICAgICAgZm9yIChqIGluIDFMOihpIC0gMUwpKSB7DQogICAgICAgICAgICAgICAgZGlzdHMgPC0gKGdldENvbHMoeCwgaSkgLSBnZXRDb2xzKHgsIGopKV4yDQogICAgICAgICAgICAgICAgZGlzdHMgPC0gc29ydC5pbnQoZGlzdHMsIHBhcnRpYWwgPSB0b3BpbmRleCApDQogICAgICAgICAgICAgICAgdG9wZGlzdCA8LSBkaXN0c1t0b3BpbmRleDpucHJvYmVzXQ0KICAgICAgICAgICAgICAgIGRkW2ksIGpdIDwtIHNxcnQobWVhbih0b3BkaXN0KSkNCiAgICAgICAgICAgIH0NCiAgICAgICAgfQ0KICAgIH0gZWxzZSB7DQogICAgIyBTYW1lIGdlbmVzIHVzZWQgZm9yIGFsbCBjb21wYXJpc29ucw0KICAgICAgICBpZiAobnByb2JlcyA+IHRvcCkgew0KICAgICAgICAgICAgbyA8LSBvcmRlcihyb3dNZWFucyggKHgtcm93TWVhbnMoeCkpXjIgKSwgZGVjcmVhc2luZz1UUlVFKQ0KICAgICAgICAgICAgeCA8LSBnZXRSb3dzKHgsIG9bMUw6dG9wXSkNCiAgICAgICAgfQ0KICAgICAgICBmb3IgKGkgaW4gMkw6KG5zYW1wbGVzKSkgew0KICAgICAgICAgICAgZGlzdHMgPC0gKHhbLCBpXSAtIHhbLCAxOihpLTEpLCBkcm9wPUZBTFNFXSkgXiAyDQogICAgICAgICAgICBkZFtpLCAxTDooaS0xTCldIDwtIHNxcnQoY29sTWVhbnMoZGlzdHMpKQ0KICAgICAgICB9DQogICAgfQ0KDQogICAgIyBNdWx0aS1kaW1lbnNpb25hbCBzY2FsaW5nDQogICAgYTEgPC0gc3VwcHJlc3NXYXJuaW5ncyhjbWRzY2FsZShhcy5kaXN0KGRkKSwgaz1taW4obmRpbSwgOCksIGVpZz1UUlVFKSkNCg0KICAgICMgTWV0aG9kIGZvciBNRFMgb2JqZWN0cw0KICAgIHBvaW50cyA8LSBhMSRwb2ludHMNCg0KICAgIGlmICghaXMuZGF0YS5mcmFtZShncm91cHMpICYmIGNsYXNzKGdyb3VwcykgIT0gIkRhdGFGcmFtZSIpIHsNCiAgICAjIFJlbmFtZSBmb3IgdGhlIGNvbHVtbiBuYW1lIGluIGRhdGFmcmFtZQ0KICAgICAgICBncm91cHMgPC0gZGF0YS5mcmFtZShncm91cHMpDQogICAgfQ0KDQogICAgYWxsX2NvbF9uYW1lcyA8LSBjb2xuYW1lcyhncm91cHMpDQogICAgZmlyc3RfY29sX25hbWUgPC0gYWxsX2NvbF9uYW1lc1sxXQ0KDQogICAgcG9pbnRzIDwtIGRhdGEuZnJhbWUocG9pbnRzKQ0KICAgIG5hbWVzKHBvaW50cykgPC0gcGFzdGUwKCJkaW0iLCBzZXFfbGVuKG5jb2wocG9pbnRzKSkpDQogICAgcG9pbnRzIDwtIGRhdGEuZnJhbWUocG9pbnRzLCBsYWJlbD1sYWJlbHMsIGdyb3VwcykNCg0KICAgIGVpZ2VuIDwtIGRhdGEuZnJhbWUoDQogICAgICAgIG5hbWUgPSAxOm1pbihuZGltLCA4KSwNCiAgICAgICAgZWlnZW4gPSByb3VuZChhMSRlaWdbMTptaW4obmRpbSwgOCldL3N1bShhMSRlaWcpLCAyKQ0KICAgICkNCiAgICANCiAgICByZXR1cm4obGlzdChwb2ludHM9cG9pbnRzLCBlaWdlbj1laWdlbikpDQoNCn0NCg0KDQpgYGANCg0KYGBge3J9DQoNCmdyb3VwcyA8LSBybmFzZXEkc2FtcGxlcyRncm91cA0KDQpncm91cERhdGEgPC0gYXMuZGF0YS5mcmFtZShjYmluZCgNCmdlbm90eXBlPWFzLmNoYXJhY3Rlcihncm91cHMpLA0KbGFuZT1jKHJlcCg0LDUpLDMsMykNCikpDQoNCmdyb3VwRGF0YSA8LSBjYmluZChncm91cERhdGEsIGxpYnNpemU9IHJuYXNlcSRzYW1wbGVzJGxpYi5zaXplKQ0KDQpwb2ludHMgPC0gZ2xNRFNQbG90KHJuYXNlcSwgZ3JvdXBzPWdyb3VwRGF0YSwgbGF1bmNoPUZBTFNFKSRwb2ludHMNCnBvaW50cw0KDQpgYGANCg0KDQoNCmBgYHtyfQ0KDQpsaWJyYXJ5KEdsaW1tYVYyKQ0KR2xpbW1hVjIocGxvdFR5cGU9Ik1EUyIsIGRhdGEgPSBsaXN0KG1kc0RhdGEgPSBwb2ludHMpKQ0KDQpgYGANCg==</div>

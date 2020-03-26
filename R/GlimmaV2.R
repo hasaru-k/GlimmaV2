@@ -16,11 +16,11 @@ GlimmaV2 <- function(plotType, data, width = NULL, height = NULL, elementId = NU
 
   # create widget
   htmlwidgets::createWidget(
-    name = 'glimmaWidget',
+    name = 'GlimmaV2',
     x,
     width = width,
     height = height,
-    package = 'glimmaWidget',
+    package = 'GlimmaV2',
     elementId = elementId
   )
 
