@@ -1,6 +1,8 @@
 ---
 title: "TestNotebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 
@@ -146,8 +148,9 @@ lane=c(rep(4,5),3,3)
 groupData <- cbind(groupData, libsize= rnaseq$samples$lib.size)
 
 points <- glMDSPlot(rnaseq, groups=groupData, launch=FALSE)$points
-points
+eigen <- glMDSPlot(rnaseq, groups=groupData, launch=FALSE)$eigen
 
+eigen
 ```
 
 
@@ -155,6 +158,6 @@ points
 ```{r}
 
 library(GlimmaV2)
-GlimmaV2(plotType="MDS", data = list(mdsData = points))
+GlimmaV2(plotType="MDS", data = list(mdsData = points, eigenData = eigen))
 
 ```

@@ -13,44 +13,55 @@ HTMLWidgets.widget({
       renderValue: function(x) {
 
         console.log(x);
+        
+        var plotContainer = document.createElement("div");
+        var mdsContainer = document.createElement("div");
+        var eigenContainer = document.createElement("div");
+        var controlContainer = document.createElement("div");
+        mdsContainer.setAttribute("id", "mdsContainer");
+        eigenContainer.setAttribute("id", "eigenContainer");
+        plotContainer.setAttribute("id", "plotContainer");
+        controlContainer.setAttribute("id", "controlContainer");
 
         var widget = document.getElementById(el.id);
-        var plotContainer = document.createElement("div");
-        plotContainer.setAttribute("id", "plotContainer");
-        var controlContainer = document.createElement("div");
-        controlContainer.setAttribute("id", "controlContainer");
         widget.appendChild(plotContainer);
         widget.appendChild(controlContainer);
 
+        plotContainer.appendChild(mdsContainer);
+        plotContainer.appendChild(eigenContainer);
 
-        var view;
         mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
+        eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
 
         // TODO: extract this data from dataframe
         dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
         sampleList = ["lane", "genotype"];
 
-        render(createVegaSpec(dimList, sampleList, mdsData,
-                width, height));
+        var mdsSpec = createMDSSpec(dimList, sampleList, mdsData, width, height);
+        var mdsView = new vega.View(vega.parse(mdsSpec), {
+          renderer: 'canvas',  // renderer (canvas or svg)
+          container: '#' + mdsContainer.getAttribute("id"),
+          bind: '#' + controlContainer.getAttribute("id"),
+          hover: true       // enable hover processing
+        });
+        mdsView.runAsync();
 
-        // plotContainer as the container to the view
-        function render(spec) {
-          view = new vega.View(vega.parse(spec), {
-            renderer: 'canvas',  // renderer (canvas or svg)
-            container: '#' + plotContainer.getAttribute("id"),
-            bind: '#' + controlContainer.getAttribute("id"),
-            hover: true       // enable hover processing
-          });
-          return view.runAsync();
-        }
-        
-        // save to PNG button
+        var eigenSpec = createEigenSpec(eigenData, width, height);
+        console.log(eigenSpec);
+        var eigenView = new vega.View(vega.parse(eigenSpec), {
+          renderer: 'canvas',  // renderer (canvas or svg)
+          container: '#' + eigenContainer.getAttribute("id"),
+          hover: true       // enable hover processing
+        });
+        eigenView.runAsync();
+
+        // save to PNG button for MDS plot
         var downloadButton = document.createElement("BUTTON");
         downloadButton.setAttribute("id", "savePNGBtn");
         downloadButton.innerHTML = "Save to PNG";
         downloadButton.onclick =
           function changeContent() {
-            view.toImageURL('png').then(function (url) {
+            mdsView.toImageURL('png').then(function (url) {
               var link = document.createElement('a');
               link.setAttribute('href', url);
               link.setAttribute('target', '_blank');
@@ -82,12 +93,13 @@ HTMLWidgets.widget({
   }
 });
 
-// parametrise a vega graph encoding
-function createVegaSpec(dimList, sampleList, mdsData, width, height) {
+// parametrise graph encoding for MDS plot
+function createMDSSpec(dimList, sampleList, mdsData, width, height) 
+{
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.9,
+    "width": width * 0.5,
     "height": height * 0.6,
     "padding": 0,
     "signals":
@@ -214,6 +226,97 @@ function createVegaSpec(dimList, sampleList, mdsData, width, height) {
             "stroke": { "value": "#4682b4" },
             "fill": { "scale": "color", "field": { "signal": "colour_by" } },
             "tooltip": { "field": "tooltip" }
+          }
+        }
+      }
+    ]
+  };
+}
+
+// parametrise graph encoding for variance plot
+function createEigenSpec(eigenData, width, height) 
+{
+  return {
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A basic bar chart example, with value labels shown upon mouse hover.",
+    "width": width * 0.5,
+    "height": height * 0.6,
+    "padding": 5,
+  
+    "data": [
+      {
+        "name": "table",
+        "values": eigenData
+      }
+    ],
+  
+    "signals": [
+      {
+        "name": "tooltip",
+        "value": {},
+        "on": [
+          {"events": "rect:mouseover", "update": "datum"},
+          {"events": "rect:mouseout",  "update": "{}"}
+        ]
+      }
+    ],
+  
+    "scales": [
+      {
+        "name": "xscale",
+        "type": "band",
+        "domain": {"data": "table", "field": "name"},
+        "range": "width",
+        "padding": 0.05,
+        "round": true
+      },
+      {
+        "name": "yscale",
+        "domain": {"data": "table", "field": "eigen"},
+        "range": "height"
+      }
+    ],
+  
+    "axes": [
+      { "orient": "bottom", "scale": "xscale" },
+      { "orient": "left", "scale": "yscale" }
+    ],
+  
+    "marks": [
+      {
+        "type": "rect",
+        "from": {"data":"table"},
+        "encode": {
+          "enter": {
+            "x": {"scale": "xscale", "field": "name"},
+            "width": {"scale": "xscale", "band": 1},
+            "y": {"scale": "yscale", "field": "eigen"},
+            "y2": {"scale": "yscale", "value": 0}
+          },
+          "update": {
+            "fill": {"value": "steelblue"}
+          },
+          "hover": {
+            "fill": {"value": "red"}
+          }
+        }
+      },
+      {
+        "type": "text",
+        "encode": {
+          "enter": {
+            "align": {"value": "center"},
+            "baseline": {"value": "bottom"},
+            "fill": {"value": "#333"}
+          },
+          "update": {
+            "x": {"scale": "xscale", "signal": "tooltip.name", "band": 0.5},
+            "y": {"scale": "yscale", "signal": "tooltip.eigen", "offset": -2},
+            "text": {"signal": "tooltip.eigen"},
+            "fillOpacity": [
+              {"test": "datum === tooltip", "value": 0},
+              {"value": 1}
+            ]
           }
         }
       }
