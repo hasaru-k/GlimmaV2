@@ -34,10 +34,11 @@ HTMLWidgets.widget({
         eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
 
         // TODO: extract this data from dataframe
-        dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
-        sampleList = ["lane", "genotype"];
+        var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
+        var sampleList = ["lane", "genotype"];
+        var numericFeatures = ["libsize", "lane"];
 
-        var mdsSpec = createMDSSpec(dimList, sampleList, mdsData, width, height);
+        var mdsSpec = createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height);
         mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
@@ -55,46 +56,9 @@ HTMLWidgets.widget({
         });
         eigenView.runAsync();
         
-        // axis-change signal listener
-        mdsView.addSignalListener('x_axis', function(name, value) {
-          console.log('x_axis=' + value);
-          var externalSelectValue = parseInt(value.substring(3));
-          eigenView.signal("external_select_x", externalSelectValue);
-          eigenView.runAsync();
-        });
-        mdsView.addSignalListener('y_axis', function(name, value) {
-          console.log('y_axis=' + value);
-          var externalSelectValue = parseInt(value.substring(3));
-          eigenView.signal("external_select_y", externalSelectValue);
-          eigenView.runAsync();
-        });
-
-
-        // save to PNG button for MDS plot
-        var downloadButton = document.createElement("BUTTON");
-        downloadButton.setAttribute("id", "savePNGBtn");
-        downloadButton.innerHTML = "Save to PNG";
-        downloadButton.onclick =
-          function changeContent() {
-            mdsView.toImageURL('png').then(function (url) {
-              var link = document.createElement('a');
-              link.setAttribute('href', url);
-              link.setAttribute('target', '_blank');
-              link.setAttribute('download', 'vega-export.png');
-              link.dispatchEvent(new MouseEvent('click'));
-            }).catch(function (error) { /* error handling */ });
-          }
-        controlContainer.appendChild(downloadButton);
-
-        // modify the vega-bound control elements
-        bindNames = document.getElementsByClassName("vega-bind-name");
-        for (i = 0; i < bindNames.length; i++) {
-          bindNames[i].innerHTML += ":";
-        }
-        // color_by input on next line
-        binds = document.getElementsByClassName("vega-bind");
-        binds[2].className += " display-block";
-
+        linkPlots();
+        addControls(controlContainer);
+        reformatElements();
 
       },
 
@@ -117,10 +81,60 @@ HTMLWidgets.widget({
   }
 });
 
+function linkPlots()
+{
+  
+  // highlight variance plot when we change a signal in the MDS plot
+  mdsView.addSignalListener('x_axis', function(name, value) {
+    var externalSelectValue = parseInt(value.substring(3));
+    eigenView.signal("external_select_x", externalSelectValue);
+    eigenView.runAsync();
+  });
 
+  mdsView.addSignalListener('y_axis', function(name, value) {
+    var externalSelectValue = parseInt(value.substring(3));
+    eigenView.signal("external_select_y", externalSelectValue);
+    eigenView.runAsync();
+  });
+
+}
+
+function addControls(controlContainer)
+{
+
+  // save to PNG button for MDS plot
+  var downloadButton = document.createElement("BUTTON");
+  downloadButton.setAttribute("id", "savePNGBtn");
+  downloadButton.innerHTML = "Save to PNG";
+  downloadButton.onclick =
+  function changeContent() {
+    mdsView.toImageURL('png').then(function (url) {
+      var link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', 'vega-export.png');
+      link.dispatchEvent(new MouseEvent('click'));
+    }).catch(function (error) { /* error handling */ });
+  }
+  controlContainer.appendChild(downloadButton);
+
+}
+
+function reformatElements()
+{
+  // reformat the vega-bound control elements
+  bindNames = document.getElementsByClassName("vega-bind-name");
+  for (i = 0; i < bindNames.length; i++) {
+    bindNames[i].innerHTML += ":";
+  }
+
+  // color_by input on next line
+  binds = document.getElementsByClassName("vega-bind");
+  binds[2].className += " display-block";
+}
 
 // parametrise graph encoding for MDS plot
-function createMDSSpec(dimList, sampleList, mdsData, width, height) 
+function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height) 
 {
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
@@ -128,17 +142,25 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
     "width": width * 0.45,
     "height": height * 0.6,
     "padding": 0,
+    "title": {
+      "text": "MDS Plot"
+    },
     "signals":
       [
         {
           "name": "x_axis",
-          "value": "dim1",
+          "value": dimList[0],
           "bind": { "input": "select", "options": dimList }
         },
         {
           "name": "y_axis",
-          "value": "dim2",
+          "value": dimList[1],
           "bind": { "input": "select", "options": dimList }
+        },
+        {
+          "name": "scale_by",
+          "value": numericFeatures[0],
+          "bind": { "input": "select", "options": numericFeatures }
         },
         {
           "name": "colour_by",
@@ -183,14 +205,14 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
         "round": true,
         "nice": false,
         "zero": true,
-        "domain": { "data": "source", "field": "libsize" },
-        "range": [4, 361]
+        "domain": { "data": "source", "field": { "signal": "scale_by" } },
+        "range": [5, 350]
       },
       {
         "name": "color",
         "type": "ordinal",
         "domain": { "data": "source", "field": { "signal": "colour_by" } },
-        "range": { "scheme": "category10" }
+        "range": { "scheme": "tableau10" }
       }
     ],
 
@@ -216,7 +238,7 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
     "legends": [
       {
         "size": "size",
-        "title": "Library Size",
+        "title": "Scale",
         "format": "s",
         "symbolStrokeColor": "#4682b4",
         "symbolStrokeWidth": 2,
@@ -245,7 +267,7 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
           "update": {
             "x": { "scale": "x", "field": { "signal": "x_axis" } },
             "y": { "scale": "y", "field": { "signal": "y_axis" } },
-            "size": { "scale": "size", "field": "libsize" },
+            "size": { "scale": "size", "field": { "signal": "scale_by" }},
             "shape": { "value": "circle" },
             "strokeWidth": { "value": 2 },
             "opacity": { "value": 0.7 },
@@ -268,7 +290,9 @@ function createEigenSpec(eigenData, width, height)
     "width": width * 0.3,
     "height": height * 0.6,
     "padding": 5,
-  
+    "title": {
+      "text": "Variance Explained"
+    },
     "data": [
       {
         "name": "table",

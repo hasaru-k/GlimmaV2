@@ -43934,85 +43934,131 @@ window.onload = function() {
         eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
 
         // TODO: extract this data from dataframe
-        dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
-        sampleList = ["lane", "genotype"];
+        var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
+        var sampleList = ["lane", "genotype"];
+        var numericFeatures = ["libsize", "lane"];
 
-        var mdsSpec = createMDSSpec(dimList, sampleList, mdsData, width, height);
-        var mdsView = new vega.View(vega.parse(mdsSpec), {
-          renderer: 'canvas',  // renderer (canvas or svg)
+        var mdsSpec = createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height);
+        mdsView = new vega.View(vega.parse(mdsSpec), {
+          renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
           bind: '#' + controlContainer.getAttribute("id"),
-          hover: true       // enable hover processing
+          hover: true
         });
         mdsView.runAsync();
 
         var eigenSpec = createEigenSpec(eigenData, width, height);
         console.log(eigenSpec);
-        var eigenView = new vega.View(vega.parse(eigenSpec), {
-          renderer: 'canvas',  // renderer (canvas or svg)
+        eigenView = new vega.View(vega.parse(eigenSpec), {
+          renderer: 'canvas',
           container: '#' + eigenContainer.getAttribute("id"),
-          hover: true       // enable hover processing
+          hover: true
         });
         eigenView.runAsync();
+        
+        linkPlots();
+        
 
-        // save to PNG button for MDS plot
-        var downloadButton = document.createElement("BUTTON");
-        downloadButton.setAttribute("id", "savePNGBtn");
-        downloadButton.innerHTML = "Save to PNG";
-        downloadButton.onclick =
-          function changeContent() {
-            mdsView.toImageURL('png').then(function (url) {
-              var link = document.createElement('a');
-              link.setAttribute('href', url);
-              link.setAttribute('target', '_blank');
-              link.setAttribute('download', 'vega-export.png');
-              link.dispatchEvent(new MouseEvent('click'));
-            }).catch(function (error) { /* error handling */ });
-          }
-        controlContainer.appendChild(downloadButton);
-
-        // modify the vega-bound control elements
-        bindNames = document.getElementsByClassName("vega-bind-name");
-        for (i = 0; i < bindNames.length; i++) {
-          bindNames[i].innerHTML += ":";
-        }
-        // color_by input on next line
-        binds = document.getElementsByClassName("vega-bind");
-        binds[2].className += " display-block";
 
 
       },
 
-      resize: function(width, height) {
-
-        // TODO: code to re-render the widget with a new size
-
+      resize: function(width, height) 
+      {
+        console.log("resize called, width=" + width + ",height=" + height);
+        if (mdsView)
+        {
+          console.log("mdsView width=" + mdsView.width() + ",height=" + mdsView.height());
+          mdsView.resize();
+          console.log("mdsView after resize width=" + mdsView.width() + ",height=" + mdsView.height());
+        }
+        if (eigenView)
+        {
+          eigenView.resize();
+        }
       }
 
     };
   }
 });
 
+function linkPlots()
+{
+  
+  // highlight variance plot when we change a signal in the MDS plot
+  mdsView.addSignalListener('x_axis', function(name, value) {
+    var externalSelectValue = parseInt(value.substring(3));
+    eigenView.signal("external_select_x", externalSelectValue);
+    eigenView.runAsync();
+  });
+
+  mdsView.addSignalListener('y_axis', function(name, value) {
+    var externalSelectValue = parseInt(value.substring(3));
+    eigenView.signal("external_select_y", externalSelectValue);
+    eigenView.runAsync();
+  });
+
+}
+
+function addControls(controlContainer)
+{
+
+  // save to PNG button for MDS plot
+  var downloadButton = document.createElement("BUTTON");
+  downloadButton.setAttribute("id", "savePNGBtn");
+  downloadButton.innerHTML = "Save to PNG";
+  downloadButton.onclick =
+  function changeContent() {
+    mdsView.toImageURL('png').then(function (url) {
+      var link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', 'vega-export.png');
+      link.dispatchEvent(new MouseEvent('click'));
+    }).catch(function (error) { /* error handling */ });
+  }
+  controlContainer.appendChild(downloadButton);
+
+  // reformat the vega-bound control elements
+  bindNames = document.getElementsByClassName("vega-bind-name");
+  for (i = 0; i < bindNames.length; i++) {
+    bindNames[i].innerHTML += ":";
+  }
+
+  // color_by input on next line
+  binds = document.getElementsByClassName("vega-bind");
+  binds[2].className += " display-block";
+
+}
+
 // parametrise graph encoding for MDS plot
-function createMDSSpec(dimList, sampleList, mdsData, width, height) 
+function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height) 
 {
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.5,
+    "width": width * 0.45,
     "height": height * 0.6,
     "padding": 0,
+    "title": {
+      "text": "MDS Plot",
+    },
     "signals":
       [
         {
           "name": "x_axis",
-          "value": "dim1",
+          "value": dimList[0],
           "bind": { "input": "select", "options": dimList }
         },
         {
           "name": "y_axis",
-          "value": "dim2",
+          "value": dimList[1],
           "bind": { "input": "select", "options": dimList }
+        },
+        {
+          "name": "scale_by",
+          "value": numericFeatures[0],
+          "bind": { "input": "select", "options": numericFeatures }
         },
         {
           "name": "colour_by",
@@ -44057,14 +44103,14 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
         "round": true,
         "nice": false,
         "zero": true,
-        "domain": { "data": "source", "field": "libsize" },
-        "range": [4, 361]
+        "domain": { "data": "source", "field": { "signal": "scale_by" } },
+        "range": [5, 350]
       },
       {
         "name": "color",
         "type": "ordinal",
         "domain": { "data": "source", "field": { "signal": "colour_by" } },
-        "range": { "scheme": "category10" }
+        "range": { "scheme": "tableau10" }
       }
     ],
 
@@ -44090,7 +44136,7 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
     "legends": [
       {
         "size": "size",
-        "title": "Library Size",
+        "title": "Scale",
         "format": "s",
         "symbolStrokeColor": "#4682b4",
         "symbolStrokeWidth": 2,
@@ -44119,7 +44165,7 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
           "update": {
             "x": { "scale": "x", "field": { "signal": "x_axis" } },
             "y": { "scale": "y", "field": { "signal": "y_axis" } },
-            "size": { "scale": "size", "field": "libsize" },
+            "size": { "scale": "size", "field": { "signal": "scale_by" }},
             "shape": { "value": "circle" },
             "strokeWidth": { "value": 2 },
             "opacity": { "value": 0.7 },
@@ -44139,25 +44185,35 @@ function createEigenSpec(eigenData, width, height)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A basic bar chart example, with value labels shown upon mouse hover.",
-    "width": width * 0.5,
+    "width": width * 0.3,
     "height": height * 0.6,
     "padding": 5,
-  
+    "title": {
+      "text": "Variance Explained",
+    },
     "data": [
       {
         "name": "table",
         "values": eigenData
       }
     ],
-  
     "signals": [
       {
         "name": "tooltip",
         "value": {},
-        "on": [
+        "on": 
+        [
           {"events": "rect:mouseover", "update": "datum"},
           {"events": "rect:mouseout",  "update": "{}"}
         ]
+      },
+      {
+        "name": "external_select_x",
+        "value": 1
+      },
+      {
+        "name": "external_select_y",
+        "value": 2
       }
     ],
   
@@ -44194,10 +44250,7 @@ function createEigenSpec(eigenData, width, height)
             "y2": {"scale": "yscale", "value": 0}
           },
           "update": {
-            "fill": {"value": "steelblue"}
-          },
-          "hover": {
-            "fill": {"value": "red"}
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "sandybrown"}, {"value": "steelblue"} ]
           }
         }
       },
@@ -44518,11 +44571,11 @@ eigen</code></pre>
   </script>
 </div>
 <pre class="r"><code>library(GlimmaV2)
-GlimmaV2(plotType=&quot;MDS&quot;, data = list(mdsData = points, eigenData = eigen))</code></pre>
+GlimmaV2(plotType=&quot;MDs&quot;, data = list(mdsData = points, eigenData = eigen))</code></pre>
 <pre><code>## Warning in readLines(con): incomplete final line found on &#39;C:/Users/hkari/
 ## OneDrive/onenote/R/win-library/3.6/GlimmaV2/htmlwidgets/GlimmaV2.yaml&#39;</code></pre>
-<div id="htmlwidget-330fa35f99b4827e4bd0" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-330fa35f99b4827e4bd0">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[-172.097113832018,-374.240188886609,-728.573352874493,195.903292880721,-2125.75210623793,-576.146001938243,3780.90547088857],"dim2":[-1613.0805541282,-306.686292158076,285.334993682426,-452.74119991067,880.370682744399,639.68850153338,567.113868236737],"dim3":[659.189077050233,-710.46348911997,-715.082453636139,-405.182062736179,548.977054263006,408.742345835874,213.819528343177],"dim4":[-20.3866098342448,-761.262706382554,325.927869691805,608.626171337157,45.1755332946292,-154.871163397278,-43.2090947095165],"dim5":[269.804037434809,-190.976934291182,683.041157556285,-630.590156357752,-51.6449146618703,-180.728368232479,101.095178552191],"dim6":[-0.224732638231188,59.5703268649269,-51.4531913431717,10.1470276149101,224.609180736595,-316.194239069491,73.5456278344597],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.69,0.16,0.07,0.04,0.04,0.01]}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-90bc0c4448d592bbd2fd" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-90bc0c4448d592bbd2fd">{"x":{"plotType":"MDs","data":{"mdsData":{"dim1":[-172.097113832018,-374.240188886609,-728.573352874493,195.903292880721,-2125.75210623793,-576.146001938243,3780.90547088857],"dim2":[-1613.0805541282,-306.686292158076,285.334993682426,-452.74119991067,880.370682744399,639.68850153338,567.113868236737],"dim3":[659.189077050233,-710.46348911997,-715.082453636139,-405.182062736179,548.977054263006,408.742345835874,213.819528343177],"dim4":[-20.3866098342448,-761.262706382554,325.927869691805,608.626171337157,45.1755332946292,-154.871163397278,-43.2090947095165],"dim5":[269.804037434809,-190.976934291182,683.041157556285,-630.590156357752,-51.6449146618703,-180.728368232479,101.095178552191],"dim6":[-0.224732638231188,59.5703268649269,-51.4531913431717,10.1470276149101,224.609180736595,-316.194239069491,73.5456278344597],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.69,0.16,0.07,0.04,0.04,0.01]}}},"evals":[],"jsHooks":[]}</script>
 
 
 
