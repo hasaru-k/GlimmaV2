@@ -38,22 +38,37 @@ HTMLWidgets.widget({
         sampleList = ["lane", "genotype"];
 
         var mdsSpec = createMDSSpec(dimList, sampleList, mdsData, width, height);
-        var mdsView = new vega.View(vega.parse(mdsSpec), {
-          renderer: 'canvas',  // renderer (canvas or svg)
+        mdsView = new vega.View(vega.parse(mdsSpec), {
+          renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
           bind: '#' + controlContainer.getAttribute("id"),
-          hover: true       // enable hover processing
+          hover: true
         });
         mdsView.runAsync();
 
         var eigenSpec = createEigenSpec(eigenData, width, height);
         console.log(eigenSpec);
-        var eigenView = new vega.View(vega.parse(eigenSpec), {
-          renderer: 'canvas',  // renderer (canvas or svg)
+        eigenView = new vega.View(vega.parse(eigenSpec), {
+          renderer: 'canvas',
           container: '#' + eigenContainer.getAttribute("id"),
-          hover: true       // enable hover processing
+          hover: true
         });
         eigenView.runAsync();
+        
+        // axis-change signal listener
+        mdsView.addSignalListener('x_axis', function(name, value) {
+          console.log('x_axis=' + value);
+          var externalSelectValue = parseInt(value.substring(3));
+          eigenView.signal("external_select_x", externalSelectValue);
+          eigenView.runAsync();
+        });
+        mdsView.addSignalListener('y_axis', function(name, value) {
+          console.log('y_axis=' + value);
+          var externalSelectValue = parseInt(value.substring(3));
+          eigenView.signal("external_select_y", externalSelectValue);
+          eigenView.runAsync();
+        });
+
 
         // save to PNG button for MDS plot
         var downloadButton = document.createElement("BUTTON");
@@ -83,15 +98,26 @@ HTMLWidgets.widget({
 
       },
 
-      resize: function(width, height) {
-
-        // TODO: code to re-render the widget with a new size
-
+      resize: function(width, height) 
+      {
+        console.log("resize called, width=" + width + ",height=" + height);
+        if (mdsView)
+        {
+          console.log("mdsView width=" + mdsView.width() + ",height=" + mdsView.height());
+          mdsView.resize();
+          console.log("mdsView after resize width=" + mdsView.width() + ",height=" + mdsView.height());
+        }
+        if (eigenView)
+        {
+          eigenView.resize();
+        }
       }
 
     };
   }
 });
+
+
 
 // parametrise graph encoding for MDS plot
 function createMDSSpec(dimList, sampleList, mdsData, width, height) 
@@ -99,7 +125,7 @@ function createMDSSpec(dimList, sampleList, mdsData, width, height)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.5,
+    "width": width * 0.45,
     "height": height * 0.6,
     "padding": 0,
     "signals":
@@ -239,7 +265,7 @@ function createEigenSpec(eigenData, width, height)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A basic bar chart example, with value labels shown upon mouse hover.",
-    "width": width * 0.5,
+    "width": width * 0.3,
     "height": height * 0.6,
     "padding": 5,
   
@@ -254,10 +280,19 @@ function createEigenSpec(eigenData, width, height)
       {
         "name": "tooltip",
         "value": {},
-        "on": [
+        "on": 
+        [
           {"events": "rect:mouseover", "update": "datum"},
           {"events": "rect:mouseout",  "update": "{}"}
         ]
+      },
+      {
+        "name": "external_select_x",
+        "value": 1
+      },
+      {
+        "name": "external_select_y",
+        "value": 2
       }
     ],
   
@@ -294,10 +329,7 @@ function createEigenSpec(eigenData, width, height)
             "y2": {"scale": "yscale", "value": 0}
           },
           "update": {
-            "fill": {"value": "steelblue"}
-          },
-          "hover": {
-            "fill": {"value": "red"}
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "sandybrown"}, {"value": "steelblue"} ]
           }
         }
       },
