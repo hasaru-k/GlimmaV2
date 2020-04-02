@@ -6,29 +6,31 @@ output:
 ---
 
 ```{r}
-
+# need old Glimma for this dataset
 library(Glimma)
+library(GlimmaV2)
+
 data(lymphomaRNAseq)
 rnaseq <- lymphomaRNAseq
 
-groups <- rnaseq$samples$group
 
 # add lane
-groups <- as.data.frame(cbind(
-genotype=as.character(groups),
-lane=c(rep(4,5),3,1)
-))
+groups <- data.frame(genotype=rnaseq$samples$group,
+                     lane=c(rep(4,5),3,3),
+                     miscCont=c(rep(4000,5),300,250),
+                     miscDisc=c("blue","red",rep("green",5)))
+
 
 # add libsize
 groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
-
 groups
 ```
 
 
-
 ```{r}
 
-library(GlimmaV2)
 GlimmaV2(plotType="MDs", x=rnaseq, groups=groups)
+
+
+
 ```

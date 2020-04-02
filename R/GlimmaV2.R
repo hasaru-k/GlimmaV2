@@ -104,10 +104,17 @@ GlimmaV2 <- function(
       eigen = round(a1$eig[1:min(ndim, 8)]/sum(a1$eig), 2)
   )
 
+  is_factor <- sapply(groups, is.factor)
+  numericFeatures <- colnames(groups[, !is_factor])
+  discreteFeatures <- colnames(groups[, is_factor])
+
   # forward data to the widget using xData
   xData = list(
     plotType = plotType,
-    data = list(mdsData=points, eigenData=eigen)
+    data = list(mdsData=points, 
+                eigenData=eigen,
+                numericFeatures=numericFeatures,
+                discreteFeatures=discreteFeatures)
   )
 
   # create widget

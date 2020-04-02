@@ -35,10 +35,12 @@ HTMLWidgets.widget({
 
         // TODO: extract this data from dataframe
         var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
-        var sampleList = ["lane", "genotype"];
-        var numericFeatures = ["libsize", "lane"];
 
-        var mdsSpec = createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height);
+        var mdsSpec = createMDSSpec(mdsData, dimList, 
+                                      x.data.numericFeatures, 
+                                      x.data.discreteFeatures, 
+                                      width, height);
+                                      
         mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
@@ -134,7 +136,7 @@ function reformatElements()
 }
 
 // parametrise graph encoding for MDS plot
-function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height) 
+function createMDSSpec(mdsData, dimList, numericFeatures, discreteFeatures, width, height) 
 {
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
@@ -164,8 +166,8 @@ function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, hei
         },
         {
           "name": "colour_by",
-          "value": "lane",
-          "bind": { "input": "select", "options": sampleList }
+          "value": discreteFeatures[0],
+          "bind": { "input": "select", "options": discreteFeatures }
         },
       ],
     "data": 
