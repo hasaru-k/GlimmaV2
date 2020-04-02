@@ -13,7 +13,8 @@ HTMLWidgets.widget({
       renderValue: function(x) {
 
         console.log(x);
-        
+        processData(x);
+
         var plotContainer = document.createElement("div");
         var mdsContainer = document.createElement("div");
         var eigenContainer = document.createElement("div");
@@ -37,10 +38,9 @@ HTMLWidgets.widget({
         var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
 
         var mdsSpec = createMDSSpec(mdsData, dimList, 
-                                      x.data.numericFeatures, 
-                                      x.data.discreteFeatures, 
+                                      x.data.features,
                                       width, height);
-                                      
+
         mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
@@ -50,7 +50,6 @@ HTMLWidgets.widget({
         mdsView.runAsync();
 
         var eigenSpec = createEigenSpec(eigenData, width, height);
-        console.log(eigenSpec);
         eigenView = new vega.View(vega.parse(eigenSpec), {
           renderer: 'canvas',
           container: '#' + eigenContainer.getAttribute("id"),
@@ -82,6 +81,20 @@ HTMLWidgets.widget({
     };
   }
 });
+
+function processData(x)
+{
+  if (!Array.isArray(x.data.features["numeric"]))
+  {
+    x.data.features["numeric"] = [ x.data.features["numeric"] ];
+  }
+  if (!Array.isArray(x.data.features["discrete"]))
+  {
+    x.data.features["discrete"] = [ x.data.features["discrete"] ];
+  }
+  x.data.features["numeric"].sort();
+  x.data.features["discrete"].sort();
+}
 
 function linkPlots()
 {
@@ -122,22 +135,26 @@ function addControls(controlContainer)
 
 }
 
-function reformatElements()
+function reformatElements(controlContainer)
 {
-  // reformat the vega-bound control elements
-  bindNames = document.getElementsByClassName("vega-bind-name");
-  for (i = 0; i < bindNames.length; i++) {
-    bindNames[i].innerHTML += ":";
-  }
-
-  // color_by input on next line
   binds = document.getElementsByClassName("vega-bind");
-  binds[2].className += " display-block";
+  for (var i = 0; i < binds.length; i++)
+  {
+    if (i == 2)
+    {
+      binds[i].className += " separator_signal";
+    }
+    else if (i > 2)
+    {
+      binds[i].className += " signal";
+    }
+  }
 }
 
 // parametrise graph encoding for MDS plot
-function createMDSSpec(mdsData, dimList, numericFeatures, discreteFeatures, width, height) 
+function createMDSSpec(mdsData, dimList, features, width, height) 
 {
+  console.log(features);
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -159,16 +176,27 @@ function createMDSSpec(mdsData, dimList, numericFeatures, discreteFeatures, widt
           "value": dimList[1],
           "bind": { "input": "select", "options": dimList }
         },
+        /* dummy_signal is used for CSS styling */
+        {
+          "name": "dummy_signal",
+          "value": {},
+          "bind": { "input": "select", "options": [] }
+        },
         {
           "name": "scale_by",
-          "value": numericFeatures[0],
-          "bind": { "input": "select", "options": numericFeatures }
+          "value": features["numeric"][0],
+          "bind": { "input": "select", "options": features["numeric"] }
         },
         {
           "name": "colour_by",
-          "value": discreteFeatures[0],
-          "bind": { "input": "select", "options": discreteFeatures }
+          "value": features["discrete"][0],
+          "bind": { "input": "select", "options": features["discrete"] }
         },
+        {
+          "name": "shape_by",
+          "value": features["discrete"][0],
+          "bind": { "input": "select", "options": features["discrete"] }
+        }
       ],
     "data": 
       [
@@ -215,6 +243,12 @@ function createMDSSpec(mdsData, dimList, numericFeatures, discreteFeatures, widt
         "type": "ordinal",
         "domain": { "data": "source", "field": { "signal": "colour_by" } },
         "range": { "scheme": "tableau10" }
+      },
+      {
+        "name": "shape",
+        "type": "ordinal",
+        "domain": { "data": "source", "field": { "signal": "shape_by" } },
+        "range": ["circle","square","diamond","triangle", "triangle-up", "cross"]
       }
     ],
 
@@ -270,11 +304,11 @@ function createMDSSpec(mdsData, dimList, numericFeatures, discreteFeatures, widt
             "x": { "scale": "x", "field": { "signal": "x_axis" } },
             "y": { "scale": "y", "field": { "signal": "y_axis" } },
             "size": { "scale": "size", "field": { "signal": "scale_by" }},
-            "shape": { "value": "circle" },
+            "shape": { "scale": "shape", "field": { "signal": "shape_by" } },
+            "fill": { "scale": "color", "field": { "signal": "colour_by" } },
             "strokeWidth": { "value": 2 },
             "opacity": { "value": 0.7 },
             "stroke": { "value": "#4682b4" },
-            "fill": { "scale": "color", "field": { "signal": "colour_by" } },
             "tooltip": { "field": "tooltip" }
           }
         }
@@ -361,6 +395,7 @@ function createEigenSpec(eigenData, width, height)
       },
       {
         "type": "text",
+        "from": {"data":"table"},
         "encode": {
           "enter": {
             "align": {"value": "center"},
@@ -368,12 +403,12 @@ function createEigenSpec(eigenData, width, height)
             "fill": {"value": "#333"}
           },
           "update": {
-            "x": {"scale": "xscale", "signal": "tooltip.name", "band": 0.5},
-            "y": {"scale": "yscale", "signal": "tooltip.eigen", "offset": -2},
-            "text": {"signal": "tooltip.eigen"},
+            "x": {"scale": "xscale", "field": "name", "band": 0.5},
+            "y": {"scale": "yscale", "field": "eigen", "offset": -2},
+            "text": {"field": "eigen"},
             "fillOpacity": [
-              {"test": "datum === tooltip", "value": 0},
-              {"value": 1}
+              {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": 1},
+              {"value": 0}
             ]
           }
         }

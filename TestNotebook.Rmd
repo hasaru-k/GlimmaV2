@@ -29,8 +29,8 @@ groups
 
 ```{r}
 
-GlimmaV2(plotType="MDs", x=rnaseq, groups=groups)
 
+GlimmaV2(plotType="MDS", x=rnaseq, groups=groups)
 
 
 ```

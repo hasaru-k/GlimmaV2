@@ -2383,7 +2383,7 @@ window.onload = function() {
 })();
 
 </script>
-<style type="text/css">#plotContainer{display: grid;grid-column-gap: 10px;}#mdsContainer{grid-column-start: 1;grid-column-end: 2;}#eigenContainer{grid-column-start: 2;grid-column-end: 3;}#controlContainer{padding: 10px;display: inline-block;font-family: sans-serif;color: #353535;font-size: 10;}.vega-bind{display: inline-block;}.display-block{display: block;}.vega-bind-name{margin-right: 2px;margin-bottom: 5px;}.vega-bind select{margin-bottom: 5px;margin-right: 5px;}#savePNGBtn {box-shadow: inset 0px 1px 0px 0px #ffffff;background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);background-color:#ffffff;border-radius: 6px;border: 1px solid #dcdcdc;display: block;cursor: pointer;color:#353535;font-family: sans-serif;padding: 6px 15px;text-decoration: none;text-shadow: 0px 1px 0px #ffffff;}#savePNGBtn:hover {background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);background-color:#f6f6f6;}#savePNGBtn:active {position:relative;top:1px;}</style>
+<style type="text/css">#plotContainer{display: grid;grid-column-gap: 10px;}#mdsContainer{grid-column-start: 1;grid-column-end: 2;}#eigenContainer{grid-column-start: 2;grid-column-end: 3;}#controlContainer{padding: 10px;display: block;font-family: sans-serif;color: #353535;font-size: 9;}.vega-bind{display: inline-block;}.separator_signal { display: block;visibility:hidden;height: 5px;}.signal select{}.display-block{display: block;}.vega-bind-name{margin-right: 2px;margin-bottom: 5px;}.vega-bind select{margin-bottom: 7px;margin-right: 7px;}#savePNGBtn {box-shadow: inset 0px 1px 0px 0px #ffffff;background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);background-color:#ffffff;border-radius: 6px;border: 1px solid #dcdcdc;display: block;cursor: pointer;color:#353535;font-family: sans-serif;font-size: 12px;padding: 6px 15px;text-decoration: none;text-shadow: 0px 1px 0px #ffffff;margin-top: 5px;}#savePNGBtn:hover {background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);background-color:#f6f6f6;}#savePNGBtn:active {position:relative;top:1px;}</style>
 <script>(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -43913,7 +43913,8 @@ window.onload = function() {
       renderValue: function(x) {
 
         console.log(x);
-        
+        processData(x);
+
         var plotContainer = document.createElement("div");
         var mdsContainer = document.createElement("div");
         var eigenContainer = document.createElement("div");
@@ -43935,10 +43936,11 @@ window.onload = function() {
 
         // TODO: extract this data from dataframe
         var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
-        var sampleList = ["lane", "genotype"];
-        var numericFeatures = ["libsize", "lane"];
 
-        var mdsSpec = createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height);
+        var mdsSpec = createMDSSpec(mdsData, dimList, 
+                                      x.data.features,
+                                      width, height);
+
         mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
@@ -43948,7 +43950,6 @@ window.onload = function() {
         mdsView.runAsync();
 
         var eigenSpec = createEigenSpec(eigenData, width, height);
-        console.log(eigenSpec);
         eigenView = new vega.View(vega.parse(eigenSpec), {
           renderer: 'canvas',
           container: '#' + eigenContainer.getAttribute("id"),
@@ -43980,6 +43981,20 @@ window.onload = function() {
     };
   }
 });
+
+function processData(x)
+{
+  if (!Array.isArray(x.data.features["numeric"]))
+  {
+    x.data.features["numeric"] = [ x.data.features["numeric"] ];
+  }
+  if (!Array.isArray(x.data.features["discrete"]))
+  {
+    x.data.features["discrete"] = [ x.data.features["discrete"] ];
+  }
+  x.data.features["numeric"].sort();
+  x.data.features["discrete"].sort();
+}
 
 function linkPlots()
 {
@@ -44020,22 +44035,27 @@ function addControls(controlContainer)
 
 }
 
-function reformatElements()
+function reformatElements(controlContainer)
 {
-  // reformat the vega-bound control elements
-  bindNames = document.getElementsByClassName("vega-bind-name");
-  for (i = 0; i < bindNames.length; i++) {
-    bindNames[i].innerHTML += ":";
-  }
-
-  // color_by input on next line
   binds = document.getElementsByClassName("vega-bind");
-  binds[2].className += " display-block";
+  for (var i = 0; i < binds.length; i++)
+  {
+    binds[i].innerHTML += " ";
+    if (i == 2)
+    {
+      binds[i].className += " separator_signal";
+    }
+    else if (i > 2)
+    {
+      binds[i].className += " signal";
+    }
+  }
 }
 
 // parametrise graph encoding for MDS plot
-function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, height) 
+function createMDSSpec(mdsData, dimList, features, width, height) 
 {
+  console.log(features);
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -44057,16 +44077,27 @@ function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, hei
           "value": dimList[1],
           "bind": { "input": "select", "options": dimList }
         },
+        /* dummy_signal is used for CSS styling */
+        {
+          "name": "dummy_signal",
+          "value": {},
+          "bind": { "input": "select", "options": [] }
+        },
         {
           "name": "scale_by",
-          "value": numericFeatures[0],
-          "bind": { "input": "select", "options": numericFeatures }
+          "value": features["numeric"][0],
+          "bind": { "input": "select", "options": features["numeric"] }
         },
         {
           "name": "colour_by",
-          "value": "lane",
-          "bind": { "input": "select", "options": sampleList }
+          "value": features["discrete"][0],
+          "bind": { "input": "select", "options": features["discrete"] }
         },
+        {
+          "name": "shape_by",
+          "value": features["discrete"][0],
+          "bind": { "input": "select", "options": features["discrete"] }
+        }
       ],
     "data": 
       [
@@ -44113,6 +44144,12 @@ function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, hei
         "type": "ordinal",
         "domain": { "data": "source", "field": { "signal": "colour_by" } },
         "range": { "scheme": "tableau10" }
+      },
+      {
+        "name": "shape",
+        "type": "ordinal",
+        "domain": { "data": "source", "field": { "signal": "shape_by" } },
+        "range": ["circle","square","diamond","triangle", "triangle-up", "cross"]
       }
     ],
 
@@ -44168,11 +44205,11 @@ function createMDSSpec(mdsData, dimList, sampleList, numericFeatures, width, hei
             "x": { "scale": "x", "field": { "signal": "x_axis" } },
             "y": { "scale": "y", "field": { "signal": "y_axis" } },
             "size": { "scale": "size", "field": { "signal": "scale_by" }},
-            "shape": { "value": "circle" },
+            "shape": { "scale": "shape", "field": { "signal": "shape_by" } },
+            "fill": { "scale": "color", "field": { "signal": "colour_by" } },
             "strokeWidth": { "value": 2 },
             "opacity": { "value": 0.7 },
             "stroke": { "value": "#4682b4" },
-            "fill": { "scale": "color", "field": { "signal": "colour_by" } },
             "tooltip": { "field": "tooltip" }
           }
         }
@@ -44259,6 +44296,7 @@ function createEigenSpec(eigenData, width, height)
       },
       {
         "type": "text",
+        "from": {"data":"table"},
         "encode": {
           "enter": {
             "align": {"value": "center"},
@@ -44266,12 +44304,12 @@ function createEigenSpec(eigenData, width, height)
             "fill": {"value": "#333"}
           },
           "update": {
-            "x": {"scale": "xscale", "signal": "tooltip.name", "band": 0.5},
-            "y": {"scale": "yscale", "signal": "tooltip.eigen", "offset": -2},
-            "text": {"signal": "tooltip.eigen"},
+            "x": {"scale": "xscale", "field": "name", "band": 0.5},
+            "y": {"scale": "yscale", "field": "eigen", "offset": -2},
+            "text": {"field": "eigen"},
             "fillOpacity": [
-              {"test": "datum === tooltip", "value": 0},
-              {"value": 1}
+              {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": 1},
+              {"value": 0}
             ]
           }
         }
@@ -44461,11 +44499,11 @@ groups</code></pre>
 {"columns":[{"label":["genotype"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["lane"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["miscCont"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["miscDisc"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["libsize"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Smchd1-null","2":"4","3":"4000","4":"blue","5":"7519549"},{"1":"Smchd1-null","2":"4","3":"4000","4":"red","5":"6752457"},{"1":"Smchd1-null","2":"4","3":"4000","4":"green","5":"6225875"},{"1":"Smchd1-null","2":"4","3":"4000","4":"green","5":"6474510"},{"1":"WT","2":"4","3":"4000","4":"green","5":"6822924"},{"1":"WT","2":"3","3":"300","4":"green","5":"6096639"},{"1":"WT","2":"3","3":"250","4":"green","5":"3626853"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<pre class="r"><code>GlimmaV2(plotType=&quot;MDs&quot;, x=rnaseq, groups=groups)</code></pre>
+<pre class="r"><code>GlimmaV2(plotType=&quot;MDS&quot;, x=rnaseq, groups=groups)</code></pre>
 <pre><code>## Warning in readLines(con): incomplete final line found on &#39;C:/Users/hkari/
 ## OneDrive/onenote/R/win-library/3.6/GlimmaV2/htmlwidgets/GlimmaV2.yaml&#39;</code></pre>
-<div id="htmlwidget-ff1714e85a257371d235" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ff1714e85a257371d235">{"x":{"plotType":"MDs","data":{"mdsData":{"dim1":[-172.097113832018,-374.240188886609,-728.573352874493,195.903292880721,-2125.75210623793,-576.146001938243,3780.90547088857],"dim2":[-1613.0805541282,-306.686292158076,285.334993682426,-452.74119991067,880.370682744399,639.68850153338,567.113868236737],"dim3":[659.189077050233,-710.46348911997,-715.082453636139,-405.182062736179,548.977054263006,408.742345835874,213.819528343177],"dim4":[-20.3866098342448,-761.262706382554,325.927869691805,608.626171337157,45.1755332946292,-154.871163397278,-43.2090947095165],"dim5":[269.804037434809,-190.976934291182,683.041157556285,-630.590156357752,-51.6449146618703,-180.728368232479,101.095178552191],"dim6":[-0.224732638231188,59.5703268649269,-51.4531913431717,10.1470276149101,224.609180736595,-316.194239069491,73.5456278344597],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":[4,4,4,4,4,3,3],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.69,0.16,0.07,0.04,0.04,0.01]},"numericFeatures":["genotype","miscDisc"],"discreteFeatures":["lane","miscCont","libsize"]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8b35c5688af374ada34e" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8b35c5688af374ada34e">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[-172.097113832018,-374.240188886609,-728.573352874493,195.903292880721,-2125.75210623793,-576.146001938243,3780.90547088857],"dim2":[-1613.0805541282,-306.686292158076,285.334993682426,-452.74119991067,880.370682744399,639.68850153338,567.113868236737],"dim3":[659.189077050233,-710.46348911997,-715.082453636139,-405.182062736179,548.977054263006,408.742345835874,213.819528343177],"dim4":[-20.3866098342448,-761.262706382554,325.927869691805,608.626171337157,45.1755332946292,-154.871163397278,-43.2090947095165],"dim5":[269.804037434809,-190.976934291182,683.041157556285,-630.590156357752,-51.6449146618703,-180.728368232479,101.095178552191],"dim6":[-0.224732638231188,59.5703268649269,-51.4531913431717,10.1470276149101,224.609180736595,-316.194239069491,73.5456278344597],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":[4,4,4,4,4,3,3],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.69,0.16,0.07,0.04,0.04,0.01]},"features":{"numeric":["lane","miscCont","libsize","- "],"discrete":["genotype","miscDisc","-"],"all":["lane","miscCont","libsize","- ","genotype","miscDisc","-"]}}},"evals":[],"jsHooks":[]}</script>
 
 
 

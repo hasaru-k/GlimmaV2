@@ -104,18 +104,19 @@ GlimmaV2 <- function(
       eigen = round(a1$eig[1:min(ndim, 8)]/sum(a1$eig), 2)
   )
 
+  # add this column for no dimensionality in Vega
+  points <- cbind(points, "-"="0")
+  points <- cbind(points, "- "=0)
   is_factor <- sapply(groups, is.factor)
-  numericFeatures <- colnames(groups[, !is_factor])
-  discreteFeatures <- colnames(groups[, is_factor])
+  numeric <- c(colnames(groups[, !is_factor]), "- ")
+  discrete <- c(colnames(groups[, is_factor]), "-")
+  features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))
 
   # forward data to the widget using xData
-  xData = list(
-    plotType = plotType,
-    data = list(mdsData=points, 
-                eigenData=eigen,
-                numericFeatures=numericFeatures,
-                discreteFeatures=discreteFeatures)
-  )
+  xData = list(plotType = plotType,
+               data = list(mdsData=points, 
+                           eigenData=eigen,
+                           features=features))
 
   # create widget
   htmlwidgets::createWidget(
