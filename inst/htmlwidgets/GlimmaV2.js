@@ -311,7 +311,14 @@ function createMDSSpec(mdsData, dimList, features, width, height)
         "symbolStrokeWidth": 2,
         "symbolOpacity": 0.7,
         "symbolType": "circle"
-      }
+      },
+      {
+        "shape": "shape",
+        "title": "Shape",
+        "symbolStrokeColor": "#4682b4",
+        "symbolStrokeWidth": 2,
+        "symbolOpacity": 0.7,
+      },
     ],
 
     "marks": [
