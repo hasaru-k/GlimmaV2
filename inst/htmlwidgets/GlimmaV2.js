@@ -41,12 +41,17 @@ HTMLWidgets.widget({
                                       x.data.features,
                                       width, height);
 
+        
+        // create tooltip handler
+        var handler = new vegaTooltip.Handler();
+
         mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'canvas',
           container: '#' + mdsContainer.getAttribute("id"),
           bind: '#' + controlContainer.getAttribute("id"),
           hover: true
         });
+        mdsView.tooltip(handler.call);
         mdsView.runAsync();
 
         var eigenSpec = createEigenSpec(eigenData, width, height);
@@ -56,7 +61,9 @@ HTMLWidgets.widget({
           hover: true
         });
         eigenView.runAsync();
-        
+
+
+
         linkPlots();
         addControls(controlContainer);
         reformatElements();
@@ -84,6 +91,8 @@ HTMLWidgets.widget({
 
 function processData(x)
 {
+  /* if there's only a single feature in an R vector,
+    it does not become an array after data transformation to JS */
   if (!Array.isArray(x.data.features["numeric"]))
   {
     x.data.features["numeric"] = [ x.data.features["numeric"] ];
@@ -155,6 +164,20 @@ function reformatElements(controlContainer)
 function createMDSSpec(mdsData, dimList, features, width, height) 
 {
   console.log(features);
+
+  // generate tooltip object for embedding in spec
+  var tooltipString = "{'x':datum[x_axis], 'y':datum[y_axis]";
+  features["all"].forEach(function(x) 
+  {
+    if (x != "-" && x != "- ")
+    {
+      tooltipString += `,'${x}':datum['${x}']`;
+    }  
+  });
+  tooltipString += "}";
+  console.log(tooltipString)
+  var tooltip = { "signal" : tooltipString };
+  
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -296,9 +319,6 @@ function createMDSSpec(mdsData, dimList, features, width, height)
         "name": "marks",
         "type": "symbol",
         "from": { "data": "source" },
-        "enter": {
-          "tooltip": { "field": "tooltip" }
-        },
         "encode": {
           "update": {
             "x": { "scale": "x", "field": { "signal": "x_axis" } },
@@ -309,7 +329,7 @@ function createMDSSpec(mdsData, dimList, features, width, height)
             "strokeWidth": { "value": 2 },
             "opacity": { "value": 0.7 },
             "stroke": { "value": "#4682b4" },
-            "tooltip": { "field": "tooltip" }
+            "tooltip": tooltip
           }
         }
       }

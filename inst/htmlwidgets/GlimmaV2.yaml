@@ -7,3 +7,10 @@
       - vega.js
     stylesheet:
       - vega_plots.css
+  - name: vega-tooltip
+    version: 1.0
+    src: htmlwidgets/lib/vega-tooltip
+    script:
+      - vega-tooltip.js
+    stylesheet:
+      - vega-tooltip.css
