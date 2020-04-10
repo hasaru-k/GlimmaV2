@@ -6,67 +6,87 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
-    // TODO: define shared variables for this instance
- 
+    // create general layout elements
+    var plotContainer = document.createElement("div");
+    var controlContainer = document.createElement("div");
+    plotContainer.setAttribute("id", "plotContainer");
+    controlContainer.setAttribute("id", "controlContainer");
+
+    var widget = document.getElementById(el.id);
+    widget.appendChild(plotContainer);
+    widget.appendChild(controlContainer);
+
     return {
 
       renderValue: function(x) {
-
-        console.log(x);
-        processData(x);
-
-        var plotContainer = document.createElement("div");
-        var mdsContainer = document.createElement("div");
-        var eigenContainer = document.createElement("div");
-        var controlContainer = document.createElement("div");
-        mdsContainer.setAttribute("id", "mdsContainer");
-        eigenContainer.setAttribute("id", "eigenContainer");
-        plotContainer.setAttribute("id", "plotContainer");
-        controlContainer.setAttribute("id", "controlContainer");
-
-        var widget = document.getElementById(el.id);
-        widget.appendChild(plotContainer);
-        widget.appendChild(controlContainer);
-
-        plotContainer.appendChild(mdsContainer);
-        plotContainer.appendChild(eigenContainer);
-
-        mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
-        eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
-
-        // TODO: extract this data from dataframe
-        var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
-
-        var mdsSpec = createMDSSpec(mdsData, dimList, 
-                                      x.data.features,
-                                      width, height);
-
         
-        // create tooltip handler
-        var handler = new vegaTooltip.Handler();
+        if (x.plotType === "MDS")
+        {
+          // create tooltip handler
+          var handler = new vegaTooltip.Handler();
 
-        mdsView = new vega.View(vega.parse(mdsSpec), {
-          renderer: 'canvas',
-          container: '#' + mdsContainer.getAttribute("id"),
-          bind: '#' + controlContainer.getAttribute("id"),
-          hover: true
-        });
-        mdsView.tooltip(handler.call);
-        mdsView.runAsync();
+          // create container elements
+          var mdsContainer = document.createElement("div");
+          var eigenContainer = document.createElement("div");
+          mdsContainer.setAttribute("id", "mdsContainer");
+          eigenContainer.setAttribute("id", "eigenContainer");
+      
+          plotContainer.appendChild(mdsContainer);
+          plotContainer.appendChild(eigenContainer);
 
-        var eigenSpec = createEigenSpec(eigenData, width, height);
-        eigenView = new vega.View(vega.parse(eigenSpec), {
-          renderer: 'canvas',
-          container: '#' + eigenContainer.getAttribute("id"),
-          hover: true
-        });
-        eigenView.runAsync();
+          console.log(x);
+          processDataMDS(x);
+          var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
+          var eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
+  
+          // TODO: extract this data from dataframe
+          var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
+          var mdsSpec = createMDSSpec(mdsData, dimList, 
+                                        x.data.features,
+                                        width, height);
+  
+          mdsView = new vega.View(vega.parse(mdsSpec), {
+            renderer: 'canvas',
+            container: '#' + mdsContainer.getAttribute("id"),
+            bind: '#' + controlContainer.getAttribute("id"),
+            hover: true
+          });
+  
+          mdsView.tooltip(handler.call);
+          mdsView.runAsync();
+  
+          var eigenSpec = createEigenSpec(eigenData, width, height);
+          eigenView = new vega.View(vega.parse(eigenSpec), {
+            renderer: 'canvas',
+            container: '#' + eigenContainer.getAttribute("id"),
+            hover: true
+          });
+          eigenView.runAsync();
+          linkPlotsMDS();
+          addControlsMDS(controlContainer);
+          reformatElementsMDS();
+        }
 
+        if (x.plotType === "MA")
+        {
+          console.log("MA");
+          console.log(x);
 
-
-        linkPlots();
-        addControls(controlContainer);
-        reformatElements();
+          // create container elements
+          var xyContainer = document.createElement("div");
+          xyContainer.setAttribute("id", "xyContainer");
+          plotContainer.appendChild(xyContainer);
+          var xyData = HTMLWidgets.dataframeToD3(x.data);
+          var xySpec = createXYSpec(xyData);
+          xyView = new vega.View(vega.parse(xySpec), {
+            renderer: 'canvas',
+            container: '#' + xyContainer.getAttribute("id"),
+            bind: '#' + controlContainer.getAttribute("id"),
+            hover: true
+          });
+  
+          xyView.runAsync();
+        }
 
       },
 
@@ -89,7 +109,7 @@ HTMLWidgets.widget({
   }
 });
 
-function processData(x)
+function processDataMDS(x)
 {
   /* if there's only a single feature in an R vector,
     it does not become an array after data transformation to JS */
@@ -105,7 +125,7 @@ function processData(x)
   x.data.features["discrete"].sort();
 }
 
-function linkPlots()
+function linkPlotsMDS()
 {
   
   // highlight variance plot when we change a signal in the MDS plot
@@ -123,7 +143,7 @@ function linkPlots()
 
 }
 
-function addControls(controlContainer)
+function addControlsMDS(controlContainer)
 {
 
   // save to PNG button for MDS plot
@@ -144,7 +164,7 @@ function addControls(controlContainer)
 
 }
 
-function reformatElements(controlContainer)
+function reformatElementsMDS(controlContainer)
 {
   binds = document.getElementsByClassName("vega-bind");
   for (var i = 0; i < binds.length; i++)
@@ -158,6 +178,90 @@ function reformatElements(controlContainer)
       binds[i].className += " signal";
     }
   }
+}
+
+
+// parametrise graph encoding for MDS plot
+function createXYSpec(xyData) 
+{
+  
+  return {
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "Testing ground for GlimmaV2",
+    "width": width * 0.45,
+    "height": height * 0.6,
+    "padding": 0,
+    "title": {
+      "text": "MDS Plot"
+    },
+    "data": 
+      [
+        {
+          "name": "source",
+          "values": xyData,
+          "transform": [{
+            "type": "formula",
+            "expr": "datum.x",
+            "as": "tooltip"
+          }]
+        }
+      ],
+    "scales": [
+      {
+        "name": "x",
+        "type": "linear",
+        "round": true,
+        "nice": true,
+        "zero": true,
+        "domain": { "data": "source", "field": "logCPM" },
+        "range": "width"
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "round": true,
+        "nice": true,
+        "zero": true,
+        "domain": { "data": "source", "field": "logFC" },
+        "range": "height"
+      }
+    ],
+    "axes" : [
+      {
+        "scale": "x",
+        "grid": true,
+        "domain": false,
+        "orient": "bottom",
+        "tickCount": 5,
+        "title": "logCPM"
+      },
+      {
+        "scale": "y",
+        "grid": true,
+        "domain": false,
+        "orient": "left",
+        "titlePadding": 5,
+        "title": "logFC"
+      }
+    ],
+    "marks": [
+      {
+        "name": "marks",
+        "type": "symbol",
+        "from": { "data": "source" },
+        "encode": {
+          "update": {
+            "x": { "scale": "x", "field": "logCPM" },
+            "y": { "scale": "y", "field": "logFC" },
+            "shape": "circle",
+            "strokeWidth": { "value": 2 },
+            "opacity": { "value": 0.7 },
+            "stroke": { "value": "#4682b4" }
+          }
+        }
+      }
+    ]
+  };
 }
 
 // parametrise graph encoding for MDS plot

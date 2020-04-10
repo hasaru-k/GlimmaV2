@@ -29,5 +29,11 @@ groups
 
 
 ```{r}
-GlimmaV2(plotType="MDs", x=rnaseq, groups=groups)
+GlimmaV2(plotType="MDS", x=rnaseq, groups=groups)
+```
+
+```{r}
+
+library(DT)
+datatable(iris, options = list(pageLength = 5))
 ```

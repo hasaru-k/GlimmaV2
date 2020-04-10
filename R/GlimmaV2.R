@@ -6,15 +6,47 @@
 #'
 #' @export
 GlimmaV2 <- function(
-  plotType = "MDS", 
+  plotType, 
   x, 
+  width = NULL, 
+  height = NULL, 
+  elementId = NULL,
+  ...)
+{
+
+  if (plotType == "MDS")
+  {
+    xData <- prepareMDSData(x, plotType, ...)
+  }
+
+  if (plotType == "MA")
+  {
+    data = list(logFC = x$coefficients[, ncol(x$coefficients)],
+                logCPM = x$Amean,
+                PValue = x$p.value[, ncol(x$coefficients)],
+                Adj.PValue = stats::p.adjust(x$p.value[, ncol(x$coefficients)]) )
+    xData <- list(plotType=plotType, data=data)
+  }
+
+  # create widget
+  htmlwidgets::createWidget(
+    name = 'GlimmaV2',
+    xData,
+    width = width,
+    height = height,
+    package = 'GlimmaV2',
+    elementId = elementId
+  )
+
+}
+
+prepareMDSData <- function(
+  x,
+  plotType,
   groups = rep(1, ncol(x)),
   top = 500, 
   labels = seq_len(ncol(x)),
-  gene.selection = c("pairwise", "common"),
-  width = NULL, 
-  height = NULL, 
-  elementId = NULL)
+  gene.selection = c("pairwise", "common")) 
 {
 
   # helper function
@@ -117,16 +149,8 @@ GlimmaV2 <- function(
                data = list(mdsData=points, 
                            eigenData=eigen,
                            features=features))
-
-  # create widget
-  htmlwidgets::createWidget(
-    name = 'GlimmaV2',
-    xData,
-    width = width,
-    height = height,
-    package = 'GlimmaV2',
-    elementId = elementId
-  )
+  
+  return(xData)
 
 }
 
