@@ -20,10 +20,10 @@ HTMLWidgets.widget({
 
       renderValue: function(x) {
         
+        var handler = new vegaTooltip.Handler();
         if (x.plotType === "MDS")
         {
           // create tooltip handler
-          var handler = new vegaTooltip.Handler();
 
           // create container elements
           var mdsContainer = document.createElement("div");
@@ -76,15 +76,15 @@ HTMLWidgets.widget({
           var xyContainer = document.createElement("div");
           xyContainer.setAttribute("id", "xyContainer");
           plotContainer.appendChild(xyContainer);
-          var xyData = HTMLWidgets.dataframeToD3(x.data);
-          var xySpec = createXYSpec(xyData);
+          var xyData = HTMLWidgets.dataframeToD3(x.data.table);
+          var xySpec = createXYSpec(xyData, width, height, x.data.x, x.data.y);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
             container: '#' + xyContainer.getAttribute("id"),
             bind: '#' + controlContainer.getAttribute("id"),
             hover: true
           });
-  
+          xyView.tooltip(handler.call);
           xyView.runAsync();
         }
 
@@ -182,9 +182,11 @@ function reformatElementsMDS(controlContainer)
 
 
 // parametrise graph encoding for MDS plot
-function createXYSpec(xyData) 
+function createXYSpec(xyData, width, height, x, y) 
 {
-  
+
+  // generate tooltip object for embedding in spec
+  var tooltip = { "signal" : `{'x':datum['${x}'], 'y':datum['${y}']}` };
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -192,7 +194,7 @@ function createXYSpec(xyData)
     "height": height * 0.6,
     "padding": 0,
     "title": {
-      "text": "MDS Plot"
+      "text": "MA Plot"
     },
     "data": 
       [
@@ -213,7 +215,7 @@ function createXYSpec(xyData)
         "round": true,
         "nice": true,
         "zero": true,
-        "domain": { "data": "source", "field": "logCPM" },
+        "domain": { "data": "source", "field": x },
         "range": "width"
       },
       {
@@ -222,7 +224,7 @@ function createXYSpec(xyData)
         "round": true,
         "nice": true,
         "zero": true,
-        "domain": { "data": "source", "field": "logFC" },
+        "domain": { "data": "source", "field": y },
         "range": "height"
       }
     ],
@@ -233,7 +235,7 @@ function createXYSpec(xyData)
         "domain": false,
         "orient": "bottom",
         "tickCount": 5,
-        "title": "logCPM"
+        "title": x
       },
       {
         "scale": "y",
@@ -241,7 +243,7 @@ function createXYSpec(xyData)
         "domain": false,
         "orient": "left",
         "titlePadding": 5,
-        "title": "logFC"
+        "title": y
       }
     ],
     "marks": [
@@ -251,12 +253,14 @@ function createXYSpec(xyData)
         "from": { "data": "source" },
         "encode": {
           "update": {
-            "x": { "scale": "x", "field": "logCPM" },
-            "y": { "scale": "y", "field": "logFC" },
+            "x": { "scale": "x", "field": x },
+            "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "strokeWidth": { "value": 2 },
+            "size" : 0.1,
+            "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.7 },
-            "stroke": { "value": "#4682b4" }
+            "stroke": { "value": "#4682b4" },
+            "tooltip": tooltip
           }
         }
       }
@@ -520,7 +524,7 @@ function createEigenSpec(eigenData, width, height)
             "y2": {"scale": "yscale", "value": 0}
           },
           "update": {
-            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "sandybrown"}, {"value": "steelblue"} ]
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "#ffcc5c"}, {"value": "#ff6f69"} ]
           }
         }
       },

@@ -32,20 +32,14 @@ dt <- decideTests(fit)
 summary(dt)
 ```
 
-
-
 ```{r}
 
 
-GlimmaV2(plotType="MA", x=fit, groups=groups)
-
 ```
 
-## Including Plots
+```{r}
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
+GlimmaV2(plotType="MA", fit)
 
 ```
 

@@ -32,8 +32,3 @@ groups
 GlimmaV2(plotType="MDS", x=rnaseq, groups=groups)
 ```
 
-```{r}
-
-library(DT)
-datatable(iris, options = list(pageLength = 5))
-```

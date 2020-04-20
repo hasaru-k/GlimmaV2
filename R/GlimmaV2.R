@@ -14,6 +14,7 @@ GlimmaV2 <- function(
   ...)
 {
 
+  # create xData depending on type of plot
   if (plotType == "MDS")
   {
     xData <- prepareMDSData(x, plotType, ...)
@@ -21,10 +22,13 @@ GlimmaV2 <- function(
 
   if (plotType == "MA")
   {
-    data = list(logFC = x$coefficients[, ncol(x$coefficients)],
-                logCPM = x$Amean,
-                PValue = x$p.value[, ncol(x$coefficients)],
-                Adj.PValue = stats::p.adjust(x$p.value[, ncol(x$coefficients)]) )
+    # for now assume fit object
+    logcpm <- unname(x$Amean)
+    logfc <- unname(x$coefficients[,1])
+    stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
+    names <- names(x$Amean)
+    table <- list(logcpm=logcpm, logfc=logfc, names=names)
+    data = list(x="logcpm", y="logfc", table=table)
     xData <- list(plotType=plotType, data=data)
   }
 
