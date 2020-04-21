@@ -6,6 +6,10 @@ output:
 ---
 
 ```{r}
+?glMDPlot
+```
+
+```{r}
 # need old Glimma for this dataset
 library(Glimma)
 library(GlimmaV2)
@@ -29,6 +33,8 @@ groups
 
 
 ```{r}
-GlimmaV2(plotType="MDS", x=rnaseq, groups=groups)
+GlimmaV2(plotType="MDS", rnaseq, groups=groups)
+
 ```
+
 

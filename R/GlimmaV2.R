@@ -6,10 +6,10 @@
 #'
 #' @export
 GlimmaV2 <- function(
-  plotType, 
-  x, 
-  width = NULL, 
-  height = NULL, 
+  plotType,
+  x,
+  width = NULL,
+  height = NULL,
   elementId = NULL,
   ...)
 {
@@ -17,10 +17,11 @@ GlimmaV2 <- function(
   # create xData depending on type of plot
   if (plotType == "MDS")
   {
-    xData <- prepareMDSData(x, plotType, ...)
+
+    xData <- prepareMDSData(x, ...)
   }
 
-  if (plotType == "MA")
+  else if (plotType == "MA")
   {
     # for now assume fit object
     logcpm <- unname(x$Amean)
@@ -30,6 +31,11 @@ GlimmaV2 <- function(
     table <- list(logcpm=logcpm, logfc=logfc, names=names)
     data = list(x="logcpm", y="logfc", table=table)
     xData <- list(plotType=plotType, data=data)
+  }
+
+  else
+  {
+    stop("Please enter a valid plotType arg in ['MDS', 'MA'].")
   }
 
   # create widget
@@ -44,13 +50,18 @@ GlimmaV2 <- function(
 
 }
 
-prepareMDSData <- function(
+prepareMDSData <- function(x, ...)
+{
+  UseMethod("prepareMDSData")
+}
+
+
+prepareMDSData.default <- function(
   x,
-  plotType,
-  groups = rep(1, ncol(x)),
-  top = 500, 
+  top = 500,
   labels = seq_len(ncol(x)),
-  gene.selection = c("pairwise", "common")) 
+  groups = rep(1, ncol(x)),
+  gene.selection = c("pairwise", "common"))
 {
 
   # helper function
@@ -59,7 +70,7 @@ prepareMDSData <- function(
   }
 
   # CODE TAKEN FROM GLIMMA
-  
+
   #   Multi-dimensional scaling with top-distance
   #   Di Wu and Gordon Smyth
   #   19 March 2009.  Last modified 14 Jan 2015
@@ -149,14 +160,45 @@ prepareMDSData <- function(
   features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))
 
   # forward data to the widget using xData
-  xData = list(plotType = plotType,
-               data = list(mdsData=points, 
+  xData = list(plotType = "MDS",
+               data = list(mdsData=points,
                            eigenData=eigen,
                            features=features))
-  
+
   return(xData)
 
 }
+
+prepareMDSData.DGEList <- function(
+  x,
+  top = 500,
+  labels = NULL,
+  groups = rep(1, ncol(x)),
+  gene.selection = c("pairwise", "common"),
+  prior.count = 2)
+{
+
+  # extract sample groups based on DGEList class
+  if (!is.null(x$samples$groups))
+  {
+    labels <- rownames(x$samples)
+  }
+  else
+  {
+    labels <- seq_len(ncol(x))
+  }
+  transformed_counts <- edgeR::cpm(x, log=TRUE, prior.count = prior.count)
+
+  # call main processing function
+  prepareMDSData.default(
+    transformed_counts,
+    top=top,
+    labels=labels,
+    groups=groups,
+    gene.selection=gene.selection)
+
+}
+
 
 #' Shiny bindings for GlimmaV2
 #'
