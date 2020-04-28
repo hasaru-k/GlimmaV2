@@ -14,3 +14,10 @@
       - vega-tooltip.js
     stylesheet:
       - vega-tooltip.css
+  - name: datatables
+    version: 1.0
+    src: htmlwidgets/lib/datatables
+    script:
+      - datatables.min.js
+    stylesheet:
+      - datatables.css

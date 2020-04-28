@@ -3,6 +3,7 @@ title: "TestMAPlot"
 output: html_document
 ---
 
+
 ```{r}
 library(Glimma)
 library(limma)
@@ -10,8 +11,19 @@ library(GlimmaV2)
 
 data(lymphomaRNAseq)
 rnaseq <- lymphomaRNAseq
+```
+
+```{r}
+
+# 7 samples
+# each instance is a gene
+# attribute is number of counts per sample
+# data.frame(rnaseq$counts)
+```
 
 
+
+```{r}
 # add lane
 groups <- data.frame(genotype=rnaseq$samples$group,
                      lane= as.character(c(rep(4,5),3,3)),
@@ -24,6 +36,8 @@ groups <- rnaseq$samples$group
 # fit
 design <- model.matrix(~0+groups)
 contrasts <- cbind(Smchd1null.vs.WT=c(-1,1))
+
+# convert raw counts to logCPM values by automatically extracting libsizes and normalisation factors from x
 vm <- voomWithQualityWeights(rnaseq, design=design)
 fit <- lmFit(vm, design=design)
 fit <- contrasts.fit(fit, contrasts)
@@ -34,12 +48,92 @@ summary(dt)
 
 ```{r}
 
+testing <- function(fit, counts, groups=1:ncol(counts), logTransform=FALSE)
+{
+  
+  if (is.null(colnames(counts)))
+  {
+    samples <- seq_len(ncol(counts))
+  }
+  else
+  {
+    samples <- colnames(counts)
+  }
+  
+  # process counts
+  cols <- colnames(counts)
+  rownames(counts) <- make.names(cols)
+  if (logTransform) 
+  {
+      counts <- as.matrix(edgeR::cpm(counts, log=TRUE))
+  } 
+  else 
+  {
+      counts <- as.matrix(counts)
+  }
+  counts <- t(counts)
+  return(counts)
+  if (!is.numeric(groups)) 
+  {
+      # reorder samples to group levels
+      groups <- factor(groups)
+      counts <- counts[order(groups), ]
+      sample.cols <- sample.cols[order(groups)]
+      samples <- samples[order(groups)]
+      groups <- sort(groups)
+  }
+
+  expData <- data.frame(
+      Sample = samples,
+      cols = as.hexcol(sample.cols),
+      Group = groups,
+      counts)
+  
+  expData
+
+}
+
+
+```
+
+```{r}
+# object has a bunch of genes
+nrow(fit$genes)
+
+# fold change is the attribute here
+# each instance is a gene;
+# the col vector names are the geneIDs
+# the col vector attribute is fold change (Smchd1null vs WT)
+# data.frame(fit$coefficients)
+
+```
+
+
+```{r}
+
+# log cpm is the attribute here
+# averaged across all arrays in the original linear model fit
+# each instance is a gene;
+# the col vector names are the geneIDs
+# the col vector attribute is mean expression
+# data.frame(fit$Amean)
+
+
+# for now assume fit object
 
 ```
 
 ```{r}
 
-GlimmaV2(plotType="MA", fit)
+# this is where info for the MD scatter plot comes from!
+# data.frame(vm$E)
+# fit$design
 
 ```
 
+
+```{r}
+
+GlimmaV2("MA", fit)
+
+```

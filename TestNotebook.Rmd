@@ -28,12 +28,14 @@ groups <- data.frame(genotype=rnaseq$samples$group,
 # add libsize
 groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
 groups
+
 ```
 
 
 
 ```{r}
-GlimmaV2(plotType="MDS", rnaseq, groups=groups)
+?glMDSPlot
+
 
 ```
 

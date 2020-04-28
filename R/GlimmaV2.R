@@ -28,8 +28,8 @@ GlimmaV2 <- function(
     logfc <- unname(x$coefficients[,1])
     stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
     names <- names(x$Amean)
-    table <- list(logcpm=logcpm, logfc=logfc, names=names)
-    data = list(x="logcpm", y="logfc", table=table)
+    table <- cbind(x$genes, logcpm=logcpm, logfc=logfc)
+    data = list(x="logcpm", y="logfc", table=table, cols=colnames(table))
     xData <- list(plotType=plotType, data=data)
   }
 

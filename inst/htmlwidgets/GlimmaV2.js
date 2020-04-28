@@ -77,6 +77,7 @@ HTMLWidgets.widget({
           xyContainer.setAttribute("id", "xyContainer");
           plotContainer.appendChild(xyContainer);
           var xyData = HTMLWidgets.dataframeToD3(x.data.table);
+          console.log(xyData);
           var xySpec = createXYSpec(xyData, width, height, x.data.x, x.data.y);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
@@ -86,6 +87,34 @@ HTMLWidgets.widget({
           });
           xyView.tooltip(handler.call);
           xyView.runAsync();
+          
+          // setup the datatable
+          var datatableEl = document.createElement("TABLE");
+          datatableEl.setAttribute("id", "dataTable");
+          datatableEl.setAttribute("class", "dataTable");
+          widget.appendChild(datatableEl);
+
+          var xyColumnsInfo = [];
+          x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
+          $(document).ready(function() {
+            datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
+                data: xyData,
+                columns: xyColumnsInfo,
+                rowId: "GeneID",
+                dom: 'Bfrtip',
+                buttons: ['csv', 'excel']
+            });
+          });
+
+          // point selection
+          xyView.addSignalListener('click', function(name, value) {
+            if (datatable)
+            {
+              datatable.search(value["Symbols"]).draw();
+            }
+          });
+
+
         }
 
       },
@@ -196,6 +225,13 @@ function createXYSpec(xyData, width, height, x, y)
     "title": {
       "text": "MA Plot"
     },
+    "signals":
+      [
+        {
+          "name": "click", "value": null,
+          "on": [ {"events": "mousedown, touchstart", "update": "datum"} ]
+        }
+      ],
     "data": 
       [
         {
@@ -256,7 +292,7 @@ function createXYSpec(xyData, width, height, x, y)
             "x": { "scale": "x", "field": x },
             "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "size" : 0.1,
+            "size" : 1,
             "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.7 },
             "stroke": { "value": "#4682b4" },
