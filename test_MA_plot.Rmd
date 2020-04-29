@@ -106,6 +106,7 @@ nrow(fit$genes)
 # the col vector attribute is fold change (Smchd1null vs WT)
 # data.frame(fit$coefficients)
 
+
 ```
 
 
@@ -120,7 +121,6 @@ nrow(fit$genes)
 
 
 # for now assume fit object
-
 ```
 
 ```{r}

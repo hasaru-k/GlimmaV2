@@ -78,7 +78,7 @@ HTMLWidgets.widget({
           plotContainer.appendChild(xyContainer);
           var xyData = HTMLWidgets.dataframeToD3(x.data.table);
           console.log(xyData);
-          var xySpec = createXYSpec(xyData, width, height, x.data.x, x.data.y);
+          var xySpec = createXYSpec(xyData, width, height, x.data.x, x.data.y, x.data.cols);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
             container: '#' + xyContainer.getAttribute("id"),
@@ -104,15 +104,34 @@ HTMLWidgets.widget({
                 dom: 'Bfrtip',
                 buttons: ['csv', 'excel']
             });
+            // add reset button
+            datatable.button().add(0, 
+              {
+                action: function ( e, dt, button, config ) 
+                {
+                    datatable.search('')
+                      .columns().search('')
+                      .draw();
+                },
+                text: 'Reset'
+            });
+            $("#" + datatableEl.getAttribute("id") + ' tbody').on( 'click', 'tr', function () 
+              {
+                $(this).toggleClass('selected');
+              }
+            );
           });
 
           // point selection
           xyView.addSignalListener('click', function(name, value) {
             if (datatable)
             {
-              datatable.search(value["Symbols"]).draw();
+              datatable.columns(0).search(value["GeneID"]).draw();
+              datatable.rows().select();
             }
           });
+
+
 
 
         }
@@ -211,17 +230,22 @@ function reformatElementsMDS(controlContainer)
 
 
 // parametrise graph encoding for MDS plot
-function createXYSpec(xyData, width, height, x, y) 
+function createXYSpec(xyData, width, height, x, y, cols) 
 {
 
   // generate tooltip object for embedding in spec
-  var tooltip = { "signal" : `{'x':datum['${x}'], 'y':datum['${y}']}` };
+  var tooltipString = "{";
+  cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
+  tooltipString += "}";
+  console.log(tooltipString)
+  var tooltip = { "signal" : tooltipString };
+
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.45,
+    "width": width * 0.8,
     "height": height * 0.6,
-    "padding": 0,
+    "padding": 10,
     "title": {
       "text": "MA Plot"
     },
@@ -292,7 +316,7 @@ function createXYSpec(xyData, width, height, x, y)
             "x": { "scale": "x", "field": x },
             "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "size" : 1,
+            "size" : 2,
             "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.7 },
             "stroke": { "value": "#4682b4" },

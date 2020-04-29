@@ -45,7 +45,13 @@ GlimmaV2 <- function(
     width = width,
     height = height,
     package = 'GlimmaV2',
-    elementId = elementId
+    elementId = elementId,
+    sizingPolicy = htmlwidgets::sizingPolicy(
+      viewer.padding = 10,
+      viewer.suppress=TRUE,
+      viewer.paneHeight = 750,
+      knitr.defaultHeight = 750,
+      browser.fill = TRUE)
   )
 
 }

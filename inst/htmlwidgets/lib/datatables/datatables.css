@@ -19,6 +19,8 @@ table.dataTable {
   clear: both;
   border-collapse: separate;
   border-spacing: 0;
+  color: #111111;
+  font-family: sans-serif;
   /*
    * Header and footer styles
    */
@@ -80,7 +82,7 @@ table.dataTable tbody td {
   padding: 8px 10px;
 }
 table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #999;
 }
 table.dataTable.row-border tbody tr:first-child th,
 table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th,
