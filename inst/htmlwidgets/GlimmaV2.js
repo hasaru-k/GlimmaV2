@@ -101,9 +101,11 @@ HTMLWidgets.widget({
                 data: xyData,
                 columns: xyColumnsInfo,
                 rowId: "GeneID",
-                dom: 'Bfrtip',
-                buttons: ['csv', 'excel']
+                dom: 'Bfr<"filter">tip',
+                buttons: ['csv', 'excel'],
+                "scrollY":        "300px"
             });
+            $("div.filter").html('<form><label>Genes:</label><input type="text" id="gene_filter"></form>');
             // add reset button
             datatable.button().add(0, 
               {
@@ -112,22 +114,59 @@ HTMLWidgets.widget({
                     datatable.search('')
                       .columns().search('')
                       .draw();
+                    selected = [];
+                    xyView.data("selected_points", selected);
+                    xyView.runAsync();
                 },
                 text: 'Reset'
             });
             $("#" + datatableEl.getAttribute("id") + ' tbody').on( 'click', 'tr', function () 
               {
                 $(this).toggleClass('selected');
+                let selected_rows = datatable.rows('.selected').data();
+                let i;
+                selected = [];
+                for (i = 0; i < selected_rows.length; i++)
+                {
+                  selected.push(selected_rows[i]);
+                }
+                document.getElementById("gene_filter").value = selected.map(x => x["GeneID"]).join(",");
+                xyView.data("selected_points", selected);
+                xyView.runAsync();
               }
             );
           });
 
           // point selection
+          selected = [];
           xyView.addSignalListener('click', function(name, value) {
+            var datum = value[0];
+            if (datum == null)
+            {
+              return;
+            }
+
+            // check if datum is in selected
+            // if it is, remove it; otherwise, add it
+            var loc = contains(selected, datum);
+            console.log(loc);
+            loc >= 0 ?
+              selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
+              : selected.push(datum);
+            xyView.data("selected_points", selected);
+            xyView.runAsync();
+            console.log("Selected:");
+            console.log(selected);
+            
+            // filter table
             if (datatable)
             {
-              datatable.columns(0).search(value["GeneID"]).draw();
-              datatable.rows().select();
+              // clear existing searches
+              datatable.search('').columns().search('').draw();
+              document.getElementById("gene_filter").value = selected.map(x => x["GeneID"]).join(",");
+              // search using a regex string: union over GeneIDs in selected
+              var regex_search = selected.map(x => '^' + x["GeneID"] + '$').join('|');
+              datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
             }
           });
 
@@ -156,6 +195,20 @@ HTMLWidgets.widget({
     };
   }
 });
+
+function contains(arr, datum)
+{
+  let loc = -1;
+  let i;
+  for (i = 0; i < arr.length; i++)
+  {
+    if (arr[i]['GeneID'] === datum['GeneID'])
+    {
+      loc = i;
+    }
+  }
+  return loc;
+}
 
 function processDataMDS(x)
 {
@@ -237,14 +290,13 @@ function createXYSpec(xyData, width, height, x, y, cols)
   var tooltipString = "{";
   cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
   tooltipString += "}";
-  console.log(tooltipString)
   var tooltip = { "signal" : tooltipString };
 
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
     "width": width * 0.8,
-    "height": height * 0.6,
+    "height": height * 0.5,
     "padding": 10,
     "title": {
       "text": "MA Plot"
@@ -253,7 +305,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
       [
         {
           "name": "click", "value": null,
-          "on": [ {"events": "mousedown, touchstart", "update": "datum"} ]
+          "on": [ {"events": "mousedown", "update": "[datum, now()]" } ]
         }
       ],
     "data": 
@@ -266,7 +318,8 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "expr": "datum.x",
             "as": "tooltip"
           }]
-        }
+        },
+        { "name": "selected_points" }
       ],
     "scales": [
       {
@@ -318,12 +371,28 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "shape": "circle",
             "size" : 2,
             "strokeWidth": { "value": 1 },
-            "opacity": { "value": 0.7 },
-            "stroke": { "value": "#4682b4" },
+            "opacity": { "value": 0.6 },
             "tooltip": tooltip
           }
         }
-      }
+      },
+      {
+        "name": "selected_marks",
+        "type": "symbol",
+        "from": { "data": "selected_points" },
+        "encode": {
+          "update": {
+            "x": { "scale": "x", "field": x },
+            "y": { "scale": "y", "field": y },
+            "shape": "circle",
+            "size" : 2,
+            "fill" : {"value" : "crimson"},
+            "strokeWidth": { "value": 1.5 },
+            "opacity": { "value": 0.8 },
+            "tooltip": tooltip
+          }
+        }
+      },
     ]
   };
 }
