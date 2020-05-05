@@ -21,3 +21,9 @@
       - datatables.min.js
     stylesheet:
       - datatables.css
+  - name: GlimmaSpecs
+    version: 1.0
+    src: htmlwidgets/lib/GlimmaSpecs
+    script:
+      - XYSpecs.js
+      - MDSSpecs.js

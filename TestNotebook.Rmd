@@ -34,7 +34,8 @@ groups
 
 
 ```{r}
-?glMDSPlot
+
+GlimmaV2(plotType ="MDS", rnaseq, groups=groups)
 
 
 ```
