@@ -46,69 +46,6 @@ dt <- decideTests(fit)
 summary(dt)
 ```
 
-```{r}
-
-testing <- function(fit, counts, groups=1:ncol(counts), logTransform=FALSE)
-{
-  
-  if (is.null(colnames(counts)))
-  {
-    samples <- seq_len(ncol(counts))
-  }
-  else
-  {
-    samples <- colnames(counts)
-  }
-  
-  # process counts
-  cols <- colnames(counts)
-  rownames(counts) <- make.names(cols)
-  if (logTransform) 
-  {
-      counts <- as.matrix(edgeR::cpm(counts, log=TRUE))
-  } 
-  else 
-  {
-      counts <- as.matrix(counts)
-  }
-  counts <- t(counts)
-  return(counts)
-  if (!is.numeric(groups)) 
-  {
-      # reorder samples to group levels
-      groups <- factor(groups)
-      counts <- counts[order(groups), ]
-      sample.cols <- sample.cols[order(groups)]
-      samples <- samples[order(groups)]
-      groups <- sort(groups)
-  }
-
-  expData <- data.frame(
-      Sample = samples,
-      cols = as.hexcol(sample.cols),
-      Group = groups,
-      counts)
-  
-  expData
-
-}
-
-
-```
-
-```{r}
-# object has a bunch of genes
-nrow(fit$genes)
-
-# fold change is the attribute here
-# each instance is a gene;
-# the col vector names are the geneIDs
-# the col vector attribute is fold change (Smchd1null vs WT)
-# data.frame(fit$coefficients)
-
-
-```
-
 
 ```{r}
 
@@ -128,12 +65,47 @@ nrow(fit$genes)
 # this is where info for the MD scatter plot comes from!
 # data.frame(vm$E)
 # fit$design
+```
 
+```{r}
+prepareXYData <- function(
+  x,
+  xvals=NULL,
+  yvals=NULL,
+  xlab=NULL,
+  ylab=NULL,
+  status=NULL)
+{
+  # assume MA plot if no x/y are given
+  if (is.null(xvals) && is.null(yvals))
+  {
+    # for now assume fit object
+    xvals <- unname(x$Amean)
+    xlab <- "logcpm"
+    yvals <- unname(x$coefficients[,1])
+    ylab <- "logfc"
+    stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
+    table <- data.frame(xvals, yvals)
+    names(table) <- c(xlab, ylab)
+    table <- cbind(table, x$genes)
+  }
+  else
+  {
+    
+  }
+  data <- list(x=xlab, y=ylab, table=table, cols=colnames(table))
+  return(list(plotType="XY", data=data))
+}
 ```
 
 
+
+```{r}
+rep(1,5)
+```
+
 ```{r}
 
-GlimmaV2("MA", fit)
+GlimmaV2("MA", fit,  colour=dt)
 
 ```

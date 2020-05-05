@@ -67,9 +67,8 @@ HTMLWidgets.widget({
           reformatElementsMDS();
         }
 
-        if (x.plotType === "MA")
+        if (x.plotType === "XY")
         {
-          console.log("MA");
           console.log(x);
 
           // create container elements
@@ -99,16 +98,6 @@ HTMLWidgets.widget({
       resize: function(width, height) 
       {
         console.log("resize called, width=" + width + ",height=" + height);
-        if (mdsView)
-        {
-          console.log("mdsView width=" + mdsView.width() + ",height=" + mdsView.height());
-          mdsView.resize();
-          console.log("mdsView after resize width=" + mdsView.width() + ",height=" + mdsView.height());
-        }
-        if (eigenView)
-        {
-          eigenView.resize();
-        }
       }
 
     };
@@ -208,10 +197,7 @@ function contains(arr, datum)
   let i;
   for (i = 0; i < arr.length; i++)
   {
-    if (arr[i]['GeneID'] === datum['GeneID'])
-    {
-      loc = i;
-    }
+    if (arr[i]['GeneID'] === datum['GeneID']) loc = i;
   }
   return loc;
 }

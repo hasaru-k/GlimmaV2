@@ -19,23 +19,12 @@ GlimmaV2 <- function(
   {
 
     xData <- prepareMDSData(x, ...)
-  }
-
-  else if (plotType == "MA")
+  } else if (plotType == "MA" || plotType == "XY")
   {
-    # for now assume fit object
-    logcpm <- unname(x$Amean)
-    logfc <- unname(x$coefficients[,1])
-    stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
-    names <- names(x$Amean)
-    table <- cbind(x$genes, logcpm=logcpm, logfc=logfc)
-    data = list(x="logcpm", y="logfc", table=table, cols=colnames(table))
-    xData <- list(plotType=plotType, data=data)
-  }
-
-  else
+    xData <- prepareXYData(x, plotType,...)
+  } else
   {
-    stop("Please enter a valid plotType arg in ['MDS', 'MA'].")
+    stop("Please enter a valid plotType arg in ['MDS', 'MA', 'XY'].")
   }
 
   # create widget
@@ -60,7 +49,6 @@ prepareMDSData <- function(x, ...)
 {
   UseMethod("prepareMDSData")
 }
-
 
 prepareMDSData.default <- function(
   x,
@@ -122,7 +110,8 @@ prepareMDSData.default <- function(
               dd[i, j] <- sqrt(mean(topdist))
           }
       }
-  } else {
+  } else 
+  {
   # Same genes used for all comparisons
       if (nprobes > top) {
           o <- order(rowMeans( (x-rowMeans(x))^2 ), decreasing=TRUE)
@@ -188,8 +177,7 @@ prepareMDSData.DGEList <- function(
   if (!is.null(x$samples$groups))
   {
     labels <- rownames(x$samples)
-  }
-  else
+  } else
   {
     labels <- seq_len(ncol(x))
   }
@@ -205,6 +193,58 @@ prepareMDSData.DGEList <- function(
 
 }
 
+prepareXYData <- function(x, ...)
+{
+  UseMethod("prepareXYData")
+}
+
+prepareXYData.default <- function(
+  x,
+  plotType,
+  xvals=NULL,
+  yvals=NULL,
+  xlab=NULL,
+  ylab=NULL,
+  colour=NULL)
+{
+  if (is.null(xvals) && !is.null(yvals))
+  {
+    stop("Error: xvals arg supplied without y arg.")
+  }
+  if (!is.null(xvals) && is.null(yvals))
+  {
+    stop("Error: yvals arg supplied without x arg.")
+  }
+  # assume MA plot if no x/y are given
+  if (is.null(xvals) && is.null(yvals))
+  {
+    # for now assume fit object
+    xvals <- unname(x$Amean)
+    xlab <- "logcpm"
+    yvals <- unname(x$coefficients[,1])
+    ylab <- "logfc"
+    stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
+    table <- data.frame(xvals, yvals)
+    names(table) <- c(xlab, ylab)
+  } else 
+  {
+    if (plotType == "MA") stop("Error: plotType arg is not XY, yet xvals and yvals are supplied.")
+    if (is.null(xlab) || is.null(ylab))
+    {
+      stop("Error: both xlab and ylab args must be supplied if xvals and yvals args are supplied.")
+    }
+    table <- data.frame(xvals, yvals) 
+    names(table) <- c(xlab, ylab)
+  }
+  # add colour info
+  if (is.null(colour)) colour <- rep(0, nrow(table))
+  table <- cbind(colour=as.vector(colour), table)
+  # add gene info
+  table <- cbind(x$genes, table)
+
+  data <- list(x=xlab, y=ylab, table=table, cols=colnames(table))
+  return(list(plotType="XY", data=data))
+}
 
 #' Shiny bindings for GlimmaV2
 #'

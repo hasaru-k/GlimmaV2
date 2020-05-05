@@ -56,6 +56,12 @@ function createXYSpec(xyData, width, height, x, y, cols)
         "zero": true,
         "domain": { "data": "source", "field": y },
         "range": "height"
+      },
+      {
+        "name": "colour_scale",
+        "type": "ordinal",
+        "domain": [-1, 0, 1],
+        "range": ["dodgerblue", "lightslategray", "firebrick"]
       }
     ],
     "axes" : [
@@ -89,6 +95,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "size" : 2,
             "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.6 },
+            "fill": { "scale": "colour_scale", "field": "colour" },
             "tooltip": tooltip
           }
         }
@@ -103,9 +110,9 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "y": { "scale": "y", "field": y },
             "shape": "circle",
             "size" : 2,
-            "fill" : {"value" : "crimson"},
+            "fill" : {"value" : "darkorange"},
             "strokeWidth": { "value": 1.5 },
-            "opacity": { "value": 0.8 },
+            "opacity": { "value": 1 },
             "tooltip": tooltip
           }
         }
