@@ -88,89 +88,8 @@ HTMLWidgets.widget({
           xyView.tooltip(handler.call);
           xyView.runAsync();
           
-          // setup the datatable
-          var datatableEl = document.createElement("TABLE");
-          datatableEl.setAttribute("id", "dataTable");
-          datatableEl.setAttribute("class", "dataTable");
-          widget.appendChild(datatableEl);
-
-          var xyColumnsInfo = [];
-          x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
-          $(document).ready(function() {
-            datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
-                data: xyData,
-                columns: xyColumnsInfo,
-                rowId: "GeneID",
-                dom: 'Bfr<"filter">tip',
-                buttons: ['csv', 'excel'],
-                "scrollY":        "300px"
-            });
-            $("div.filter").html('<form><label>Genes:</label><input type="text" id="gene_filter"></form>');
-            // add reset button
-            datatable.button().add(0, 
-              {
-                action: function ( e, dt, button, config ) 
-                {
-                    datatable.search('')
-                      .columns().search('')
-                      .draw();
-                    selected = [];
-                    xyView.data("selected_points", selected);
-                    xyView.runAsync();
-                },
-                text: 'Reset'
-            });
-            $("#" + datatableEl.getAttribute("id") + ' tbody').on( 'click', 'tr', function () 
-              {
-                $(this).toggleClass('selected');
-                let selected_rows = datatable.rows('.selected').data();
-                let i;
-                selected = [];
-                for (i = 0; i < selected_rows.length; i++)
-                {
-                  selected.push(selected_rows[i]);
-                }
-                document.getElementById("gene_filter").value = selected.map(x => x["GeneID"]).join(",");
-                xyView.data("selected_points", selected);
-                xyView.runAsync();
-              }
-            );
-          });
-
-          // point selection
-          selected = [];
-          xyView.addSignalListener('click', function(name, value) {
-            var datum = value[0];
-            if (datum == null)
-            {
-              return;
-            }
-
-            // check if datum is in selected
-            // if it is, remove it; otherwise, add it
-            var loc = contains(selected, datum);
-            console.log(loc);
-            loc >= 0 ?
-              selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
-              : selected.push(datum);
-            xyView.data("selected_points", selected);
-            xyView.runAsync();
-            console.log("Selected:");
-            console.log(selected);
-            
-            // filter table
-            if (datatable)
-            {
-              // clear existing searches
-              datatable.search('').columns().search('').draw();
-              document.getElementById("gene_filter").value = selected.map(x => x["GeneID"]).join(",");
-              // search using a regex string: union over GeneIDs in selected
-              var regex_search = selected.map(x => '^' + x["GeneID"] + '$').join('|');
-              datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
-            }
-          });
-
-
+          // add datatable, and generate interaction
+          setupXYInteraction(xyView, xyData, widget, x);
 
 
         }
@@ -195,6 +114,93 @@ HTMLWidgets.widget({
     };
   }
 });
+
+function setupXYInteraction(xyView, xyData, widget, x)
+{
+  // setup the datatable
+  var datatableEl = document.createElement("TABLE");
+  datatableEl.setAttribute("id", "dataTable");
+  datatableEl.setAttribute("class", "dataTable");
+  widget.appendChild(datatableEl);
+  var xyColumnsInfo = [];
+  x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
+
+  graphMode = false;
+  $(document).ready(function() 
+  {
+
+    datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
+        data: xyData,
+        columns: xyColumnsInfo,
+        rowId: "GeneID",
+        dom: 'Bfrtip',
+        buttons: ['csv', 'excel'],
+        "scrollY":        "300px"
+    });
+
+    // reset graph and table selections
+    datatable.button().add(0, 
+      {
+        action: function ( e, dt, button, config ) 
+        {
+          graphMode = false;
+          console.log(datatable.rows())
+          datatable.rows('.selected').nodes().to$().removeClass('selected');
+          datatable.search('').columns().search('').draw();                      
+          selected = [];
+          xyView.data("selected_points", selected);
+          xyView.runAsync();
+        },
+        text: 'Reset'
+    });
+
+    // map table selections onto the graph (clearing graph selections each time)
+    $("#" + datatableEl.getAttribute("id") + ' tbody').on( 'click', 'tr', function () 
+      {
+        if (graphMode) return;
+        $(this).toggleClass('selected');
+        let selected_rows = datatable.rows('.selected').data();
+        let i;
+        selected = [];
+        for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
+        xyView.data("selected_points", selected);
+        xyView.runAsync();
+      }
+    );
+    
+  });
+
+  selected = [];
+  // map graph selections onto the table (clearing table selections each time)
+  xyView.addSignalListener('click', function(name, value) {
+    var datum = value[0];
+    if (datum == null) return;
+    if (!graphMode)
+    {
+      graphMode = true;
+      datatable.rows('.selected').nodes().to$().removeClass('selected');
+      selected = [];
+    }
+    // check if datum is in selected
+    // if it is, remove it; otherwise, add it
+    var loc = contains(selected, datum);
+    console.log(loc);
+    loc >= 0 ?
+      selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
+      : selected.push(datum);
+    xyView.data("selected_points", selected);
+    xyView.runAsync();
+    
+    // filter table
+    if (!datatable) return;
+    datatable.search('').columns().search('').draw();
+    // search using a regex string: union over GeneIDs in selected
+    var regex_search = selected.map(x => '^' + x["GeneID"] + '$').join('|');
+    datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
+
+  });
+
+}
 
 function contains(arr, datum)
 {
