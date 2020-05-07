@@ -17,7 +17,6 @@ GlimmaV2 <- function(
   # create xData depending on type of plot
   if (plotType == "MDS")
   {
-
     xData <- prepareMDSData(x, ...)
   } else if (plotType == "MA" || plotType == "XY")
   {
@@ -26,7 +25,6 @@ GlimmaV2 <- function(
   {
     stop("Please enter a valid plotType arg in ['MDS', 'MA', 'XY'].")
   }
-
   # create widget
   htmlwidgets::createWidget(
     name = 'GlimmaV2',
@@ -198,9 +196,16 @@ prepareXYData <- function(x, ...)
   UseMethod("prepareXYData")
 }
 
+
+# anno - extra columns to add to the gene table
+# p.adj.method - method to adjust p-value in table
+# coef - column in MArrayLM object to use
 prepareXYData.default <- function(
   x,
   plotType,
+  coef=ncol(x$coefficients),
+  p.adj.method = "BH",
+  anno=NULL,
   xvals=NULL,
   yvals=NULL,
   xlab=NULL,
@@ -220,10 +225,10 @@ prepareXYData.default <- function(
   {
     # for now assume fit object
     xvals <- unname(x$Amean)
-    xlab <- "logcpm"
-    yvals <- unname(x$coefficients[,1])
-    ylab <- "logfc"
-    stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
+    xlab <- "logCPM"
+    yvals <- unname(x$coefficients[, coef])
+    ylab <- "logFC"
+    stopifnot(all(names(x$Amean) == names(x$coefficients[, coef])))
     table <- data.frame(xvals, yvals)
     names(table) <- c(xlab, ylab)
   } else 
@@ -239,9 +244,14 @@ prepareXYData.default <- function(
   # add colour info
   if (is.null(colour)) colour <- rep(0, nrow(table))
   table <- cbind(colour=as.vector(colour), table)
-  # add gene info
+  # add gene info from MArrayLM object
   table <- cbind(x$genes, table)
-
+  # add pvalue/adjusted pvalue info
+  AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
+  table <- cbind(table, PValue=x$p.value[, coef])
+  table <- cbind(table,  AdjPValue=AdjPValue)
+  # add anno columns
+  if (!is.null(anno)) table <- cbind(table, anno)
   data <- list(x=xlab, y=ylab, table=table, cols=colnames(table))
   return(list(plotType="XY", data=data))
 }

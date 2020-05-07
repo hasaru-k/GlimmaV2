@@ -124,7 +124,10 @@ function setupXYInteraction(xyView, xyData, widget, x)
         rowId: "GeneID",
         dom: 'Bfrtip',
         buttons: ['csv', 'excel'],
-        "scrollY":        "300px"
+        scrollY:        "180px",
+        scrollX:        true,
+        orderClasses: false,
+        'stripeClasses':['stripe1','stripe2']
     });
 
     // reset graph and table selections

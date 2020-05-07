@@ -102,10 +102,10 @@ table.dataTable.cell-border tbody tr:first-child td {
   border-top: none;
 }
 table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
-  background-color: #f9f9f9;
+  background-color: #cab6ff;
 }
 table.dataTable.stripe tbody tr.odd.selected, table.dataTable.display tbody tr.odd.selected {
-  background-color: #acbad4;
+  background-color: #7393ce;
 }
 table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   background-color: #f6f6f6;
@@ -290,14 +290,17 @@ table.dataTable td {
   float: left;
 }
 .dataTables_wrapper .dataTables_filter {
+  font-size: 12pt;
   float: right;
   text-align: right;
 }
 .dataTables_wrapper .dataTables_filter input {
+  font-size: 12pt;
   margin-left: 0.5em;
 }
 .dataTables_wrapper .dataTables_info {
   clear: both;
+  font-size: 12pt;
   float: left;
   padding-top: 0.755em;
 }
@@ -312,6 +315,8 @@ table.dataTable td {
   min-width: 1.5em;
   padding: 0.5em 1em;
   margin-left: 2px;
+  font-size: 8pt;
+  font-family: sans-serif;
   text-align: center;
   text-decoration: none !important;
   cursor: pointer;
@@ -405,6 +410,8 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_processing,
 .dataTables_wrapper .dataTables_paginate {
+  font-family: sans-serif;
+  font-size: 8pt;
   color: #333;
 }
 .dataTables_wrapper .dataTables_scroll {
@@ -535,10 +542,10 @@ a.dt-button {
   margin-right: 0.333em;
   margin-bottom: 0.333em;
   padding: 0.5em 1em;
+  font-size: 6.5pt;
   border: 1px solid #999;
   border-radius: 2px;
   cursor: pointer;
-  font-size: 0.88em;
   line-height: 1.6em;
   color: black;
   white-space: nowrap;
@@ -669,6 +676,7 @@ a.dt-button:focus:not(.disabled) {
 div.dt-buttons {
   position: relative;
   float: left;
+  font-size: 12pt;
 }
 div.dt-buttons.buttons-right {
   float: right;
@@ -877,4 +885,34 @@ div.dts div.dataTables_length {
   display: none;
 }
 
+th { font-size: 10px; }
+td { font-size: 9px; }
+/* search filter */
+label 
+{ 
+  font-size: 8pt;
+  color: black;
+  font-family: sans-serif;
+}
 
+
+table.dataTable tbody tr.stripe1 {
+  background-color: #E8E8E8;
+}
+table.dataTable tbody tr.stripe1:hover {
+  background-color: #d1e3f0;
+}
+table.dataTable tbody tr.stripe1.selected {
+  background-color: #9aadd1;
+}
+table.dataTable tbody tr.stripe2 {
+  background-color: #f7f7f7;
+  border-bottom: solid #c0c0c0;
+}
+table.dataTable tbody tr.stripe2:hover {
+  background-color: #d1e3f0;
+}
+table.dataTable tbody tr.stripe2.selected {
+  background-color: #9aadd1;
+  border-bottom: solid #c0c0c0;
+}

@@ -12,9 +12,9 @@ function createXYSpec(xyData, width, height, x, y, cols)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.8,
-    "height": height * 0.5,
-    "padding": 10,
+    "width": width * 0.45,
+    "height": height * 0.35,
+    "padding": 0,
     "title": {
       "text": "MA Plot"
     },
@@ -92,7 +92,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "x": { "scale": "x", "field": x },
             "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "size" : 2,
+            "size" : 1,
             "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.6 },
             "fill": { "scale": "colour_scale", "field": "colour" },
@@ -109,7 +109,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "x": { "scale": "x", "field": x },
             "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "size" : 2,
+            "size" : 1,
             "fill" : {"value" : "darkorange"},
             "strokeWidth": { "value": 1.5 },
             "opacity": { "value": 1 },
