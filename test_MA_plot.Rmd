@@ -106,5 +106,6 @@ rep(1,5)
 
 ```{r}
 
-GlimmaV2("MA", fit)
+GlimmaV2("MA", fit, colour=dt, display.columns=c("PValue"))
+
 ```

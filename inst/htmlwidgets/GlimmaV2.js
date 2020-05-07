@@ -129,7 +129,6 @@ function setupXYInteraction(xyView, xyData, widget, x)
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
-
     // reset graph and table selections
     datatable.button().add(0, 
       {

@@ -916,3 +916,7 @@ table.dataTable tbody tr.stripe2.selected {
   background-color: #9aadd1;
   border-bottom: solid #c0c0c0;
 }
+
+div.container {
+  width: 80%;
+}

@@ -33,12 +33,7 @@ GlimmaV2 <- function(
     height = height,
     package = 'GlimmaV2',
     elementId = elementId,
-    sizingPolicy = htmlwidgets::sizingPolicy(
-      viewer.padding = 10,
-      viewer.suppress=TRUE,
-      viewer.paneHeight = 750,
-      knitr.defaultHeight = 750,
-      browser.fill = TRUE)
+    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=750, defaultHeight=750, browser.fill=TRUE, viewer.suppress=TRUE)
   )
 
 }
@@ -205,6 +200,7 @@ prepareXYData.default <- function(
   plotType,
   coef=ncol(x$coefficients),
   p.adj.method = "BH",
+  display.columns = NULL,
   anno=NULL,
   xvals=NULL,
   yvals=NULL,
@@ -212,6 +208,7 @@ prepareXYData.default <- function(
   ylab=NULL,
   colour=NULL)
 {
+  
   if (is.null(xvals) && !is.null(yvals))
   {
     stop("Error: xvals arg supplied without y arg.")
@@ -220,6 +217,7 @@ prepareXYData.default <- function(
   {
     stop("Error: yvals arg supplied without x arg.")
   }
+  
   # assume MA plot if no x/y are given
   if (is.null(xvals) && is.null(yvals))
   {
@@ -241,18 +239,33 @@ prepareXYData.default <- function(
     table <- data.frame(xvals, yvals) 
     names(table) <- c(xlab, ylab)
   }
+  
   # add colour info
   if (is.null(colour)) colour <- rep(0, nrow(table))
   table <- cbind(colour=as.vector(colour), table)
+  
   # add gene info from MArrayLM object
   table <- cbind(x$genes, table)
+  
   # add pvalue/adjusted pvalue info
   AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
   table <- cbind(table, PValue=x$p.value[, coef])
   table <- cbind(table,  AdjPValue=AdjPValue)
+  
   # add anno columns
   if (!is.null(anno)) table <- cbind(table, anno)
-  data <- list(x=xlab, y=ylab, table=table, cols=colnames(table))
+
+  # set display.columns (columns to show in tooltips and in the table)
+  if (is.null(display.columns)) 
+  {
+    display.columns <- colnames(table)
+  } else
+  {
+    if (!(xlab %in% display.columns)) display.columns <- c(display.columns, xlab)
+    if (!(ylab %in% display.columns)) display.columns <- c(display.columns, ylab)
+    if (!("GeneID" %in% display.columns)) display.columns <- c("GeneID", display.columns)
+  }
+  data <- list(x=xlab, y=ylab, table=table, cols=display.columns)
   return(list(plotType="XY", data=data))
 }
 
