@@ -1,3 +1,24 @@
+glimmaMDS <- function(x, ...)
+{
+  xData <- prepareMDSData(x, ...)
+  return(GlimmaV2(xData))
+}
+
+glimmaMA <- function(x, ...)
+{
+  xData <- prepareXYData(x, plotType="MA",...)
+  return(GlimmaV2(xData))
+}
+
+# required: x and y
+glimmaXY <- function(x, y, xlab="x", ylab="y", ...)
+{
+  # might be a bit confusing that there are two x variables?
+  # maybe rename second x to fit
+  xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, plotType="XY", ...)
+  return(GlimmaV2(xData))
+}
+
 #' <Add Title>
 #'
 #' <Add Description>
@@ -6,25 +27,13 @@
 #'
 #' @export
 GlimmaV2 <- function(
-  plotType,
-  x,
+  xData,
   width = NULL,
   height = NULL,
   elementId = NULL,
   ...)
 {
 
-  # create xData depending on type of plot
-  if (plotType == "MDS")
-  {
-    xData <- prepareMDSData(x, ...)
-  } else if (plotType == "MA" || plotType == "XY")
-  {
-    xData <- prepareXYData(x, plotType,...)
-  } else
-  {
-    stop("Please enter a valid plotType arg in ['MDS', 'MA', 'XY'].")
-  }
   # create widget
   htmlwidgets::createWidget(
     name = 'GlimmaV2',
@@ -191,7 +200,6 @@ prepareXYData <- function(x, ...)
   UseMethod("prepareXYData")
 }
 
-
 # anno - extra columns to add to the gene table
 # p.adj.method - method to adjust p-value in table
 # coef - column in MArrayLM object to use
@@ -209,19 +217,10 @@ prepareXYData.default <- function(
   colour=NULL)
 {
   
-  if (is.null(xvals) && !is.null(yvals))
+  if (plotType=="MA")
   {
-    stop("Error: xvals arg supplied without y arg.")
-  }
-  if (!is.null(xvals) && is.null(yvals))
-  {
-    stop("Error: yvals arg supplied without x arg.")
-  }
-  
-  # assume MA plot if no x/y are given
-  if (is.null(xvals) && is.null(yvals))
-  {
-    # for now assume fit object
+    # for now assume fit object.
+    # create initial table with logCPM and logFC features
     xvals <- unname(x$Amean)
     xlab <- "logCPM"
     yvals <- unname(x$coefficients[, coef])
@@ -229,31 +228,29 @@ prepareXYData.default <- function(
     stopifnot(all(names(x$Amean) == names(x$coefficients[, coef])))
     table <- data.frame(xvals, yvals)
     names(table) <- c(xlab, ylab)
+
+    # add pvalue/adjusted pvalue info to table from fit object
+    AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
+    table <- cbind(table, PValue=x$p.value[, coef], AdjPValue=AdjPValue)
+
+    # add gene info from MArrayLM object
+    table <- cbind(x$genes, table)
+
   } else 
   {
-    if (plotType == "MA") stop("Error: plotType arg is not XY, yet xvals and yvals are supplied.")
-    if (is.null(xlab) || is.null(ylab))
-    {
-      stop("Error: both xlab and ylab args must be supplied if xvals and yvals args are supplied.")
-    }
     table <- data.frame(xvals, yvals) 
     names(table) <- c(xlab, ylab)
   }
   
   # add colour info
   if (is.null(colour)) colour <- rep(0, nrow(table))
-  table <- cbind(colour=as.vector(colour), table)
-  
-  # add gene info from MArrayLM object
-  table <- cbind(x$genes, table)
-  
-  # add pvalue/adjusted pvalue info
-  AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
-  table <- cbind(table, PValue=x$p.value[, coef])
-  table <- cbind(table,  AdjPValue=AdjPValue)
-  
+  table <- cbind(table, colour=as.vector(colour))
+
   # add anno columns
   if (!is.null(anno)) table <- cbind(table, anno)
+
+  # add index for linking table and plot (independent of object type)
+  table <- data.frame(index=1:nrow(table), table)
 
   # set display.columns (columns to show in tooltips and in the table)
   if (is.null(display.columns)) 
@@ -261,11 +258,13 @@ prepareXYData.default <- function(
     display.columns <- colnames(table)
   } else
   {
+    # if it's specified, make sure at least x, y and index are shown
     if (!(xlab %in% display.columns)) display.columns <- c(display.columns, xlab)
     if (!(ylab %in% display.columns)) display.columns <- c(display.columns, ylab)
-    if (!("GeneID" %in% display.columns)) display.columns <- c("GeneID", display.columns)
+    if (!("index" %in% display.columns)) display.columns <- c("index", display.columns)
   }
-  data <- list(x=xlab, y=ylab, table=table, cols=display.columns)
+
+  data <- list(x=xlab, y=ylab, table=table, cols=display.columns, tooltipFields=display.columns)
   return(list(plotType="XY", data=data))
 }
 

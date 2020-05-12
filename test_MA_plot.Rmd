@@ -11,6 +11,8 @@ library(GlimmaV2)
 
 data(lymphomaRNAseq)
 rnaseq <- lymphomaRNAseq
+
+
 ```
 
 ```{r}
@@ -65,6 +67,9 @@ summary(dt)
 # this is where info for the MD scatter plot comes from!
 # data.frame(vm$E)
 # fit$design
+
+fit$design
+fit$design
 ```
 
 ```{r}
@@ -96,16 +101,32 @@ prepareXYData <- function(
   data <- list(x=xlab, y=ylab, table=table, cols=colnames(table))
   return(list(plotType="XY", data=data))
 }
+
+exp <- vm$E
+# exp <- cbind(exp, c(1))
+# exp
+fit$design[1:ncol(exp)]
 ```
 
 
 
 ```{r}
-rep(1,5)
+newvals <- c(`-1`="downreg",`0`="normal",`1`="upreg")
+anno <- data.frame(newvals[as.character(dt)])
+
+table <- data.frame(2:26)
+cbind(secret_id=1:nrow(table), table )
 ```
 
 ```{r}
+glimmaMA(fit, colour=dt)
+```
 
-GlimmaV2("MA", fit, colour=dt, display.columns=c("PValue"))
+
+```{r}
+
+# volcano plot
+glimmaXY(x=fit$coefficients[,1], y=fit$lods, anno=fit$genes, colour=dt)
 
 ```
+

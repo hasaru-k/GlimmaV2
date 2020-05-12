@@ -121,7 +121,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
     datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
         data: xyData,
         columns: xyColumnsInfo,
-        rowId: "GeneID",
+        rowId: "index",
         dom: 'Bfrtip',
         buttons: ['csv', 'excel'],
         scrollY:        "180px",
@@ -185,8 +185,8 @@ function setupXYInteraction(xyView, xyData, widget, x)
     // filter table
     if (!datatable) return;
     datatable.search('').columns().search('').draw();
-    // search using a regex string: union over GeneIDs in selected
-    var regex_search = selected.map(x => '^' + x["GeneID"] + '$').join('|');
+    // search using a regex string: union over indices in selected
+    var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
     datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
   });
@@ -199,7 +199,7 @@ function contains(arr, datum)
   let i;
   for (i = 0; i < arr.length; i++)
   {
-    if (arr[i]['GeneID'] === datum['GeneID']) loc = i;
+    if (arr[i]['index'] === datum['index']) loc = i;
   }
   return loc;
 }
