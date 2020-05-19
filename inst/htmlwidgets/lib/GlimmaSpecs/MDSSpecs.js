@@ -1,6 +1,6 @@
 
 // parametrise graph encoding for MDS plot
-function createMDSSpec(mdsData, dimList, features, width, height) 
+function createMDSSpec(mdsData, dimList, features, width, height, continuous_colour) 
 {
   console.log(features);
 
@@ -17,15 +17,17 @@ function createMDSSpec(mdsData, dimList, features, width, height)
   console.log(tooltipString)
   var tooltip = { "signal" : tooltipString };
   
+  // generate colorscheme options
+  var colourschemes = continuous_colour ? ["reds", "blues", "tealblues", "teals", "greens", "browns", "oranges", "reds", "purples", "warmgreys", "greys", "viridis", "plasma", "blueorange", "redblue"]
+        : [ "tableau20", "tableau10", "category20", "category20b", "category20c", "set1", "set2", "set3", "pastel1", "pastel2", "paired", "dark2",  "category10", "accent", "viridis", "plasma"];
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
     "width": width * 0.45,
     "height": height * 0.6,
     "padding": 0,
-    "title": {
-      "text": "MDS Plot"
-    },
+    "autosize": {"type": "fit", "resize": true},
+    "title": { "text": "MDS Plot"},
     "signals":
       [
         {
@@ -52,12 +54,17 @@ function createMDSSpec(mdsData, dimList, features, width, height)
         {
           "name": "colour_by",
           "value": features["discrete"][0],
-          "bind": { "input": "select", "options": features["discrete"] }
+          "bind": { "input": "select", "options": continuous_colour ? features["numeric"] : features["discrete"] }
         },
         {
           "name": "shape_by",
           "value": features["discrete"][0],
           "bind": { "input": "select", "options": features["discrete"] }
+        },
+        {
+          "name": "colourscheme",
+          "value": colourschemes[0],
+          "bind": { "input": "select", "options": colourschemes }
         }
       ],
     "data": 
@@ -102,9 +109,9 @@ function createMDSSpec(mdsData, dimList, features, width, height)
       },
       {
         "name": "color",
-        "type": "ordinal",
+        "type": continuous_colour ? "linear" : "ordinal",
         "domain": { "data": "source", "field": { "signal": "colour_by" } },
-        "range": { "scheme": "tableau10" }
+        "range": { "scheme": { "signal": "colourscheme" } }
       },
       {
         "name": "shape",
@@ -255,7 +262,7 @@ function createEigenSpec(eigenData, width, height)
             "y2": {"scale": "yscale", "value": 0}
           },
           "update": {
-            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "#ffcc5c"}, {"value": "#ff6f69"} ]
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "LightSlateGray"}, {"value": "LightGrey"} ]
           }
         }
       },

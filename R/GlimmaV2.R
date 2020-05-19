@@ -55,9 +55,10 @@ prepareMDSData <- function(x, ...)
 prepareMDSData.default <- function(
   x,
   top = 500,
-  labels = seq_len(ncol(x)),
-  groups = rep(1, ncol(x)),
-  gene.selection = c("pairwise", "common"))
+  labels = as.character(seq_len(ncol(x))),
+  groups = as.character(rep(1, ncol(x))),
+  gene.selection = c("pairwise", "common"),
+  continuous.colour=FALSE)
 {
 
   # helper function
@@ -131,13 +132,12 @@ prepareMDSData.default <- function(
   # Method for MDS objects
   points <- a1$points
 
-  if (!is.data.frame(groups) && class(groups) != "DataFrame") {
-  # Rename for the column name in dataframe
-      groups <- data.frame(groups)
-  }
+  if (!is.data.frame(groups) && class(groups) != "DataFrame") groups <- data.frame(groups)
 
-  all_col_names <- colnames(groups)
-  first_col_name <- all_col_names[1]
+
+
+  # add labels to groups
+  groups <- data.frame(labels, groups)
 
   points <- data.frame(points)
   names(points) <- paste0("dim", seq_len(ncol(points)))
@@ -148,9 +148,10 @@ prepareMDSData.default <- function(
       eigen = round(a1$eig[1:min(ndim, 8)]/sum(a1$eig), 2)
   )
 
+
   # add this column for no dimensionality in Vega
-  points <- cbind(points, "-"="0")
-  points <- cbind(points, "- "=0)
+  points <- cbind(points, "-" = "0")
+  points <- cbind(points, "- " = 0)
   is_factor <- sapply(groups, is.factor)
   numeric <- c(colnames(groups[, !is_factor]), "- ")
   discrete <- c(colnames(groups[, is_factor]), "-")
@@ -160,7 +161,9 @@ prepareMDSData.default <- function(
   xData = list(plotType = "MDS",
                data = list(mdsData=points,
                            eigenData=eigen,
-                           features=features))
+                           features=features,
+                           continuous_colour=continuous.colour,
+                           ndims=min(ndim, 8)))
 
   return(xData)
 
@@ -170,19 +173,24 @@ prepareMDSData.DGEList <- function(
   x,
   top = 500,
   labels = NULL,
-  groups = rep(1, ncol(x)),
+  groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
-  prior.count = 2)
+  prior.count = 2,
+  continuous.colour = FALSE)
 {
 
-  # extract sample groups based on DGEList class
-  if (!is.null(x$samples$groups))
+  # extract sample groups based on DGEList class, if we need to
+  if (is.null(labels))
   {
-    labels <- rownames(x$samples)
-  } else
-  {
-    labels <- seq_len(ncol(x))
+    if (!is.null(x$samples$groups))
+    {
+      labels <- rownames(x$samples)
+    } else
+    {
+      labels <- as.character(seq_len(ncol(x)))
+    }
   }
+
   transformed_counts <- edgeR::cpm(x, log=TRUE, prior.count = prior.count)
 
   # call main processing function
@@ -191,9 +199,60 @@ prepareMDSData.DGEList <- function(
     top=top,
     labels=labels,
     groups=groups,
-    gene.selection=gene.selection)
+    gene.selection=gene.selection,
+    continuous.colour=continuous.colour)
 
 }
+
+prepareMDSData.DESeqDataSet <- function(
+  x,
+  top = 500,
+  labels = NULL,
+  groups = NULL,
+  gene.selection = c("pairwise", "common"),
+  prior.count = 0.25,
+  continuous.colour = FALSE)
+{
+
+  # extract sample groups based on DESeqDataSet class, if we need to
+  if (is.null(labels)) 
+  {
+    if (!is.null(SummarizedExperiment::colData(x))) 
+    {
+      labels <- rownames(SummarizedExperiment::colData(x))
+    } else 
+    {
+      labels <- as.character(seq_len(ncol(x)))
+    }
+  }
+
+  transformed_counts <- edgeR::cpm(
+      DESeq2::counts(x),
+      log = TRUE,
+      prior.count = prior.count
+  )
+
+  if (is.null(groups)) 
+  {
+    if (!is.null(SummarizedExperiment::colData(x))) 
+    {
+        groups <- S4Vectors::as.data.frame.DataTable(SummarizedExperiment::colData(x))
+    } else 
+    {
+        groups <- as.character(rep(1, ncol(x)))
+    }
+  }
+
+  prepareMDSData.default(
+    transformed_counts,
+    top=top,
+    labels=labels,
+    groups=groups,
+    gene.selection=gene.selection,
+    continuous.colour=continuous.colour)
+
+}
+
 
 prepareXYData <- function(x, ...)
 {

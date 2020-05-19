@@ -44513,10 +44513,10 @@ table.dataTable.cell-border tbody tr:first-child td {
 border-top: none;
 }
 table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
-background-color: #f9f9f9;
+background-color: #cab6ff;
 }
 table.dataTable.stripe tbody tr.odd.selected, table.dataTable.display tbody tr.odd.selected {
-background-color: #acbad4;
+background-color: #7393ce;
 }
 table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 background-color: #f6f6f6;
@@ -44697,14 +44697,17 @@ zoom: 1;
 float: left;
 }
 .dataTables_wrapper .dataTables_filter {
+font-size: 12pt;
 float: right;
 text-align: right;
 }
 .dataTables_wrapper .dataTables_filter input {
+font-size: 12pt;
 margin-left: 0.5em;
 }
 .dataTables_wrapper .dataTables_info {
 clear: both;
+font-size: 12pt;
 float: left;
 padding-top: 0.755em;
 }
@@ -44719,6 +44722,8 @@ display: inline-block;
 min-width: 1.5em;
 padding: 0.5em 1em;
 margin-left: 2px;
+font-size: 8pt;
+font-family: sans-serif;
 text-align: center;
 text-decoration: none !important;
 cursor: pointer;
@@ -44812,6 +44817,8 @@ background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_processing,
 .dataTables_wrapper .dataTables_paginate {
+font-family: sans-serif;
+font-size: 8pt;
 color: #333;
 }
 .dataTables_wrapper .dataTables_scroll {
@@ -44936,10 +44943,10 @@ box-sizing: border-box;
 margin-right: 0.333em;
 margin-bottom: 0.333em;
 padding: 0.5em 1em;
+font-size: 6.5pt;
 border: 1px solid #999;
 border-radius: 2px;
 cursor: pointer;
-font-size: 0.88em;
 line-height: 1.6em;
 color: black;
 white-space: nowrap;
@@ -45068,6 +45075,7 @@ outline: none;
 div.dt-buttons {
 position: relative;
 float: left;
+font-size: 12pt;
 }
 div.dt-buttons.buttons-right {
 float: right;
@@ -45270,7 +45278,36 @@ div.dts div.dataTables_paginate,
 div.dts div.dataTables_length {
 display: none;
 }
-</style>
+th { font-size: 10px; }
+td { font-size: 9px; }
+
+label { font-size: 8pt;
+color: black;
+font-family: sans-serif;
+}
+table.dataTable tbody tr.stripe1 {
+background-color: #E8E8E8;
+}
+table.dataTable tbody tr.stripe1:hover {
+background-color: #d1e3f0;
+}
+table.dataTable tbody tr.stripe1.selected {
+background-color: #9aadd1;
+}
+table.dataTable tbody tr.stripe2 {
+background-color: #f7f7f7;
+border-bottom: solid #c0c0c0;
+}
+table.dataTable tbody tr.stripe2:hover {
+background-color: #d1e3f0;
+}
+table.dataTable tbody tr.stripe2.selected {
+background-color: #9aadd1;
+border-bottom: solid #c0c0c0;
+}
+div.container {
+width: 80%;
+}</style>
 <script>/*
  * This combined file was created by the DataTables downloader builder:
  *   https://datatables.net/download
@@ -45623,9 +45660,9 @@ function createXYSpec(xyData, width, height, x, y, cols)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.8,
-    "height": height * 0.5,
-    "padding": 10,
+    "width": width * 0.45,
+    "height": height * 0.35,
+    "padding": 0,
     "title": {
       "text": "MA Plot"
     },
@@ -45667,6 +45704,12 @@ function createXYSpec(xyData, width, height, x, y, cols)
         "zero": true,
         "domain": { "data": "source", "field": y },
         "range": "height"
+      },
+      {
+        "name": "colour_scale",
+        "type": "ordinal",
+        "domain": [-1, 0, 1],
+        "range": ["dodgerblue", "lightslategray", "firebrick"]
       }
     ],
     "axes" : [
@@ -45697,9 +45740,10 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "x": { "scale": "x", "field": x },
             "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "size" : 2,
+            "size" : 1,
             "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.6 },
+            "fill": { "scale": "colour_scale", "field": "colour" },
             "tooltip": tooltip
           }
         }
@@ -45713,14 +45757,298 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "x": { "scale": "x", "field": x },
             "y": { "scale": "y", "field": y },
             "shape": "circle",
-            "size" : 2,
-            "fill" : {"value" : "crimson"},
+            "size" : 1,
+            "fill" : {"value" : "darkorange"},
             "strokeWidth": { "value": 1.5 },
-            "opacity": { "value": 0.8 },
+            "opacity": { "value": 1 },
             "tooltip": tooltip
           }
         }
       },
+    ]
+  };
+}</script>
+<script>
+// parametrise graph encoding for MDS plot
+function createMDSSpec(mdsData, dimList, features, width, height, continuous_colour) 
+{
+  console.log(features);
+
+  // generate tooltip object for embedding in spec
+  var tooltipString = "{'x':datum[x_axis], 'y':datum[y_axis]";
+  features["all"].forEach(function(x) 
+  {
+    if (x != "-" && x != "- ")
+    {
+      tooltipString += `,'${x}':datum['${x}']`;
+    }  
+  });
+  tooltipString += "}";
+  console.log(tooltipString)
+  var tooltip = { "signal" : tooltipString };
+  
+  return {
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "Testing ground for GlimmaV2",
+    "width": width * 0.45,
+    "height": height * 0.6,
+    "padding": 0,
+    "title": {
+      "text": "MDS Plot"
+    },
+    "signals":
+      [
+        {
+          "name": "x_axis",
+          "value": dimList[0],
+          "bind": { "input": "select", "options": dimList }
+        },
+        {
+          "name": "y_axis",
+          "value": dimList[1],
+          "bind": { "input": "select", "options": dimList }
+        },
+        /* dummy_signal is used for CSS styling */
+        {
+          "name": "dummy_signal",
+          "value": {},
+          "bind": { "input": "select", "options": [] }
+        },
+        {
+          "name": "scale_by",
+          "value": features["numeric"][0],
+          "bind": { "input": "select", "options": features["numeric"] }
+        },
+        {
+          "name": "colour_by",
+          "value": features["discrete"][0],
+          "bind": { "input": "select", "options": continuous_colour ? features["numeric"] : features["discrete"] }
+        },
+        {
+          "name": "shape_by",
+          "value": features["discrete"][0],
+          "bind": { "input": "select", "options": features["discrete"] }
+        }
+      ],
+    "data": 
+      [
+        {
+          "name": "source",
+          "values": mdsData,
+          "transform": [{
+            "type": "formula",
+            "expr": "datum.x",
+            "as": "tooltip"
+          }]
+        }
+      ],
+    "scales": [
+      {
+        "name": "x",
+        "type": "linear",
+        "round": true,
+        "nice": true,
+        "zero": true,
+        "domain": { "data": "source", "field": { "signal": "x_axis" } },
+        "range": "width"
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "round": true,
+        "nice": true,
+        "zero": true,
+        "domain": { "data": "source", "field": { "signal": "y_axis" } },
+        "range": "height"
+      },
+      {
+        "name": "size",
+        "type": "linear",
+        "round": true,
+        "nice": false,
+        "zero": true,
+        "domain": { "data": "source", "field": { "signal": "scale_by" } },
+        "range": [5, 350]
+      },
+      {
+        "name": "color",
+        "type": continuous_colour ? "linear" : "ordinal",
+        "domain": { "data": "source", "field": { "signal": "colour_by" } },
+        "range": { "scheme": continuous_colour ?  "reds" : "tableau20" }
+      },
+      {
+        "name": "shape",
+        "type": "ordinal",
+        "domain": { "data": "source", "field": { "signal": "shape_by" } },
+        "range": ["circle","square","diamond","triangle", "triangle-up", "cross"]
+      }
+    ],
+
+    "axes": [
+      {
+        "scale": "x",
+        "grid": true,
+        "domain": false,
+        "orient": "bottom",
+        "tickCount": 5,
+        "title": { "signal": "x_axis" }
+      },
+      {
+        "scale": "y",
+        "grid": true,
+        "domain": false,
+        "orient": "left",
+        "titlePadding": 5,
+        "title": { "signal": "y_axis" }
+      }
+    ],
+
+    "legends": [
+      {
+        "size": "size",
+        "title": "Scale",
+        "format": "s",
+        "symbolStrokeColor": "#4682b4",
+        "symbolStrokeWidth": 2,
+        "symbolOpacity": 0.7,
+        "symbolType": "circle"
+      },
+      {
+        "fill": "color",
+        "title": "Colour",
+        "symbolStrokeColor": "#4682b4",
+        "symbolStrokeWidth": 2,
+        "symbolOpacity": 0.7,
+        "symbolType": "circle"
+      },
+      {
+        "shape": "shape",
+        "title": "Shape",
+        "symbolStrokeColor": "#4682b4",
+        "symbolStrokeWidth": 2,
+        "symbolOpacity": 0.7,
+      },
+    ],
+
+    "marks": [
+      {
+        "name": "marks",
+        "type": "symbol",
+        "from": { "data": "source" },
+        "encode": {
+          "update": {
+            "x": { "scale": "x", "field": { "signal": "x_axis" } },
+            "y": { "scale": "y", "field": { "signal": "y_axis" } },
+            "size": { "scale": "size", "field": { "signal": "scale_by" }},
+            "shape": { "scale": "shape", "field": { "signal": "shape_by" } },
+            "fill": { "scale": "color", "field": { "signal": "colour_by" } },
+            "strokeWidth": { "value": 2 },
+            "opacity": { "value": 0.7 },
+            "stroke": { "value": "#4682b4" },
+            "tooltip": tooltip
+          }
+        }
+      }
+    ]
+  };
+}
+
+// parametrise graph encoding for variance plot
+function createEigenSpec(eigenData, width, height) 
+{
+  return {
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A basic bar chart example, with value labels shown upon mouse hover.",
+    "width": width * 0.3,
+    "height": height * 0.6,
+    "padding": 5,
+    "title": {
+      "text": "Variance Explained"
+    },
+    "data": [
+      {
+        "name": "table",
+        "values": eigenData
+      }
+    ],
+  
+    "signals": [
+      {
+        "name": "tooltip",
+        "value": {},
+        "on": 
+        [
+          {"events": "rect:mouseover", "update": "datum"},
+          {"events": "rect:mouseout",  "update": "{}"}
+        ]
+      },
+      {
+        "name": "external_select_x",
+        "value": 1
+      },
+      {
+        "name": "external_select_y",
+        "value": 2
+      }
+    ],
+  
+    "scales": [
+      {
+        "name": "xscale",
+        "type": "band",
+        "domain": {"data": "table", "field": "name"},
+        "range": "width",
+        "padding": 0.05,
+        "round": true
+      },
+      {
+        "name": "yscale",
+        "domain": {"data": "table", "field": "eigen"},
+        "range": "height"
+      }
+    ],
+  
+    "axes": [
+      { "orient": "bottom", "scale": "xscale" },
+      { "orient": "left", "scale": "yscale" }
+    ],
+  
+    "marks": [
+      {
+        "type": "rect",
+        "from": {"data":"table"},
+        "encode": {
+          "enter": {
+            "x": {"scale": "xscale", "field": "name"},
+            "width": {"scale": "xscale", "band": 1},
+            "y": {"scale": "yscale", "field": "eigen"},
+            "y2": {"scale": "yscale", "value": 0}
+          },
+          "update": {
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "#ffcc5c"}, {"value": "#ff6f69"} ]
+          }
+        }
+      },
+      {
+        "type": "text",
+        "from": {"data":"table"},
+        "encode": {
+          "enter": {
+            "align": {"value": "center"},
+            "baseline": {"value": "bottom"},
+            "fill": {"value": "#333"}
+          },
+          "update": {
+            "x": {"scale": "xscale", "field": "name", "band": 0.5},
+            "y": {"scale": "yscale", "field": "eigen", "offset": -2},
+            "text": {"field": "eigen"},
+            "fillOpacity": [
+              {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": 1},
+              {"value": 0}
+            ]
+          }
+        }
+      }
     ]
   };
 }</script>
@@ -45747,6 +46075,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
       renderValue: function(x) {
         
         var handler = new vegaTooltip.Handler();
+
         if (x.plotType === "MDS")
         {
           // create tooltip handler
@@ -45769,8 +46098,8 @@ function createXYSpec(xyData, width, height, x, y, cols)
           var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
           var mdsSpec = createMDSSpec(mdsData, dimList, 
                                         x.data.features,
-                                        width, height);
-  
+                                        width, height, x.continuous_colour);
+          
           mdsView = new vega.View(vega.parse(mdsSpec), {
             renderer: 'canvas',
             container: '#' + mdsContainer.getAttribute("id"),
@@ -45793,9 +46122,8 @@ function createXYSpec(xyData, width, height, x, y, cols)
           reformatElementsMDS();
         }
 
-        if (x.plotType === "MA")
+        if (x.plotType === "XY")
         {
-          console.log("MA");
           console.log(x);
 
           // create container elements
@@ -45825,16 +46153,6 @@ function createXYSpec(xyData, width, height, x, y, cols)
       resize: function(width, height) 
       {
         console.log("resize called, width=" + width + ",height=" + height);
-        if (mdsView)
-        {
-          console.log("mdsView width=" + mdsView.width() + ",height=" + mdsView.height());
-          mdsView.resize();
-          console.log("mdsView after resize width=" + mdsView.width() + ",height=" + mdsView.height());
-        }
-        if (eigenView)
-        {
-          eigenView.resize();
-        }
       }
 
     };
@@ -45858,12 +46176,14 @@ function setupXYInteraction(xyView, xyData, widget, x)
     datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
         data: xyData,
         columns: xyColumnsInfo,
-        rowId: "GeneID",
+        rowId: "index",
         dom: 'Bfrtip',
         buttons: ['csv', 'excel'],
-        "scrollY":        "300px"
+        scrollY:        "180px",
+        scrollX:        false,
+        orderClasses: false,
+        'stripeClasses':['stripe1','stripe2']
     });
-
     // reset graph and table selections
     datatable.button().add(0, 
       {
@@ -45920,8 +46240,8 @@ function setupXYInteraction(xyView, xyData, widget, x)
     // filter table
     if (!datatable) return;
     datatable.search('').columns().search('').draw();
-    // search using a regex string: union over GeneIDs in selected
-    var regex_search = selected.map(x => '^' + x["GeneID"] + '$').join('|');
+    // search using a regex string: union over indices in selected
+    var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
     datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
   });
@@ -45934,10 +46254,7 @@ function contains(arr, datum)
   let i;
   for (i = 0; i < arr.length; i++)
   {
-    if (arr[i]['GeneID'] === datum['GeneID'])
-    {
-      loc = i;
-    }
+    if (arr[i]['index'] === datum['index']) loc = i;
   }
   return loc;
 }
@@ -46165,9 +46482,6 @@ summary {
 </div>
 
 
-<pre class="r"><code>?glMDPlot</code></pre>
-<pre><code>## No documentation for &#39;glMDPlot&#39; in specified packages and libraries:
-## you could try &#39;??glMDPlot&#39;</code></pre>
 <pre class="r"><code># need old Glimma for this dataset
 library(Glimma)
 library(GlimmaV2)
@@ -46191,11 +46505,11 @@ groups</code></pre>
 {"columns":[{"label":["genotype"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["lane"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["miscCont"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["miscDisc"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["libsize"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Smchd1-null","2":"4","3":"4000","4":"blue","5":"7519549"},{"1":"Smchd1-null","2":"4","3":"4000","4":"red","5":"6752457"},{"1":"Smchd1-null","2":"4","3":"4000","4":"green","5":"6225875"},{"1":"Smchd1-null","2":"4","3":"4000","4":"green","5":"6474510"},{"1":"WT","2":"4","3":"4000","4":"green","5":"6822924"},{"1":"WT","2":"3","3":"300","4":"green","5":"6096639"},{"1":"WT","2":"3","3":"250","4":"green","5":"3626853"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<pre class="r"><code>GlimmaV2(plotType =&quot;MDS&quot;, rnaseq, groups=groups)</code></pre>
+<pre class="r"><code>glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)</code></pre>
 <pre><code>## Warning in readLines(con): incomplete final line found on &#39;C:/Users/hkari/
 ## OneDrive/onenote/R/win-library/3.6/GlimmaV2/htmlwidgets/GlimmaV2.yaml&#39;</code></pre>
-<div id="htmlwidget-3acb423e6b625e3152df" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3acb423e6b625e3152df">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["miscCont","libsize","- "],"discrete":["genotype","lane","miscDisc","-"],"all":["miscCont","libsize","- ","genotype","lane","miscDisc","-"]}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5b14820f7e3a9046f5ba" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5b14820f7e3a9046f5ba">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"label":[1,2,3,4,5,6,7],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["miscCont","libsize","- "],"discrete":["genotype","lane","miscDisc","-"],"all":["miscCont","libsize","- ","genotype","lane","miscDisc","-"]},"continuous_colour":true}},"evals":[],"jsHooks":[]}</script>
 
 
 

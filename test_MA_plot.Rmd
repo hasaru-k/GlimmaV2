@@ -113,20 +113,21 @@ fit$design[1:ncol(exp)]
 ```{r}
 newvals <- c(`-1`="downreg",`0`="normal",`1`="upreg")
 anno <- data.frame(newvals[as.character(dt)])
+```
 
-table <- data.frame(2:26)
-cbind(secret_id=1:nrow(table), table )
+```{r}
+glMA <- glimmaMA(fit, colour=dt)
+
+htmlwidgets::saveWidget(glMA, file="glMA.html", )
 ```
 
 ```{r}
 glimmaMA(fit, colour=dt)
 ```
 
-
 ```{r}
 
-# volcano plot
-glimmaXY(x=fit$coefficients[,1], y=fit$lods, anno=fit$genes, colour=dt)
+glimmaXY(x=fit$coefficients[,1], y=fit$lods, colour=dt)
 
 ```
 

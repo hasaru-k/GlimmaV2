@@ -21,6 +21,7 @@ HTMLWidgets.widget({
       renderValue: function(x) {
         
         var handler = new vegaTooltip.Handler();
+
         if (x.plotType === "MDS")
         {
           // create tooltip handler
@@ -43,8 +44,8 @@ HTMLWidgets.widget({
           var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
           var mdsSpec = createMDSSpec(mdsData, dimList, 
                                         x.data.features,
-                                        width, height);
-  
+                                        width, height, x.data.continuous_colour);
+          
           mdsView = new vega.View(vega.parse(mdsSpec), {
             renderer: 'canvas',
             container: '#' + mdsContainer.getAttribute("id"),
@@ -125,7 +126,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
         dom: 'Bfrtip',
         buttons: ['csv', 'excel'],
         scrollY:        "180px",
-        scrollX:        true,
+        scrollX:        false,
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
@@ -264,7 +265,9 @@ function reformatElementsMDS(controlContainer)
   binds = document.getElementsByClassName("vega-bind");
   for (var i = 0; i < binds.length; i++)
   {
+    // the separator input signal is a dummy invisible signal after x_axis, y_axis
     if (i == 2) binds[i].className += " separator_signal";
+    // it is used to display all signals after x_axis, y_axis to display on a different line
     else if (i > 2) binds[i].className += " signal";
   }
 }

@@ -6,7 +6,9 @@ output:
 ---
 
 ```{r}
-?glMDPlot
+
+as.character(rep(1, 5))
+
 ```
 
 ```{r}
@@ -32,10 +34,20 @@ groups
 ```
 
 
+```{r}
+
+as.character(seq_len(5))
+
+```
 
 ```{r}
 
-GlimmaV2(plotType ="MDS", rnaseq, groups=groups)
+glimmaMDS(rnaseq, groups=groups)
+
+
+```
+
+```{r}
 
 ```
 

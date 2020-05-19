@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+
+library(DESeq2)
+library(Glimma)
+library(GlimmaV2)
+data(lymphomaRNAseq)
+rnaseq <- lymphomaRNAseq
+
+
+```
+
+
+```{r}
+
+rnaseq.deseq2 <- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, design=~group)
+
+
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+glimmaMDS(rnaseq.deseq2)
+
+```
+
