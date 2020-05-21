@@ -108,7 +108,16 @@ exp <- vm$E
 fit$design[1:ncol(exp)]
 ```
 
+```{r}
+glMDPlot(fit, status=dt, counts=vm, groups=groups, side.main="Symbols")
 
+```
+
+```{r}
+
+data.frame(vm$E)
+
+```
 
 ```{r}
 newvals <- c(`-1`="downreg",`0`="normal",`1`="upreg")
@@ -124,6 +133,13 @@ htmlwidgets::saveWidget(glMA, file="glMA.html", )
 ```{r}
 glimmaMA(fit, colour=dt)
 ```
+
+```{r}
+
+class(fit)
+
+```
+
 
 ```{r}
 

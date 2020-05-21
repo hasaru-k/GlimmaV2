@@ -34,11 +34,6 @@ groups
 ```
 
 
-```{r}
-
-as.character(seq_len(5))
-
-```
 
 ```{r}
 
@@ -48,7 +43,7 @@ glimmaMDS(rnaseq, groups=groups)
 ```
 
 ```{r}
-
+groups
 ```
 
 

@@ -140,6 +140,7 @@ prepareMDSData.default <- function(
   groups <- data.frame(labels, groups)
 
   points <- data.frame(points)
+  dimlist <- paste0("dim", seq_len(ncol(points)))
   names(points) <- paste0("dim", seq_len(ncol(points)))
   points <- data.frame(points, label=labels, groups)
 
@@ -152,9 +153,9 @@ prepareMDSData.default <- function(
   # add this column for no dimensionality in Vega
   points <- cbind(points, "-" = "0")
   points <- cbind(points, "- " = 0)
-  is_factor <- sapply(groups, is.factor)
-  numeric <- c(colnames(groups[, !is_factor]), "- ")
-  discrete <- c(colnames(groups[, is_factor]), "-")
+  is_numeric <- sapply(groups, is.numeric)
+  numeric <- c(colnames(groups[, is_numeric]), "- ")
+  discrete <- c(colnames(groups[, !is_numeric]), "-")
   features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))
 
   # forward data to the widget using xData
@@ -163,7 +164,7 @@ prepareMDSData.default <- function(
                            eigenData=eigen,
                            features=features,
                            continuous_colour=continuous.colour,
-                           ndims=min(ndim, 8)))
+                           dimlist=dimlist))
 
   return(xData)
 

@@ -20,7 +20,16 @@ rnaseq <- lymphomaRNAseq
 
 rnaseq.deseq2 <- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, design=~group)
 
+# add lane
+groups <- data.frame(genotype=rnaseq$samples$group,
+                     lane= as.character(c(rep(4,5),3,3)),
+                     miscCont=c(rep(4000,5),300,250),
+                     miscDisc=c("blue","red",rep("green",5)))
 
+
+# add libsize
+groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
+groups
 
 ```
 
@@ -30,7 +39,7 @@ rnaseq.deseq2 <- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, d
 
 ```{r}
 
-glimmaMDS(rnaseq.deseq2)
+glimmaMDS(rnaseq.deseq2, groups=groups)
 
 ```
 

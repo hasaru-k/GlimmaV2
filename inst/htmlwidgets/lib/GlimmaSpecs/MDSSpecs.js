@@ -262,7 +262,7 @@ function createEigenSpec(eigenData, width, height)
             "y2": {"scale": "yscale", "value": 0}
           },
           "update": {
-            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "LightSlateGray"}, {"value": "LightGrey"} ]
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "LightGrey" }, {"value": "LightSlateGray"} ]
           }
         }
       },

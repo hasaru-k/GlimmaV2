@@ -39,10 +39,9 @@ HTMLWidgets.widget({
           processDataMDS(x);
           var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
           var eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
-  
-          // TODO: extract this data from dataframe
-          var dimList = ["dim1", "dim2", "dim3", "dim4", "dim5", "dim6"];
-          var mdsSpec = createMDSSpec(mdsData, dimList, 
+          
+          /* NB: the createXXSpec functions are defined in lib/GlimmaSpecs */
+          var mdsSpec = createMDSSpec(mdsData, x.data.dimlist, 
                                         x.data.features,
                                         width, height, x.data.continuous_colour);
           
@@ -90,8 +89,7 @@ HTMLWidgets.widget({
           
           // add datatable, and generate interaction
           setupXYInteraction(xyView, xyData, widget, x);
-
-
+          
         }
 
       },
