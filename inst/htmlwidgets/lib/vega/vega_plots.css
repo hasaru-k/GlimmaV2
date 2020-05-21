@@ -1,7 +1,7 @@
 #plotContainer
 {
-	display: grid;
-	grid-column-gap: 10px;
+    display: inline-grid;
+    grid-column-gap: 2rem;
 }
 #mdsContainer
 {
@@ -14,7 +14,6 @@
 	grid-column-start: 2;
 	grid-column-end: 3;
 }
-
 
 /* contains everything that is not a plot */
 #controlContainer

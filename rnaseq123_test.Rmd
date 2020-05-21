@@ -45,29 +45,37 @@ x
 
 ```{r}
 
+# transformations from raw scale
+
 cpm <- cpm(x)
 lcpm <- cpm(x, log=TRUE)
-L <- mean(x$samples$lib.size) * 1e-6
-M <- median(x$samples$lib.size) * 1e-6
 summary(lcpm)
 
 ```
 
 ```{r}
 
-x$samples
-
+# remove lowly expressed genes
+keep.exprs <- filterByExpr(x, group=group)
+x <- x[keep.exprs,, keep.lib.sizes=FALSE]
+dim(x)
 ```
-
 
 ```{r}
+# normalising gene expression distributions
+x <- calcNormFactors(x, method = "TMM")
+x$samples$norm.factors
 
 ```
+
+
 
 ```{r}
 glimmaMDS(lcpm, labels=paste(group, lane, sep="_"), 
           groups=x$samples)
+```
 
-
-
+```{r}
+glMDSPlot(lcpm, labels=paste(group, lane, sep="_"), 
+          groups=x$samples)
 ```

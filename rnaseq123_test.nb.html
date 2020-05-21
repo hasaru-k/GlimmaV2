@@ -1870,59 +1870,61 @@ $genes</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5jcG0gPC0gY3BtKHgpXG5sY3BtIDwtIGNwbSh4LCBsb2c9VFJVRSlcbkwgPC0gbWVhbih4JHNhbXBsZXMkbGliLnNpemUpICogMWUtNlxuTSA8LSBtZWRpYW4oeCRzYW1wbGVzJGxpYi5zaXplKSAqIDFlLTZcbnN1bW1hcnkobGNwbSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jIHRyYW5zZm9ybWF0aW9ucyBmcm9tIHJhdyBzY2FsZVxuXG5jcG0gPC0gY3BtKHgpXG5sY3BtIDwtIGNwbSh4LCBsb2c9VFJVRSlcbnN1bW1hcnkobGNwbSlcbmBgYCJ9 -->
 <pre class="r"><code>
+# transformations from raw scale
+
 cpm &lt;- cpm(x)
 lcpm &lt;- cpm(x, log=TRUE)
-L &lt;- mean(x$samples$lib.size) * 1e-6
-M &lt;- median(x$samples$lib.size) * 1e-6
 summary(lcpm)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgMTBfNl81XzExICAgICAgICAgIDlfNl81XzExICAgICAgICAgIHB1cmVwNTMgICAgICAgICAgICAgSk1TOC0yICAgICAgIFxuIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NDMgICBNaW4uICAgOi00LjUwNzQgIFxuIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NDMgICAxc3QgUXUuOi00LjUwNzQgIFxuIE1lZGlhbiA6LTAuNjg0NyAgIE1lZGlhbiA6LTAuMzU4OSAgIE1lZGlhbiA6LTAuMDk1MTMgICBNZWRpYW4gOi0wLjA5MDEgIFxuIE1lYW4gICA6IDAuMTcxNCAgIE1lYW4gICA6IDAuMzMxMiAgIE1lYW4gICA6IDAuNDM1NTkgICBNZWFuICAgOiAwLjQwODkgIFxuIDNyZCBRdS46IDQuMjkxMyAgIDNyZCBRdS46IDQuNTYwMSAgIDNyZCBRdS46IDQuNjAwODEgICAzcmQgUXUuOiA0LjU0NzUgIFxuIE1heC4gICA6MTQuNzYzMiAgIE1heC4gICA6MTMuNDk1MiAgIE1heC4gICA6MTIuOTU3MDAgICBNYXguICAgOjEyLjg1MTMgIFxuICAgICBKTVM4LTMgICAgICAgICAgICBKTVM4LTQgICAgICAgICAgICBKTVM4LTUgICAgICAgICAgICBKTVM5LVA3YyAgICAgIFxuIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NDMgICBNaW4uICAgOi00LjUwNzQgIFxuIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NDMgICAxc3QgUXUuOi00LjUwNzQgIFxuIE1lZGlhbiA6LTAuNDI4MSAgIE1lZGlhbiA6LTAuNDA2NCAgIE1lZGlhbiA6LTAuMDcxNTIgICBNZWRpYW4gOi0wLjE3MDQgIFxuIE1lYW4gICA6IDAuMzIyNSAgIE1lYW4gICA6IDAuMjUyOSAgIE1lYW4gICA6IDAuNDA0MjggICBNZWFuICAgOiAwLjM3MDggIFxuIDNyZCBRdS46IDQuNTc3MiAgIDNyZCBRdS46IDQuMzE5OSAgIDNyZCBRdS46IDQuNDI1MTMgICAzcmQgUXUuOiA0LjYwMzEgIFxuIE1heC4gICA6MTIuOTU3OCAgIE1heC4gICA6MTQuODUyMCAgIE1heC4gICA6MTMuMTk0OTEgICBNYXguICAgOjEyLjk0MTMgIFxuICAgIEpNUzktUDhjICAgICAgXG4gTWluLiAgIDotNC41MDc0ICBcbiAxc3QgUXUuOi00LjUwNzQgIFxuIE1lZGlhbiA6LTAuMzMwMCAgXG4gTWVhbiAgIDogMC4yNzQ5ICBcbiAzcmQgUXUuOiA0LjQzNTUgIFxuIE1heC4gICA6MTQuMDEwMiAgXG4ifQ== -->
-<pre><code>   10_6_5_11          9_6_5_11          purep53             JMS8-2       
- Min.   :-4.5074   Min.   :-4.5074   Min.   :-4.50743   Min.   :-4.5074  
- 1st Qu.:-4.5074   1st Qu.:-4.5074   1st Qu.:-4.50743   1st Qu.:-4.5074  
- Median :-0.6847   Median :-0.3589   Median :-0.09513   Median :-0.0901  
- Mean   : 0.1714   Mean   : 0.3312   Mean   : 0.43559   Mean   : 0.4089  
- 3rd Qu.: 4.2913   3rd Qu.: 4.5601   3rd Qu.: 4.60081   3rd Qu.: 4.5475  
- Max.   :14.7632   Max.   :13.4952   Max.   :12.95700   Max.   :12.8513  
-     JMS8-3            JMS8-4            JMS8-5            JMS9-P7c      
- Min.   :-4.5074   Min.   :-4.5074   Min.   :-4.50743   Min.   :-4.5074  
- 1st Qu.:-4.5074   1st Qu.:-4.5074   1st Qu.:-4.50743   1st Qu.:-4.5074  
- Median :-0.4281   Median :-0.4064   Median :-0.07152   Median :-0.1704  
- Mean   : 0.3225   Mean   : 0.2529   Mean   : 0.40428   Mean   : 0.3708  
- 3rd Qu.: 4.5772   3rd Qu.: 4.3199   3rd Qu.: 4.42513   3rd Qu.: 4.6031  
- Max.   :12.9578   Max.   :14.8520   Max.   :13.19491   Max.   :12.9413  
-    JMS9-P8c      
- Min.   :-4.5074  
- 1st Qu.:-4.5074  
- Median :-0.3300  
- Mean   : 0.2749  
- 3rd Qu.: 4.4355  
- Max.   :14.0102  </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgMTBfNl81XzExICAgICAgICAgIDlfNl81XzExICAgICAgICAgIHB1cmVwNTMgICAgICAgIFxuIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NDMgIFxuIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NDMgIFxuIE1lZGlhbiA6LTAuNjg0NyAgIE1lZGlhbiA6LTAuMzU4OSAgIE1lZGlhbiA6LTAuMDk1MTMgIFxuIE1lYW4gICA6IDAuMTcxNCAgIE1lYW4gICA6IDAuMzMxMiAgIE1lYW4gICA6IDAuNDM1NTkgIFxuIDNyZCBRdS46IDQuMjkxMyAgIDNyZCBRdS46IDQuNTYwMSAgIDNyZCBRdS46IDQuNjAwODEgIFxuIE1heC4gICA6MTQuNzYzMiAgIE1heC4gICA6MTMuNDk1MiAgIE1heC4gICA6MTIuOTU3MDAgIFxuICAgICBKTVM4LTIgICAgICAgICAgICBKTVM4LTMgICAgICAgICAgICBKTVM4LTQgICAgICAgXG4gTWluLiAgIDotNC41MDc0ICAgTWluLiAgIDotNC41MDc0ICAgTWluLiAgIDotNC41MDc0ICBcbiAxc3QgUXUuOi00LjUwNzQgICAxc3QgUXUuOi00LjUwNzQgICAxc3QgUXUuOi00LjUwNzQgIFxuIE1lZGlhbiA6LTAuMDkwMSAgIE1lZGlhbiA6LTAuNDI4MSAgIE1lZGlhbiA6LTAuNDA2NCAgXG4gTWVhbiAgIDogMC40MDg5ICAgTWVhbiAgIDogMC4zMjI1ICAgTWVhbiAgIDogMC4yNTI5ICBcbiAzcmQgUXUuOiA0LjU0NzUgICAzcmQgUXUuOiA0LjU3NzIgICAzcmQgUXUuOiA0LjMxOTkgIFxuIE1heC4gICA6MTIuODUxMyAgIE1heC4gICA6MTIuOTU3OCAgIE1heC4gICA6MTQuODUyMCAgXG4gICAgIEpNUzgtNSAgICAgICAgICAgIEpNUzktUDdjICAgICAgICAgIEpNUzktUDhjICAgICAgXG4gTWluLiAgIDotNC41MDc0MyAgIE1pbi4gICA6LTQuNTA3NCAgIE1pbi4gICA6LTQuNTA3NCAgXG4gMXN0IFF1LjotNC41MDc0MyAgIDFzdCBRdS46LTQuNTA3NCAgIDFzdCBRdS46LTQuNTA3NCAgXG4gTWVkaWFuIDotMC4wNzE1MiAgIE1lZGlhbiA6LTAuMTcwNCAgIE1lZGlhbiA6LTAuMzMwMCAgXG4gTWVhbiAgIDogMC40MDQyOCAgIE1lYW4gICA6IDAuMzcwOCAgIE1lYW4gICA6IDAuMjc0OSAgXG4gM3JkIFF1LjogNC40MjUxMyAgIDNyZCBRdS46IDQuNjAzMSAgIDNyZCBRdS46IDQuNDM1NSAgXG4gTWF4LiAgIDoxMy4xOTQ5MSAgIE1heC4gICA6MTIuOTQxMyAgIE1heC4gICA6MTQuMDEwMiAgXG4ifQ== -->
+<pre><code>   10_6_5_11          9_6_5_11          purep53        
+ Min.   :-4.5074   Min.   :-4.5074   Min.   :-4.50743  
+ 1st Qu.:-4.5074   1st Qu.:-4.5074   1st Qu.:-4.50743  
+ Median :-0.6847   Median :-0.3589   Median :-0.09513  
+ Mean   : 0.1714   Mean   : 0.3312   Mean   : 0.43559  
+ 3rd Qu.: 4.2913   3rd Qu.: 4.5601   3rd Qu.: 4.60081  
+ Max.   :14.7632   Max.   :13.4952   Max.   :12.95700  
+     JMS8-2            JMS8-3            JMS8-4       
+ Min.   :-4.5074   Min.   :-4.5074   Min.   :-4.5074  
+ 1st Qu.:-4.5074   1st Qu.:-4.5074   1st Qu.:-4.5074  
+ Median :-0.0901   Median :-0.4281   Median :-0.4064  
+ Mean   : 0.4089   Mean   : 0.3225   Mean   : 0.2529  
+ 3rd Qu.: 4.5475   3rd Qu.: 4.5772   3rd Qu.: 4.3199  
+ Max.   :12.8513   Max.   :12.9578   Max.   :14.8520  
+     JMS8-5            JMS9-P7c          JMS9-P8c      
+ Min.   :-4.50743   Min.   :-4.5074   Min.   :-4.5074  
+ 1st Qu.:-4.50743   1st Qu.:-4.5074   1st Qu.:-4.5074  
+ Median :-0.07152   Median :-0.1704   Median :-0.3300  
+ Mean   : 0.40428   Mean   : 0.3708   Mean   : 0.2749  
+ 3rd Qu.: 4.42513   3rd Qu.: 4.6031   3rd Qu.: 4.4355  
+ Max.   :13.19491   Max.   :12.9413   Max.   :14.0102  </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG54JHNhbXBsZXNcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jIHJlbW92ZSBsb3dseSBleHByZXNzZWQgZ2VuZXNcbmtlZXAuZXhwcnMgPC0gZmlsdGVyQnlFeHByKHgsIGdyb3VwPWdyb3VwKVxueCA8LSB4W2tlZXAuZXhwcnMsLCBrZWVwLmxpYi5zaXplcz1GQUxTRV1cbmRpbSh4KVxuYGBgIn0= -->
 <pre class="r"><code>
-x$samples</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NSwibnJvdyI6OX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJxVlV5MjdUUUJTZCtwSFdGaTBJQlBRWFdNU0trNW5nckZDZ0VoSktwS2hkMEoyWnVrNWltSTR0MjRHS0JiQ3NnQlVTZXlSK0JJa052NEJZcytjTENqT2VHV3RzeklwSU4rZWVlM0xuY1p6cnc0UGprWHZzQWdCTVlQYll0ODFTMEh1dzhJZG9DSUJsTUxZRkxPQndQR2Y2RFpidzMxeGo0VWhoLytIUjNFY1FvUkVLL1VFNERobjRYbmxlU3YxMnJZL0R5ZC95clZvT3dteVR4eGthYWVyTldwMkVqK1pIUVgvWUpjS0JFRHM3b1M5RTJDa09oWWk2RGd3aEZ5Zjl4ZDJvVTBaU0RvUU16TjNLRmdDTXlsSHVuUWhUMXJTODRXMlB4TTlqVWtoalRWbTE3K01DRTBtTTJVSmw4MW1yM1k0SUxsUjN2ZVlTUjJXYXMreVN4UjQvMmZUMVkvaUZKZE0zMzUvdWMzdzMvWHpCOGVMVnh3by9YTCt6NXZqK3gvb2J4N2NIcTA4Y3k4T2ZWVit4OC9VSnFEN1ZldmQrQ2ZLL3FEbTNwWVhSQ2xNRXY3cnh1K1dWTlJzTW9KYVB0VHdRUGFicTZYU29hU2pGWjdFeTFGYkZaVUpZVVpKVm5tNHlTWFpJY3VJVnljdFk4aXMwemM4OHNicHFzQWltY1dzYkowOWZlUHBXYXFTY2VvN1VEcE1tMzVhVG9tNGlScVBCbWhwc01LU1dWWC92SmcraWZ6am1udUlTZTh1Y0hibkR0ZTAwSzVPVXNzc1krbnVpZm9Ia3JjTFZEZVdYUCsxSDZ3MTkxaC96RGJUSHZ5dlIwWEpiYkdtcGc2bG4wNHZwS3FIS2Y1dmdrMWdOemg0enVmTFl5L0tFcWlGMldiWHd5clNzQjh5TlVxSXFZbVl1L3dDR2VRZk9Id1VBQUE9PSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["files"],"name":[1],"type":["chr"],"align":["left"]},{"label":["group"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["lib.size"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["norm.factors"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lane"],"name":[5],"type":["fctr"],"align":["left"]}],"data":[{"1":"GSM1545535_10_6_5_11.txt","2":"LP","3":"32863052","4":"1","5":"L004","_rn_":"10_6_5_11"},{"1":"GSM1545536_9_6_5_11.txt","2":"ML","3":"35335491","4":"1","5":"L004","_rn_":"9_6_5_11"},{"1":"GSM1545538_purep53.txt","2":"Basal","3":"57160817","4":"1","5":"L004","_rn_":"purep53"},{"1":"GSM1545539_JMS8-2.txt","2":"Basal","3":"51368625","4":"1","5":"L006","_rn_":"JMS8-2"},{"1":"GSM1545540_JMS8-3.txt","2":"ML","3":"75795034","4":"1","5":"L006","_rn_":"JMS8-3"},{"1":"GSM1545541_JMS8-4.txt","2":"LP","3":"60517657","4":"1","5":"L006","_rn_":"JMS8-4"},{"1":"GSM1545542_JMS8-5.txt","2":"Basal","3":"55086324","4":"1","5":"L006","_rn_":"JMS8-5"},{"1":"GSM1545544_JMS9-P7c.txt","2":"ML","3":"21311068","4":"1","5":"L008","_rn_":"JMS9-P7c"},{"1":"GSM1545545_JMS9-P8c.txt","2":"LP","3":"19958838","4":"1","5":"L008","_rn_":"JMS9-P8c"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[9]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 -->
-<pre class="r"><code>NA</code></pre>
+# remove lowly expressed genes
+keep.exprs &lt;- filterByExpr(x, group=group)
+x &lt;- x[keep.exprs,, keep.lib.sizes=FALSE]
+dim(x)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBub3JtYWxpc2luZyBnZW5lIGV4cHJlc3Npb24gZGlzdHJpYnV0aW9uc1xueCA8LSBjYWxjTm9ybUZhY3RvcnMoeCwgbWV0aG9kID0gXCJUTU1cIilcbngkc2FtcGxlcyRub3JtLmZhY3RvcnNcbmBgYCJ9 -->
+<pre class="r"><code># normalising gene expression distributions
+x &lt;- calcNormFactors(x, method = &quot;TMM&quot;)
+x$samples$norm.factors</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuODk0Mzk1NiAxLjAyNTAxODYgMS4wNDU5MDA1IDEuMDQ1ODQ1NSAxLjAxNjI3MDcgMC45MjE3MTMyXG5bN10gMC45OTYxOTU5IDEuMDg2MTAyNiAwLjk4MzkyMDNcbiJ9 -->
+<pre><code>[1] 0.8943956 1.0250186 1.0459005 1.0458455 1.0162707 0.9217132
+[7] 0.9961959 1.0861026 0.9839203</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1931,12 +1933,23 @@ x$samples</code></pre>
 <pre class="r"><code>glimmaMDS(lcpm, labels=paste(group, lane, sep=&quot;_&quot;), 
           groups=x$samples)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiaW5jb21wbGV0ZSBmaW5hbCBsaW5lIGZvdW5kIG9uICdDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L0dsaW1tYVYyL2h0bWx3aWRnZXRzL0dsaW1tYVYyLnlhbWwnXG4ifQ== -->
-<pre><code>incomplete final line found on &#39;C:/Users/hkari/OneDrive/onenote/R/win-library/3.6/GlimmaV2/htmlwidgets/GlimmaV2.yaml&#39;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiaW5jb21wbGV0ZSBmaW5hbCBsaW5lIGZvdW5kIG9uICdDOi9Vc2Vycy9oa2FyaS9PbmVEcml2ZS9vbmVub3RlL1Ivd2luLWxpYnJhcnkvMy42L0dsaW1tYVYyL2h0bWx3aWRnZXRzL0dsaW1tYVYyLnlhbWwnV2FybmluZyBtZXNzYWdlczpcbjE6IHBhY2thZ2Ug4oCYZWRnZVLigJkgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiAzLjYuMSBcbjI6IHBhY2thZ2Ug4oCYQW5ub3RhdGlvbkRiaeKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNi4xIFxuMzogcGFja2FnZSDigJhHZW5vbWljUmFuZ2Vz4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gMy42LjEgXG4ifQ== -->
+<pre><code>incomplete final line found on &#39;C:/Users/hkari/OneDrive/onenote/R/win-library/3.6/GlimmaV2/htmlwidgets/GlimmaV2.yaml&#39;Warning messages:
+1: package ‘edgeR’ was built under R version 3.6.1 
+2: package ‘AnnotationDbi’ was built under R version 3.6.1 
+3: package ‘GenomicRanges’ was built under R version 3.6.1 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2xNRFNQbG90KGxjcG0sIGxhYmVscz1wYXN0ZShncm91cCwgbGFuZSwgc2VwPVwiX1wiKSwgXG4gICAgICAgICAgZ3JvdXBzPXgkc2FtcGxlcylcbmBgYCJ9 -->
+<pre class="r"><code>glMDSPlot(lcpm, labels=paste(group, lane, sep=&quot;_&quot;), 
+          groups=x$samples)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCg0KbGlicmFyeShlZGdlUikNCmxpYnJhcnkoTXVzLm11c2N1bHVzKQ0KDQpmaWxlcyA8LSBjKCJHU00xNTQ1NTM1XzEwXzZfNV8xMS50eHQiLCAiR1NNMTU0NTUzNl85XzZfNV8xMS50eHQiLCANCiAgICJHU00xNTQ1NTM4X3B1cmVwNTMudHh0IiwgIkdTTTE1NDU1MzlfSk1TOC0yLnR4dCIsIA0KICAgIkdTTTE1NDU1NDBfSk1TOC0zLnR4dCIsICJHU00xNTQ1NTQxX0pNUzgtNC50eHQiLCANCiAgICJHU00xNTQ1NTQyX0pNUzgtNS50eHQiLCAiR1NNMTU0NTU0NF9KTVM5LVA3Yy50eHQiLCANCiAgICJHU00xNTQ1NTQ1X0pNUzktUDhjLnR4dCIpDQoNCnggPC0gcmVhZERHRShmaWxlcywgY29sdW1ucz1jKDEsMykpDQpjbGFzcyh4KQ0KYGBgDQoNCmBgYHtyfQ0KZGltKHgpDQpgYGANCg0KYGBge3J9DQpzYW1wbGVuYW1lcyA8LSBzdWJzdHJpbmcoY29sbmFtZXMoeCksIDEyLCBuY2hhcihjb2xuYW1lcyh4KSkpDQpjb2xuYW1lcyh4KSA8LSBzYW1wbGVuYW1lcw0KZ3JvdXAgPC0gYXMuZmFjdG9yKGMoIkxQIiwgIk1MIiwgIkJhc2FsIiwgIkJhc2FsIiwgIk1MIiwgIkxQIiwgDQogICAgICAgICAgICAgICAgICAgICAiQmFzYWwiLCAiTUwiLCAiTFAiKSkNCngkc2FtcGxlcyRncm91cCA8LSBncm91cA0KbGFuZSA8LSBhcy5mYWN0b3IocmVwKGMoIkwwMDQiLCJMMDA2IiwiTDAwOCIpLCBjKDMsNCwyKSkpDQp4JHNhbXBsZXMkbGFuZSA8LSBsYW5lDQp4JHNhbXBsZXMNCmBgYA0KDQpgYGB7cn0NCmdlbmVpZCA8LSByb3duYW1lcyh4KQ0KZ2VuZXMgPC0gc2VsZWN0KE11cy5tdXNjdWx1cywga2V5cz1nZW5laWQsIGNvbHVtbnM9YygiU1lNQk9MIiwgIlRYQ0hST00iKSwgDQogICAgICAgICAgICAgICAga2V5dHlwZT0iRU5UUkVaSUQiKQ0KZ2VuZXMgPC0gZ2VuZXNbIWR1cGxpY2F0ZWQoZ2VuZXMkRU5UUkVaSUQpLF0NCngkZ2VuZXMgPC0gZ2VuZXMNCngNCmBgYA0KDQoNCmBgYHtyfQ0KDQpjcG0gPC0gY3BtKHgpDQpsY3BtIDwtIGNwbSh4LCBsb2c9VFJVRSkNCkwgPC0gbWVhbih4JHNhbXBsZXMkbGliLnNpemUpICogMWUtNg0KTSA8LSBtZWRpYW4oeCRzYW1wbGVzJGxpYi5zaXplKSAqIDFlLTYNCnN1bW1hcnkobGNwbSkNCg0KYGBgDQoNCmBgYHtyfQ0KDQp4JHNhbXBsZXMNCg0KYGBgDQoNCg0KYGBge3J9DQoNCmBgYA0KDQpgYGB7cn0NCmdsaW1tYU1EUyhsY3BtLCBsYWJlbHM9cGFzdGUoZ3JvdXAsIGxhbmUsIHNlcD0iXyIpLCANCiAgICAgICAgICBncm91cHM9eCRzYW1wbGVzKQ0KDQoNCg0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCg0KbGlicmFyeShlZGdlUikNCmxpYnJhcnkoTXVzLm11c2N1bHVzKQ0KDQpmaWxlcyA8LSBjKCJHU00xNTQ1NTM1XzEwXzZfNV8xMS50eHQiLCAiR1NNMTU0NTUzNl85XzZfNV8xMS50eHQiLCANCiAgICJHU00xNTQ1NTM4X3B1cmVwNTMudHh0IiwgIkdTTTE1NDU1MzlfSk1TOC0yLnR4dCIsIA0KICAgIkdTTTE1NDU1NDBfSk1TOC0zLnR4dCIsICJHU00xNTQ1NTQxX0pNUzgtNC50eHQiLCANCiAgICJHU00xNTQ1NTQyX0pNUzgtNS50eHQiLCAiR1NNMTU0NTU0NF9KTVM5LVA3Yy50eHQiLCANCiAgICJHU00xNTQ1NTQ1X0pNUzktUDhjLnR4dCIpDQoNCnggPC0gcmVhZERHRShmaWxlcywgY29sdW1ucz1jKDEsMykpDQpjbGFzcyh4KQ0KYGBgDQoNCmBgYHtyfQ0KZGltKHgpDQpgYGANCg0KYGBge3J9DQpzYW1wbGVuYW1lcyA8LSBzdWJzdHJpbmcoY29sbmFtZXMoeCksIDEyLCBuY2hhcihjb2xuYW1lcyh4KSkpDQpjb2xuYW1lcyh4KSA8LSBzYW1wbGVuYW1lcw0KZ3JvdXAgPC0gYXMuZmFjdG9yKGMoIkxQIiwgIk1MIiwgIkJhc2FsIiwgIkJhc2FsIiwgIk1MIiwgIkxQIiwgDQogICAgICAgICAgICAgICAgICAgICAiQmFzYWwiLCAiTUwiLCAiTFAiKSkNCngkc2FtcGxlcyRncm91cCA8LSBncm91cA0KbGFuZSA8LSBhcy5mYWN0b3IocmVwKGMoIkwwMDQiLCJMMDA2IiwiTDAwOCIpLCBjKDMsNCwyKSkpDQp4JHNhbXBsZXMkbGFuZSA8LSBsYW5lDQp4JHNhbXBsZXMNCmBgYA0KDQpgYGB7cn0NCmdlbmVpZCA8LSByb3duYW1lcyh4KQ0KZ2VuZXMgPC0gc2VsZWN0KE11cy5tdXNjdWx1cywga2V5cz1nZW5laWQsIGNvbHVtbnM9YygiU1lNQk9MIiwgIlRYQ0hST00iKSwgDQogICAgICAgICAgICAgICAga2V5dHlwZT0iRU5UUkVaSUQiKQ0KZ2VuZXMgPC0gZ2VuZXNbIWR1cGxpY2F0ZWQoZ2VuZXMkRU5UUkVaSUQpLF0NCngkZ2VuZXMgPC0gZ2VuZXMNCngNCmBgYA0KDQoNCmBgYHtyfQ0KDQojIHRyYW5zZm9ybWF0aW9ucyBmcm9tIHJhdyBzY2FsZQ0KDQpjcG0gPC0gY3BtKHgpDQpsY3BtIDwtIGNwbSh4LCBsb2c9VFJVRSkNCnN1bW1hcnkobGNwbSkNCg0KYGBgDQoNCmBgYHtyfQ0KDQojIHJlbW92ZSBsb3dseSBleHByZXNzZWQgZ2VuZXMNCmtlZXAuZXhwcnMgPC0gZmlsdGVyQnlFeHByKHgsIGdyb3VwPWdyb3VwKQ0KeCA8LSB4W2tlZXAuZXhwcnMsLCBrZWVwLmxpYi5zaXplcz1GQUxTRV0NCmRpbSh4KQ0KYGBgDQoNCmBgYHtyfQ0KIyBub3JtYWxpc2luZyBnZW5lIGV4cHJlc3Npb24gZGlzdHJpYnV0aW9ucw0KeCA8LSBjYWxjTm9ybUZhY3RvcnMoeCwgbWV0aG9kID0gIlRNTSIpDQp4JHNhbXBsZXMkbm9ybS5mYWN0b3JzDQoNCmBgYA0KDQoNCg0KYGBge3J9DQpnbGltbWFNRFMobGNwbSwgbGFiZWxzPXBhc3RlKGdyb3VwLCBsYW5lLCBzZXA9Il8iKSwgDQogICAgICAgICAgZ3JvdXBzPXgkc2FtcGxlcykNCmBgYA0KDQpgYGB7cn0NCmdsTURTUGxvdChsY3BtLCBsYWJlbHM9cGFzdGUoZ3JvdXAsIGxhbmUsIHNlcD0iXyIpLCANCiAgICAgICAgICBncm91cHM9eCRzYW1wbGVzKQ0KYGBgDQo=</div>
 
 
 

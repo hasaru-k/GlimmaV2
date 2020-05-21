@@ -23,8 +23,8 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuous_col
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.45,
-    "height": height * 0.6,
+    "width": width * 0.35,
+    "height": width * 0.3,
     "padding": 0,
     "autosize": {"type": "fit", "resize": true},
     "title": { "text": "MDS Plot"},
@@ -196,9 +196,9 @@ function createEigenSpec(eigenData, width, height)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A basic bar chart example, with value labels shown upon mouse hover.",
-    "width": width * 0.3,
-    "height": height * 0.6,
-    "padding": 5,
+    "width": width * 0.2,
+    "height": width * 0.2,
+    "padding": 0,
     "title": {
       "text": "Variance Explained"
     },
