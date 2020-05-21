@@ -138,17 +138,18 @@ prepareMDSData.default <- function(
 
   # add labels to groups
   groups <- data.frame(labels, groups)
+  # ensure there are no periods in groups colnames (Vega doesn't handle these well)
+  colnames(groups) <- gsub("\\.", "_", colnames(groups))
 
   points <- data.frame(points)
   dimlist <- paste0("dim", seq_len(ncol(points)))
   names(points) <- paste0("dim", seq_len(ncol(points)))
-  points <- data.frame(points, label=labels, groups)
+  points <- data.frame(points, groups)
 
   eigen <- data.frame(
       name = 1:min(ndim, 8),
       eigen = round(a1$eig[1:min(ndim, 8)]/sum(a1$eig), 2)
   )
-
 
   # add this column for no dimensionality in Vega
   points <- cbind(points, "-" = "0")
