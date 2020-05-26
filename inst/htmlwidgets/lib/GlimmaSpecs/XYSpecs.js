@@ -95,7 +95,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
             "size" : 1,
             "strokeWidth": { "value": 1 },
             "opacity": { "value": 0.6 },
-            "fill": { "scale": "colour_scale", "field": "colour" },
+            "fill": { "scale": "colour_scale", "field": "status" },
             "tooltip": tooltip
           }
         }

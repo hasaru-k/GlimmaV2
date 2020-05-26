@@ -73,38 +73,6 @@ fit$design
 ```
 
 ```{r}
-prepareXYData <- function(
-  x,
-  xvals=NULL,
-  yvals=NULL,
-  xlab=NULL,
-  ylab=NULL,
-  status=NULL)
-{
-  # assume MA plot if no x/y are given
-  if (is.null(xvals) && is.null(yvals))
-  {
-    # for now assume fit object
-    xvals <- unname(x$Amean)
-    xlab <- "logcpm"
-    yvals <- unname(x$coefficients[,1])
-    ylab <- "logfc"
-    stopifnot(all(names(x$Amean) == names(x$coefficients[,1])))
-    table <- data.frame(xvals, yvals)
-    names(table) <- c(xlab, ylab)
-    table <- cbind(table, x$genes)
-  }
-  else
-  {
-    
-  }
-  data <- list(x=xlab, y=ylab, table=table, cols=colnames(table))
-  return(list(plotType="XY", data=data))
-}
-
-exp <- vm$E
-# exp <- cbind(exp, c(1))
-# exp
 fit$design[1:ncol(exp)]
 ```
 

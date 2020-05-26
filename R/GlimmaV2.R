@@ -275,7 +275,7 @@ prepareXYData.default <- function(
   yvals=NULL,
   xlab=NULL,
   ylab=NULL,
-  colour=NULL)
+  status=NULL)
 {
   
   if (plotType=="MA")
@@ -304,8 +304,8 @@ prepareXYData.default <- function(
   }
   
   # add colour info
-  if (is.null(colour)) colour <- rep(0, nrow(table))
-  table <- cbind(table, colour=as.vector(colour))
+  if (is.null(status)) status <- rep(0, nrow(table))
+  table <- cbind(table, status=as.vector(status))
 
   # add anno columns
   if (!is.null(anno)) table <- cbind(table, anno)

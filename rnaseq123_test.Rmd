@@ -1,12 +1,15 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r}
 
 library(edgeR)
 library(Mus.musculus)
+library(GlimmaV2)
 
 files <- c("GSM1545535_10_6_5_11.txt", "GSM1545536_9_6_5_11.txt", 
    "GSM1545538_purep53.txt", "GSM1545539_JMS8-2.txt", 
@@ -76,6 +79,5 @@ glimmaMDS(lcpm, labels=paste(group, lane, sep="_"),
 ```
 
 ```{r}
-glMDSPlot(lcpm, labels=paste(group, lane, sep="_"), 
-          groups=x$samples)
+
 ```
