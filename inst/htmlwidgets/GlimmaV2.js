@@ -31,7 +31,7 @@ HTMLWidgets.widget({
           var eigenContainer = document.createElement("div");
           mdsContainer.setAttribute("id", "mdsContainer");
           eigenContainer.setAttribute("id", "eigenContainer");
-      
+          
           plotContainer.appendChild(mdsContainer);
           plotContainer.appendChild(eigenContainer);
 
@@ -63,7 +63,7 @@ HTMLWidgets.widget({
           });
           eigenView.runAsync();
           linkPlotsMDS();
-          addControlsMDS(controlContainer);
+          addPNGSave(controlContainer, mdsView);
           reformatElementsMDS();
         }
 
@@ -86,10 +86,13 @@ HTMLWidgets.widget({
           });
           xyView.tooltip(handler.call);
           xyView.runAsync();
-          
+
           // add datatable, and generate interaction
-          setupXYInteraction(xyView, xyData, widget, x);
+          setupXYInteraction(xyView, xyData, controlContainer, x);
           
+          // add XY plot save button
+          addPNGSave(controlContainer, xyView);
+
         }
 
       },
@@ -237,16 +240,15 @@ function linkPlotsMDS()
 
 }
 
-function addControlsMDS(controlContainer)
+function addPNGSave(controlContainer, view_obj)
 {
-
   // save to PNG button for MDS plot
   var downloadButton = document.createElement("BUTTON");
   downloadButton.setAttribute("id", "savePNGBtn");
-  downloadButton.innerHTML = "Save to PNG";
+  downloadButton.innerHTML = "Save (PNG)";
   downloadButton.onclick =
   function changeContent() {
-    mdsView.toImageURL('png').then(function (url) {
+    view_obj.toImageURL('png').then(function (url) {
       var link = document.createElement('a');
       link.setAttribute('href', url);
       link.setAttribute('target', '_blank');
@@ -255,7 +257,6 @@ function addControlsMDS(controlContainer)
     }).catch(function (error) { /* error handling */ });
   }
   controlContainer.appendChild(downloadButton);
-
 }
 
 function reformatElementsMDS(controlContainer)

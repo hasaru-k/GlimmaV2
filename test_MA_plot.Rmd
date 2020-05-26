@@ -99,13 +99,13 @@ htmlwidgets::saveWidget(glMA, file="glMA.html", )
 ```
 
 ```{r}
-glimmaMA(fit, colour=dt)
+
+glimmaXY(x=fit$coefficients[, 1],y=fit$lods)
 ```
 
 ```{r}
 
 class(fit)
-
 ```
 
 
