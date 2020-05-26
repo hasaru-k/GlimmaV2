@@ -261,6 +261,7 @@ prepareXYData <- function(x, ...)
   UseMethod("prepareXYData")
 }
 
+# status_colours
 # anno - extra columns to add to the gene table
 # p.adj.method - method to adjust p-value in table
 # coef - column in MArrayLM object to use
@@ -275,7 +276,8 @@ prepareXYData.default <- function(
   yvals=NULL,
   xlab=NULL,
   ylab=NULL,
-  status=NULL)
+  status=NULL,
+  status.colours=c("dodgerblue", "lightslategray", "firebrick"))
 {
   
   if (plotType=="MA")
@@ -325,8 +327,17 @@ prepareXYData.default <- function(
     if (!("index" %in% display.columns)) display.columns <- c("index", display.columns)
   }
 
-  data <- list(x=xlab, y=ylab, table=table, cols=display.columns, tooltipFields=display.columns)
-  return(list(plotType="XY", data=data))
+  # error checking on status_colours
+  if (length(status.colours) != 3) stop("status_colours 
+          arg must have exactly 3 elements for [downreg, notDE, upreg]")
+
+  data <- list(x=xlab, 
+               y=ylab, 
+               table=table, 
+               cols=display.columns, 
+               tooltipFields=display.columns,
+               status_colours=status.colours)
+  return(list(plotType=plotType, data=data))
 }
 
 #' Shiny bindings for GlimmaV2

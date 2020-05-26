@@ -79,7 +79,9 @@ HTMLWidgets.widget({
           plotContainer.appendChild(xyContainer);
           var xyData = HTMLWidgets.dataframeToD3(x.data.table);
           console.log(xyData);
-          var xySpec = createXYSpec(xyData, width, height, x.data.x, x.data.y, x.data.cols);
+          var xySpec = createXYSpec(xyData, width, height, 
+                                      x.data.x, x.data.y, x.data.cols,
+                                      x.data.status_colours);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
             container: '#' + xyContainer.getAttribute("id"),
@@ -227,6 +229,7 @@ function processDataMDS(x)
   {
     x.data.features["discrete"] = [ x.data.features["discrete"] ];
   }
+  // sort to get "-", " -" features loaded first
   x.data.features["numeric"].sort();
   x.data.features["discrete"].sort();
 }

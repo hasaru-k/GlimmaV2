@@ -1,6 +1,6 @@
 
 // parametrise graph encoding for MDS plot
-function createXYSpec(xyData, width, height, x, y, cols) 
+function createXYSpec(xyData, width, height, x, y, cols, status_colours) 
 {
 
   // generate tooltip object for embedding in spec
@@ -61,7 +61,7 @@ function createXYSpec(xyData, width, height, x, y, cols)
         "name": "colour_scale",
         "type": "ordinal",
         "domain": [-1, 0, 1],
-        "range": ["dodgerblue", "lightslategray", "firebrick"]
+        "range": status_colours
       }
     ],
     "axes" : [

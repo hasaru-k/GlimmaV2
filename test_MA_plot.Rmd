@@ -100,7 +100,7 @@ htmlwidgets::saveWidget(glMA, file="glMA.html", )
 
 ```{r}
 
-glimmaXY(x=fit$coefficients[, 1],y=fit$lods)
+glimmaXY(x=fit$coefficients[, 1],y=fit$lods, status=dt, status.colours=c("mediumseagreen","black","darkviolet"))
 ```
 
 ```{r}
