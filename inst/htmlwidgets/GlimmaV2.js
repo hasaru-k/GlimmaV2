@@ -67,25 +67,12 @@ HTMLWidgets.widget({
           addSave(controlContainer, mdsView, text="Save MDS");
           addSave(controlContainer, eigenView, text="Save VAR");
 
-          window.addEventListener("click", 
-            function(event) {
-              if (!event.target.matches('.save-button')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                
-                for (const dropdown_i of dropdowns) {
-                  if (dropdown_i.classList.contains('show')) {
-                    dropdown_i.classList.remove('show');
-                  }
-                }
-              }
-            }
-          );
-
           reformatElementsMDS();
         }
 
         if (x.plotType === "XY")
         {
+          console.log("XY plot created.");
           console.log(x);
 
           // create container elements
@@ -110,7 +97,7 @@ HTMLWidgets.widget({
           setupXYInteraction(xyView, xyData, controlContainer, x);
           
           // add XY plot save button
-          addPNGSave(controlContainer, xyView);
+          addSave(controlContainer, xyView);
 
         }
 
@@ -267,9 +254,9 @@ function linkPlotsMDS()
 
 }
 
-function addSave(controlContainer, view_obj, text="Save (PNG)")
+function addSave(controlContainer, view_obj, text="Save Plot")
 {
-  // save to PNG button for MDS plot
+  // set up button elements
   var dropdownDiv = document.createElement("div");
   dropdownDiv.setAttribute("class", "dropdown");
 
@@ -307,23 +294,45 @@ function addSave(controlContainer, view_obj, text="Save (PNG)")
     });
   };
 
+  // add elements to container
   dropdownDiv.appendChild(dropdownButton);
   dropdownDiv.appendChild(dropdownContent);
 
   dropdownContent.appendChild(pngSaveBtn);
   dropdownContent.appendChild(svgSaveBtn);
 
+  // set up dropdown action
   dropdownButton.onclick = function() {
       var dropdowns = document.getElementsByClassName("dropdown-content");
       for (const dropdown_i of dropdowns) {
-        if (dropdown_i.classList.contains('show')) {
-          dropdown_i.classList.remove('show');
+        if (dropdown_i.classList.contains("show")) {
+          dropdown_i.classList.remove("show");
         }
       }
     dropdownContent.classList.toggle("show");
   };
 
   controlContainer.appendChild(dropdownDiv);
+
+  // set up dropdown hide when clicking elsewhere
+  // global window.dropdownHide so this event is only added once
+  if (!window.dropdownHide) {
+    function hideDropdowns(event) {
+      if (!event.target.matches(".save-button")) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+
+        for (const dropdown_i of dropdowns) {
+          if (dropdown_i.classList.contains("show")) {
+            dropdown_i.classList.remove("show");
+          }
+        }
+      }
+    }
+
+    window.addEventListener("click", hideDropdowns);
+
+    window.dropdownHide = true;
+  }
 }
 
 function addSVGSave(controlContainer, view_obj, text="Save (SVG)")
