@@ -95,3 +95,61 @@ plotMDS(lcpm, labels=lane, col=col.lane, dim=c(3,4))
 title(main="B. Sequencing lanes")
 
 ```
+
+```{r}
+library(Glimma)
+?glMDPlot
+```
+
+
+```{r}
+
+design <- model.matrix(~0+group+lane)
+colnames(design) <- gsub("group", "", colnames(design))
+design
+
+```
+
+```{r}
+contr.matrix <- makeContrasts(
+   BasalvsLP = Basal-LP, 
+   BasalvsML = Basal - ML, 
+   LPvsML = LP - ML, 
+   levels = colnames(design))
+contr.matrix
+```
+
+```{r}
+
+par(mfrow=c(1,2))
+v <- voom(x, design, plot=TRUE)
+vfit <- lmFit(v, design)
+vfit <- contrasts.fit(vfit, contrasts=contr.matrix)
+efit <- eBayes(vfit)
+plotSA(efit, main="Final model: Mean-variance trend")
+
+```
+
+
+
+```{r}
+
+tfit <- treat(vfit, lfc=1)
+dt <- decideTests(tfit)
+summary(dt)
+
+```
+
+```{r}
+
+
+nrow(parameter.type)
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

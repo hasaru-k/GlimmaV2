@@ -4,18 +4,27 @@ glimmaMDS <- function(x, ...)
   return(GlimmaV2(xData))
 }
 
-glimmaMA <- function(x, ...)
+glimmaMA <- function(
+  x, 
+  status=rep(0, nrow(x)), 
+  ...)
 {
-  xData <- prepareXYData(x, plotType="MA",...)
+  xData <- prepareXYData(x, parameter.type="MA", status, ...)
   return(GlimmaV2(xData))
 }
 
 # required: x and y
-glimmaXY <- function(x, y, xlab="x", ylab="y", ...)
+glimmaXY <- function(
+  x, 
+  y, 
+  xlab="x", 
+  ylab="y", 
+  status=rep(0, length(x)), 
+  ...)
 {
   # might be a bit confusing that there are two x variables?
   # maybe rename second x to fit
-  xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, plotType="XY", ...)
+  xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, parameter.type="XY", status, ...)
   return(GlimmaV2(xData))
 }
 
@@ -261,13 +270,14 @@ prepareXYData <- function(x, ...)
   UseMethod("prepareXYData")
 }
 
-# status_colours
-# anno - extra columns to add to the gene table
-# p.adj.method - method to adjust p-value in table
-# coef - column in MArrayLM object to use
+# display.columns - character vector containing names of columns to display in mouseover tooltips and table.
+# anno - the data.frame containing gene annotations.
+# p.adj.method - character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")
+# coef - integer or character index vector indicating which column of object to plot.
 prepareXYData.default <- function(
   x,
-  plotType,
+  parameter.type,
+  status,
   coef=ncol(x$coefficients),
   p.adj.method = "BH",
   display.columns = NULL,
@@ -276,11 +286,10 @@ prepareXYData.default <- function(
   yvals=NULL,
   xlab=NULL,
   ylab=NULL,
-  status=NULL,
   status.colours=c("dodgerblue", "lightslategray", "firebrick"))
 {
   
-  if (plotType=="MA")
+  if (parameter.type=="MA")
   {
     # for now assume fit object.
     # create initial table with logCPM and logFC features
@@ -299,14 +308,20 @@ prepareXYData.default <- function(
     # add gene info from MArrayLM object
     table <- cbind(x$genes, table)
 
-  } else 
+  } else
   {
+    if (length(xvals)!=length(yvals)) stop("Error: x and y args must have the same length.")
     table <- data.frame(xvals, yvals) 
     names(table) <- c(xlab, ylab)
   }
   
   # add colour info
-  if (is.null(status)) status <- rep(0, nrow(table))
+  if (is.matrix(status)) status <- status[, coef]
+  if (length(status)!=nrow(table))
+  {
+    if (parameter.type=="MA") stop("Status vector must have the same number of genes as x arg.")
+    else stop("Status vector must have the same number of genes as x/y args.")
+  }
   table <- cbind(table, status=as.vector(status))
 
   # add anno columns
@@ -337,7 +352,7 @@ prepareXYData.default <- function(
                cols=display.columns, 
                tooltipFields=display.columns,
                status_colours=status.colours)
-  return(list(plotType=plotType, data=data))
+  return(list(plotType="XY", data=data))
 }
 
 #' Shiny bindings for GlimmaV2
