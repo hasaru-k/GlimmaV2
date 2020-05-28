@@ -72,25 +72,7 @@ fit$design
 fit$design
 ```
 
-```{r}
-fit$design[1:ncol(exp)]
-```
 
-```{r}
-glMDPlot(fit, status=dt, counts=vm, groups=groups, side.main="Symbols")
-
-```
-
-```{r}
-
-data.frame(vm$E)
-
-```
-
-```{r}
-newvals <- c(`-1`="downreg",`0`="normal",`1`="upreg")
-anno <- data.frame(newvals[as.character(dt)])
-```
 
 ```{r}
 glMA <- glimmaMA(fit, colour=dt)
@@ -105,7 +87,7 @@ glimmaXY(x=fit$coefficients[, 1],y=fit$lods, status=dt, status.colours=c("medium
 
 ```{r}
 
-class(fit)
+colnames(fit)
 ```
 
 

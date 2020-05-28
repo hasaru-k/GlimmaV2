@@ -83,7 +83,7 @@ HTMLWidgets.widget({
           console.log(xyData);
           var xySpec = createXYSpec(xyData, width, height, 
                                       x.data.x, x.data.y, x.data.cols,
-                                      x.data.status_colours);
+                                      x.data.status_colours, x.data.title);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
             container: '#' + xyContainer.getAttribute("id"),
