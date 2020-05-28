@@ -1,6 +1,6 @@
 
 // parametrise graph encoding for MDS plot
-function createXYSpec(xyData, width, height, x, y, cols, status_colours) 
+function createXYSpec(xyData, width, height, x, y, cols, status_colours, title) 
 {
 
   // generate tooltip object for embedding in spec
@@ -16,7 +16,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours)
     "height": height * 0.35,
     "padding": 0,
     "title": {
-      "text": "MA Plot"
+      "text": title
     },
     "signals":
       [

@@ -6,10 +6,11 @@ glimmaMDS <- function(x, ...)
 
 glimmaMA <- function(
   x, 
-  status=rep(0, nrow(x)), 
+  status=rep(0, nrow(x)),
+  main="MA Plot", 
   ...)
 {
-  xData <- prepareXYData(x, parameter.type="MA", status, ...)
+  xData <- prepareXYData(x, parameter.type="MA", status, main, ...)
   return(GlimmaV2(xData))
 }
 
@@ -19,12 +20,13 @@ glimmaXY <- function(
   y, 
   xlab="x", 
   ylab="y", 
-  status=rep(0, length(x)), 
+  status=rep(0, length(x)),
+  main="XY Plot", 
   ...)
 {
   # might be a bit confusing that there are two x variables?
   # maybe rename second x to fit
-  xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, parameter.type="XY", status, ...)
+  xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, parameter.type="XY", status, main, ...)
   return(GlimmaV2(xData))
 }
 
@@ -278,6 +280,7 @@ prepareXYData.default <- function(
   x,
   parameter.type,
   status,
+  main,
   coef=ncol(x$coefficients),
   p.adj.method = "BH",
   display.columns = NULL,
@@ -351,7 +354,8 @@ prepareXYData.default <- function(
                table=table, 
                cols=display.columns, 
                tooltipFields=display.columns,
-               status_colours=status.colours)
+               status_colours=status.colours,
+               title=main)
   return(list(plotType="XY", data=data))
 }
 

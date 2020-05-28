@@ -142,6 +142,7 @@ summary(dt)
 
 ```{r}
 
+glimmaXY(1:5, 11:15,main="Hello")
 
 nrow(parameter.type)
 ```
