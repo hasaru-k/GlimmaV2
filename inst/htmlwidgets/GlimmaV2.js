@@ -64,13 +64,15 @@ HTMLWidgets.widget({
           eigenView.runAsync();
           linkPlotsMDS();
           addBlockElement(controlContainer);
-          addPNGSave(controlContainer, mdsView, text="Save (MDS)");
-          addPNGSave(controlContainer, eigenView, text="Save (Var)");
+          addSave(controlContainer, mdsView, text="Save MDS");
+          addSave(controlContainer, eigenView, text="Save VAR");
+
           reformatElementsMDS();
         }
 
         if (x.plotType === "XY")
         {
+          console.log("XY plot created.");
           console.log(x);
 
           // create container elements
@@ -95,7 +97,7 @@ HTMLWidgets.widget({
           setupXYInteraction(xyView, xyData, controlContainer, x);
           
           // add XY plot save button
-          addPNGSave(controlContainer, xyView);
+          addSave(controlContainer, xyView);
 
         }
 
@@ -252,19 +254,99 @@ function linkPlotsMDS()
 
 }
 
-function addPNGSave(controlContainer, view_obj, text="Save (PNG)")
+function addSave(controlContainer, view_obj, text="Save Plot")
 {
-  // save to PNG button for MDS plot
-  var downloadButton = document.createElement("BUTTON");
-  downloadButton.setAttribute("id", "savePNGBtn");
-  downloadButton.innerHTML = text;
-  downloadButton.onclick =
-  function changeContent() {
+  // set up button elements
+  var dropdownDiv = document.createElement("div");
+  dropdownDiv.setAttribute("class", "dropdown");
+
+  var dropdownButton = document.createElement("button");
+  dropdownButton.setAttribute("class", "save-button");
+  dropdownButton.innerHTML = text;
+
+  var dropdownContent = document.createElement("div");
+  dropdownContent.setAttribute("class", "dropdown-content");
+  dropdownContent.setAttribute("id", "dropdown-content");
+
+  var pngSaveBtn = document.createElement("a");
+  pngSaveBtn.setAttribute("href", "#")
+  pngSaveBtn.innerText = "PNG";
+  pngSaveBtn.onclick = function() {
     view_obj.toImageURL('png', scaleFactor=3).then(function (url) {
       var link = document.createElement('a');
       link.setAttribute('href', url);
       link.setAttribute('target', '_blank');
       link.setAttribute('download', 'vega-export.png');
+      link.dispatchEvent(new MouseEvent('click'));
+    });
+  };
+  
+  var svgSaveBtn = document.createElement("a");
+  svgSaveBtn.setAttribute("href", "#");
+  svgSaveBtn.innerText = "SVG";
+  svgSaveBtn.onclick = function() {
+    view_obj.toImageURL('svg', scaleFactor=3).then(function (url) {
+      var link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', 'vega-export.svg');
+      link.dispatchEvent(new MouseEvent('click'));
+    });
+  };
+
+  // add elements to container
+  dropdownDiv.appendChild(dropdownButton);
+  dropdownDiv.appendChild(dropdownContent);
+
+  dropdownContent.appendChild(pngSaveBtn);
+  dropdownContent.appendChild(svgSaveBtn);
+
+  // set up dropdown action
+  dropdownButton.onclick = function() {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      for (const dropdown_i of dropdowns) {
+        if (dropdown_i.classList.contains("show")) {
+          dropdown_i.classList.remove("show");
+        }
+      }
+    dropdownContent.classList.toggle("show");
+  };
+
+  controlContainer.appendChild(dropdownDiv);
+
+  // set up dropdown hide when clicking elsewhere
+  // global window.dropdownHide so this event is only added once
+  if (!window.dropdownHide) {
+    function hideDropdowns(event) {
+      if (!event.target.matches(".save-button")) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+
+        for (const dropdown_i of dropdowns) {
+          if (dropdown_i.classList.contains("show")) {
+            dropdown_i.classList.remove("show");
+          }
+        }
+      }
+    }
+
+    window.addEventListener("click", hideDropdowns);
+
+    window.dropdownHide = true;
+  }
+}
+
+function addSVGSave(controlContainer, view_obj, text="Save (SVG)")
+{
+  var downloadButton = document.createElement("BUTTON");
+  downloadButton.setAttribute("class", "save-button");
+  downloadButton.innerHTML = text;
+  downloadButton.onclick =
+  function changeContent() {
+    view_obj.toImageURL('svg', scaleFactor=3).then(function (url) {
+      var link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', 'vega-export.svg');
       link.dispatchEvent(new MouseEvent('click'));
     }).catch(function (error) { /* error handling */ });
   }

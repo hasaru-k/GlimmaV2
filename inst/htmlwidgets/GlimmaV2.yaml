@@ -1,5 +1,4 @@
-# (uncomment to add a dependency)
- dependencies:
+dependencies:
   - name: vega
     version: 1.0
     src: htmlwidgets/lib/vega
