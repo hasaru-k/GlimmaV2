@@ -39,7 +39,7 @@ groups
 
 ```{r}
 
-glimmaMDS(rnaseq.deseq2, groups=groups)
+glimmaMDS(rnaseq.deseq2)
 
 ```
 
