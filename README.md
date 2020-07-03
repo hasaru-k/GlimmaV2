@@ -4,4 +4,4 @@ GlimmaV2 is an interactive R widget for creating interactive plots for different
 - exporting plots to to PNG and SVG formats
 - saving widgets as encapsulated HTML files for enhanced portability
 ## Under construction
-![MDS plot](readme_assets/mdsplot.png "MDS Plot")
+![MDS plot](https://github.com/hasacat/GlimmaV2/blob/master/readme_assets/mdsplot.PNG "MDS Plot")
