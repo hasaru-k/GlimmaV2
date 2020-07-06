@@ -43,8 +43,8 @@ glimmaXY <- function(
 #' @export
 GlimmaV2 <- function(
   xData,
-  width = NULL,
-  height = NULL,
+  width = 900,
+  height = 570,
   elementId = NULL,
   ...)
 {
