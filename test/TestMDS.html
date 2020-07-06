@@ -46140,7 +46140,7 @@ function createEigenSpec(eigenData, width, height)
           addSave(controlContainer, mdsView, text="Save MDS");
           addSave(controlContainer, eigenView, text="Save VAR");
 
-          reformatElementsMDS();
+          reformatElementsMDS(controlContainer);
         }
 
         if (x.plotType === "XY")
@@ -46195,7 +46195,6 @@ function setupXYInteraction(xyView, xyData, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
-  datatableEl.setAttribute("id", "dataTable");
   datatableEl.setAttribute("class", "dataTable");
   widget.appendChild(datatableEl);
   var xyColumnsInfo = [];
@@ -46205,7 +46204,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
   $(document).ready(function() 
   {
 
-    datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
+    var datatable = $(datatableEl).DataTable({
         data: xyData,
         columns: xyColumnsInfo,
         rowId: "index",
@@ -46216,6 +46215,9 @@ function setupXYInteraction(xyView, xyData, widget, x)
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
+
+    var selected = [];
+
     // reset graph and table selections
     datatable.button().add(0, 
       {
@@ -46233,7 +46235,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
     });
 
     // map table selections onto the graph (clearing graph selections each time)
-    $("#" + datatableEl.getAttribute("id") + ' tbody').on( 'click', 'tr', function () 
+    datatable.on( 'click', 'tr', function () 
       {
         if (graphMode) return;
         $(this).toggleClass('selected');
@@ -46241,6 +46243,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
         let i;
         selected = [];
         for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
+        console.log(selected);
         xyView.data("selected_points", selected);
         xyView.runAsync();
       }
@@ -46248,7 +46251,6 @@ function setupXYInteraction(xyView, xyData, widget, x)
     
   });
 
-  selected = [];
   // map graph selections onto the table (clearing table selections each time)
   xyView.addSignalListener('click', function(name, value) {
     var datum = value[0];
@@ -46268,7 +46270,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
       : selected.push(datum);
     xyView.data("selected_points", selected);
     xyView.runAsync();
-    
+    console.log(selected);
     // filter table
     if (!datatable) return;
     datatable.search('').columns().search('').draw();
@@ -46338,8 +46340,7 @@ function addSave(controlContainer, view_obj, text="Save Plot")
 
   var dropdownContent = document.createElement("div");
   dropdownContent.setAttribute("class", "dropdown-content");
-  dropdownContent.setAttribute("id", "dropdown-content");
-
+  
   var pngSaveBtn = document.createElement("a");
   pngSaveBtn.setAttribute("href", "#")
   pngSaveBtn.innerText = "PNG";
@@ -46427,7 +46428,7 @@ function addSVGSave(controlContainer, view_obj, text="Save (SVG)")
 
 function reformatElementsMDS(controlContainer)
 {
-  binds = document.getElementsByClassName("vega-bind");
+  binds = controlContainer.getElementsByClassName("vega-bind");
   for (var i = 0; i < binds.length; i++)
   {
     // the separator input signal is a dummy invisible signal after x_axis, y_axis
@@ -46613,8 +46614,8 @@ groups &lt;- data.frame(genotype=rnaseq$samples$group,
 # add libsize
 groups &lt;- cbind(groups, libsize=rnaseq$samples$lib.size)
 glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)</code></pre>
-<div id="htmlwidget-fa8e7ea824bbc4f83636" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fa8e7ea824bbc4f83636">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"labels":["1","2","3","4","5","6","7"],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["miscCont","libsize","- "],"discrete":["labels","genotype","lane","miscDisc","-"],"all":["miscCont","libsize","- ","labels","genotype","lane","miscDisc","-"]},"continuous_colour":true,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-335f41c8cd222246a80f" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-335f41c8cd222246a80f">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"labels":["1","2","3","4","5","6","7"],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["miscCont","libsize","- "],"discrete":["labels","genotype","lane","miscDisc","-"],"all":["miscCont","libsize","- ","labels","genotype","lane","miscDisc","-"]},"continuous_colour":true,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>### DESeqDataset TEST ###
 
 library(&quot;pasilla&quot;, quietly=TRUE)
@@ -46689,8 +46690,8 @@ dds &lt;- DESeqDataSetFromMatrix(countData = cts,
                               design = ~ condition)
 
 glimmaMDS(dds)</code></pre>
-<div id="htmlwidget-799e33004efe6fc1cc2a" style="width:672px;height:480px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-799e33004efe6fc1cc2a">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[1.55789848737508,-0.994413514994185,-1.03518602977175,1.23400810821737,1.25827290537262,-1.27046025294586,-0.750119703253269],"dim2":[0.327465585703156,1.33877243635546,1.18136538115996,-0.394083867074646,-0.206388633543526,-2.12254637830374,-0.124584524296666],"dim3":[1.04762623809889,0.651014750012702,0.127488711525188,-1.0580943333895,0.180276506655706,0.932524691358084,-1.88083656426107],"dim4":[-0.497653559616661,-1.06559976318159,1.73569377315974,0.954129495902234,-0.222389523421366,0.12185770523214,-1.0260381280745],"dim5":[-0.745673464161095,1.33046713730006,-0.795419473499434,1.4927735310024,-0.541257943037364,0.106640788225339,-0.8475305758299],"dim6":[-1.15717856809029,0.21434062603293,0.0219279442005961,-0.317790844666358,1.64317878900307,-0.114908804796268,-0.28956914168368],"labels":["treated1","treated2","treated3","untreated1","untreated2","untreated3","untreated4"],"condition":["treated","treated","treated","untreated","untreated","untreated","untreated"],"type":["single-read","paired-end","paired-end","single-read","single-read","paired-end","paired-end"],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.23,0.19,0.17,0.15,0.15,0.1]},"features":{"numeric":"- ","discrete":["labels","condition","type","-"],"all":["- ","labels","condition","type","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-11ea7ff698b5d4d56ad3" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-11ea7ff698b5d4d56ad3">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[1.55789848737508,-0.994413514994185,-1.03518602977175,1.23400810821737,1.25827290537262,-1.27046025294586,-0.750119703253269],"dim2":[0.327465585703156,1.33877243635546,1.18136538115996,-0.394083867074646,-0.206388633543526,-2.12254637830374,-0.124584524296666],"dim3":[1.04762623809889,0.651014750012702,0.127488711525188,-1.0580943333895,0.180276506655706,0.932524691358084,-1.88083656426107],"dim4":[-0.497653559616661,-1.06559976318159,1.73569377315974,0.954129495902234,-0.222389523421366,0.12185770523214,-1.0260381280745],"dim5":[-0.745673464161095,1.33046713730006,-0.795419473499434,1.4927735310024,-0.541257943037364,0.106640788225339,-0.8475305758299],"dim6":[-1.15717856809029,0.21434062603293,0.0219279442005961,-0.317790844666358,1.64317878900307,-0.114908804796268,-0.28956914168368],"labels":["treated1","treated2","treated3","untreated1","untreated2","untreated3","untreated4"],"condition":["treated","treated","treated","untreated","untreated","untreated","untreated"],"type":["single-read","paired-end","paired-end","single-read","single-read","paired-end","paired-end"],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.23,0.19,0.17,0.15,0.15,0.1]},"features":{"numeric":"- ","discrete":["labels","condition","type","-"],"all":["- ","labels","condition","type","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
 
 
 

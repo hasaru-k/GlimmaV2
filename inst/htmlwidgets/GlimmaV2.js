@@ -67,7 +67,7 @@ HTMLWidgets.widget({
           addSave(controlContainer, mdsView, text="Save MDS");
           addSave(controlContainer, eigenView, text="Save VAR");
 
-          reformatElementsMDS();
+          reformatElementsMDS(controlContainer);
         }
 
         if (x.plotType === "XY")
@@ -355,7 +355,7 @@ function addSVGSave(controlContainer, view_obj, text="Save (SVG)")
 
 function reformatElementsMDS(controlContainer)
 {
-  binds = document.getElementsByClassName("vega-bind");
+  binds = controlContainer.getElementsByClassName("vega-bind");
   for (var i = 0; i < binds.length; i++)
   {
     // the separator input signal is a dummy invisible signal after x_axis, y_axis
