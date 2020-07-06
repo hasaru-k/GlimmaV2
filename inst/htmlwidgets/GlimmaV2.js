@@ -9,8 +9,8 @@ HTMLWidgets.widget({
     // create general layout elements
     var plotContainer = document.createElement("div");
     var controlContainer = document.createElement("div");
-    plotContainer.setAttribute("id", "plotContainer");
-    controlContainer.setAttribute("id", "controlContainer");
+    plotContainer.setAttribute("class", "plotContainer");
+    controlContainer.setAttribute("class", "controlContainer");
 
     var widget = document.getElementById(el.id);
     widget.appendChild(plotContainer);
@@ -29,12 +29,12 @@ HTMLWidgets.widget({
           // create container elements
           var mdsContainer = document.createElement("div");
           var eigenContainer = document.createElement("div");
-          mdsContainer.setAttribute("id", "mdsContainer");
-          eigenContainer.setAttribute("id", "eigenContainer");
+          mdsContainer.setAttribute("class", "mdsContainer");
+          eigenContainer.setAttribute("class", "eigenContainer");
           
           plotContainer.appendChild(mdsContainer);
           plotContainer.appendChild(eigenContainer);
-
+          
           console.log(x);
           processDataMDS(x);
           var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
@@ -47,8 +47,8 @@ HTMLWidgets.widget({
           
           mdsView = new vega.View(vega.parse(mdsSpec), {
             renderer: 'canvas',
-            container: '#' + mdsContainer.getAttribute("id"),
-            bind: '#' + controlContainer.getAttribute("id"),
+            container: mdsContainer,
+            bind: controlContainer,
             hover: true
           });
   
@@ -58,7 +58,7 @@ HTMLWidgets.widget({
           var eigenSpec = createEigenSpec(eigenData, width, height);
           eigenView = new vega.View(vega.parse(eigenSpec), {
             renderer: 'canvas',
-            container: '#' + eigenContainer.getAttribute("id"),
+            container: eigenContainer,
             hover: true
           });
           eigenView.runAsync();
@@ -67,7 +67,7 @@ HTMLWidgets.widget({
           addSave(controlContainer, mdsView, text="Save MDS");
           addSave(controlContainer, eigenView, text="Save VAR");
 
-          reformatElementsMDS();
+          reformatElementsMDS(controlContainer);
         }
 
         if (x.plotType === "XY")
@@ -77,7 +77,6 @@ HTMLWidgets.widget({
 
           // create container elements
           var xyContainer = document.createElement("div");
-          xyContainer.setAttribute("id", "xyContainer");
           plotContainer.appendChild(xyContainer);
           var xyData = HTMLWidgets.dataframeToD3(x.data.table);
           console.log(xyData);
@@ -86,8 +85,8 @@ HTMLWidgets.widget({
                                       x.data.status_colours, x.data.title);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
-            container: '#' + xyContainer.getAttribute("id"),
-            bind: '#' + controlContainer.getAttribute("id"),
+            container: xyContainer,
+            bind: controlContainer,
             hover: true
           });
           xyView.tooltip(handler.call);
@@ -123,7 +122,6 @@ function setupXYInteraction(xyView, xyData, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
-  datatableEl.setAttribute("id", "dataTable");
   datatableEl.setAttribute("class", "dataTable");
   widget.appendChild(datatableEl);
   var xyColumnsInfo = [];
@@ -133,7 +131,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
   $(document).ready(function() 
   {
 
-    datatable = $("#" + datatableEl.getAttribute("id")).DataTable({
+    var datatable = $(datatableEl).DataTable({
         data: xyData,
         columns: xyColumnsInfo,
         rowId: "index",
@@ -144,6 +142,9 @@ function setupXYInteraction(xyView, xyData, widget, x)
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
+
+    var selected = [];
+
     // reset graph and table selections
     datatable.button().add(0, 
       {
@@ -161,7 +162,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
     });
 
     // map table selections onto the graph (clearing graph selections each time)
-    $("#" + datatableEl.getAttribute("id") + ' tbody').on( 'click', 'tr', function () 
+    datatable.on( 'click', 'tr', function () 
       {
         if (graphMode) return;
         $(this).toggleClass('selected');
@@ -169,6 +170,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
         let i;
         selected = [];
         for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
+        console.log(selected);
         xyView.data("selected_points", selected);
         xyView.runAsync();
       }
@@ -176,7 +178,6 @@ function setupXYInteraction(xyView, xyData, widget, x)
     
   });
 
-  selected = [];
   // map graph selections onto the table (clearing table selections each time)
   xyView.addSignalListener('click', function(name, value) {
     var datum = value[0];
@@ -196,7 +197,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
       : selected.push(datum);
     xyView.data("selected_points", selected);
     xyView.runAsync();
-    
+    console.log(selected);
     // filter table
     if (!datatable) return;
     datatable.search('').columns().search('').draw();
@@ -266,8 +267,7 @@ function addSave(controlContainer, view_obj, text="Save Plot")
 
   var dropdownContent = document.createElement("div");
   dropdownContent.setAttribute("class", "dropdown-content");
-  dropdownContent.setAttribute("id", "dropdown-content");
-
+  
   var pngSaveBtn = document.createElement("a");
   pngSaveBtn.setAttribute("href", "#")
   pngSaveBtn.innerText = "PNG";
@@ -355,7 +355,7 @@ function addSVGSave(controlContainer, view_obj, text="Save (SVG)")
 
 function reformatElementsMDS(controlContainer)
 {
-  binds = document.getElementsByClassName("vega-bind");
+  binds = controlContainer.getElementsByClassName("vega-bind");
   for (var i = 0; i < binds.length; i++)
   {
     // the separator input signal is a dummy invisible signal after x_axis, y_axis
