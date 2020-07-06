@@ -1,21 +1,21 @@
-#plotContainer {
+.plotContainer {
 	display: inline-grid;
 	grid-column-gap: 2rem;
 }
 
-#mdsContainer {
+.mdsContainer {
 	grid-column-start: 1;
 	grid-column-end: 2;
 }
 
-#eigenContainer {
+.eigenContainer {
 	grid-column-start: 2;
 	grid-column-end: 3;
 }
 
 /* contains everything that is not a plot */
 
-#controlContainer {
+.controlContainer {
 	padding: 10px;
 	display: block;
 	font-family: sans-serif;

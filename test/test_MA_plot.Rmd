@@ -49,51 +49,12 @@ summary(dt)
 ```
 
 
+
 ```{r}
-
-# log cpm is the attribute here
-# averaged across all arrays in the original linear model fit
-# each instance is a gene;
-# the col vector names are the geneIDs
-# the col vector attribute is mean expression
-# data.frame(fit$Amean)
-
-
-# for now assume fit object
+glimmaMA(fit, status=dt)
 ```
 
 ```{r}
-
-# this is where info for the MD scatter plot comes from!
-# data.frame(vm$E)
-# fit$design
-
-fit$design
-fit$design
-```
-
-
-
-```{r}
-glMA <- glimmaMA(fit, colour=dt)
-
-htmlwidgets::saveWidget(glMA, file="glMA.html", )
-```
-
-```{r}
-
-glimmaXY(x=fit$coefficients[, 1],y=fit$lods, status=dt, status.colours=c("mediumseagreen","black","darkviolet"))
-```
-
-```{r}
-
-colnames(fit)
-```
-
-
-```{r}
-
-glimmaXY(x=fit$coefficients[,1], y=fit$lods, colour=dt)
-
+glimmaMA(fit, status=dt, status.colours=c("mediumseagreen","black","darkviolet"))
 ```
 
