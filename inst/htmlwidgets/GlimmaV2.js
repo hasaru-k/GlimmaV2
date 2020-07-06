@@ -131,7 +131,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
   $(document).ready(function() 
   {
 
-    datatable = $(datatableEl).DataTable({
+    var datatable = $(datatableEl).DataTable({
         data: xyData,
         columns: xyColumnsInfo,
         rowId: "index",
@@ -142,6 +142,9 @@ function setupXYInteraction(xyView, xyData, widget, x)
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
+
+    var selected = [];
+
     // reset graph and table selections
     datatable.button().add(0, 
       {
@@ -167,6 +170,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
         let i;
         selected = [];
         for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
+        console.log(selected);
         xyView.data("selected_points", selected);
         xyView.runAsync();
       }
@@ -174,7 +178,6 @@ function setupXYInteraction(xyView, xyData, widget, x)
     
   });
 
-  selected = [];
   // map graph selections onto the table (clearing table selections each time)
   xyView.addSignalListener('click', function(name, value) {
     var datum = value[0];
@@ -194,7 +197,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
       : selected.push(datum);
     xyView.data("selected_points", selected);
     xyView.runAsync();
-    
+    console.log(selected);
     // filter table
     if (!datatable) return;
     datatable.search('').columns().search('').draw();
