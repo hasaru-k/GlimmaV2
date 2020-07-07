@@ -335,24 +335,6 @@ function addSave(controlContainer, view_obj, text="Save Plot")
   }
 }
 
-function addSVGSave(controlContainer, view_obj, text="Save (SVG)")
-{
-  var downloadButton = document.createElement("BUTTON");
-  downloadButton.setAttribute("class", "save-button");
-  downloadButton.innerHTML = text;
-  downloadButton.onclick =
-  function changeContent() {
-    view_obj.toImageURL('svg', scaleFactor=3).then(function (url) {
-      var link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('download', 'vega-export.svg');
-      link.dispatchEvent(new MouseEvent('click'));
-    }).catch(function (error) { /* error handling */ });
-  }
-  controlContainer.appendChild(downloadButton);
-}
-
 function reformatElementsMDS(controlContainer)
 {
   binds = controlContainer.getElementsByClassName("vega-bind");
