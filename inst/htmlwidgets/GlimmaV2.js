@@ -126,8 +126,8 @@ function setupXYInteraction(xyView, xyData, widget, x)
   widget.appendChild(datatableEl);
   var xyColumnsInfo = [];
   x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
-
-  graphMode = false;
+  
+  var graphMode = false;
   $(document).ready(function() 
   {
 
@@ -164,6 +164,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
     // map table selections onto the graph (clearing graph selections each time)
     datatable.on( 'click', 'tr', function () 
       {
+        // not possible while in graph mode
         if (graphMode) return;
         $(this).toggleClass('selected');
         let selected_rows = datatable.rows('.selected').data();
@@ -176,36 +177,47 @@ function setupXYInteraction(xyView, xyData, widget, x)
       }
     );
     
+    // map graph selections onto the table (clearing table selections each time)
+    xyView.addSignalListener('click', 
+      function(name, value) 
+      {
+        var datum = value[0];
+        if (datum == null) return;
+
+        // switch to graph mode if in table mode
+        if (!graphMode)
+        {
+          graphMode = true;
+          datatable.rows('.selected').nodes().to$().removeClass('selected');
+          selected = [];
+        }
+
+        // check if datum is in selected
+        // if it is, remove it; otherwise, add it
+        var loc = contains(selected, datum);
+        loc >= 0 ?
+          selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
+          : selected.push(datum);
+
+        // highlight selected points
+        xyView.data("selected_points", selected);
+        xyView.runAsync();
+
+        // edge case: deselect last point
+        if (selected.length == 0) graphMode = false;
+
+        // update table filter based on selected
+        if (!datatable) return;
+        datatable.search('').columns().search('').draw();
+        // filter using a regex string: union over indices in selected
+        var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
+        datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
+      }
+
+    );
+    
   });
 
-  // map graph selections onto the table (clearing table selections each time)
-  xyView.addSignalListener('click', function(name, value) {
-    var datum = value[0];
-    if (datum == null) return;
-    if (!graphMode)
-    {
-      graphMode = true;
-      datatable.rows('.selected').nodes().to$().removeClass('selected');
-      selected = [];
-    }
-    // check if datum is in selected
-    // if it is, remove it; otherwise, add it
-    var loc = contains(selected, datum);
-    console.log(loc);
-    loc >= 0 ?
-      selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
-      : selected.push(datum);
-    xyView.data("selected_points", selected);
-    xyView.runAsync();
-    console.log(selected);
-    // filter table
-    if (!datatable) return;
-    datatable.search('').columns().search('').draw();
-    // search using a regex string: union over indices in selected
-    var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
-    datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
-
-  });
 
 }
 

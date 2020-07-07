@@ -51,7 +51,7 @@ summary(dt)
 
 
 ```{r}
-glimmaMA(fit, status=dt)
+glimmaMA(fit, status=dt, width=2000, height=800)
 ```
 
 ```{r}

@@ -36,3 +36,6 @@ GlimmaV2 is rendered within a parent widget HTML element in which it spawns the 
 ![MDS plot](mds_layout.png "MDS Plot")
 - an empty block element (not shown) is used to structure the vega binds in controlContainer into separate lines
 - simpler and much more lightweight than the XY plot without the datatable
+
+## XY Plot Interaction
+![interaction](interaction_statemach.png)

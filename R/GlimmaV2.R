@@ -2,20 +2,26 @@
 #' two MDS dimensions, with annotations displayed on hover. The right panel contains a bar plot of
 #' the eigenvalues of each dimension, clicking on any of the bars will plot the corresponding dimension
 #' against the next dimension.
-glimmaMDS <- function(x, ...)
+glimmaMDS <- function(
+  x, 
+  width = 900, 
+  height = 570, 
+  ...)
 {
   xData <- prepareMDSData(x, ...)
-  return(GlimmaV2(xData))
+  return(GlimmaV2(xData, width, height))
 }
 
 glimmaMA <- function(
   x, 
   status=rep(0, nrow(x)),
   main="MA Plot", 
+  width = 900, 
+  height = 570,
   ...)
 {
   xData <- prepareXYData(x, parameter.type="MA", status, main, ...)
-  return(GlimmaV2(xData))
+  return(GlimmaV2(xData, width, height))
 }
 
 # required: x and y
@@ -26,12 +32,14 @@ glimmaXY <- function(
   ylab="y", 
   status=rep(0, length(x)),
   main="XY Plot", 
+  width = 900, 
+  height = 570,
   ...)
 {
   # might be a bit confusing that there are two x variables?
   # maybe rename second x to fit
   xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, parameter.type="XY", status, main, ...)
-  return(GlimmaV2(xData))
+  return(GlimmaV2(xData, width, height))
 }
 
 #' <Add Title>
