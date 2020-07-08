@@ -284,7 +284,6 @@ glimmaMA.default <- function(
   width = 900, 
   height = 570)
 {
-  
   # create initial table with logCPM and logFC features
   xvals <- unname(x$Amean)
   yvals <- unname(x$coefficients[, coef])
@@ -308,6 +307,65 @@ glimmaMA.default <- function(
   return(GlimmaV2(xData, width, height))
 }
 
+#' Glimma MA Plot
+#'
+#' @export
+glimmaMA.DESeqDataSet  <- function(
+  x,
+  status=NULL,
+  main="MA Plot",
+  display.columns = NULL,
+  anno=NULL,
+  xlab=NULL,
+  ylab=NULL,
+  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  width = 900, 
+  height = 570)
+{
+
+  # extract logCPM, logFC from DESeqDataSet
+  res <- DESeq2::results(x)
+  res.df <- as.data.frame(res)
+  delRows <- naRowInds(res.df, "log2FoldChange", "padj")
+  res.df <- res.df[!delRows, , drop=FALSE]
+  anno <- anno[!delRows, , drop=FALSE]
+
+  # extract status if it is not given
+  if (is.null(status)) status <- as.numeric(res$padj<0.05)
+  status <- status[!delRows]
+
+  # create initial table with logCPM and logFC features
+  xvals <- log(res.df$baseMean + 0.5)
+  yvals <- res.df$log2FoldChange
+  if (is.null(xlab)) xlab <- "logCPM"
+  if (is.null(ylab)) ylab <- "logFC"
+  table <- data.frame(xvals, yvals)
+  names(table) <- c(xlab, ylab)
+
+  # add pvalue/adjusted pvalue info from fit object to table
+  table <- cbind(table, PValue=res.df$pvalue, AdjPValue=res.df$padj)
+
+  # make status single-dimensional
+  if (is.matrix(status)) status <- status[, coef]
+  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
+  xData <- buildXYData(table, status, main, display.columns, anno, xlab, ylab, status.colours)
+  return(GlimmaV2(xData, width, height))
+}
+
+# returns indices of NA rows
+naRowInds <- function(res.df, ...) 
+{
+  res.df <- data.frame(res.df)
+  filterCols <- unlist(list(...))
+
+  delRows <- rep(FALSE, nrow(res.df))
+
+  for (cols in filterCols) 
+  {
+      delRows <- delRows | is.na(res.df[, cols])
+  }
+  return(delRows)
+}
 
 #' Glimma XY Plot
 #'

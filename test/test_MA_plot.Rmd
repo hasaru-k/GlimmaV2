@@ -131,5 +131,32 @@ plotMD(tfit, column=2, status=dt[,2], main=colnames(tfit)[2])
 glimmaMA(tfit, status=dt, status.colours=c("#DD7373","#3B3561","#51A3A3"))
 ```
 
+```{r}
 
+### Test: DESeqDataset ###
+
+library("pasilla", quietly=TRUE)
+library("DESeq2", quietly=TRUE)
+library(GlimmaV2)
+pasCts <- system.file("extdata",
+                      "pasilla_gene_counts.tsv",
+                      package="pasilla", mustWork=TRUE)
+pasAnno <- system.file("extdata",
+                       "pasilla_sample_annotation.csv",
+                       package="pasilla", mustWork=TRUE)
+cts <- as.matrix(read.csv(pasCts,sep="\t",row.names="gene_id"))
+coldata <- read.csv(pasAnno, row.names=1)
+coldata <- coldata[,c("condition","type")]
+coldata$condition <- factor(coldata$condition)
+coldata$type <- factor(coldata$type)
+
+rownames(coldata) <- sub("fb", "", rownames(coldata))
+cts <- cts[, rownames(coldata)]
+
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design = ~ condition)
+dds <- DESeq(dds)
+glimmaMA(dds)
+```
 

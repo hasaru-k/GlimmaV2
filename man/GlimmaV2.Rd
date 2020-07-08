@@ -2,10 +2,10 @@
 % Please edit documentation in R/GlimmaV2.R
 \name{GlimmaV2}
 \alias{GlimmaV2}
-\title{<Add Title>}
+\title{GlimmaV2 HTMLWidget Wrapper}
 \usage{
 GlimmaV2(xData, width = 900, height = 570, elementId = NULL, ...)
 }
 \description{
-<Add Description>
+Passes packaged data to JS interface for rendering.
 }
