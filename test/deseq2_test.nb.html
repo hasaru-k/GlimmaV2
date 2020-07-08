@@ -1777,18 +1777,11 @@ rnaseq &lt;- lymphomaRNAseq
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5ybmFzZXEuZGVzZXEyIDwtIERFU2VxRGF0YVNldEZyb21NYXRyaXgocm5hc2VxJGNvdW50cywgY29sRGF0YT1ybmFzZXEkc2FtcGxlcywgZGVzaWduPX5ncm91cClcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5ybmFzZXEuZGVzZXEyIDwtIERFU2VxRGF0YVNldEZyb21NYXRyaXgocm5hc2VxJGNvdW50cywgY29sRGF0YT1ybmFzZXEkc2FtcGxlcywgZGVzaWduPX5ncm91cClcblxuIyBhZGQgbGFuZVxuZ3JvdXBzIDwtIGRhdGEuZnJhbWUoZ2Vub3R5cGU9cm5hc2VxJHNhbXBsZXMkZ3JvdXAsXG4gICAgICAgICAgICAgICAgICAgICBsYW5lPSBhcy5jaGFyYWN0ZXIoYyhyZXAoNCw1KSwzLDMpKSxcbiAgICAgICAgICAgICAgICAgICAgIG1pc2NDb250PWMocmVwKDQwMDAsNSksMzAwLDI1MCksXG4gICAgICAgICAgICAgICAgICAgICBtaXNjRGlzYz1jKFwiYmx1ZVwiLFwicmVkXCIscmVwKFwiZ3JlZW5cIiw1KSkpXG5cblxuIyBhZGQgbGlic2l6ZVxuZ3JvdXBzIDwtIGNiaW5kKGdyb3VwcywgbGlic2l6ZT1ybmFzZXEkc2FtcGxlcyRsaWIuc2l6ZSlcbmdyb3Vwc1xuXG5gYGAifQ== -->
 <pre class="r"><code>
-rnaseq.deseq2 &lt;- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, design=~group)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICBOb3RlOiBsZXZlbHMgb2YgZmFjdG9ycyBpbiB0aGUgZGVzaWduIGNvbnRhaW4gY2hhcmFjdGVycyBvdGhlciB0aGFuXG4gIGxldHRlcnMsIG51bWJlcnMsICdfJyBhbmQgJy4nLiBJdCBpcyByZWNvbW1lbmRlZCAoYnV0IG5vdCByZXF1aXJlZCkgdG8gdXNlXG4gIG9ubHkgbGV0dGVycywgbnVtYmVycywgYW5kIGRlbGltaXRlcnMgJ18nIG9yICcuJywgYXMgdGhlc2UgYXJlIHNhZmUgY2hhcmFjdGVyc1xuICBmb3IgY29sdW1uIG5hbWVzIGluIFIuIFtUaGlzIGlzIGEgbWVzc2FnZSwgbm90IGFuIHdhcm5pbmcgb3IgZXJyb3JdXG4ifQ== -->
-<pre><code>  Note: levels of factors in the design contain characters other than
-  letters, numbers, &#39;_&#39; and &#39;.&#39;. It is recommended (but not required) to use
-  only letters, numbers, and delimiters &#39;_&#39; or &#39;.&#39;, as these are safe characters
-  for column names in R. [This is a message, not an warning or error]</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhZGQgbGFuZVxuZ3JvdXBzIDwtIGRhdGEuZnJhbWUoZ2Vub3R5cGU9cm5hc2VxJHNhbXBsZXMkZ3JvdXAsXG4gICAgICAgICAgICAgICAgICAgICBsYW5lPSBhcy5jaGFyYWN0ZXIoYyhyZXAoNCw1KSwzLDMpKSxcbiAgICAgICAgICAgICAgICAgICAgIG1pc2NDb250PWMocmVwKDQwMDAsNSksMzAwLDI1MCksXG4gICAgICAgICAgICAgICAgICAgICBtaXNjRGlzYz1jKFwiYmx1ZVwiLFwicmVkXCIscmVwKFwiZ3JlZW5cIiw1KSkpXG5cblxuIyBhZGQgbGlic2l6ZVxuZ3JvdXBzIDwtIGNiaW5kKGdyb3VwcywgbGlic2l6ZT1ybmFzZXEkc2FtcGxlcyRsaWIuc2l6ZSlcbmdyb3Vwc1xuYGBgIn0= -->
-<pre class="r"><code># add lane
+rnaseq.deseq2 &lt;- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, design=~group)
+
+# add lane
 groups &lt;- data.frame(genotype=rnaseq$samples$group,
                      lane= as.character(c(rep(4,5),3,3)),
                      miscCont=c(rep(4000,5),300,250),
@@ -1797,17 +1790,8 @@ groups &lt;- data.frame(genotype=rnaseq$samples$group,
 
 # add libsize
 groups &lt;- cbind(groups, libsize=rnaseq$samples$lib.size)
-groups</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NSwibnJvdyI6N30sInJkZiI6Ikg0c0lBQUFBQUFBQUJvMVN6VTRDTVJEdS9zTWFDWW5Qd1NhQUhyeXhnWnNIalpxQXhrdlpMYkN4dEdSLy9EdnhQaDVJZUFHTXZwSm5zTjIyeUc0SWVoam1tMkdtODgwM2U5MGJ0TjJCQ3dBd2dHR3pYNHRCWUhldm1xMnpGZ0NtemlJTm1LREsvUXY3LzRRQlZtTWNNKzh3MDB1bS9WcWgyY2JvQ2VHRW9YcGVLYko2LzFhaW81dHBNQW1iRFpKaFhHcTFBZ3dUMWJsOWJ3U0RsTVlNclErdzBZdHM5RTFwdnRaVzRGUlVHSnREYzBDTnora3NPbHdrOEtlUFA0U25JdDdocWVXQzcrVmI0R2xJRnVZUVowakpNWTRSSWpJd1loVCtuN24vc0xqa1hQeTd6MWJ1KzZ0dnp0RWZMTC9tM044N25CWEwrNnM4Zi9HK25PZk1pd2NoY0lyVVFTeVpySXdSb2VuclRORTBNU1FLVjZaUkVuUXBTWGZqSGpNWk96Z2FKdEViS3MycHh2VFpVN080ZExvZ3d5WGN1N0lid2hSNm81aTFpTFVMenpsMGxrYVVzTWQwK1JVWG1yVzRsS2huaEE4UEc4RWtJNCtOOWptZklJOEhKQ05OSGxSaFM4dzBGVE9sam8zSU9OcnFZV0U0UkZnR05iWmx2cVEzaTZPdFJDN0xKbDVLVTZqcTNJQmlsUkUzWGY4QW9SQVkrNzREQUFBPSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["genotype"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["lane"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["miscCont"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["miscDisc"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["libsize"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Smchd1-null","2":"4","3":"4000","4":"blue","5":"7519549"},{"1":"Smchd1-null","2":"4","3":"4000","4":"red","5":"6752457"},{"1":"Smchd1-null","2":"4","3":"4000","4":"green","5":"6225875"},{"1":"Smchd1-null","2":"4","3":"4000","4":"green","5":"6474510"},{"1":"WT","2":"4","3":"4000","4":"green","5":"6822924"},{"1":"WT","2":"3","3":"300","4":"green","5":"6096639"},{"1":"WT","2":"3","3":"250","4":"green","5":"3626853"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[7]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 -->
-<pre class="r"><code>NA</code></pre>
+groups
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->

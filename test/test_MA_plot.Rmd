@@ -51,10 +51,10 @@ summary(dt)
 
 
 ```{r}
-glimmaMA(fit, status=dt, width=2000, height=800)
+glimmaMA(fit, status=dt, width=2000, height=1600)
 ```
 
 ```{r}
-glimmaMA(fit, status=dt, status.colours=c("mediumseagreen","black","darkviolet"))
+glimmaMA(fit, status=dt, status.colours=c("mediumseagreen","orange","darkviolet"), width=2000, height=1600)
 ```
 

@@ -11,8 +11,8 @@ output:
 ### DGEList TEST ###
 
 # need old Glimma for this dataset
-library(Glimma)
-library(GlimmaV2)
+library(Glimma, quietly=TRUE)
+library(GlimmaV2, quietly=TRUE)
 
 data(lymphomaRNAseq)
 rnaseq <- lymphomaRNAseq
@@ -25,14 +25,23 @@ groups <- data.frame(genotype=rnaseq$samples$group,
 
 # add libsize
 groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
-glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)
+glimmaMDS(rnaseq, groups=groups, width=900)
 ```
 
+```{r}
+
+### DESeqDataset TEST 1 ###
+
+library("DESeq2", quietly=TRUE)
+rnaseq.deseq2 <- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, design=~group)
+glimmaMDS(rnaseq.deseq2, width=900, prior.count=2)
+
+```
 
 
 ```{r}
 
-### DESeqDataset TEST ###
+### DESeqDataset TEST 2 ###
 
 library("pasilla", quietly=TRUE)
 library("DESeq2", quietly=TRUE)
@@ -56,7 +65,8 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = coldata,
                               design = ~ condition)
 
-glimmaMDS(dds)
+glimmaMDS(dds, width=900)
+?glimmaMDS
 ```
 
 

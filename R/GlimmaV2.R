@@ -1,17 +1,3 @@
-#' Draws a two-panel interactive MDS plot in an html page. The left panel contains the plot between
-#' two MDS dimensions, with annotations displayed on hover. The right panel contains a bar plot of
-#' the eigenvalues of each dimension, clicking on any of the bars will plot the corresponding dimension
-#' against the next dimension.
-glimmaMDS <- function(
-  x, 
-  width = 900, 
-  height = 570, 
-  ...)
-{
-  xData <- prepareMDSData(x, ...)
-  return(GlimmaV2(xData, width, height))
-}
-
 glimmaMA <- function(
   x, 
   status=rep(0, nrow(x)),
@@ -70,18 +56,52 @@ GlimmaV2 <- function(
 
 }
 
-prepareMDSData <- function(x, ...)
+#' Glimma MDS Plot
+#'
+#' Draws a two-panel interactive MDS plot in an html page. The left panel contains the plot between
+#' two MDS dimensions, with annotations displayed on hover. The right panel contains a bar plot of
+#' the eigenvalues of each dimension. The controls below can be used to change the dimensions being
+#' displayed.
+#'
+#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#'
+#' @param x the matrix containing the gene expressions.
+#' @param ... the additional arguments.
+#' @export
+glimmaMDS <- function(x, ...)
 {
-  UseMethod("prepareMDSData")
+  UseMethod("glimmaMDS")
 }
 
-prepareMDSData.default <- function(
+#' Glimma MDS Plot
+#'
+#' Draws a two-panel interactive MDS plot. The left panel contains the plot between
+#' two MDS dimensions, with annotations displayed on hover. The right panel contains a bar plot of
+#' the eigenvalues of each dimension. The controls below can be used to change the dimensions being
+#' displayed.
+#'
+#' @seealso \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#'
+#' @param x the matrix containing the gene expressions.
+#' @param top the number of top most variable genes to use.
+#' @param labels the labels for each sample.
+#' @param groups the experimental group to which samples belong.
+#' @param gene.selection 	"pairwise" if most variable genes are to be chosen for each pair of samples or
+#' "common" to select the same genes for all comparisons.
+#' @param continuous.colour if TRUE, colour is displayed using continuous columns in groups; if false,
+#' colour is displayed using discrete columns.
+#' @param width custom widget width in pixels
+#' @param height custom widget height in pixels
+#' @export
+glimmaMDS.default <- function(
   x,
   top = 500,
   labels = as.character(seq_len(ncol(x))),
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
-  continuous.colour=FALSE)
+  continuous.colour=FALSE,
+  width = 900, 
+  height = 570)
 {
 
   # helper function
@@ -189,19 +209,28 @@ prepareMDSData.default <- function(
                            features=features,
                            continuous_colour=continuous.colour,
                            dimlist=dimlist))
-
-  return(xData)
-
+  return(GlimmaV2(xData, width, height))
 }
 
-prepareMDSData.DGEList <- function(
+#' Glimma MDS Plot
+#'
+#' Draws a two-panel interactive MDS plot using a DGEList x.
+#' By default, extracts \code{labels} as \code{rownames(x$samples)}.
+#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#'
+#' @inheritParams glimmaMDS.default
+#' @param prior.count average count to be added to each observation to avoid taking log of zero.
+#' @export
+glimmaMDS.DGEList <- function(
   x,
   top = 500,
   labels = NULL,
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
-  continuous.colour = FALSE)
+  continuous.colour = FALSE,
+  width = 900, 
+  height = 570)
 {
 
   # extract sample groups based on DGEList class, if we need to
@@ -219,24 +248,34 @@ prepareMDSData.DGEList <- function(
   transformed_counts <- edgeR::cpm(x, log=TRUE, prior.count = prior.count)
 
   # call main processing function
-  prepareMDSData.default(
+  return(glimmaMDS.default(
     transformed_counts,
     top=top,
     labels=labels,
     groups=groups,
     gene.selection=gene.selection,
-    continuous.colour=continuous.colour)
+    continuous.colour=continuous.colour))
 
 }
 
-prepareMDSData.DESeqDataSet <- function(
+#' Glimma MDS Plot
+#'
+#' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
+#' By default, extracts groups as \code{colData(x)} and extracts labels as \code{rownames(colData(x))}.
+#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
+#'
+#' @inheritParams glimmaMDS.DGEList
+#' @export
+glimmaMDS.DESeqDataSet <- function(
   x,
   top = 500,
   labels = NULL,
   groups = NULL,
   gene.selection = c("pairwise", "common"),
   prior.count = 0.25,
-  continuous.colour = FALSE)
+  continuous.colour = FALSE,
+  width = 900, 
+  height = 570)
 {
 
   # extract sample groups based on DESeqDataSet class, if we need to
@@ -268,13 +307,13 @@ prepareMDSData.DESeqDataSet <- function(
     }
   }
 
-  prepareMDSData.default(
+  return(glimmaMDS.default(
     transformed_counts,
     top=top,
     labels=labels,
     groups=groups,
     gene.selection=gene.selection,
-    continuous.colour=continuous.colour)
+    continuous.colour=continuous.colour))
 
 }
 
