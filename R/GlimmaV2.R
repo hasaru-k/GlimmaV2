@@ -1,61 +1,3 @@
-glimmaMA <- function(
-  x, 
-  status=rep(0, nrow(x)),
-  main="MA Plot", 
-  width = 900, 
-  height = 570,
-  ...)
-{
-  xData <- prepareXYData(x, parameter.type="MA", status, main, ...)
-  return(GlimmaV2(xData, width, height))
-}
-
-# required: x and y
-glimmaXY <- function(
-  x, 
-  y, 
-  xlab="x", 
-  ylab="y", 
-  status=rep(0, length(x)),
-  main="XY Plot", 
-  width = 900, 
-  height = 570,
-  ...)
-{
-  # might be a bit confusing that there are two x variables?
-  # maybe rename second x to fit
-  xData <- prepareXYData(x=NULL, xvals=x, yvals=y, xlab=xlab, ylab=ylab, parameter.type="XY", status, main, ...)
-  return(GlimmaV2(xData, width, height))
-}
-
-#' <Add Title>
-#'
-#' <Add Description>
-#'
-#' @import htmlwidgets
-#'
-#' @export
-GlimmaV2 <- function(
-  xData,
-  width = 900,
-  height = 570,
-  elementId = NULL,
-  ...)
-{
-
-  # create widget
-  htmlwidgets::createWidget(
-    name = 'GlimmaV2',
-    xData,
-    width = width,
-    height = height,
-    package = 'GlimmaV2',
-    elementId = elementId,
-    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=750, defaultHeight=750, browser.fill=TRUE, viewer.suppress=TRUE)
-  )
-
-}
-
 #' Glimma MDS Plot
 #'
 #' Draws a two-panel interactive MDS plot in an html page. The left panel contains the plot between
@@ -317,71 +259,107 @@ glimmaMDS.DESeqDataSet <- function(
 
 }
 
-
-prepareXYData <- function(x, ...)
+#' Glimma MA Plot
+#'
+#' @export
+glimmaMA <- function(x, ...)
 {
-  UseMethod("prepareXYData")
+  UseMethod("glimmaMA")
 }
 
-# display.columns - character vector containing names of columns to display in mouseover tooltips and table.
-# anno - the data.frame containing gene annotations.
-# p.adj.method - character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")
-# coef - integer or character index vector indicating which column of object to plot.
-prepareXYData.default <- function(
+#' Glimma MA Plot
+#'
+#' @export
+glimmaMA.default <- function(
   x,
-  parameter.type,
-  status,
-  main,
+  status=rep(0, nrow(x)),
   coef=ncol(x$coefficients),
+  main=colnames(x)[coef],
   p.adj.method = "BH",
   display.columns = NULL,
   anno=NULL,
-  xvals=NULL,
-  yvals=NULL,
+  xlab=NULL,
+  ylab=NULL,
+  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  width = 900, 
+  height = 570)
+{
+  
+  # create initial table with logCPM and logFC features
+  xvals <- unname(x$Amean)
+  yvals <- unname(x$coefficients[, coef])
+  stopifnot(all(names(x$Amean) == names(x$coefficients[, coef])))
+  if (is.null(xlab)) xlab <- "logCPM"
+  if (is.null(ylab)) ylab <- "logFC"
+  table <- data.frame(xvals, yvals)
+  names(table) <- c(xlab, ylab)
+
+  # add pvalue/adjusted pvalue info from fit object to table
+  AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
+  table <- cbind(table, PValue=x$p.value[, coef], AdjPValue=AdjPValue)
+
+  # add gene info from MArrayLM object to table
+  table <- cbind(x$genes, table)
+
+  # make status single-dimensional
+  if (is.matrix(status)) status <- status[, coef]
+  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
+  xData <- buildXYData(table, status, main, display.columns, anno, xlab, ylab, status.colours)
+  return(GlimmaV2(xData, width, height))
+}
+
+
+#' Glimma XY Plot
+#'
+#' @export
+glimmaXY <- function(x, ...)
+{
+  UseMethod("glimmaXY")
+}
+
+#' Glimma XY Plot
+#'
+#' @export
+glimmaXY.default <- function(
+  x,
+  y, 
+  xlab="x",
+  ylab="y", 
+  status=rep(0, length(x)),
+  main="XY Plot",
+  display.columns = NULL,
+  anno=NULL,
+  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  width = 900, 
+  height = 570)
+{
+  if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
+  table <- data.frame(x, y) 
+  names(table) <- c(xlab, ylab)
+  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x/y args.")
+  xData <- buildXYData(table, status, main, display.columns, anno, xlab, ylab, status.colours)
+  return(GlimmaV2(xData, width, height))
+}
+
+# common processing for both MA and XY plots.
+# expects a table with xlab and ylab columns
+# and a 1D status vector.
+buildXYData <- function(
+  table,
+  status,
+  main,
+  display.columns = NULL,
+  anno=NULL,
   xlab=NULL,
   ylab=NULL,
   status.colours=c("dodgerblue", "lightslategray", "firebrick"))
 {
-  
-  if (parameter.type=="MA")
-  {
-    # for now assume fit object.
-    # create initial table with logCPM and logFC features
-    xvals <- unname(x$Amean)
-    xlab <- "logCPM"
-    yvals <- unname(x$coefficients[, coef])
-    ylab <- "logFC"
-    stopifnot(all(names(x$Amean) == names(x$coefficients[, coef])))
-    table <- data.frame(xvals, yvals)
-    names(table) <- c(xlab, ylab)
 
-    # add pvalue/adjusted pvalue info to table from fit object
-    AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
-    table <- cbind(table, PValue=x$p.value[, coef], AdjPValue=AdjPValue)
-
-    # add gene info from MArrayLM object
-    table <- cbind(x$genes, table)
-
-  } else
-  {
-    if (length(xvals)!=length(yvals)) stop("Error: x and y args must have the same length.")
-    table <- data.frame(xvals, yvals) 
-    names(table) <- c(xlab, ylab)
-  }
-  
-  # add colour info
-  if (is.matrix(status)) status <- status[, coef]
-  if (length(status)!=nrow(table))
-  {
-    if (parameter.type=="MA") stop("Status vector must have the same number of genes as x arg.")
-    else stop("Status vector must have the same number of genes as x/y args.")
-  }
+  # add colour and anno info to table
   table <- cbind(table, status=as.vector(status))
-
-  # add anno columns
   if (!is.null(anno)) table <- cbind(table, anno)
 
-  # add index for linking table and plot (independent of object type)
+  # add index for linking table and plot (independent of object type) to table
   table <- data.frame(index=1:nrow(table), table)
 
   # set display.columns (columns to show in tooltips and in the table)
@@ -400,14 +378,41 @@ prepareXYData.default <- function(
   if (length(status.colours) != 3) stop("status_colours 
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
 
-  data <- list(x=xlab, 
-               y=ylab, 
-               table=table, 
-               cols=display.columns, 
-               tooltipFields=display.columns,
-               status_colours=status.colours,
-               title=main)
-  return(list(plotType="XY", data=data))
+  xData <- list(plotType="XY",
+                data=list(x=xlab, 
+                          y=ylab, 
+                          table=table, 
+                          cols=display.columns, 
+                          tooltipFields=display.columns,
+                          status_colours=status.colours,
+                          title=main))
+  return(xData)
+}
+
+#' GlimmaV2 HTMLWidget Wrapper
+#'
+#' Passes packaged data to JS interface for rendering.
+#'
+#' @import htmlwidgets
+GlimmaV2 <- function(
+  xData,
+  width = 900,
+  height = 570,
+  elementId = NULL,
+  ...)
+{
+
+  # create widget
+  htmlwidgets::createWidget(
+    name = 'GlimmaV2',
+    xData,
+    width = width,
+    height = height,
+    package = 'GlimmaV2',
+    elementId = elementId,
+    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=750, defaultHeight=750, browser.fill=TRUE, viewer.suppress=TRUE)
+  )
+
 }
 
 #' Shiny bindings for GlimmaV2

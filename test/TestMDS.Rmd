@@ -1,8 +1,9 @@
 ---
-title: "TrialNotebook"
+title: "TestMDS"
 output:
   html_document:
     df_print: paged
+author: "Hasaru Kariyawasam"
 ---
 
 
@@ -66,7 +67,6 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               design = ~ condition)
 
 glimmaMDS(dds, width=900)
-?glimmaMDS
 ```
 
 
