@@ -354,6 +354,8 @@ function addSave(controlContainer, view_obj, text="Save Plot")
   }
 }
 
+/* arranges vega-bind elements so that x_dim, y_dim are on their
+   own line */
 function reformatElementsMDS(controlContainer)
 {
   binds = controlContainer.getElementsByClassName("vega-bind");
