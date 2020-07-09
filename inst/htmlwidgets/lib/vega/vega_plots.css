@@ -3,12 +3,29 @@
 	grid-column-gap: 2rem;
 }
 
+/* MDS plots */
 .mdsContainer {
 	grid-column-start: 1;
 	grid-column-end: 2;
 }
 
 .eigenContainer {
+	grid-column-start: 2;
+	grid-column-end: 3;
+}
+
+/* XY plots */
+.xyContainerSingle {
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+.xyContainer {
+	grid-column-start: 1;
+	grid-column-end: 2;
+}
+
+.expressionContainer {
 	grid-column-start: 2;
 	grid-column-end: 3;
 }
