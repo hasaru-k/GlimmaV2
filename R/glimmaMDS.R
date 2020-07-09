@@ -155,7 +155,7 @@ glimmaMDS.default <- function(
 
   # create widget
   return(htmlwidgets::createWidget(
-    name = 'GlimmaV2',
+    name = 'glimmaMDS',
     xData,
     width = width,
     height = height,
