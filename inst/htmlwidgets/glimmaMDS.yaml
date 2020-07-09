@@ -13,8 +13,8 @@ dependencies:
       - vega-tooltip.js
     stylesheet:
       - vega-tooltip.css
-  - name: GlimmaSpecs
+  - name: GlimmaV2
     version: 1.0
-    src: htmlwidgets/lib/GlimmaSpecs
+    src: htmlwidgets/lib/GlimmaV2
     script:
       - MDSSpecs.js

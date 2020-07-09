@@ -209,7 +209,7 @@ glimmaXYWidget <- function(
 
   # create widget
   htmlwidgets::createWidget(
-    name = 'GlimmaV2',
+    name = 'glimmaXY',
     xData,
     width = width,
     height = height,

@@ -160,9 +160,3 @@ dds <- DESeq(dds)
 glimmaMA(dds)
 
 ```
-```{r}
-library(Glimma)
-glimmaMA(dds, counts="Yellow")
-glMDPlot(fit)
-```
-
