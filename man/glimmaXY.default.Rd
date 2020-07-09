@@ -13,6 +13,7 @@
   main = "XY Plot",
   display.columns = NULL,
   anno = NULL,
+  counts = NULL,
   status.colours = c("dodgerblue", "lightslategray", "firebrick"),
   width = 900,
   height = 570

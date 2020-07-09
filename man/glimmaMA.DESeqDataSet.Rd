@@ -6,10 +6,11 @@
 \usage{
 \method{glimmaMA}{DESeqDataSet}(
   x,
-  status = rep(0, nrow(x)),
+  status = NULL,
   main = "MA Plot",
   display.columns = NULL,
   anno = NULL,
+  counts = NULL,
   xlab = NULL,
   ylab = NULL,
   status.colours = c("dodgerblue", "lightslategray", "firebrick"),

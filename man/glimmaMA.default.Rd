@@ -12,6 +12,7 @@
   p.adj.method = "BH",
   display.columns = NULL,
   anno = NULL,
+  counts = NULL,
   xlab = NULL,
   ylab = NULL,
   status.colours = c("dodgerblue", "lightslategray", "firebrick"),
