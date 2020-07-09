@@ -76,15 +76,6 @@ HTMLWidgets.widget({
           var xyContainer = document.createElement("div");
           xyContainer.setAttribute("class", "xyContainerSingle");
           plotContainer.appendChild(xyContainer);
-          
-          // add expression plot if necessary
-          if (x.data.counts != -1)
-          {
-            var expressionContainer = document.createElement("div");
-            expressionContainer.setAttribute("class", "expressionContainer");
-            plotContainer.appendChild(expressionContainer);
-            xyContainer.setAttribute("class", "xyContainer");
-          }
 
           var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
           var xySpec = createXYSpec(x.data, xyTable, width, height);
@@ -96,6 +87,17 @@ HTMLWidgets.widget({
           });
           xyView.tooltip(handler.call);
           xyView.runAsync();
+
+          // add expression plot if necessary
+          if (x.data.counts != -1)
+          {
+            var expressionContainer = document.createElement("div");
+            expressionContainer.setAttribute("class", "expressionContainer");
+            plotContainer.appendChild(expressionContainer);
+            xyContainer.setAttribute("class", "xyContainer");
+
+            /* TODO: add expressionView located in expressionContainer */
+          }
           
           // add datatable, and generate interaction
           setupXYInteraction(xyView, xyTable, controlContainer, x);

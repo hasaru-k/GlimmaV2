@@ -1,0 +1,12 @@
+language: r
+r: bioc-devel
+cache: packages
+warnings_are_errors: false
+bioc_packages:
+  - testthat
+  - DESeq2
+  - limma
+r_packages:
+  - covr
+after_success:
+  - Rscript -e 'library(covr); codecov()'
