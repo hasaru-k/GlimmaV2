@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/hasacat/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasacat/GlimmaV2)
 # GlimmaV2
 GlimmaV2 is an interactive R widget for creating plots for differential expression analysis, based on the Vega and HTMLWidget frameworks. New features in development include:
 - embedding plots in R markdown
