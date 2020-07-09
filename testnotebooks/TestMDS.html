@@ -2396,7 +2396,7 @@ window.onload = function() {
 })();
 
 </script>
-<style type="text/css">.plotContainer {display: inline-grid;grid-column-gap: 2rem;}.mdsContainer {grid-column-start: 1;grid-column-end: 2;}.eigenContainer {grid-column-start: 2;grid-column-end: 3;}.controlContainer {padding: 10px;display: block;font-family: sans-serif;color: #353535;font-size: 9;}.vega-bind {display: inline-block;}.separator_signal {display: block;visibility: hidden;height: 5px;}.signal select {}.display-block {display: block;}.vega-bind-name {margin-right: 2px;margin-bottom: 5px;font-size: 12px;}.vega-bind select {margin-bottom: 7px;margin-right: 7px;}.save-button {box-sizing: border-box;margin-top: 0.333em;margin-right: 0.333em;margin-bottom: 0.333em;padding: 0.5em 1em;font-size: 7.5pt;border: 1px solid #999;border-radius: 2px;cursor: pointer;line-height: 1.6em;color: black;white-space: nowrap;overflow: hidden;background-color: #e9e9e9;background-image: -webkit-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: -moz-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: -ms-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: -o-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: linear-gradient(to bottom, white 0%, #e9e9e9 100%);filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='white', EndColorStr='#e9e9e9');-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;text-decoration: none;outline: none;text-overflow: ellipsis;}.save-button:hover {background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);background-color: #f6f6f6;}.save-button:active {position: relative;top: 1px;}.dropdown {position: relative;display: inline-block;}.dropdown-content {display: none;position: absolute;background-color: #f1f1f1;min-width: 160px;box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);z-index: 1;border-radius: 4px;}.dropdown-content a {padding: 12px 16px;text-decoration: none;display: block;font-size: 11px;color: #383838;font-family: sans-serif;border-radius: 4px;}.dropdown-content a:hover {background-color: #ddd}.show {display: block;}</style>
+<style type="text/css">.plotContainer {display: inline-grid;grid-column-gap: 2rem;}.mdsContainer {grid-column-start: 1;grid-column-end: 2;}.eigenContainer {grid-column-start: 2;grid-column-end: 3;}.xyContainerSingle {grid-column-start: 1;grid-column-end: 3;}.xyContainer {grid-column-start: 1;grid-column-end: 2;}.expressionContainer {grid-column-start: 2;grid-column-end: 3;}.controlContainer {padding: 10px;display: block;font-family: sans-serif;color: #353535;font-size: 9;}.vega-bind {display: inline-block;}.separator_signal {display: block;visibility: hidden;height: 5px;}.signal select {}.display-block {display: block;}.vega-bind-name {margin-right: 2px;margin-bottom: 5px;font-size: 12px;}.vega-bind select {margin-bottom: 7px;margin-right: 7px;}.save-button {box-sizing: border-box;margin-top: 0.333em;margin-right: 0.333em;margin-bottom: 0.333em;padding: 0.5em 1em;font-size: 7.5pt;border: 1px solid #999;border-radius: 2px;cursor: pointer;line-height: 1.6em;color: black;white-space: nowrap;overflow: hidden;background-color: #e9e9e9;background-image: -webkit-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: -moz-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: -ms-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: -o-linear-gradient(top, white 0%, #e9e9e9 100%);background-image: linear-gradient(to bottom, white 0%, #e9e9e9 100%);filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='white', EndColorStr='#e9e9e9');-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;text-decoration: none;outline: none;text-overflow: ellipsis;}.save-button:hover {background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);background-color: #f6f6f6;}.save-button:active {position: relative;top: 1px;}.dropdown {position: relative;display: inline-block;}.dropdown-content {display: none;position: absolute;background-color: #f1f1f1;min-width: 160px;box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);z-index: 1;border-radius: 4px;}.dropdown-content a {padding: 12px 16px;text-decoration: none;display: block;font-size: 11px;color: #383838;font-family: sans-serif;border-radius: 4px;}.dropdown-content a:hover {background-color: #ddd}.show {display: block;}</style>
 <script>(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -45661,23 +45661,23 @@ d){c.oScroller&&(d=b.rows({order:"applied",search:"applied"}).indexes().indexOf(
 </script>
 <script>
 // parametrise graph encoding for MDS plot
-function createXYSpec(xyData, width, height, x, y, cols, status_colours, title) 
+function createXYSpec(xyData, xyTable, width, height)
 {
 
   // generate tooltip object for embedding in spec
   var tooltipString = "{";
-  cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
+  xyData.cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
   tooltipString += "}";
   var tooltip = { "signal" : tooltipString };
 
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.45,
+    "width": xyData.counts == -1 ? (width*0.9) : (width * 0.45),
     "height": height * 0.35,
     "padding": 0,
     "title": {
-      "text": title
+      "text": xyData.title
     },
     "signals":
       [
@@ -45690,7 +45690,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
       [
         {
           "name": "source",
-          "values": xyData,
+          "values": xyTable,
           "transform": [{
             "type": "formula",
             "expr": "datum.x",
@@ -45706,7 +45706,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "round": true,
         "nice": true,
         "zero": true,
-        "domain": { "data": "source", "field": x },
+        "domain": { "data": "source", "field": xyData.x },
         "range": "width"
       },
       {
@@ -45715,14 +45715,14 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "round": true,
         "nice": true,
         "zero": true,
-        "domain": { "data": "source", "field": y },
+        "domain": { "data": "source", "field": xyData.y },
         "range": "height"
       },
       {
         "name": "colour_scale",
         "type": "ordinal",
         "domain": [-1, 0, 1],
-        "range": status_colours
+        "range": xyData.status_colours
       }
     ],
     "axes" : [
@@ -45732,7 +45732,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "domain": false,
         "orient": "bottom",
         "tickCount": 5,
-        "title": x
+        "title": xyData.x
       },
       {
         "scale": "y",
@@ -45740,7 +45740,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "domain": false,
         "orient": "left",
         "titlePadding": 5,
-        "title": y
+        "title": xyData.y
       }
     ],
     "marks": [
@@ -45750,8 +45750,8 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "from": { "data": "source" },
         "encode": {
           "update": {
-            "x": { "scale": "x", "field": x },
-            "y": { "scale": "y", "field": y },
+            "x": { "scale": "x", "field": xyData.x },
+            "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
             "size" : 50,
             "strokeWidth": 0,
@@ -45767,8 +45767,8 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "from": { "data": "selected_points" },
         "encode": {
           "update": {
-            "x": { "scale": "x", "field": x },
-            "y": { "scale": "y", "field": y },
+            "x": { "scale": "x", "field": xyData.x },
+            "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
             "size" : 1,
             "fill" : {"value" : "darkorange"},
@@ -46094,11 +46094,11 @@ function createEigenSpec(eigenData, width, height)
 
       renderValue: function(x) {
         
+        console.log(x);
         var handler = new vegaTooltip.Handler();
 
         if (x.plotType === "MDS")
         {
-          // create tooltip handler
 
           // create container elements
           var mdsContainer = document.createElement("div");
@@ -46109,7 +46109,6 @@ function createEigenSpec(eigenData, width, height)
           plotContainer.appendChild(mdsContainer);
           plotContainer.appendChild(eigenContainer);
           
-          console.log(x);
           processDataMDS(x);
           var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
           var eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
@@ -46146,17 +46145,14 @@ function createEigenSpec(eigenData, width, height)
 
         if (x.plotType === "XY")
         {
-          console.log("XY plot created.");
-          console.log(x);
 
           // create container elements
           var xyContainer = document.createElement("div");
+          xyContainer.setAttribute("class", "xyContainerSingle");
           plotContainer.appendChild(xyContainer);
-          var xyData = HTMLWidgets.dataframeToD3(x.data.table);
-          console.log(xyData);
-          var xySpec = createXYSpec(xyData, width, height, 
-                                      x.data.x, x.data.y, x.data.cols,
-                                      x.data.status_colours, x.data.title);
+
+          var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
+          var xySpec = createXYSpec(x.data, xyTable, width, height);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
             container: xyContainer,
@@ -46166,8 +46162,19 @@ function createEigenSpec(eigenData, width, height)
           xyView.tooltip(handler.call);
           xyView.runAsync();
 
+          // add expression plot if necessary
+          if (x.data.counts != -1)
+          {
+            var expressionContainer = document.createElement("div");
+            expressionContainer.setAttribute("class", "expressionContainer");
+            plotContainer.appendChild(expressionContainer);
+            xyContainer.setAttribute("class", "xyContainer");
+
+            /* TODO: add expressionView located in expressionContainer */
+          }
+          
           // add datatable, and generate interaction
-          setupXYInteraction(xyView, xyData, controlContainer, x);
+          setupXYInteraction(xyView, xyTable, controlContainer, x);
           
           // add XY plot save button
           addSave(controlContainer, xyView);
@@ -46192,7 +46199,7 @@ function addBlockElement(controlContainer)
   controlContainer.appendChild(blockElement);
 }
 
-function setupXYInteraction(xyView, xyData, widget, x)
+function setupXYInteraction(xyView, xyTable, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
@@ -46206,7 +46213,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
   {
 
     var datatable = $(datatableEl).DataTable({
-        data: xyData,
+        data: xyTable,
         columns: xyColumnsInfo,
         rowId: "index",
         dom: 'Bfrtip',
@@ -46421,6 +46428,8 @@ function addSave(controlContainer, view_obj, text="Save Plot")
   }
 }
 
+/* arranges vega-bind elements so that x_dim, y_dim are on their
+   own line */
 function reformatElementsMDS(controlContainer)
 {
   binds = controlContainer.getElementsByClassName("vega-bind");
@@ -46609,9 +46618,9 @@ groups &lt;- data.frame(genotype=rnaseq$samples$group,
 
 # add libsize
 groups &lt;- cbind(groups, libsize=rnaseq$samples$lib.size)
-glimmaMDS(rnaseq, groups=groups, width=900)</code></pre>
-<div id="htmlwidget-0bba837fc6caba8babc4" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0bba837fc6caba8babc4">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"labels":["1","2","3","4","5","6","7"],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["miscCont","libsize","- "],"discrete":["labels","genotype","lane","miscDisc","-"],"all":["miscCont","libsize","- ","labels","genotype","lane","miscDisc","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
+glimmaMDS(rnaseq, groups=groups, width=1200, height=900)</code></pre>
+<div id="htmlwidget-94ad5d9615c218a7001f" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-94ad5d9615c218a7001f">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"labels":["1","2","3","4","5","6","7"],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lane":["4","4","4","4","4","3","3"],"miscCont":[4000,4000,4000,4000,4000,300,250],"miscDisc":["blue","red","green","green","green","green","green"],"libsize":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["miscCont","libsize","- "],"discrete":["labels","genotype","lane","miscDisc","-"],"all":["miscCont","libsize","- ","labels","genotype","lane","miscDisc","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>### DESeqDataset TEST 1 ###
 
 library(&quot;DESeq2&quot;, quietly=TRUE)</code></pre>
@@ -46643,19 +46652,16 @@ library(&quot;DESeq2&quot;, quietly=TRUE)</code></pre>
 <pre><code>## The following object is masked from &#39;package:grDevices&#39;:
 ## 
 ##     windows</code></pre>
-<pre><code>## Warning: package &#39;GenomicRanges&#39; was built under R version 3.6.1</code></pre>
 <pre><code>## Welcome to Bioconductor
 ## 
 ##     Vignettes contain introductory material; view with
 ##     &#39;browseVignettes()&#39;. To cite Bioconductor, see
 ##     &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
-<pre><code>## Warning: package &#39;matrixStats&#39; was built under R version 3.6.3</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;matrixStats&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:Biobase&#39;:
 ## 
 ##     anyMissing, rowMedians</code></pre>
-<pre><code>## Warning: package &#39;BiocParallel&#39; was built under R version 3.6.1</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;DelayedArray&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:matrixStats&#39;:
@@ -46668,10 +46674,10 @@ library(&quot;DESeq2&quot;, quietly=TRUE)</code></pre>
 <pre><code>##   Note: levels of factors in the design contain characters other than
 ##   letters, numbers, &#39;_&#39; and &#39;.&#39;. It is recommended (but not required) to use
 ##   only letters, numbers, and delimiters &#39;_&#39; or &#39;.&#39;, as these are safe characters
-##   for column names in R. [This is a message, not an warning or error]</code></pre>
+##   for column names in R. [This is a message, not a warning or an error]</code></pre>
 <pre class="r"><code>glimmaMDS(rnaseq.deseq2, width=900, prior.count=2)</code></pre>
-<div id="htmlwidget-3f3d96da03d340dfc672" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3f3d96da03d340dfc672">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"labels":["smchd1-nv11-1940_AD2E00ACXX_TTAGGC_L004.sam","smchd1-nv11-2086_AD2E00ACXX_TGACCA_L004.sam","smchd1-nv11-2433_AD2E00ACXX_ACAGTG_L004.sam","smchd1-nv11-3225_AD2E00ACXX_GCCAAT_L004.sam","smchd1-wt-1932_AD2E00ACXX_CGATGT_L004.sam","smchd1-wt-241_AD2E00ACXX_ATCACG_L004.sam","NJ_RNA1__Smchd1_WT_lymphoma_1934__C2G5CACXX_AGTCAA_L003.sam"],"sampleID":["smchd1-nv11-1940_AD2E00ACXX_TTAGGC_L004.sam","smchd1-nv11-2086_AD2E00ACXX_TGACCA_L004.sam","smchd1-nv11-2433_AD2E00ACXX_ACAGTG_L004.sam","smchd1-nv11-3225_AD2E00ACXX_GCCAAT_L004.sam","smchd1-wt-1932_AD2E00ACXX_CGATGT_L004.sam","smchd1-wt-241_AD2E00ACXX_ATCACG_L004.sam","NJ_RNA1__Smchd1_WT_lymphoma_1934__C2G5CACXX_AGTCAA_L003.sam"],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"group":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lib_size":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"norm_factors":[1,1,1,1,1,1,1],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["lib_size","norm_factors","- "],"discrete":["labels","sampleID","genotype","group","-"],"all":["lib_size","norm_factors","- ","labels","sampleID","genotype","group","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-47c83106b153d83af80a" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-47c83106b153d83af80a">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[4.16449277476037,-0.168327623008933,-0.652820180252737,-0.16928377925904,-1.53651495220685,-1.59810300996085,-0.0394432300719616],"dim2":[-0.273192063108986,-1.52643084094504,-1.20408970462251,0.115090943202602,-0.108969439598623,-0.0417001662504756,3.03929127132304],"dim3":[1.04043287055364,-1.42181917916805,-0.86048467735198,-1.38093843253612,1.7400240545062,1.70616192508929,-0.823376561092966],"dim4":[0.069192211937763,-1.69306989479566,0.590494271241247,1.76508950117246,-0.0191789385093712,-0.0343715818989552,-0.678155569147483],"dim5":[-0.0508079761591216,0.683000558687726,-1.75776196508041,1.10183791621454,0.182857365503976,0.230797800777171,-0.389923699943885],"dim6":[-0.0114703796896207,0.00485219205444514,-0.0143204437064301,0.00810494857395783,0.709905978833351,-0.708233326740698,0.0111610306749969],"labels":["smchd1-nv11-1940_AD2E00ACXX_TTAGGC_L004.sam","smchd1-nv11-2086_AD2E00ACXX_TGACCA_L004.sam","smchd1-nv11-2433_AD2E00ACXX_ACAGTG_L004.sam","smchd1-nv11-3225_AD2E00ACXX_GCCAAT_L004.sam","smchd1-wt-1932_AD2E00ACXX_CGATGT_L004.sam","smchd1-wt-241_AD2E00ACXX_ATCACG_L004.sam","NJ_RNA1__Smchd1_WT_lymphoma_1934__C2G5CACXX_AGTCAA_L003.sam"],"sampleID":["smchd1-nv11-1940_AD2E00ACXX_TTAGGC_L004.sam","smchd1-nv11-2086_AD2E00ACXX_TGACCA_L004.sam","smchd1-nv11-2433_AD2E00ACXX_ACAGTG_L004.sam","smchd1-nv11-3225_AD2E00ACXX_GCCAAT_L004.sam","smchd1-wt-1932_AD2E00ACXX_CGATGT_L004.sam","smchd1-wt-241_AD2E00ACXX_ATCACG_L004.sam","NJ_RNA1__Smchd1_WT_lymphoma_1934__C2G5CACXX_AGTCAA_L003.sam"],"genotype":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"group":["Smchd1-null","Smchd1-null","Smchd1-null","Smchd1-null","WT","WT","WT"],"lib_size":[7519549,6752457,6225875,6474510,6822924,6096639,3626853],"norm_factors":[1,1,1,1,1,1,1],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.37,0.21,0.2,0.11,0.08,0.02]},"features":{"numeric":["lib_size","norm_factors","- "],"discrete":["labels","sampleID","genotype","group","-"],"all":["lib_size","norm_factors","- ","labels","sampleID","genotype","group","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>### DESeqDataset TEST 2 ###
 
 library(&quot;pasilla&quot;, quietly=TRUE)
@@ -46697,10 +46703,8 @@ dds &lt;- DESeqDataSetFromMatrix(countData = cts,
                               design = ~ condition)
 
 glimmaMDS(dds, width=900)</code></pre>
-<div id="htmlwidget-5499aa14fb3cc3af433e" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5499aa14fb3cc3af433e">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[1.55789848737508,-0.994413514994185,-1.03518602977175,1.23400810821737,1.25827290537262,-1.27046025294586,-0.750119703253269],"dim2":[0.327465585703156,1.33877243635546,1.18136538115996,-0.394083867074646,-0.206388633543526,-2.12254637830374,-0.124584524296666],"dim3":[1.04762623809889,0.651014750012702,0.127488711525188,-1.0580943333895,0.180276506655706,0.932524691358084,-1.88083656426107],"dim4":[-0.497653559616661,-1.06559976318159,1.73569377315974,0.954129495902234,-0.222389523421366,0.12185770523214,-1.0260381280745],"dim5":[-0.745673464161095,1.33046713730006,-0.795419473499434,1.4927735310024,-0.541257943037364,0.106640788225339,-0.8475305758299],"dim6":[-1.15717856809029,0.21434062603293,0.0219279442005961,-0.317790844666358,1.64317878900307,-0.114908804796268,-0.28956914168368],"labels":["treated1","treated2","treated3","untreated1","untreated2","untreated3","untreated4"],"condition":["treated","treated","treated","untreated","untreated","untreated","untreated"],"type":["single-read","paired-end","paired-end","single-read","single-read","paired-end","paired-end"],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.23,0.19,0.17,0.15,0.15,0.1]},"features":{"numeric":"- ","discrete":["labels","condition","type","-"],"all":["- ","labels","condition","type","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
-<pre class="r"><code>?glimmaMDS</code></pre>
-<pre><code>## starting httpd help server ... done</code></pre>
+<div id="htmlwidget-a6a24f3ef08ade766cb1" style="width:900px;height:570px;" class="GlimmaV2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a6a24f3ef08ade766cb1">{"x":{"plotType":"MDS","data":{"mdsData":{"dim1":[1.55789848737508,-0.994413514994185,-1.03518602977175,1.23400810821737,1.25827290537262,-1.27046025294586,-0.750119703253269],"dim2":[0.327465585703156,1.33877243635546,1.18136538115996,-0.394083867074646,-0.206388633543526,-2.12254637830374,-0.124584524296666],"dim3":[1.04762623809889,0.651014750012702,0.127488711525188,-1.0580943333895,0.180276506655706,0.932524691358084,-1.88083656426107],"dim4":[-0.497653559616661,-1.06559976318159,1.73569377315974,0.954129495902234,-0.222389523421366,0.12185770523214,-1.0260381280745],"dim5":[-0.745673464161095,1.33046713730006,-0.795419473499434,1.4927735310024,-0.541257943037364,0.106640788225339,-0.8475305758299],"dim6":[-1.15717856809029,0.21434062603293,0.0219279442005961,-0.317790844666358,1.64317878900307,-0.114908804796268,-0.28956914168368],"labels":["treated1","treated2","treated3","untreated1","untreated2","untreated3","untreated4"],"condition":["treated","treated","treated","untreated","untreated","untreated","untreated"],"type":["single-read","paired-end","paired-end","single-read","single-read","paired-end","paired-end"],"-":["0","0","0","0","0","0","0"],"- ":[0,0,0,0,0,0,0]},"eigenData":{"name":[1,2,3,4,5,6],"eigen":[0.23,0.19,0.17,0.15,0.15,0.1]},"features":{"numeric":"- ","discrete":["labels","condition","type","-"],"all":["- ","labels","condition","type","-"]},"continuous_colour":false,"dimlist":["dim1","dim2","dim3","dim4","dim5","dim6"]}},"evals":[],"jsHooks":[]}</script>
 
 
 
