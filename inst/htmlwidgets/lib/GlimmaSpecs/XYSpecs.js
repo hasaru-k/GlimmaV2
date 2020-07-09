@@ -1,22 +1,22 @@
 
 // parametrise graph encoding for MDS plot
-function createXYSpec(xyData, width, height, x, y, cols, status_colours, title) 
+function createXYSpec(xyData, xyTable, width, height)
 {
 
   // generate tooltip object for embedding in spec
   var tooltipString = "{";
-  cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
+  xyData.cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
   tooltipString += "}";
   var tooltip = { "signal" : tooltipString };
 
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": width * 0.45,
+    "width": xyData.counts == -1 ? (width*0.9) : (width * 0.45),
     "height": height * 0.35,
     "padding": 0,
     "title": {
-      "text": title
+      "text": xyData.title
     },
     "signals":
       [
@@ -29,7 +29,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
       [
         {
           "name": "source",
-          "values": xyData,
+          "values": xyTable,
           "transform": [{
             "type": "formula",
             "expr": "datum.x",
@@ -45,7 +45,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "round": true,
         "nice": true,
         "zero": true,
-        "domain": { "data": "source", "field": x },
+        "domain": { "data": "source", "field": xyData.x },
         "range": "width"
       },
       {
@@ -54,14 +54,14 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "round": true,
         "nice": true,
         "zero": true,
-        "domain": { "data": "source", "field": y },
+        "domain": { "data": "source", "field": xyData.y },
         "range": "height"
       },
       {
         "name": "colour_scale",
         "type": "ordinal",
         "domain": [-1, 0, 1],
-        "range": status_colours
+        "range": xyData.status_colours
       }
     ],
     "axes" : [
@@ -71,7 +71,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "domain": false,
         "orient": "bottom",
         "tickCount": 5,
-        "title": x
+        "title": xyData.x
       },
       {
         "scale": "y",
@@ -79,7 +79,7 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "domain": false,
         "orient": "left",
         "titlePadding": 5,
-        "title": y
+        "title": xyData.y
       }
     ],
     "marks": [
@@ -89,8 +89,8 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "from": { "data": "source" },
         "encode": {
           "update": {
-            "x": { "scale": "x", "field": x },
-            "y": { "scale": "y", "field": y },
+            "x": { "scale": "x", "field": xyData.x },
+            "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
             "size" : 50,
             "strokeWidth": 0,
@@ -106,8 +106,8 @@ function createXYSpec(xyData, width, height, x, y, cols, status_colours, title)
         "from": { "data": "selected_points" },
         "encode": {
           "update": {
-            "x": { "scale": "x", "field": x },
-            "y": { "scale": "y", "field": y },
+            "x": { "scale": "x", "field": xyData.x },
+            "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
             "size" : 1,
             "fill" : {"value" : "darkorange"},

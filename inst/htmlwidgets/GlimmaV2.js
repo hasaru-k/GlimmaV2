@@ -20,11 +20,11 @@ HTMLWidgets.widget({
 
       renderValue: function(x) {
         
+        console.log(x);
         var handler = new vegaTooltip.Handler();
 
         if (x.plotType === "MDS")
         {
-          // create tooltip handler
 
           // create container elements
           var mdsContainer = document.createElement("div");
@@ -35,7 +35,6 @@ HTMLWidgets.widget({
           plotContainer.appendChild(mdsContainer);
           plotContainer.appendChild(eigenContainer);
           
-          console.log(x);
           processDataMDS(x);
           var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
           var eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
@@ -72,17 +71,14 @@ HTMLWidgets.widget({
 
         if (x.plotType === "XY")
         {
-          console.log("XY plot created.");
-          console.log(x);
 
           // create container elements
           var xyContainer = document.createElement("div");
+          xyContainer.setAttribute("class", "xyContainerSingle");
           plotContainer.appendChild(xyContainer);
-          var xyData = HTMLWidgets.dataframeToD3(x.data.table);
-          console.log(xyData);
-          var xySpec = createXYSpec(xyData, width, height, 
-                                      x.data.x, x.data.y, x.data.cols,
-                                      x.data.status_colours, x.data.title);
+
+          var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
+          var xySpec = createXYSpec(x.data, xyTable, width, height);
           xyView = new vega.View(vega.parse(xySpec), {
             renderer: 'canvas',
             container: xyContainer,
@@ -92,8 +88,19 @@ HTMLWidgets.widget({
           xyView.tooltip(handler.call);
           xyView.runAsync();
 
+          // add expression plot if necessary
+          if (x.data.counts != -1)
+          {
+            var expressionContainer = document.createElement("div");
+            expressionContainer.setAttribute("class", "expressionContainer");
+            plotContainer.appendChild(expressionContainer);
+            xyContainer.setAttribute("class", "xyContainer");
+
+            /* TODO: add expressionView located in expressionContainer */
+          }
+          
           // add datatable, and generate interaction
-          setupXYInteraction(xyView, xyData, controlContainer, x);
+          setupXYInteraction(xyView, xyTable, controlContainer, x);
           
           // add XY plot save button
           addSave(controlContainer, xyView);
@@ -118,7 +125,7 @@ function addBlockElement(controlContainer)
   controlContainer.appendChild(blockElement);
 }
 
-function setupXYInteraction(xyView, xyData, widget, x)
+function setupXYInteraction(xyView, xyTable, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
@@ -132,7 +139,7 @@ function setupXYInteraction(xyView, xyData, widget, x)
   {
 
     var datatable = $(datatableEl).DataTable({
-        data: xyData,
+        data: xyTable,
         columns: xyColumnsInfo,
         rowId: "index",
         dom: 'Bfrtip',
@@ -347,6 +354,8 @@ function addSave(controlContainer, view_obj, text="Save Plot")
   }
 }
 
+/* arranges vega-bind elements so that x_dim, y_dim are on their
+   own line */
 function reformatElementsMDS(controlContainer)
 {
   binds = controlContainer.getElementsByClassName("vega-bind");

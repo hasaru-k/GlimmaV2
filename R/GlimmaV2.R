@@ -278,6 +278,7 @@ glimmaMA.default <- function(
   p.adj.method = "BH",
   display.columns = NULL,
   anno=NULL,
+  counts=NULL,
   xlab=NULL,
   ylab=NULL,
   status.colours=c("dodgerblue", "lightslategray", "firebrick"),
@@ -303,7 +304,7 @@ glimmaMA.default <- function(
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  xData <- buildXYData(table, status, main, display.columns, anno, xlab, ylab, status.colours)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
   return(GlimmaV2(xData, width, height))
 }
 
@@ -316,6 +317,7 @@ glimmaMA.DESeqDataSet  <- function(
   main="MA Plot",
   display.columns = NULL,
   anno=NULL,
+  counts=NULL,
   xlab=NULL,
   ylab=NULL,
   status.colours=c("dodgerblue", "lightslategray", "firebrick"),
@@ -348,7 +350,7 @@ glimmaMA.DESeqDataSet  <- function(
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  xData <- buildXYData(table, status, main, display.columns, anno, xlab, ylab, status.colours)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
   return(GlimmaV2(xData, width, height))
 }
 
@@ -387,6 +389,7 @@ glimmaXY.default <- function(
   main="XY Plot",
   display.columns = NULL,
   anno=NULL,
+  counts=NULL,
   status.colours=c("dodgerblue", "lightslategray", "firebrick"),
   width = 900, 
   height = 570)
@@ -395,7 +398,7 @@ glimmaXY.default <- function(
   table <- data.frame(x, y) 
   names(table) <- c(xlab, ylab)
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x/y args.")
-  xData <- buildXYData(table, status, main, display.columns, anno, xlab, ylab, status.colours)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
   return(GlimmaV2(xData, width, height))
 }
 
@@ -408,11 +411,15 @@ buildXYData <- function(
   main,
   display.columns = NULL,
   anno=NULL,
+  counts=NULL,
   xlab=NULL,
   ylab=NULL,
   status.colours=c("dodgerblue", "lightslategray", "firebrick"))
 {
 
+  # give placeholder for counts
+  if (is.null(counts)) counts <- -1
+  
   # add colour and anno info to table
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno)) table <- cbind(table, anno)
@@ -435,12 +442,13 @@ buildXYData <- function(
   # error checking on status_colours
   if (length(status.colours) != 3) stop("status_colours 
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
-
+  
   xData <- list(plotType="XY",
                 data=list(x=xlab, 
                           y=ylab, 
                           table=table, 
-                          cols=display.columns, 
+                          cols=display.columns,
+                          counts=counts, 
                           tooltipFields=display.columns,
                           status_colours=status.colours,
                           title=main))

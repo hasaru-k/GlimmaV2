@@ -1,0 +1,72 @@
+---
+title: "TestMDS"
+output:
+  html_document:
+    df_print: paged
+author: "Hasaru Kariyawasam"
+---
+
+
+```{r}
+
+### DGEList TEST ###
+
+# need old Glimma for this dataset
+library(Glimma, quietly=TRUE)
+library(GlimmaV2, quietly=TRUE)
+
+data(lymphomaRNAseq)
+rnaseq <- lymphomaRNAseq
+
+# add lane
+groups <- data.frame(genotype=rnaseq$samples$group,
+                     lane= as.character(c(rep(4,5),3,3)),
+                     miscCont=c(rep(4000,5),300,250),
+                     miscDisc=c("blue","red",rep("green",5)))
+
+# add libsize
+groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
+glimmaMDS(rnaseq, groups=groups, width=900)
+```
+
+```{r}
+
+### DESeqDataset TEST 1 ###
+
+library("DESeq2", quietly=TRUE)
+rnaseq.deseq2 <- DESeqDataSetFromMatrix(rnaseq$counts, colData=rnaseq$samples, design=~group)
+glimmaMDS(rnaseq.deseq2, width=900, prior.count=2)
+
+```
+
+
+```{r}
+
+### DESeqDataset TEST 2 ###
+
+library("pasilla", quietly=TRUE)
+library("DESeq2", quietly=TRUE)
+library(GlimmaV2)
+pasCts <- system.file("extdata",
+                      "pasilla_gene_counts.tsv",
+                      package="pasilla", mustWork=TRUE)
+pasAnno <- system.file("extdata",
+                       "pasilla_sample_annotation.csv",
+                       package="pasilla", mustWork=TRUE)
+cts <- as.matrix(read.csv(pasCts,sep="\t",row.names="gene_id"))
+coldata <- read.csv(pasAnno, row.names=1)
+coldata <- coldata[,c("condition","type")]
+coldata$condition <- factor(coldata$condition)
+coldata$type <- factor(coldata$type)
+
+rownames(coldata) <- sub("fb", "", rownames(coldata))
+cts <- cts[, rownames(coldata)]
+
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design = ~ condition)
+
+glimmaMDS(dds, width=900)
+glimmaMDS(x)
+```
+
