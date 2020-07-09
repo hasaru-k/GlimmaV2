@@ -1,0 +1,21 @@
+dependencies:
+  - name: vega
+    version: 1.0
+    src: htmlwidgets/lib/vega
+    script:
+      - vega.js
+    stylesheet:
+      - vega_plots.css
+  - name: vega-tooltip
+    version: 1.0
+    src: htmlwidgets/lib/vega-tooltip
+    script:
+      - vega-tooltip.js
+    stylesheet:
+      - vega-tooltip.css
+  - name: GlimmaV2
+    version: 1.0
+    src: htmlwidgets/lib/GlimmaV2
+    script:
+      - MDSSpecs.js
+      - saveVega.js

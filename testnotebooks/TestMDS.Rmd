@@ -26,7 +26,7 @@ groups <- data.frame(genotype=rnaseq$samples$group,
 
 # add libsize
 groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
-glimmaMDS(rnaseq, groups=groups, width=900)
+glimmaMDS(rnaseq, groups=groups, width=1200, height=900)
 ```
 
 ```{r}
@@ -67,6 +67,5 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               design = ~ condition)
 
 glimmaMDS(dds, width=900)
-glimmaMDS(x)
 ```
 
