@@ -145,8 +145,7 @@ glimmaMDS.default <- function(
   features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))
 
   # forward data to the widget using xData
-  xData = list(plotType = "MDS",
-               data = list(mdsData=points,
+  xData = list(data = list(mdsData=points,
                            eigenData=eigen,
                            features=features,
                            continuous_colour=continuous.colour,

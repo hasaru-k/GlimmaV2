@@ -182,13 +182,11 @@ buildXYData <- function(
   if (length(status.colours) != 3) stop("status_colours 
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
   
-  xData <- list(plotType="XY",
-                data=list(x=xlab, 
+  xData <- list(data=list(x=xlab, 
                           y=ylab, 
                           table=table, 
                           cols=display.columns,
                           counts=counts, 
-                          tooltipFields=display.columns,
                           status_colours=status.colours,
                           title=main))
   return(xData)
