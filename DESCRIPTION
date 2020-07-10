@@ -15,6 +15,7 @@ RoxygenNote: 7.1.1
 Imports: 
     htmlwidgets,
     edgeR,
+    limma,
     DESeq2,
     S4Vectors,
     SummarizedExperiment
