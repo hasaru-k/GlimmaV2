@@ -2,6 +2,7 @@
 
 S3method(glimmaMA,DESeqDataSet)
 S3method(glimmaMA,DGEExact)
+S3method(glimmaMA,DGELRT)
 S3method(glimmaMA,MArrayLM)
 S3method(glimmaMDS,DESeqDataSet)
 S3method(glimmaMDS,DGEList)
@@ -18,3 +19,4 @@ importFrom(S4Vectors,as.data.frame.DataTable)
 importFrom(SummarizedExperiment,colData)
 importFrom(edgeR,cpm)
 importFrom(edgeR,decideTestsDGE)
+importFrom(limma,decideTests)

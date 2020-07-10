@@ -112,7 +112,7 @@ dt <- decideTests(tfit)
 
 ```{r}
 # test general plot (final column)
-glimmaMA(tfit, status=dt)
+glimmaMA(tfit)
 ```
 ```{r}
 plotMD(tfit, status=dt[,3])
@@ -133,7 +133,7 @@ glimmaMA(tfit, status=dt, status.colours=c("#DD7373","#3B3561","#51A3A3"))
 ```
 
 ```{r}
-## TEST: DGELRT ##
+## TEST: DGEExact ##
 d <- matrix(rnbinom(16,size=1,mu=10),4,4)
 rownames(d) <- c("a","b","c","d")
 colnames(d) <- c("A1","A2","B1","B2")
@@ -148,7 +148,17 @@ glimmaMA(results)
 ```
 
 ```{r}
-plotMD(xResults)
+plotMD(results)
+```
+
+```{r}
+## TEST: DGELRT ##
+
+x <- estimateDisp(x, design)
+xGlm <- glmFit(x, design)
+lrt <- glmLRT(xGlm)
+lrt
+glimmaMA(lrt)
 ```
 
 

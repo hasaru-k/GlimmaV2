@@ -8,10 +8,11 @@ glimmaMA <- function(x, ...)
 
 #' Glimma MA Plot
 #'
+#' @importFrom limma decideTests
 #' @export
 glimmaMA.MArrayLM <- function(
   x,
-  status=rep(0, nrow(x)),
+  status=limma::decideTests(x),
   coef=ncol(x$coefficients),
   main=colnames(x)[coef],
   p.adj.method = "BH",
@@ -86,6 +87,12 @@ glimmaMA.DGEExact <- function(
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
   return(glimmaXYWidget(xData, width, height))
 }
+
+#' Glimma MA Plot
+#'
+#' @importFrom edgeR decideTestsDGE
+#' @export
+glimmaMA.DGELRT <- glimmaMA.DGEExact
 
 #' Glimma MA Plot
 #' @importFrom DESeq2 results
