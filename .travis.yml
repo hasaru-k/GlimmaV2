@@ -1,5 +1,5 @@
 language: r
-r: bioc-devel
+r: bioc-release
 cache: packages
 warnings_are_errors: false
 bioc_packages:
