@@ -76,8 +76,8 @@ glimmaMA.DGEExact <- function(
   AdjPValue <- stats::p.adjust(x$table$PValue, method=p.adj.method)
   table <- cbind(table, PValue=x$table$PValue, AdjPValue=AdjPValue)
 
-  # add gene info from DGEExact object to table
-  table <- cbind(x$genes, table)
+  # add gene info from DGEExact object to table, if non-null
+  if (!is.null(x$genes)) table <- cbind(x$genes, table)
 
   # generate, error-check status
   if (is.null(status)) status <- edgeR::decideTestsDGE(x)

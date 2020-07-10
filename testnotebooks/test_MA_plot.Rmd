@@ -134,13 +134,17 @@ glimmaMA(tfit, status=dt, status.colours=c("#DD7373","#3B3561","#51A3A3"))
 
 ```{r}
 ## TEST: DGELRT ##
-
-xDisp <- estimateCommonDisp(x)
-xResults <- exactTest(xDisp, pair=c("ML","LP"))
+d <- matrix(rnbinom(16,size=1,mu=10),4,4)
+rownames(d) <- c("a","b","c","d")
+colnames(d) <- c("A1","A2","B1","B2")
+d <- DGEList(counts=d,group=factor(c("A","A","B","B")))
+d <- estimateCommonDisp(d)
+results <- exactTest(d)
+class(results)
 ```
 
 ```{r}
-glimmaMA(xResults)
+glimmaMA(results)
 ```
 
 ```{r}
