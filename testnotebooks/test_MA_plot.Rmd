@@ -7,7 +7,7 @@ author: "Hasaru Kariyawasam"
 
 ```{r}
 
-### TEST: glimmav1 dataset ###
+### TEST: glimmav1 dataset (MArrayLM) ###
 
 library(Glimma)
 library(limma)
@@ -35,7 +35,7 @@ fit <- lmFit(vm, design=design)
 fit <- contrasts.fit(fit, contrasts)
 fit <- eBayes(fit)
 dtFit <- decideTests(fit)
-
+class(fit)
 ```
 
 ```{r}
@@ -44,13 +44,14 @@ glimmaMA(fit, status=dtFit)
 ```
 
 ```{r}
-# verify against edgeR
+# verify against limma
 plotMD(fit, status=dtFit)
 ```
 
-```{r}
 
-### TEST: rnaseq-123 dataset ###
+
+```{r}
+### TEST: rnaseq-123 dataset (MArrayLM) ###
 
 library(edgeR, quietly=TRUE)
 library(Mus.musculus, quietly=TRUE)
@@ -130,6 +131,37 @@ plotMD(tfit, column=2, status=dt[,2], main=colnames(tfit)[2])
 # test status.colours
 glimmaMA(tfit, status=dt, status.colours=c("#DD7373","#3B3561","#51A3A3"))
 ```
+
+```{r}
+## TEST: DGELRT ##
+
+xDisp <- estimateCommonDisp(x)
+xResults <- exactTest(xDisp, pair=c("ML","LP"))
+
+glimmaMA(xResults)
+plotMD(xResults)
+```
+
+```{r}
+# create initial table with logCPM and logFC features
+xvals <- x$table$logCPM
+yvals <- x$table$logFC
+xlab <- NULL
+ylab <- NULL
+if (is.null(xlab)) xlab <- "logCPM"
+if (is.null(ylab)) ylab <- "logFC"
+table <- data.frame(xvals, yvals)
+names(table) <- c(xlab, ylab)
+table
+
+x$table$PValue
+stats::p.adjust(x$table$PValue, method=p.adj.method)
+    help("DGEGLM-class")
+   
+glimmaMA(x)
+edgeR::decideTestsDGE(x)
+```
+
 
 ```{r}
 

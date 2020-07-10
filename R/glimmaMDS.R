@@ -173,6 +173,7 @@ glimmaMDS.default <- function(
 #'
 #' @inheritParams glimmaMDS.default
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
+#' @importFrom edgeR cpm
 #' @export
 glimmaMDS.DGEList <- function(
   x,
@@ -218,6 +219,9 @@ glimmaMDS.DGEList <- function(
 #' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'
 #' @inheritParams glimmaMDS.DGEList
+#' @importFrom SummarizedExperiment colData
+#' @importFrom edgeR cpm
+#' @importFrom S4Vectors as.data.frame.DataTable
 #' @export
 glimmaMDS.DESeqDataSet <- function(
   x,
