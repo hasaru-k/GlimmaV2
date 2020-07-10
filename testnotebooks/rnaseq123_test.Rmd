@@ -96,11 +96,6 @@ title(main="B. Sequencing lanes")
 
 ```
 
-```{r}
-library(Glimma)
-?glMDPlot
-```
-
 
 ```{r}
 
@@ -141,7 +136,7 @@ summary(dt)
 ```
 
 ```{r}
-
+class(tfit)
 glimmaMA(tfit, coef=2, status=dt, main=colnames(tfit)[2])
 
 ```

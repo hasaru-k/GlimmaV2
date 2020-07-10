@@ -1,5 +1,5 @@
 language: r
-r: bioc-devel
+r: bioc-release
 cache: packages
 warnings_are_errors: false
 bioc_packages:
@@ -8,5 +8,6 @@ bioc_packages:
   - limma
 r_packages:
   - covr
+  - S4Vectors
 after_success:
   - Rscript -e 'library(covr); codecov()'

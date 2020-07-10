@@ -8,10 +8,11 @@ glimmaMA <- function(x, ...)
 
 #' Glimma MA Plot
 #'
+#' @importFrom limma decideTests
 #' @export
-glimmaMA.default <- function(
+glimmaMA.MArrayLM <- function(
   x,
-  status=rep(0, nrow(x)),
+  status=limma::decideTests(x),
   coef=ncol(x$coefficients),
   main=colnames(x)[coef],
   p.adj.method = "BH",
@@ -49,6 +50,52 @@ glimmaMA.default <- function(
 
 #' Glimma MA Plot
 #'
+#' @importFrom edgeR decideTestsDGE
+#' @export
+glimmaMA.DGEExact <- function(
+  x,
+  status=NULL,
+  main=paste(x$comparison[2],"vs",x$comparison[1]),
+  p.adj.method = "BH",
+  display.columns = NULL,
+  anno=NULL,
+  counts=NULL,
+  xlab=NULL,
+  ylab=NULL,
+  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  width = 900, 
+  height = 570)
+{
+
+  # create initial table with logCPM and logFC features
+  if (is.null(xlab)) xlab <- "logCPM"
+  if (is.null(ylab)) ylab <- "logFC"
+  table <- data.frame(x$table$logCPM, x$table$logFC)
+  names(table) <- c(xlab, ylab)
+
+  # add pvalue/adjusted pvalue info to table
+  AdjPValue <- stats::p.adjust(x$table$PValue, method=p.adj.method)
+  table <- cbind(table, PValue=x$table$PValue, AdjPValue=AdjPValue)
+
+  # add gene info from DGEExact object to table, if non-null
+  if (!is.null(x$genes)) table <- cbind(x$genes, table)
+
+  # generate, error-check status
+  if (is.null(status)) status <- edgeR::decideTestsDGE(x)
+  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
+  
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
+  return(glimmaXYWidget(xData, width, height))
+}
+
+#' Glimma MA Plot
+#'
+#' @importFrom edgeR decideTestsDGE
+#' @export
+glimmaMA.DGELRT <- glimmaMA.DGEExact
+
+#' Glimma MA Plot
+#' @importFrom DESeq2 results
 #' @export
 glimmaMA.DESeqDataSet  <- function(
   x,
@@ -86,8 +133,6 @@ glimmaMA.DESeqDataSet  <- function(
   # add pvalue/adjusted pvalue info from fit object to table
   table <- cbind(table, PValue=res.df$pvalue, AdjPValue=res.df$padj)
 
-  # make status single-dimensional
-  if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
   return(glimmaXYWidget(xData, width, height))
