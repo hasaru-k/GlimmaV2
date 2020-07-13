@@ -15,6 +15,7 @@ function createXYSpec(xyData, xyTable, width, height)
     "width": xyData.counts == -1 ? (width*0.9) : (width * 0.45),
     "height": height * 0.35,
     "padding": 0,
+    "autosize": {"type": "fit", "resize": true},
     "title": {
       "text": xyData.title
     },

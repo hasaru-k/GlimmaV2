@@ -61,7 +61,7 @@ formatCounts <- function(counts, anno)
 x <- formatCounts(rnaseq$counts, as.data.frame(rnaseq$samples$group))
 counts <- rnaseq$counts
 groups <- data.frame(group=rnaseq$samples$group, sample=colnames(rnaseq))
-glimmaMA(fit, counts=counts, groups=groups)
+glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1000)
 ```
 
 ```{r}

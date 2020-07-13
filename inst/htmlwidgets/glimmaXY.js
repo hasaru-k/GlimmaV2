@@ -74,7 +74,7 @@ HTMLWidgets.widget({
   }
 });
 
-function processExpression(counts, groups, samples, expressionView)
+function processExpression(counts, groups, samples, expressionView, index)
 {
   let result = [];
   for (col in counts) 
@@ -88,7 +88,8 @@ function processExpression(counts, groups, samples, expressionView)
     result.push(curr);
   }
   console.log(result);
-  expressionView.data("table", result)
+  expressionView.data("table", result);
+  expressionView.signal("title_signal", "Index " + index.toString());
   expressionView.runAsync();
 }
 
@@ -138,6 +139,7 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
     // map table selections onto the graph (clearing graph selections each time)
     datatable.on( 'click', 'tr', function () 
       {
+
         // not possible while in graph mode
         if (graphMode) return;
         $(this).toggleClass('selected');
@@ -145,12 +147,36 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
         let i;
         selected = [];
         for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
-        console.log(selected);
-        let index = Number($(this).context.firstChild.innerHTML);
-        let expressionObj = xyExpression[index];
-        processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView);
         xyView.data("selected_points", selected);
         xyView.runAsync();
+
+        /* expression plot */
+        /* if we selected a row, display its expression */
+        if ($(this).hasClass('selected'))
+        {
+          let index = Number($(this).context.firstChild.innerHTML);
+          let expressionObj = xyExpression[index];
+          processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
+        }
+        /* if we deselected the row, check if anything else is selected */
+        else
+        {
+          /* if so, display the row with the largest index */
+          if (selected_rows.length > 0)
+          {
+            let last = selected_rows[selected_rows.length-1];
+            let expressionObj = xyExpression[last.index];
+            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
+          }
+          /* otherwise, clear the expression plot */
+          else
+          {
+            expressionView.data("table", []);
+            expressionView.signal("title_signal", "");
+            expressionView.runAsync();
+          }
+        }
+
       }
     );
     
