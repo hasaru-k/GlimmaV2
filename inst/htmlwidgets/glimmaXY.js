@@ -40,18 +40,26 @@ HTMLWidgets.widget({
         xyView.runAsync();
 
         // add expression plot if necessary
+        var xyExpression = null;
         if (x.data.counts != -1)
         {
           var expressionContainer = document.createElement("div");
           expressionContainer.setAttribute("class", "expressionContainer");
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
-
+          xyExpression = HTMLWidgets.dataframeToD3(x.data.counts)
           /* TODO: add expressionView located in expressionContainer */
+          var expressionSpec = createExpressionSpec(width, height);
+          expressionView = new vega.View(vega.parse(expressionSpec), {
+            renderer: 'canvas',
+            container: expressionContainer,
+            hover: true
+          });
+          expressionView.runAsync();
         }
         
         // add datatable, and generate interaction
-        setupXYInteraction(xyView, xyTable, controlContainer, x);
+        setupXYInteraction(xyView, xyTable, xyExpression, expressionView, controlContainer, x);
         // add XY plot save button
         addSave(controlContainer, xyView);
 
@@ -66,7 +74,25 @@ HTMLWidgets.widget({
   }
 });
 
-function setupXYInteraction(xyView, xyTable, widget, x)
+function processExpression(counts, groups, samples, expressionView)
+{
+  let result = [];
+  for (col in counts) 
+  {
+    if (!samples.includes(col)) continue;
+    let curr = {};
+    let group = groups[samples.indexOf(col)];
+    curr["group"] = group;
+    curr["sample"] = col;
+    curr["count"] = counts[col];
+    result.push(curr);
+  }
+  console.log(result);
+  expressionView.data("table", result)
+  expressionView.runAsync();
+}
+
+function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
@@ -120,6 +146,9 @@ function setupXYInteraction(xyView, xyTable, widget, x)
         selected = [];
         for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
         console.log(selected);
+        let index = Number($(this).context.firstChild.innerHTML);
+        let expressionObj = xyExpression[index];
+        processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView);
         xyView.data("selected_points", selected);
         xyView.runAsync();
       }
