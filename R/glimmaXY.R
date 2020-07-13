@@ -156,22 +156,6 @@ naRowInds <- function(res.df, ...)
   return(delRows)
 }
 
-formatCounts <- function(counts, anno)
-{
-  anno <- cbind(anno, sample=colnames(counts))
-  counts %>%
-    as_tibble() %>%
-    mutate(gene = rownames(counts)) %>%
-    pivot_longer(colnames(counts), names_to = "sample", values_to = "count") %>%
-    left_join(anno)
-  split_counts <- counts %>%
-    as_tibble() %>%
-    mutate(gene = rownames(counts)) %>%
-    pivot_longer(colnames(counts), names_to = "sample", values_to = "count") %>%
-    left_join(anno) %>%
-    group_split(gene, .keep = FALSE)
-  return(split_counts)  
-}
 #' Glimma XY Plot
 #'
 #' @export

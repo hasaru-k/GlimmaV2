@@ -215,6 +215,34 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
         // filter using a regex string: union over indices in selected
         var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
+
+        /* expression plot */
+        /* if we selected a point, display its expression */
+        if (loc < 0)
+        {
+          let index = datum["index"];
+          let expressionObj = xyExpression[index];
+          processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
+        }
+        /* if we deselected the point, check if anything else is selected */
+        else
+        {
+          /* if so, display the last selected point */
+          if (selected.length > 0)
+          {
+            let last = selected[selected.length-1];
+            let expressionObj = xyExpression[last.index];
+            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
+          }
+          /* otherwise, clear the expression plot */
+          else
+          {
+            expressionView.data("table", []);
+            expressionView.signal("title_signal", "");
+            expressionView.runAsync();
+          }
+        }
+
       }
 
     );
