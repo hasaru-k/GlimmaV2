@@ -41,6 +41,7 @@ HTMLWidgets.widget({
 
         // add expression plot if necessary
         var xyExpression = null;
+        var expressionView = null;
         if (x.data.counts != -1)
         {
           var expressionContainer = document.createElement("div");
@@ -50,7 +51,7 @@ HTMLWidgets.widget({
           xyExpression = HTMLWidgets.dataframeToD3(x.data.counts)
           /* TODO: add expressionView located in expressionContainer */
           var expressionSpec = createExpressionSpec(width, height);
-          expressionView = new vega.View(vega.parse(expressionSpec), {
+          var expressionView = new vega.View(vega.parse(expressionSpec), {
             renderer: 'canvas',
             container: expressionContainer,
             hover: true
@@ -151,29 +152,32 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
         xyView.runAsync();
 
         /* expression plot */
-        /* if we selected a row, display its expression */
-        if ($(this).hasClass('selected'))
+        if (expressionView)
         {
-          let index = Number($(this).context.firstChild.innerHTML);
-          let expressionObj = xyExpression[index];
-          processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
-        }
-        /* if we deselected the row, check if anything else is selected */
-        else
-        {
-          /* if so, display the row with the largest index */
-          if (selected_rows.length > 0)
+          /* if we selected a row, display its expression */
+          if ($(this).hasClass('selected'))
           {
-            let last = selected_rows[selected_rows.length-1];
-            let expressionObj = xyExpression[last.index];
-            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
+            let index = Number($(this).context.firstChild.innerHTML);
+            let expressionObj = xyExpression[index];
+            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
           }
-          /* otherwise, clear the expression plot */
+          /* if we deselected the row, check if anything else is selected */
           else
           {
-            expressionView.data("table", []);
-            expressionView.signal("title_signal", "");
-            expressionView.runAsync();
+            /* if so, display the row with the largest index */
+            if (selected_rows.length > 0)
+            {
+              let last = selected_rows[selected_rows.length-1];
+              let expressionObj = xyExpression[last.index];
+              processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
+            }
+            /* otherwise, clear the expression plot */
+            else
+            {
+              expressionView.data("table", []);
+              expressionView.signal("title_signal", "");
+              expressionView.runAsync();
+            }
           }
         }
 
@@ -218,28 +222,31 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
 
         /* expression plot */
         /* if we selected a point, display its expression */
-        if (loc < 0)
+        if (expressionView)
         {
-          let index = datum["index"];
-          let expressionObj = xyExpression[index];
-          processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
-        }
-        /* if we deselected the point, check if anything else is selected */
-        else
-        {
-          /* if so, display the last selected point */
-          if (selected.length > 0)
+          if (loc < 0)
           {
-            let last = selected[selected.length-1];
-            let expressionObj = xyExpression[last.index];
-            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
+            let index = datum["index"];
+            let expressionObj = xyExpression[index];
+            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
           }
-          /* otherwise, clear the expression plot */
+          /* if we deselected the point, check if anything else is selected */
           else
           {
-            expressionView.data("table", []);
-            expressionView.signal("title_signal", "");
-            expressionView.runAsync();
+            /* if so, display the last selected point */
+            if (selected.length > 0)
+            {
+              let last = selected[selected.length-1];
+              let expressionObj = xyExpression[last.index];
+              processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
+            }
+            /* otherwise, clear the expression plot */
+            else
+            {
+              expressionView.data("table", []);
+              expressionView.signal("title_signal", "");
+              expressionView.runAsync();
+            }
           }
         }
 

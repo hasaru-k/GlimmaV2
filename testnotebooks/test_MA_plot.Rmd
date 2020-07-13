@@ -40,28 +40,12 @@ class(fit)
 
 ```{r}
 # general plot
-library("tidyverse")
-formatCounts <- function(counts, anno)
-{
-  anno <- cbind(anno, sample=colnames(counts))
-  counts %>%
-    as_tibble() %>%
-    mutate(gene = rownames(counts)) %>%
-    pivot_longer(colnames(counts), names_to = "sample", values_to = "count") %>%
-    left_join(anno)
-  split_counts <- counts %>%
-    as_tibble() %>%
-    mutate(gene = rownames(counts)) %>%
-    pivot_longer(colnames(counts), names_to = "sample", values_to = "count") %>%
-    left_join(anno) %>%
-    group_split(gene, .keep = FALSE)
-  return(split_counts)  
-}
 
-x <- formatCounts(rnaseq$counts, as.data.frame(rnaseq$samples$group))
-counts <- rnaseq$counts
-groups <- data.frame(group=rnaseq$samples$group, sample=colnames(rnaseq))
-glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1000)
+
+counts <- data.frame(rnaseq$counts)
+groups <- data.frame(group=rnaseq$samples$group, sample=colnames(counts))
+glimmaMA(fit,  width=1200, height=1000)
+
 ```
 
 ```{r}

@@ -41,8 +41,6 @@ glimmaMA.MArrayLM <- function(
 
   # add gene info from MArrayLM object to table
   table <- cbind(x$genes, table)
-
-  # if (!is.null(counts)) counts <- formatCounts(counts, groups)
     
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
