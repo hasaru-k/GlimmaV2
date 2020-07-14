@@ -40,7 +40,12 @@ class(fit)
 
 ```{r}
 # general plot
-glimmaMA(fit, status=dtFit)
+
+
+counts <- data.frame(rnaseq$counts)
+groups <- data.frame(group=rnaseq$samples$group, sample=colnames(counts))
+glimmaMA(fit,  width=1200, height=1000)
+
 ```
 
 ```{r}

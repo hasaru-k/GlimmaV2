@@ -18,6 +18,7 @@ glimmaMA.MArrayLM <- function(
   p.adj.method = "BH",
   display.columns = NULL,
   anno=NULL,
+  groups=NULL,
   counts=NULL,
   xlab=NULL,
   ylab=NULL,
@@ -40,11 +41,11 @@ glimmaMA.MArrayLM <- function(
 
   # add gene info from MArrayLM object to table
   table <- cbind(x$genes, table)
-
+    
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
   return(glimmaXYWidget(xData, width, height))
 }
 
@@ -198,18 +199,23 @@ buildXYData <- function(
   counts=NULL,
   xlab=NULL,
   ylab=NULL,
-  status.colours=c("dodgerblue", "lightslategray", "firebrick"))
+  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  groups=NULL)
 {
 
   # give placeholder for counts
-  if (is.null(counts)) counts <- -1
+  if (is.null(counts)) {
+    counts <- -1
+  } else {
+    counts <- cbind(counts, gene=rownames(counts))
+  }
   
   # add colour and anno info to table
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno)) table <- cbind(table, anno)
 
   # add index for linking table and plot (independent of object type) to table
-  table <- data.frame(index=1:nrow(table), table)
+  table <- data.frame(index=0:(nrow(table)-1), table)
 
   # set display.columns (columns to show in tooltips and in the table)
   if (is.null(display.columns)) 
@@ -231,7 +237,8 @@ buildXYData <- function(
                           y=ylab, 
                           table=table, 
                           cols=display.columns,
-                          counts=counts, 
+                          counts=counts,
+                          groups=groups, 
                           status_colours=status.colours,
                           title=main))
   return(xData)

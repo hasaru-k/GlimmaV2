@@ -40,18 +40,27 @@ HTMLWidgets.widget({
         xyView.runAsync();
 
         // add expression plot if necessary
+        var countsMatrix = null;
+        var expressionView = null;
         if (x.data.counts != -1)
         {
           var expressionContainer = document.createElement("div");
           expressionContainer.setAttribute("class", "expressionContainer");
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
-
+          countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts)
           /* TODO: add expressionView located in expressionContainer */
+          var expressionSpec = createExpressionSpec(width, height);
+          var expressionView = new vega.View(vega.parse(expressionSpec), {
+            renderer: 'canvas',
+            container: expressionContainer,
+            hover: true
+          });
+          expressionView.runAsync();
         }
         
         // add datatable, and generate interaction
-        setupXYInteraction(xyView, xyTable, controlContainer, x);
+        setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x);
         // add XY plot save button
         addSave(controlContainer, xyView);
 
@@ -66,7 +75,9 @@ HTMLWidgets.widget({
   }
 });
 
-function setupXYInteraction(xyView, xyTable, widget, x)
+
+
+function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
@@ -115,13 +126,18 @@ function setupXYInteraction(xyView, xyTable, widget, x)
         // not possible while in graph mode
         if (graphMode) return;
         $(this).toggleClass('selected');
-        let selected_rows = datatable.rows('.selected').data();
+        let selectedRows = datatable.rows('.selected').data();
         let i;
         selected = [];
-        for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
-        console.log(selected);
+        for (i = 0; i < selectedRows.length; i++) selected.push(selectedRows[i]);
         xyView.data("selected_points", selected);
         xyView.runAsync();
+
+        /* expression plot */
+        let index = Number($(this).context.firstChild.innerHTML);
+        let countsRow = countsMatrix[index];
+        let selectEvent = $(this).hasClass('selected');
+        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
       }
     );
     
@@ -160,6 +176,12 @@ function setupXYInteraction(xyView, xyTable, widget, x)
         // filter using a regex string: union over indices in selected
         var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
+
+        /* expression plot */
+        let selectEvent = loc < 0;
+        let countsRow = countsMatrix[datum.index];
+        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+
       }
 
     );
@@ -167,6 +189,49 @@ function setupXYInteraction(xyView, xyTable, widget, x)
   });
 
 
+}
+
+function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selectedPoints, countsRow)
+{
+  if (!expressionView) return;
+  if (selectEvent)
+  {
+    processExpression(countsRow, x.data.groups.group, x.data.groups.sample, expressionView);
+  }
+  /* if we deselected the point, check if anything else is selected */
+  else
+  {
+    if (selectedPoints.length > 0)
+    {
+      let newIndex = selectedPoints[selectedPoints.length-1].index;
+      processExpression(countsMatrix[newIndex], x.data.groups.group, x.data.groups.sample, expressionView);
+    }
+    else
+    {
+      expressionView.data("table", []);
+      expressionView.signal("title_signal", "");
+      expressionView.runAsync();
+    }
+  }
+}
+
+function processExpression(countsRow, groups, samples, expressionView)
+{
+  let result = [];
+  for (col in countsRow) 
+  {
+    if (!samples.includes(col)) continue;
+    let curr = {};
+    let group = groups[samples.indexOf(col)];
+    curr["group"] = group;
+    curr["sample"] = col;
+    curr["count"] = countsRow[col];
+    result.push(curr);
+  }
+  console.log(result);
+  expressionView.data("table", result);
+  expressionView.signal("title_signal", "Gene " + countsRow.gene);
+  expressionView.runAsync();
 }
 
 function contains(arr, datum)
