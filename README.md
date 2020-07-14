@@ -6,6 +6,6 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 - saving widgets as encapsulated HTML files for enhanced portability
 ## Under construction
 ### MA Plot
-![MA plot](documentation/MAPlot.png "MA Plot")
+![MA plot](https://github.com/hasacat/GlimmaV2/blob/expression_plot/documentation/MAPlot.PNG "MA Plot")
 ### MDS Plot
 ![MDS plot](https://github.com/hasacat/GlimmaV2/blob/master/readme_assets/mdsplot.PNG "MDS Plot")
