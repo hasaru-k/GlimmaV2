@@ -40,7 +40,7 @@ HTMLWidgets.widget({
         xyView.runAsync();
 
         // add expression plot if necessary
-        var xyExpression = null;
+        var countsMatrix = null;
         var expressionView = null;
         if (x.data.counts != -1)
         {
@@ -48,7 +48,7 @@ HTMLWidgets.widget({
           expressionContainer.setAttribute("class", "expressionContainer");
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
-          xyExpression = HTMLWidgets.dataframeToD3(x.data.counts)
+          countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts)
           /* TODO: add expressionView located in expressionContainer */
           var expressionSpec = createExpressionSpec(width, height);
           var expressionView = new vega.View(vega.parse(expressionSpec), {
@@ -60,7 +60,7 @@ HTMLWidgets.widget({
         }
         
         // add datatable, and generate interaction
-        setupXYInteraction(xyView, xyTable, xyExpression, expressionView, controlContainer, x);
+        setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x);
         // add XY plot save button
         addSave(controlContainer, xyView);
 
@@ -75,26 +75,9 @@ HTMLWidgets.widget({
   }
 });
 
-function processExpression(counts, groups, samples, expressionView, index)
-{
-  let result = [];
-  for (col in counts) 
-  {
-    if (!samples.includes(col)) continue;
-    let curr = {};
-    let group = groups[samples.indexOf(col)];
-    curr["group"] = group;
-    curr["sample"] = col;
-    curr["count"] = counts[col];
-    result.push(curr);
-  }
-  console.log(result);
-  expressionView.data("table", result);
-  expressionView.signal("title_signal", "Index " + index.toString());
-  expressionView.runAsync();
-}
 
-function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widget, x)
+
+function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widget, x)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
@@ -140,47 +123,21 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
     // map table selections onto the graph (clearing graph selections each time)
     datatable.on( 'click', 'tr', function () 
       {
-
         // not possible while in graph mode
         if (graphMode) return;
         $(this).toggleClass('selected');
-        let selected_rows = datatable.rows('.selected').data();
+        let selectedRows = datatable.rows('.selected').data();
         let i;
         selected = [];
-        for (i = 0; i < selected_rows.length; i++) selected.push(selected_rows[i]);
+        for (i = 0; i < selectedRows.length; i++) selected.push(selectedRows[i]);
         xyView.data("selected_points", selected);
         xyView.runAsync();
 
         /* expression plot */
-        if (expressionView)
-        {
-          /* if we selected a row, display its expression */
-          if ($(this).hasClass('selected'))
-          {
-            let index = Number($(this).context.firstChild.innerHTML);
-            let expressionObj = xyExpression[index];
-            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
-          }
-          /* if we deselected the row, check if anything else is selected */
-          else
-          {
-            /* if so, display the row with the largest index */
-            if (selected_rows.length > 0)
-            {
-              let last = selected_rows[selected_rows.length-1];
-              let expressionObj = xyExpression[last.index];
-              processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
-            }
-            /* otherwise, clear the expression plot */
-            else
-            {
-              expressionView.data("table", []);
-              expressionView.signal("title_signal", "");
-              expressionView.runAsync();
-            }
-          }
-        }
-
+        let index = Number($(this).context.firstChild.innerHTML);
+        let countsRow = countsMatrix[index];
+        let selectEvent = $(this).hasClass('selected');
+        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
       }
     );
     
@@ -221,34 +178,9 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
         /* expression plot */
-        /* if we selected a point, display its expression */
-        if (expressionView)
-        {
-          if (loc < 0)
-          {
-            let index = datum["index"];
-            let expressionObj = xyExpression[index];
-            processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, index);
-          }
-          /* if we deselected the point, check if anything else is selected */
-          else
-          {
-            /* if so, display the last selected point */
-            if (selected.length > 0)
-            {
-              let last = selected[selected.length-1];
-              let expressionObj = xyExpression[last.index];
-              processExpression(expressionObj, x.data.groups.group, x.data.groups.sample, expressionView, last.index);
-            }
-            /* otherwise, clear the expression plot */
-            else
-            {
-              expressionView.data("table", []);
-              expressionView.signal("title_signal", "");
-              expressionView.runAsync();
-            }
-          }
-        }
+        let selectEvent = loc < 0;
+        let countsRow = countsMatrix[datum.index];
+        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
 
       }
 
@@ -257,6 +189,49 @@ function setupXYInteraction(xyView, xyTable, xyExpression, expressionView, widge
   });
 
 
+}
+
+function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selectedPoints, countsRow)
+{
+  if (!expressionView) return;
+  if (selectEvent)
+  {
+    processExpression(countsRow, x.data.groups.group, x.data.groups.sample, expressionView);
+  }
+  /* if we deselected the point, check if anything else is selected */
+  else
+  {
+    if (selectedPoints.length > 0)
+    {
+      let newIndex = selectedPoints[selectedPoints.length-1].index;
+      processExpression(countsMatrix[newIndex], x.data.groups.group, x.data.groups.sample, expressionView);
+    }
+    else
+    {
+      expressionView.data("table", []);
+      expressionView.signal("title_signal", "");
+      expressionView.runAsync();
+    }
+  }
+}
+
+function processExpression(countsRow, groups, samples, expressionView)
+{
+  let result = [];
+  for (col in countsRow) 
+  {
+    if (!samples.includes(col)) continue;
+    let curr = {};
+    let group = groups[samples.indexOf(col)];
+    curr["group"] = group;
+    curr["sample"] = col;
+    curr["count"] = countsRow[col];
+    result.push(curr);
+  }
+  console.log(result);
+  expressionView.data("table", result);
+  expressionView.signal("title_signal", "Gene " + countsRow.gene);
+  expressionView.runAsync();
 }
 
 function contains(arr, datum)
