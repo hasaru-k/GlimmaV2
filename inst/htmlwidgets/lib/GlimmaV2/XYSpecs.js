@@ -93,10 +93,11 @@ function createXYSpec(xyData, xyTable, width, height)
             "x": { "scale": "x", "field": xyData.x },
             "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
-            "size" : 50,
-            "strokeWidth": 0,
-            "opacity": { "value": 0.6 },
+            "size" : 1,
+            "opacity": [ {"test": "datum.status == 0", "value": 0.45}, {"value": 0.65} ],
             "fill": { "scale": "colour_scale", "field": "status" },
+            "strokeWidth": {"value": 1},
+            "stroke": {"value": "transparent"},
             "tooltip": tooltip
           }
         }
@@ -112,7 +113,8 @@ function createXYSpec(xyData, xyTable, width, height)
             "shape": "circle",
             "size" : 1,
             "fill" : {"value" : "darkorange"},
-            "strokeWidth": { "value": 1.5 },
+            "strokeWidth": { "value": 1 },
+            "stroke": { "value": "black" },
             "opacity": { "value": 1 },
             "tooltip": tooltip
           }

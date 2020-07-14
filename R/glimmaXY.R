@@ -22,7 +22,7 @@ glimmaMA.MArrayLM <- function(
   counts=NULL,
   xlab=NULL,
   ylab=NULL,
-  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  status.colours=NULL,
   width = 900, 
   height = 570)
 {
@@ -63,7 +63,7 @@ glimmaMA.DGEExact <- function(
   counts=NULL,
   xlab=NULL,
   ylab=NULL,
-  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  status.colours=NULL,
   width = 900, 
   height = 570)
 {
@@ -107,7 +107,7 @@ glimmaMA.DESeqDataSet  <- function(
   counts=NULL,
   xlab=NULL,
   ylab=NULL,
-  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  status.colours=NULL,
   width = 900, 
   height = 570)
 {
@@ -175,7 +175,7 @@ glimmaXY.default <- function(
   display.columns = NULL,
   anno=NULL,
   counts=NULL,
-  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  status.colours=NULL,
   width = 900, 
   height = 570)
 {
@@ -199,7 +199,7 @@ buildXYData <- function(
   counts=NULL,
   xlab=NULL,
   ylab=NULL,
-  status.colours=c("dodgerblue", "lightslategray", "firebrick"),
+  status.colours=NULL,
   groups=NULL)
 {
 
@@ -230,6 +230,7 @@ buildXYData <- function(
   }
 
   # error checking on status_colours
+  if (is.null(status.colours)) status.colours <- c("dodgerblue", "silver", "firebrick")
   if (length(status.colours) != 3) stop("status_colours 
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
   

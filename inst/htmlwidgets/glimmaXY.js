@@ -48,7 +48,7 @@ HTMLWidgets.widget({
           expressionContainer.setAttribute("class", "expressionContainer");
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
-          countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts)
+          countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts);
           /* TODO: add expressionView located in expressionContainer */
           var expressionSpec = createExpressionSpec(width, height);
           var expressionView = new vega.View(vega.parse(expressionSpec), {

@@ -897,23 +897,23 @@ label
 
 
 table.dataTable tbody tr.stripe1 {
-  background-color: #E8E8E8;
+  background-color: #ffffff;
 }
 table.dataTable tbody tr.stripe1:hover {
-  background-color: #d1e3f0;
+  background-color: #ebf0fa;
 }
 table.dataTable tbody tr.stripe1.selected {
-  background-color: #9aadd1;
+  background-color: #e4ecff;
 }
 table.dataTable tbody tr.stripe2 {
-  background-color: #f7f7f7;
+  background-color: #f6f6f6;
   border-bottom: solid #c0c0c0;
 }
 table.dataTable tbody tr.stripe2:hover {
-  background-color: #d1e3f0;
+  background-color: #ebf0fa;
 }
 table.dataTable tbody tr.stripe2.selected {
-  background-color: #9aadd1;
+  background-color: #e4ecff;
   border-bottom: solid #c0c0c0;
 }
 
