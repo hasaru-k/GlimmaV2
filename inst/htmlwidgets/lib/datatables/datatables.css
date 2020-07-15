@@ -965,4 +965,5 @@ table.dataTable
   border-radius: 8px;
   margin: 0px 2px;
   color: white;
+  user-select: none;
 }
