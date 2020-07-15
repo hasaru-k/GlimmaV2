@@ -37,10 +37,109 @@ class(fit)
 ```
 
 ```{r}
-# general plot
-
-
+# MArrayLM plot
 counts <- data.frame(rnaseq$counts)
 groups <- rnaseq$samples$group
 glimmaMA(fit, counts=counts, groups=groups, width=1000)
 ```
+
+
+```{r}
+### RNASeq 123 dataset ###
+
+library(edgeR, quietly=TRUE)
+library(Mus.musculus, quietly=TRUE)
+library(GlimmaV2, quietly=TRUE)
+
+# load data
+files <- c("GSM1545535_10_6_5_11.txt", "GSM1545536_9_6_5_11.txt", 
+   "GSM1545538_purep53.txt", "GSM1545539_JMS8-2.txt", 
+   "GSM1545540_JMS8-3.txt", "GSM1545541_JMS8-4.txt", 
+   "GSM1545542_JMS8-5.txt", "GSM1545544_JMS9-P7c.txt", 
+   "GSM1545545_JMS9-P8c.txt")
+
+
+x <- readDGE(files, columns=c(1,3))
+
+# add sample info
+samples <- substring(colnames(x), 12, nchar(colnames(x)))
+colnames(x) <- samples
+group <- as.factor(c("LP", "ML", "Basal", "Basal", "ML", "LP", 
+                     "Basal", "ML", "LP"))
+x$samples$group <- group
+lane <- as.factor(rep(c("L004","L006","L008"), c(3,4,2)))
+x$samples$lane <- lane
+
+# add gene info
+geneid <- rownames(x)
+genes <- select(Mus.musculus, keys=geneid, columns=c("SYMBOL", "TXCHROM"), 
+                keytype="ENTREZID")
+genes <- genes[!duplicated(genes$ENTREZID),]
+x$genes <- genes
+
+# transformations from raw scale
+cpm <- cpm(x)
+lcpm <- cpm(x, log=TRUE)
+
+# remove lowly expressed genes
+keep.exprs <- filterByExpr(x, group=group)
+x <- x[keep.exprs,, keep.lib.sizes=FALSE]
+
+
+# normalising gene expression distributions
+x <- calcNormFactors(x, method = "TMM")
+
+# generate design
+design <- model.matrix(~0+group+lane)
+colnames(design) <- gsub("group", "", colnames(design))
+```
+
+
+```{r}
+## DGELRT ##
+
+# estimate dispersion
+x <- estimateDisp(x, design)
+glmfit <- glmFit(x, design)
+lrt <- glmLRT(glmfit, coef=5)
+glimmaMA(lrt, counts=x$counts, groups=group, width=800)
+```
+
+
+```{r}
+## DGEExact ##
+results <- exactTest(x, pair=c("LP","Basal"))
+glimmaMA(results, counts=x$counts, groups=group, width=800)
+```
+
+
+
+```{r}
+## DESeqDataset ##
+library("pasilla", quietly=TRUE)
+library("DESeq2", quietly=TRUE)
+library(GlimmaV2)
+pasCts <- system.file("extdata",
+                      "pasilla_gene_counts.tsv",
+                      package="pasilla", mustWork=TRUE)
+pasAnno <- system.file("extdata",
+                       "pasilla_sample_annotation.csv",
+                       package="pasilla", mustWork=TRUE)
+cts <- as.matrix(read.csv(pasCts,sep="\t",row.names="gene_id"))
+coldata <- read.csv(pasAnno, row.names=1)
+coldata <- coldata[,c("condition","type")]
+coldata$condition <- factor(coldata$condition)
+coldata$type <- factor(coldata$type)
+
+rownames(coldata) <- sub("fb", "", rownames(coldata))
+cts <- cts[, rownames(coldata)]
+
+dds <- DESeqDataSetFromMatrix(countData = cts,
+                              colData = coldata,
+                              design = ~ condition)
+dds <- DESeq(dds)
+
+glimmaMA(dds, groups=dds$condition)
+
+```
+
