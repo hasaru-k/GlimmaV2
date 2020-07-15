@@ -84,7 +84,6 @@ lcpm <- cpm(x, log=TRUE)
 # remove lowly expressed genes
 keep.exprs <- filterByExpr(x, group=group)
 x <- x[keep.exprs,, keep.lib.sizes=FALSE]
-x$counts[keep.exprs,]
 
 
 # normalising gene expression distributions
@@ -140,6 +139,7 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               design = ~ condition)
 dds <- DESeq(dds)
 
-glimmaMA(dds, groups=dds$condition, width=600)
+glimmaMA(dds, groups=dds$condition)
+
 ```
 
