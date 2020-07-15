@@ -40,7 +40,7 @@ class(fit)
 # MArrayLM plot
 counts <- rnaseq$counts
 groups <- rnaseq$samples$group
-glimmaMA(fit, counts=counts, groups=groups, width=1000)
+glimmaMA(fit, counts=counts, groups=groups)
 ```
 
 
