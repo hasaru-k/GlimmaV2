@@ -8,4 +8,4 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 ### MA Plot
 ![MA plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/maplot.png "MA Plot")
 ### MDS Plot
-![MDS plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/mds.png "MDS Plot")
+![MDS plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/mds_plot.png "MDS Plot")
