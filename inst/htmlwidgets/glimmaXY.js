@@ -39,6 +39,8 @@ HTMLWidgets.widget({
         xyView.tooltip(handler.call);
         xyView.runAsync();
 
+
+
         // add expression plot if necessary
         var countsMatrix = null;
         var expressionView = null;
@@ -56,14 +58,17 @@ HTMLWidgets.widget({
             container: expressionContainer,
             hover: true
           });
+          expressionView.tooltip(handler.call);
           expressionView.runAsync();
+
         }
         
         // add datatable, and generate interaction
-        setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x);
+        setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height);
         // add XY plot save button
-        addSave(controlContainer, xyView);
-
+        addSave(controlContainer, xyView, text="Save (XY)");
+        if (expressionView) addSave(controlContainer, expressionView, text="Save (EXP)");
+        
       },
 
       resize: function(width, height) 
@@ -77,7 +82,7 @@ HTMLWidgets.widget({
 
 
 
-function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widget, x)
+function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widget, x, height)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
@@ -96,8 +101,8 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         rowId: "index",
         dom: 'Bfrtip',
         buttons: ['csv', 'excel'],
-        scrollY:        "180px",
-        scrollX:        false,
+        scrollY:        (height*0.27).toString() + "px",
+        scrollX: true,
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
@@ -111,11 +116,15 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         {
           graphMode = false;
           console.log(datatable.rows())
+          /* clear datatable rows and search filter */
           datatable.rows('.selected').nodes().to$().removeClass('selected');
           datatable.search('').columns().search('').draw();                      
           selected = [];
+          /* clear XY plot */
           xyView.data("selected_points", selected);
           xyView.runAsync();
+          /* clear expression plot */
+          clearExpressionPlot(expressionView);
         },
         text: 'Reset'
     });
@@ -208,11 +217,17 @@ function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, s
     }
     else
     {
-      expressionView.data("table", []);
-      expressionView.signal("title_signal", "");
-      expressionView.runAsync();
+      clearExpressionPlot(expressionView);
     }
   }
+}
+
+function clearExpressionPlot(expressionView)
+{
+  if (!expressionView) return;
+  expressionView.data("table", []);
+  expressionView.signal("title_signal", "");
+  expressionView.runAsync();
 }
 
 function processExpression(countsRow, groups, samples, expressionView)
