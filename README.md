@@ -4,6 +4,7 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 - multiple gene selections
 - full integration with R markdown
 - exporting plots to PNG/SVG/CSV formats
+
 Feedback is welcome, please feel free to open an issue for any enhancements you would like to see in future.
 ### MA Plot
 ![MA plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/maplot.png "MA Plot")
