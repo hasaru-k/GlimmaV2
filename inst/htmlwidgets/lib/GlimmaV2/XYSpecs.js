@@ -2,13 +2,7 @@
 // parametrise graph encoding for MDS plot
 function createXYSpec(xyData, xyTable, width, height)
 {
-
-  // generate tooltip object for embedding in spec
-  var tooltipString = "{";
-  xyData.cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
-  tooltipString += "}";
-  var tooltip = { "signal" : tooltipString };
-
+  var tooltip = makeVegaTooltip(xyData.cols);
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -93,8 +87,8 @@ function createXYSpec(xyData, xyTable, width, height)
             "x": { "scale": "x", "field": xyData.x },
             "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
-            "size" : 1,
-            "opacity": [ {"test": "datum.status == 0", "value": 0.45}, {"value": 0.65} ],
+            "size" : [ {"test": "datum.status == 0", "value": 40}, {"value": 100} ],
+            "opacity": {"value": 0.65},
             "fill": { "scale": "colour_scale", "field": "status" },
             "strokeWidth": {"value": 1},
             "stroke": {"value": "transparent"},
@@ -111,7 +105,7 @@ function createXYSpec(xyData, xyTable, width, height)
             "x": { "scale": "x", "field": xyData.x },
             "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
-            "size" : 1,
+            "size": {"value": 100},
             "fill" : {"value" : "darkorange"},
             "strokeWidth": { "value": 1 },
             "stroke": { "value": "black" },
