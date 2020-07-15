@@ -8,6 +8,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuous_col
   var tooltipString = "{'x':datum[x_axis], 'y':datum[y_axis]";
   features["all"].forEach(function(x) 
   {
+    // don't include dummy features in tooltip
     if (x != "-" && x != "- ")
     {
       tooltipString += `,'${x}':datum['${x}']`;

@@ -2,13 +2,7 @@
 // parametrise graph encoding for MDS plot
 function createXYSpec(xyData, xyTable, width, height)
 {
-
-  // generate tooltip object for embedding in spec
-  var tooltipString = "{";
-  xyData.cols.forEach(x => tooltipString += `'${x}':datum['${x}'],`);
-  tooltipString += "}";
-  var tooltip = { "signal" : tooltipString };
-
+  var tooltip = makeVegaTooltip(xyData.cols);
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
