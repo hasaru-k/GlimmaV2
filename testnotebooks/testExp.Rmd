@@ -108,7 +108,7 @@ glimmaMA(lrt, counts=x$counts, groups=group, width=800)
 
 ```{r}
 ## DGEExact ##
-results <- exactTest(x, pair=c("LP","Basal"))
+results <- exactTest(x, pair=c("LP","ML"))
 glimmaMA(results, counts=x$counts, groups=group, width=800)
 ```
 
