@@ -102,7 +102,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         dom: 'Bfrtip',
         buttons: ['csv', 'excel'],
         scrollY:        (height*0.27).toString() + "px",
-        scrollX: true,
+        scrollX: false,
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
@@ -143,10 +143,13 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         xyView.runAsync();
 
         /* expression plot */
-        let index = Number($(this).context.firstChild.innerHTML);
-        let countsRow = countsMatrix[index];
-        let selectEvent = $(this).hasClass('selected');
-        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+        if (expressionView)
+        {
+          let index = Number($(this).context.firstChild.innerHTML);
+          let countsRow = countsMatrix[index];
+          let selectEvent = $(this).hasClass('selected');
+          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+        }
       }
     );
     
@@ -187,9 +190,12 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
         /* expression plot */
-        let selectEvent = loc < 0;
-        let countsRow = countsMatrix[datum.index];
-        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+        if (expressionView)
+        {
+          let selectEvent = loc < 0;
+          let countsRow = countsMatrix[datum.index];
+          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+        }
 
       }
 
@@ -232,6 +238,7 @@ function clearExpressionPlot(expressionView)
 
 function processExpression(countsRow, groups, samples, expressionView)
 {
+  console.log(countsRow);
   let result = [];
   for (col in countsRow) 
   {

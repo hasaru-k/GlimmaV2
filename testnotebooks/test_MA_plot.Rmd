@@ -23,10 +23,10 @@ groups <- data.frame(genotype=rnaseq$samples$group,
                      miscDisc=c("blue","red",rep("green",5)))
 
 # add libsize
-groups <- rnaseq$samples$group
+groups <- cbind(groups, libsize=rnaseq$samples$lib.size)
 
 # fit
-design <- model.matrix(~0+groups)
+design <- model.matrix(~0+rnaseq$samples$group)
 contrasts <- cbind(Smchd1null.vs.WT=c(-1,1))
 
 # convert raw counts to logCPM values by automatically extracting libsizes and normalisation factors from x
@@ -40,12 +40,8 @@ class(fit)
 
 ```{r}
 # general plot
-
-
-counts <- data.frame(rnaseq$counts)
-groups <- data.frame(group=rnaseq$samples$group, sample=colnames(counts))
-glimmaMA(fit,  width=1200, height=1000)
-
+library("tidyverse")
+glimmaMA(fit, counts=rnaseq$counts, groups=groups)
 ```
 
 ```{r}
