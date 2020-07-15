@@ -81,12 +81,12 @@ HTMLWidgets.widget({
 
 
 
-function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widget, x, height)
+function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
   datatableEl.setAttribute("class", "dataTable");
-  widget.appendChild(datatableEl);
+  controlContainer.appendChild(datatableEl);
   var xyColumnsInfo = [];
   x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
   
@@ -98,7 +98,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         data: xyTable,
         columns: xyColumnsInfo,
         rowId: "index",
-        dom: 'Bfrtip',
+        dom: 'Bfr<"geneDisplay">tip',
         buttons: ['csv', 'excel'],
         scrollY:        (height*0.27).toString() + "px",
         scrollX: false,
@@ -119,6 +119,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
           datatable.rows('.selected').nodes().to$().removeClass('selected');
           datatable.search('').columns().search('').draw();                      
           selected = [];
+          selectedUpdateHandler(selected, controlContainer);
           /* clear XY plot */
           xyView.data("selected_points", selected);
           xyView.runAsync();
@@ -140,6 +141,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         for (i = 0; i < selectedRows.length; i++) selected.push(selectedRows[i]);
         xyView.data("selected_points", selected);
         xyView.runAsync();
+        selectedUpdateHandler(selected, controlContainer);
 
         /* expression plot */
         if (expressionView)
@@ -177,6 +179,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, widge
         // highlight selected points
         xyView.data("selected_points", selected);
         xyView.runAsync();
+        selectedUpdateHandler(selected, controlContainer);
 
         // edge case: deselect last point
         if (selected.length == 0) graphMode = false;
@@ -264,4 +267,14 @@ function contains(arr, datum)
     if (arr[i]['index'] === datum['index']) loc = i;
   }
   return loc;
+}
+
+function selectedUpdateHandler(selected, controlContainer)
+{
+  var findGeneDisplay = controlContainer.getElementsByClassName("geneDisplay");
+  if (findGeneDisplay.length == 0) return;
+  var geneDisplay = findGeneDisplay[0];
+  var htmlString = selected.map(x => `<span>${x.index}</span>`).join("");
+  console.log(htmlString);
+  $(geneDisplay).html(htmlString);
 }

@@ -122,7 +122,7 @@ function linkPlotsMDS(mdsView, eigenView)
    own line */
 function reformatElementsMDS(controlContainer)
 {
-  binds = controlContainer.getElementsByClassName("vega-bind");
+  var binds = controlContainer.getElementsByClassName("vega-bind");
   for (var i = 0; i < binds.length; i++)
   {
     // the separator input signal is a dummy invisible signal after x_axis, y_axis

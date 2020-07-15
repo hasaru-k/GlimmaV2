@@ -945,3 +945,22 @@ table.dataTable
 {
   border-spacing: 0px;
 }
+
+.geneDisplay
+{
+  float: left;
+  width: 204px;
+  height: 20px;
+  border: solid 1px #8a8a8a;
+  overflow: hidden;
+}
+
+.geneDisplay span 
+{
+  padding: 4px;
+  font-size: 10px;
+  background-color: #6292ff;
+  border-radius: 5px;
+  margin: 0px 2px;
+  color: white;
+}
