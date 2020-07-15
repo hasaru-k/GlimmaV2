@@ -86,13 +86,13 @@
 	margin-top: 0.333em;
 	margin-right: 0.333em;
 	margin-bottom: 0.333em;
-	padding: 0.5em 1em;
-	font-size: 7.5pt;
+	padding: 0.3em 0.5em;
+	font-size: 8pt;
 	border: 1px solid #999;
 	border-radius: 2px;
 	cursor: pointer;
 	line-height: 1.6em;
-	color: black;
+	color: #252525;
 	white-space: nowrap;
 	overflow: hidden;
 	background-color: #e9e9e9;

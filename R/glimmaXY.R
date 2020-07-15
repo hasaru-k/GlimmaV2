@@ -23,8 +23,8 @@ glimmaMA.MArrayLM <- function(
   xlab=NULL,
   ylab=NULL,
   status.colours=NULL,
-  width = 900, 
-  height = 570)
+  width = 920, 
+  height = 920)
 {
   # create initial table with logCPM and logFC features
   xvals <- unname(x$Amean)
@@ -64,8 +64,8 @@ glimmaMA.DGEExact <- function(
   xlab=NULL,
   ylab=NULL,
   status.colours=NULL,
-  width = 900, 
-  height = 570)
+  width = 920, 
+  height = 920)
 {
 
   # create initial table with logCPM and logFC features
@@ -108,8 +108,8 @@ glimmaMA.DESeqDataSet  <- function(
   xlab=NULL,
   ylab=NULL,
   status.colours=NULL,
-  width = 900, 
-  height = 570)
+  width = 920, 
+  height = 920)
 {
 
   # extract logCPM, logFC from DESeqDataSet
@@ -176,8 +176,8 @@ glimmaXY.default <- function(
   anno=NULL,
   counts=NULL,
   status.colours=NULL,
-  width = 900, 
-  height = 570)
+  width = 920, 
+  height = 920)
 {
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
   table <- data.frame(x, y) 
@@ -203,10 +203,14 @@ buildXYData <- function(
   groups=NULL)
 {
 
-  # give placeholder for counts
+  # process counts and groups
   if (is.null(counts)) {
     counts <- -1
   } else {
+    if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
+    groups <- data.frame(group=groups)
+    groups <- cbind(groups, sample=colnames(counts))
+    # add gene col to counts for ease of display
     counts <- cbind(counts, gene=rownames(counts))
   }
   
@@ -252,8 +256,8 @@ buildXYData <- function(
 #' @import htmlwidgets
 glimmaXYWidget <- function(
   xData,
-  width = 900,
-  height = 570,
+  width = 920,
+  height = 920,
   elementId = NULL,
   ...)
 {
