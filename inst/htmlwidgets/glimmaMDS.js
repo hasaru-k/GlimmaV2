@@ -42,7 +42,7 @@ HTMLWidgets.widget({
                                       x.data.features,
                                       width, height, x.data.continuous_colour);
         
-        mdsView = new vega.View(vega.parse(mdsSpec), {
+        var mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'canvas',
           container: mdsContainer,
           bind: controlContainer,
@@ -59,10 +59,10 @@ HTMLWidgets.widget({
           hover: true
         });
         eigenView.runAsync();
-        linkPlotsMDS();
+        linkPlotsMDS(mdsView, eigenView);
         addBlockElement(controlContainer);
-        addSave(controlContainer, mdsView, text="Save MDS");
-        addSave(controlContainer, eigenView, text="Save VAR");
+        addSave(controlContainer, mdsView, text="Save (MDS)");
+        addSave(controlContainer, eigenView, text="Save (VAR)");
 
         reformatElementsMDS(controlContainer);
 
@@ -100,7 +100,7 @@ function processDataMDS(x)
   x.data.features["discrete"].sort();
 }
 
-function linkPlotsMDS()
+function linkPlotsMDS(mdsView, eigenView)
 {
   
   // highlight variance plot when we change a signal in the MDS plot

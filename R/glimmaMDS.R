@@ -43,7 +43,7 @@ glimmaMDS.default <- function(
   gene.selection = c("pairwise", "common"),
   continuous.colour=FALSE,
   width = 900, 
-  height = 570)
+  height = 500)
 {
 
   # helper function
@@ -160,7 +160,7 @@ glimmaMDS.default <- function(
     height = height,
     package = 'GlimmaV2',
     elementId = NULL,
-    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=750, defaultHeight=750, browser.fill=TRUE, viewer.suppress=TRUE)
+    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   ))
 
 }
@@ -184,7 +184,7 @@ glimmaMDS.DGEList <- function(
   prior.count = 2,
   continuous.colour = FALSE,
   width = 900, 
-  height = 570)
+  height = 500)
 {
 
   # extract sample groups based on DGEList class, if we need to
@@ -208,7 +208,9 @@ glimmaMDS.DGEList <- function(
     labels=labels,
     groups=groups,
     gene.selection=gene.selection,
-    continuous.colour=continuous.colour))
+    continuous.colour=continuous.colour,
+    width=width,
+    height=height))
 
 }
 
@@ -232,7 +234,7 @@ glimmaMDS.DESeqDataSet <- function(
   prior.count = 0.25,
   continuous.colour = FALSE,
   width = 900, 
-  height = 570)
+  height = 500)
 {
 
   # extract sample groups based on DESeqDataSet class, if we need to
@@ -270,6 +272,8 @@ glimmaMDS.DESeqDataSet <- function(
     labels=labels,
     groups=groups,
     gene.selection=gene.selection,
-    continuous.colour=continuous.colour))
+    continuous.colour=continuous.colour,
+    width=width,
+    height=height))
 
 }

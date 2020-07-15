@@ -66,6 +66,6 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = coldata,
                               design = ~ condition)
 
-glimmaMDS(dds, width=900)
+glimmaMDS(dds, width=600, height=400)
 ```
 
