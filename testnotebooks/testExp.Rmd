@@ -38,7 +38,7 @@ class(fit)
 
 ```{r}
 # MArrayLM plot
-counts <- data.frame(rnaseq$counts)
+counts <- rnaseq$counts
 groups <- rnaseq$samples$group
 glimmaMA(fit, counts=counts, groups=groups, width=1000)
 ```
@@ -108,7 +108,7 @@ glimmaMA(lrt, counts=x$counts, groups=group, width=800)
 
 ```{r}
 ## DGEExact ##
-results <- exactTest(x, pair=c("LP","Basal"))
+results <- exactTest(x, pair=c("LP","ML"))
 glimmaMA(results, counts=x$counts, groups=group, width=800)
 ```
 
