@@ -42,6 +42,5 @@ class(fit)
 
 counts <- data.frame(rnaseq$counts)
 groups <- rnaseq$samples$group
-glimmaMA(fit, counts=counts, groups=groups, width=1200)
-
+glimmaMA(fit, counts=counts, groups=groups, width=1000)
 ```

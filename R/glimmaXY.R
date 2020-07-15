@@ -27,8 +27,8 @@ glimmaMA.MArrayLM <- function(
   height = 920)
 {
   # create initial table with logCPM and logFC features
-  xvals <- unname(x$Amean)
-  yvals <- unname(x$coefficients[, coef])
+  xvals <- round(unname(x$Amean), digits=4)
+  yvals <- round(unname(x$coefficients[, coef]), digits=4)
   stopifnot(all(names(x$Amean) == names(x$coefficients[, coef])))
   if (is.null(xlab)) xlab <- "logCPM"
   if (is.null(ylab)) ylab <- "logFC"
@@ -36,8 +36,8 @@ glimmaMA.MArrayLM <- function(
   names(table) <- c(xlab, ylab)
 
   # add pvalue/adjusted pvalue info from fit object to table
-  AdjPValue <- stats::p.adjust(x$p.value[, coef], method=p.adj.method)
-  table <- cbind(table, PValue=x$p.value[, coef], AdjPValue=AdjPValue)
+  AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
+  table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
 
   # add gene info from MArrayLM object to table
   table <- cbind(x$genes, table)
@@ -71,12 +71,13 @@ glimmaMA.DGEExact <- function(
   # create initial table with logCPM and logFC features
   if (is.null(xlab)) xlab <- "logCPM"
   if (is.null(ylab)) ylab <- "logFC"
-  table <- data.frame(x$table$logCPM, x$table$logFC)
+  table <- data.frame(round(x$table$logCPM, digits=4), 
+                      round(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
 
   # add pvalue/adjusted pvalue info to table
-  AdjPValue <- stats::p.adjust(x$table$PValue, method=p.adj.method)
-  table <- cbind(table, PValue=x$table$PValue, AdjPValue=AdjPValue)
+  AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
+  table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
 
   # add gene info from DGEExact object to table, if non-null
   if (!is.null(x$genes)) table <- cbind(x$genes, table)
@@ -124,15 +125,15 @@ glimmaMA.DESeqDataSet  <- function(
   status <- status[!delRows]
 
   # create initial table with logCPM and logFC features
-  xvals <- log(res.df$baseMean + 0.5)
-  yvals <- res.df$log2FoldChange
+  xvals <- round(log(res.df$baseMean + 0.5), digits=4)
+  yvals <- round(res.df$log2FoldChange, digits=4)
   if (is.null(xlab)) xlab <- "logCPM"
   if (is.null(ylab)) ylab <- "logFC"
   table <- data.frame(xvals, yvals)
   names(table) <- c(xlab, ylab)
 
   # add pvalue/adjusted pvalue info from fit object to table
-  table <- cbind(table, PValue=res.df$pvalue, AdjPValue=res.df$padj)
+  table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
 
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours)
@@ -179,6 +180,8 @@ glimmaXY.default <- function(
   width = 920, 
   height = 920)
 {
+  x <- round(x, digits=4)
+  y <- round(y, digits=4)
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
   table <- data.frame(x, y) 
   names(table) <- c(xlab, ylab)
