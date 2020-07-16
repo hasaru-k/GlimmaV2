@@ -59,6 +59,16 @@ function createXYSpec(xyData, xyTable, width, height)
         "range": xyData.status_colours
       }
     ],
+    "legends": [
+      {
+        "fill": "colour_scale",
+        "title": "Status",
+        "symbolStrokeColor": "black",
+        "symbolStrokeWidth": 1,
+        "symbolOpacity": 0.7,
+        "symbolType": "circle"
+      }
+    ],
     "axes" : [
       {
         "scale": "x",
