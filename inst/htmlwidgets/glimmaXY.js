@@ -97,7 +97,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
     var datatable = $(datatableEl).DataTable({
         data: xyTable,
         columns: xyColumnsInfo,
-        rowId: "index",
+        rowId: "gene",
         dom: '<"geneDisplay">Bfrtip',
         buttons: ['csv', 'excel'],
         scrollY:        (height*0.27).toString() + "px",
@@ -188,7 +188,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         if (!datatable) return;
         datatable.search('').columns().search('').draw();
         // filter using a regex string: union over indices in selected
-        var regex_search = selected.map(x => '^' + x["index"] + '$').join('|');
+        var regex_search = selected.map(x => '^' + x.gene + '$').join('|');
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
         /* expression plot */
