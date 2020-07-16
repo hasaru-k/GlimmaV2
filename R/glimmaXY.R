@@ -190,10 +190,10 @@ glimmaXY.default <- function(
   table <- data.frame(x, y) 
   names(table) <- c(xlab, ylab)
   # add rownames to LHS of table if possible
-  if (!is.null(rownames(x))) {
-    table <- cbind(gene=rownames(x), table)
+  if (!is.null(counts)) {
+    table <- cbind(gene=rownames(counts), table)
   } else {
-     if (!is.null(counts)) table <- cbind(gene=rownames(counts), table)
+    table <- cbind(gene=1:length(x), table)
   }
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x/y args.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)

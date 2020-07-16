@@ -33,7 +33,7 @@ fit <- lmFit(vm, design=design)
 fit <- contrasts.fit(fit, contrasts)
 fit <- eBayes(fit)
 dtFit <- decideTests(fit)
-class(fit)
+
 ```
 
 ```{r}
@@ -141,4 +141,14 @@ dds <- DESeq(dds)
 rownames(dds) <- gsub("FBgn", "", rownames(dds))
 glimmaMA(dds)
 ```
+
+
+```{r}
+## XY plot ##
+
+glimmaXY(x=fit$coefficients, y=fit$lod, status=dtFit, counts=counts, groups=groups)
+         
+```
+
+
 
