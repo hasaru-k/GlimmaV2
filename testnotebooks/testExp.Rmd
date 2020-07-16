@@ -40,7 +40,7 @@ class(fit)
 # MArrayLM plot
 counts <- rnaseq$counts
 groups <- rnaseq$samples$group
-glimmaMA(fit, counts=counts, groups=groups, width=1000)
+glimmaMA(fit, counts=counts, groups=groups)
 ```
 
 
@@ -102,14 +102,14 @@ colnames(design) <- gsub("group", "", colnames(design))
 x <- estimateDisp(x, design)
 glmfit <- glmFit(x, design)
 lrt <- glmLRT(glmfit, coef=5)
-glimmaMA(lrt, counts=x$counts, groups=group, width=800)
+glimmaMA(lrt, counts=x$counts, groups=group)
 ```
 
 
 ```{r}
 ## DGEExact ##
 results <- exactTest(x, pair=c("LP","ML"))
-glimmaMA(results, counts=x$counts, groups=group, width=800)
+glimmaMA(results, counts=x$counts, groups=group)
 ```
 
 
@@ -138,8 +138,7 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = coldata,
                               design = ~ condition)
 dds <- DESeq(dds)
-
-glimmaMA(dds, groups=dds$condition)
-
+rownames(dds) <- gsub("FBgn", "", rownames(dds))
+glimmaMA(dds)
 ```
 

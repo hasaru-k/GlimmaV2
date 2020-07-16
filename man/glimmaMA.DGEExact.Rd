@@ -6,17 +6,19 @@
 \usage{
 \method{glimmaMA}{DGEExact}(
   x,
-  status = NULL,
+  status = edgeR::decideTestsDGE(x),
   main = paste(x$comparison[2], "vs", x$comparison[1]),
   p.adj.method = "BH",
   display.columns = NULL,
   anno = NULL,
+  groups = NULL,
   counts = NULL,
   xlab = NULL,
   ylab = NULL,
-  status.colours = c("dodgerblue", "lightslategray", "firebrick"),
-  width = 900,
-  height = 570
+  status.colours = NULL,
+  transform.counts = FALSE,
+  width = 920,
+  height = 920
 )
 }
 \description{

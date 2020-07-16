@@ -846,13 +846,7 @@ div.dts div.dataTables_length {
 th { font-size: 11px; }
 td { font-size: 10px; }
 
-/* search filter */
-label 
-{ 
-  font-size: 9pt;
-  color: #252525;
-  font-family: sans-serif;
-}
+
 
 
 table.dataTable tbody tr.stripe1 {
@@ -887,7 +881,7 @@ a.dt-button {
   position: relative;
   display: inline-block;
   box-sizing: border-box;
-  margin-right: 0.333em;
+  margin-right: 0px;
   margin-bottom: 0.333em;
   padding: 0.3em 0.5em;
   font-size: 8pt;
@@ -944,4 +938,43 @@ table.dataTable tfoot th {
 table.dataTable 
 {
   border-spacing: 0px;
+}
+
+
+/* search filter */
+label 
+{ 
+  font-size: 9pt;
+  color: #4c4c4c;
+  font-family: sans-serif;
+}
+
+/* search input border */
+.dataTables_wrapper .dataTables_filter input {
+  border: solid 1px #d8d8d8;
+  border-radius: 2px;
+  height: 23px;
+}
+
+/* selected genes display  */
+.geneDisplay 
+{
+  width: 100%;
+  margin-bottom: 1.2rem;
+  height: 1.3rem;
+  border-radius: 2px;
+  border: solid 1px #d8d8d8;
+  overflow-x: hidden;
+  padding: 1px;
+}
+
+.geneDisplay span 
+{
+  padding: 2px 6px;
+  font-size: 10px;
+  background-color: #8594ff;
+  border-radius: 8px;
+  margin: 0px 2px;
+  color: white;
+  user-select: none;
 }

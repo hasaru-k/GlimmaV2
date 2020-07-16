@@ -13,10 +13,12 @@
   main = "XY Plot",
   display.columns = NULL,
   anno = NULL,
+  groups = NULL,
   counts = NULL,
-  status.colours = c("dodgerblue", "lightslategray", "firebrick"),
-  width = 900,
-  height = 570
+  status.colours = NULL,
+  transform.counts = FALSE,
+  width = 920,
+  height = 920
 )
 }
 \description{

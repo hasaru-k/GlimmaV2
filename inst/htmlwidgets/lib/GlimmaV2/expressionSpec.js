@@ -5,7 +5,7 @@ function createExpressionSpec(width, height, expColumns)
     let tooltip = makeVegaTooltip(expColumns);
     return {
         "$schema": "https://vega.github.io/schema/vega/v5.json",
-        "width": width*0.45,
+        "width": width*0.40,
         "height": height*0.35,
         "padding": 0,
         "autosize": {"type": "fit", "resize": true},

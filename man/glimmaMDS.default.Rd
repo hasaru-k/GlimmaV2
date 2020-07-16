@@ -12,7 +12,7 @@
   gene.selection = c("pairwise", "common"),
   continuous.colour = FALSE,
   width = 900,
-  height = 570
+  height = 500
 )
 }
 \arguments{

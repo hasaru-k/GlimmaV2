@@ -6,7 +6,7 @@ function createXYSpec(xyData, xyTable, width, height)
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
-    "width": xyData.counts == -1 ? (width*0.9) : (width * 0.45),
+    "width": xyData.counts == -1 ? (width*0.9) : (width * 0.5),
     "height": height * 0.35,
     "padding": 0,
     "autosize": {"type": "fit", "resize": true},
@@ -57,6 +57,16 @@ function createXYSpec(xyData, xyTable, width, height)
         "type": "ordinal",
         "domain": [-1, 0, 1],
         "range": xyData.status_colours
+      }
+    ],
+    "legends": [
+      {
+        "fill": "colour_scale",
+        "title": "Status",
+        "symbolStrokeColor": "black",
+        "symbolStrokeWidth": 1,
+        "symbolOpacity": 0.7,
+        "symbolType": "circle"
       }
     ],
     "axes" : [
