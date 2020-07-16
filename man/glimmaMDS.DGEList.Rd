@@ -13,7 +13,7 @@
   prior.count = 2,
   continuous.colour = FALSE,
   width = 900,
-  height = 570
+  height = 500
 )
 }
 \arguments{

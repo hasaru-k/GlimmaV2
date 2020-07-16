@@ -23,6 +23,7 @@ glimmaMA.MArrayLM <- function(
   xlab=NULL,
   ylab=NULL,
   status.colours=NULL,
+  transform.counts=FALSE,
   width = 920, 
   height = 920)
 {
@@ -48,7 +49,7 @@ glimmaMA.MArrayLM <- function(
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
 
@@ -68,6 +69,7 @@ glimmaMA.DGEExact <- function(
   xlab=NULL,
   ylab=NULL,
   status.colours=NULL,
+  transform.counts=FALSE,
   width = 920, 
   height = 920)
 {
@@ -92,7 +94,7 @@ glimmaMA.DGEExact <- function(
   # error-check status
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
 
@@ -117,6 +119,7 @@ glimmaMA.DESeqDataSet  <- function(
   xlab=NULL,
   ylab=NULL,
   status.colours=NULL,
+  transform.counts=FALSE,
   width = 920, 
   height = 920)
 {
@@ -143,14 +146,14 @@ glimmaMA.DESeqDataSet  <- function(
   if (!is.null(counts) && is.null(groups))
   {
     colData <- SummarizedExperiment::colData(x)
-    groups <- colData[, ncol(colData)]
+    if (ncol(colData) > 0) groups <- colData[, 1]
   }
 
   # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
 
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
 
@@ -177,6 +180,7 @@ glimmaXY.default <- function(
   groups=NULL,
   counts=NULL,
   status.colours=NULL,
+  transform.counts=FALSE,
   width = 920, 
   height = 920)
 {
@@ -192,24 +196,27 @@ glimmaXY.default <- function(
      if (!is.null(counts)) table <- cbind(gene=rownames(counts), table)
   }
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x/y args.")
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
 
-# common processing for both MA and XY plots.
-# expects a table with xlab and ylab columns
-# and a 1D status vector.
+#' Glimma XY Plot
+#'
+#' Common processing steps for both MA and XY plots.
+#' 
+#' @importFrom edgeR cpm
 buildXYData <- function(
   table,
   status,
   main,
-  display.columns = NULL,
-  anno=NULL,
-  counts=NULL,
-  xlab=NULL,
-  ylab=NULL,
-  status.colours=NULL,
-  groups=NULL)
+  display.columns,
+  anno,
+  counts,
+  xlab,
+  ylab,
+  status.colours,
+  groups,
+  transform.counts)
 {
 
   # process counts and groups
@@ -217,6 +224,7 @@ buildXYData <- function(
     counts <- -1
   } else {
     # df format for serialisation
+    if (transform.counts) counts <- edgeR::cpm(counts, log=TRUE)
     counts <- data.frame(counts)
     if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     groups <- data.frame(group=groups)

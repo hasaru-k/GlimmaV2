@@ -102,7 +102,7 @@ colnames(design) <- gsub("group", "", colnames(design))
 x <- estimateDisp(x, design)
 glmfit <- glmFit(x, design)
 lrt <- glmLRT(glmfit, coef=5)
-glimmaMA(lrt, counts=x$counts, groups=group, width=900)
+glimmaMA(lrt, counts=x$counts, groups=group)
 ```
 
 
@@ -139,6 +139,6 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               design = ~ condition)
 dds <- DESeq(dds)
 rownames(dds) <- gsub("FBgn", "", rownames(dds))
-glimmaMA(dds, groups=dds$condition)
+glimmaMA(dds)
 ```
 

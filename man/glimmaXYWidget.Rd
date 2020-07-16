@@ -4,7 +4,7 @@
 \alias{glimmaXYWidget}
 \title{GlimmaXY HTMLWidget Wrapper}
 \usage{
-glimmaXYWidget(xData, width = 900, height = 570, elementId = NULL, ...)
+glimmaXYWidget(xData, width = 920, height = 920, elementId = NULL, ...)
 }
 \description{
 Passes packaged data to JS interface for rendering.

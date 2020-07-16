@@ -10,12 +10,14 @@
   main = "MA Plot",
   display.columns = NULL,
   anno = NULL,
-  counts = NULL,
+  groups = NULL,
+  counts = DESeq2::counts(x),
   xlab = NULL,
   ylab = NULL,
-  status.colours = c("dodgerblue", "lightslategray", "firebrick"),
-  width = 900,
-  height = 570
+  status.colours = NULL,
+  transform.counts = FALSE,
+  width = 920,
+  height = 920
 )
 }
 \description{
