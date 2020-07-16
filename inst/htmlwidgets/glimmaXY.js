@@ -98,7 +98,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         data: xyTable,
         columns: xyColumnsInfo,
         rowId: "index",
-        dom: 'Bfr<"geneDisplay">tip',
+        dom: '<"geneDisplay">Bfrtip',
         buttons: ['csv', 'excel'],
         scrollY:        (height*0.27).toString() + "px",
         scrollX: false,
@@ -126,7 +126,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
           /* clear expression plot */
           clearExpressionPlot(expressionView);
         },
-        text: 'Reset'
+        text: 'Clear'
     });
 
     // map table selections onto the graph (clearing graph selections each time)
@@ -146,14 +146,14 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         /* expression plot */
         if (expressionView)
         {
-          let index = Number($(this).context.firstChild.innerHTML);
-          let countsRow = countsMatrix[index];
+          console.log($(this));
+          let index = datatable.row(this).index();
           let selectEvent = $(this).hasClass('selected');
-          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, xyTable[index]);
         }
       }
     );
-    
+
     // map graph selections onto the table (clearing table selections each time)
     xyView.addSignalListener('click', 
       function(name, value) 
@@ -195,8 +195,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         if (expressionView)
         {
           let selectEvent = loc < 0;
-          let countsRow = countsMatrix[datum.index];
-          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, countsRow);
+          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, datum);
         }
 
       }
@@ -208,20 +207,22 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
 
 }
 
-function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selectedPoints, countsRow)
+function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selectedPoints, xyRow)
 {
   if (!expressionView) return;
   if (selectEvent)
   {
-    processExpression(countsRow, x.data.groups.group, x.data.groups.sample, expressionView);
+    let countsRow = countsMatrix[xyRow.index];
+    processExpression(countsRow, x.data.groups, expressionView, xyRow.gene);
   }
   /* if we deselected the point, check if anything else is selected */
   else
   {
     if (selectedPoints.length > 0)
     {
-      let newIndex = selectedPoints[selectedPoints.length-1].index;
-      processExpression(countsMatrix[newIndex], x.data.groups.group, x.data.groups.sample, expressionView);
+      let last = selectedPoints[selectedPoints.length-1];
+      let countsRow = countsMatrix[last.index];
+      processExpression(countsRow, x.data.groups, expressionView, last.gene);
     }
     else
     {
@@ -238,10 +239,13 @@ function clearExpressionPlot(expressionView)
   expressionView.runAsync();
 }
 
-function processExpression(countsRow, groups, samples, expressionView)
+function processExpression(countsRow, groupsData, expressionView, gene)
 {
-  console.log(countsRow);
+  console.log(groupsData);
+  let groups = groupsData.group;
+  let samples = groupsData.sample;
   let result = [];
+  console.log(countsRow);
   for (col in countsRow) 
   {
     if (!samples.includes(col)) continue;
@@ -254,7 +258,7 @@ function processExpression(countsRow, groups, samples, expressionView)
   }
   console.log(result);
   expressionView.data("table", result);
-  expressionView.signal("title_signal", "Gene " + countsRow.gene);
+  expressionView.signal("title_signal", "Gene " + gene.toString());
   expressionView.runAsync();
 }
 
@@ -264,7 +268,7 @@ function contains(arr, datum)
   let i;
   for (i = 0; i < arr.length; i++)
   {
-    if (arr[i]['index'] === datum['index']) loc = i;
+    if (arr[i]['gene'] === datum['gene']) loc = i;
   }
   return loc;
 }
@@ -274,7 +278,6 @@ function selectedUpdateHandler(selected, controlContainer)
   var findGeneDisplay = controlContainer.getElementsByClassName("geneDisplay");
   if (findGeneDisplay.length == 0) return;
   var geneDisplay = findGeneDisplay[0];
-  var htmlString = selected.map(x => `<span>${x.index}</span>`).join("");
-  console.log(htmlString);
+  var htmlString = selected.map(x => `<span>${x.gene}</span>`).join("");
   $(geneDisplay).html(htmlString);
 }

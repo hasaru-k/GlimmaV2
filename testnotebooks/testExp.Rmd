@@ -102,14 +102,14 @@ colnames(design) <- gsub("group", "", colnames(design))
 x <- estimateDisp(x, design)
 glmfit <- glmFit(x, design)
 lrt <- glmLRT(glmfit, coef=5)
-glimmaMA(lrt, counts=x$counts, groups=group, width=800)
+glimmaMA(lrt, counts=x$counts, groups=group, width=900)
 ```
 
 
 ```{r}
 ## DGEExact ##
 results <- exactTest(x, pair=c("LP","ML"))
-glimmaMA(results, counts=x$counts, groups=group, width=800)
+glimmaMA(results, counts=x$counts, groups=group)
 ```
 
 
@@ -138,8 +138,7 @@ dds <- DESeqDataSetFromMatrix(countData = cts,
                               colData = coldata,
                               design = ~ condition)
 dds <- DESeq(dds)
-
+rownames(dds) <- gsub("FBgn", "", rownames(dds))
 glimmaMA(dds, groups=dds$condition)
-
 ```
 

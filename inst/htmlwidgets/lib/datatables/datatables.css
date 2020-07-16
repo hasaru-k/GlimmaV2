@@ -881,7 +881,7 @@ a.dt-button {
   position: relative;
   display: inline-block;
   box-sizing: border-box;
-  margin-right: 0.333em;
+  margin-right: 0px;
   margin-bottom: 0.333em;
   padding: 0.3em 0.5em;
   font-size: 8pt;
@@ -957,15 +957,15 @@ label
 }
 
 /* selected genes display  */
-.geneDisplay {
-  float: left;
-  width: 490px;
-  height: 20px;
+.geneDisplay 
+{
+  width: 100%;
+  margin-bottom: 1.2rem;
+  height: 1.3rem;
   border-radius: 2px;
   border: solid 1px #d8d8d8;
   overflow-x: hidden;
   padding: 1px;
-  margin-left: 10px;
 }
 
 .geneDisplay span 

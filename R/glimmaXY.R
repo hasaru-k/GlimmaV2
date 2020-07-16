@@ -35,12 +35,15 @@ glimmaMA.MArrayLM <- function(
   table <- data.frame(xvals, yvals)
   names(table) <- c(xlab, ylab)
 
-  # add pvalue/adjusted pvalue info from fit object to table
+  # add pvalue/adjusted pvalue info from fit object to RHS of table
   AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
 
   # add gene info from MArrayLM object to table
   table <- cbind(x$genes, table)
+
+  # add rownames to LHS of table
+  table <- cbind(gene=rownames(x), table)
     
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
@@ -83,7 +86,10 @@ glimmaMA.DGEExact <- function(
   # add gene info from DGEExact object to table, if non-null
   if (!is.null(x$genes)) table <- cbind(x$genes, table)
 
-  # generate, error-check status
+  # add rownames to LHS of table
+  table <- cbind(gene=rownames(x), table)
+
+  # error-check status
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
@@ -118,13 +124,9 @@ glimmaMA.DESeqDataSet  <- function(
   # extract logCPM, logFC from DESeqDataSet
   res <- DESeq2::results(x)
   res.df <- as.data.frame(res)
-  delRows <- naRowInds(res.df, "log2FoldChange", "padj")
-  res.df <- res.df[!delRows, , drop=FALSE]
-  anno <- anno[!delRows, , drop=FALSE]
 
   # extract status if it is not given
   if (is.null(status)) status <- as.numeric(res$padj<0.05)
-  status <- status[!delRows]
 
   # create initial table with logCPM and logFC features
   xvals <- round(log(res.df$baseMean + 0.5), digits=4)
@@ -144,24 +146,12 @@ glimmaMA.DESeqDataSet  <- function(
     groups <- colData[, ncol(colData)]
   }
 
+  # add rownames to LHS of table
+  table <- cbind(gene=rownames(x), table)
+
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
   return(glimmaXYWidget(xData, width, height))
-}
-
-# returns indices of NA rows
-naRowInds <- function(res.df, ...) 
-{
-  res.df <- data.frame(res.df)
-  filterCols <- unlist(list(...))
-
-  delRows <- rep(FALSE, nrow(res.df))
-
-  for (cols in filterCols) 
-  {
-      delRows <- delRows | is.na(res.df[, cols])
-  }
-  return(delRows)
 }
 
 #' Glimma XY Plot
@@ -195,6 +185,12 @@ glimmaXY.default <- function(
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
   table <- data.frame(x, y) 
   names(table) <- c(xlab, ylab)
+  # add rownames to LHS of table if possible
+  if (!is.null(rownames(x))) {
+    table <- cbind(gene=rownames(x), table)
+  } else {
+     if (!is.null(counts)) table <- cbind(gene=rownames(counts), table)
+  }
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x/y args.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups)
   return(glimmaXYWidget(xData, width, height))
@@ -225,16 +221,12 @@ buildXYData <- function(
     if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     groups <- data.frame(group=groups)
     groups <- cbind(groups, sample=colnames(counts))
-    # add gene col to counts for ease of display
-    counts <- cbind(counts, gene=rownames(counts))
   }
+  
   
   # add colour and anno info to table
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno)) table <- cbind(table, anno)
-
-  # add index for linking table and plot (independent of object type) to table
-  table <- data.frame(index=0:(nrow(table)-1), table)
 
   # set display.columns (columns to show in tooltips and in the table)
   if (is.null(display.columns)) 
@@ -242,11 +234,13 @@ buildXYData <- function(
     display.columns <- colnames(table)
   } else
   {
-    # if it's specified, make sure at least x, y and index are shown
+    # if it's specified, make sure at least x, y, gene are displayed in the table and tooltips
     if (!(xlab %in% display.columns)) display.columns <- c(display.columns, xlab)
     if (!(ylab %in% display.columns)) display.columns <- c(display.columns, ylab)
-    if (!("index" %in% display.columns)) display.columns <- c("index", display.columns)
+    if (!("gene" %in% display.columns)) display.columns <- c("gene", display.columns)
   }
+
+  table <- data.frame(index=0:(nrow(table)-1), table)
 
   # error checking on status_colours
   if (is.null(status.colours)) status.colours <- c("dodgerblue", "silver", "firebrick")
