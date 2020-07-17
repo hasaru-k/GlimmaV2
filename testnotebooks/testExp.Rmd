@@ -41,7 +41,6 @@ dtFit <- decideTests(fit)
 counts <- rnaseq$counts
 groups <- rnaseq$samples$group
 glimmaMA(fit, counts=counts, groups=groups)
-
 ```
 
 

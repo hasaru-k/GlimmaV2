@@ -84,6 +84,7 @@ function saveSubsetClick(selected, xyTable, countsMatrix)
   {
     if (confirm(`This will save the table and counts data for all ${xyTable.length} genes.`)) 
     {
+      /* only include counts if it is provided */
       let data = countsMatrix==null ? 
         xyTable : xyTable.map( x => $.extend(x, countsMatrix[x.index]) );
       saveJSONArrayToCSV(data);
@@ -118,5 +119,3 @@ function JSONArrayToCSV(array)
    csv = csv.join('\r\n');
   return csv;
 }
-
-

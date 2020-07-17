@@ -150,7 +150,6 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         let index = datatable.row(this).index();
         let selectEvent = $(this).hasClass('selected');
         expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, xyTable[index]);
-  
       }
     );
 
@@ -187,20 +186,18 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         // update table filter based on selected
         if (!datatable) return;
         datatable.search('').columns().search('').draw();
-        // filter using a regex string: union over indices in selected
+        // filter using a regex string: union over genes in selected
         var regex_search = selected.map(x => '^' + x.gene + '$').join('|');
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
         /* expression plot */
         let selectEvent = loc < 0;
         expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, datum);
-
       }
 
     );
     
   });
-
 
 }
 
@@ -242,7 +239,6 @@ function processExpression(countsRow, groupsData, expressionView, gene)
   let groups = groupsData.group;
   let samples = groupsData.sample;
   let result = [];
-  console.log(countsRow);
   for (col in countsRow) 
   {
     if (!samples.includes(col)) continue;
@@ -274,24 +270,12 @@ function contains(arr, datum)
 function selectedUpdateHandler(selected, controlContainer)
 {
   /* update gene display */
-  var findGeneDisplay = controlContainer.getElementsByClassName("geneDisplay");
-  if (findGeneDisplay.length == 0)
-  {
-    alert("geneDisplay element not found.")
-    return;
-  }
-  var geneDisplay = findGeneDisplay[0];
-  var htmlString = selected.map(x => `<span>${x.gene}</span>`).join("");
+  var geneDisplay = controlContainer.getElementsByClassName("geneDisplay")[0];
+  let htmlString = selected.map(x => `<span>${x.gene}</span>`).join("");
   $(geneDisplay).html(htmlString);
 
   /* update save btn */
-  var findSaveSubset = controlContainer.getElementsByClassName("saveSubset");
-  if (findSaveSubset.length == 0)
-  {
-    alert("geneDisplay element not found.")
-    return;
-  } 
-  var saveSubsetButton = findSaveSubset[0];
+  var saveSubsetButton = controlContainer.getElementsByClassName("saveSubset")[0];
   let saveString = selected.length > 0 ? `Save (${selected.length})` : "Save (All)";
   $(saveSubsetButton).html(saveString);
 }

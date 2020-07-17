@@ -87,11 +87,11 @@ button.save-button {
     margin-bottom: 0.333em;
     padding: 0.3em 0.5em;
     font-size: 9pt;
-    border: 1px solid #5c5f62;
+    border: 1px solid #888888;
     border-radius: 2px;
     cursor: pointer;
     line-height: 1.6em;
-    color: #494949;
+    color: #4c4c4c;
     white-space: nowrap;
     overflow: hidden;
     background-color: #ffffff;
@@ -107,9 +107,9 @@ button.save-button {
 }
 button.save-button:hover 
 {
-    background-color: #5c5f62;
+    background-color: #888888;
     color: white;
-    border-color: #5c5f62;
+    border-color: #888888;
 }
 button.save-button:active {
     color: rgba(255, 255, 255, 1);
