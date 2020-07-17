@@ -77,3 +77,47 @@ function addSave(controlContainer, view_obj, text="Save Plot")
     window.dropdownHide = true;
   }
 }
+
+function saveSubsetClick(selected, xyTable, countsMatrix)
+{
+  if (selected.length == 0)
+  {
+    if (confirm(`This will save the table and counts data for all ${xyTable.length} genes. 
+                  Are you sure you want to proceed?`)) 
+    {
+      let data = countsMatrix==null ? 
+        xyTable : xyTable.map( x => $.extend(x, countsMatrix[x.index]) );
+      saveJSONArrayToCSV(data);
+    }
+  }
+  else
+  {
+    let concatData = countsMatrix==null ?
+      selected : selected.map( x => $.extend(x, countsMatrix[x.index]) );
+    saveJSONArrayToCSV(concatData);
+  }
+}
+
+function saveJSONArrayToCSV(jsonArray)
+{
+  let csvData = JSONArrayToCSV(jsonArray);
+  var blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
+  saveAs(blob, "glimmaTable.csv");
+}
+
+/* credit: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable */
+function JSONArrayToCSV(array)
+{
+  var fields = Object.keys(array[0])
+  var replacer = function(key, value) { return value === null ? '' : value } 
+  var csv = array.map(function(row){
+    return fields.map(function(fieldName){
+      return JSON.stringify(row[fieldName], replacer)
+    }).join(',')
+  })
+  csv.unshift(fields.join(',')) // add header column
+   csv = csv.join('\r\n');
+  return csv;
+}
+
+
