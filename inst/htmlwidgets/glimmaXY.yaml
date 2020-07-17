@@ -20,6 +20,11 @@ dependencies:
       - datatables.min.js
     stylesheet:
       - datatables.css
+  - name: FileSaver
+    version: 1.0
+    src: htmlwidgets/lib/FileSaver
+    script:
+      - FileSaver.js
   - name: GlimmaV2
     version: 1.0
     src: htmlwidgets/lib/GlimmaV2
@@ -27,4 +32,4 @@ dependencies:
       - XYSpecs.js
       - expressionSpec.js
       - makeTooltip.js
-      - saveVega.js
+      - saveTools.js

@@ -288,7 +288,7 @@ glimmaXYWidget <- function(
     height = height,
     package = 'GlimmaV2',
     elementId = elementId,
-    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=750, defaultHeight=750, browser.fill=TRUE, viewer.suppress=TRUE)
+    sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
 
 }

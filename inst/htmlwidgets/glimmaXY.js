@@ -67,7 +67,7 @@ HTMLWidgets.widget({
         // add XY plot save button
         addSave(controlContainer, xyView, text="Save (XY)");
         if (expressionView) addSave(controlContainer, expressionView, text="Save (EXP)");
-        
+
       },
 
       resize: function(width, height) 
@@ -90,7 +90,9 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
   var xyColumnsInfo = [];
   x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
   
+  var selected = [];
   var graphMode = false;
+
   $(document).ready(function() 
   {
 
@@ -99,14 +101,14 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         columns: xyColumnsInfo,
         rowId: "gene",
         dom: '<"geneDisplay">Bfrtip',
-        buttons: ['csv', 'excel'],
+        buttons: [ { action: () => saveSubsetClick(selected, xyTable, countsMatrix),
+                    text: 'Save (All)',
+                    attr: {class: 'save-button saveSubset'}} ],
         scrollY:        (height*0.27).toString() + "px",
         scrollX: false,
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']
     });
-
-    var selected = [];
 
     // reset graph and table selections
     datatable.button().add(0, 
@@ -126,8 +128,9 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
           /* clear expression plot */
           clearExpressionPlot(expressionView);
         },
-        text: 'Clear'
-    });
+        text: 'Clear',
+        attr: {class: 'save-button'}
+      });
 
     // map table selections onto the graph (clearing graph selections each time)
     datatable.on( 'click', 'tr', function () 
@@ -144,13 +147,9 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         selectedUpdateHandler(selected, controlContainer);
 
         /* expression plot */
-        if (expressionView)
-        {
-          console.log($(this));
-          let index = datatable.row(this).index();
-          let selectEvent = $(this).hasClass('selected');
-          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, xyTable[index]);
-        }
+        let index = datatable.row(this).index();
+        let selectEvent = $(this).hasClass('selected');
+        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, xyTable[index]);
       }
     );
 
@@ -187,23 +186,18 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         // update table filter based on selected
         if (!datatable) return;
         datatable.search('').columns().search('').draw();
-        // filter using a regex string: union over indices in selected
+        // filter using a regex string: union over genes in selected
         var regex_search = selected.map(x => '^' + x.gene + '$').join('|');
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
         /* expression plot */
-        if (expressionView)
-        {
-          let selectEvent = loc < 0;
-          expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, datum);
-        }
-
+        let selectEvent = loc < 0;
+        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, datum);
       }
 
     );
     
   });
-
 
 }
 
@@ -245,7 +239,6 @@ function processExpression(countsRow, groupsData, expressionView, gene)
   let groups = groupsData.group;
   let samples = groupsData.sample;
   let result = [];
-  console.log(countsRow);
   for (col in countsRow) 
   {
     if (!samples.includes(col)) continue;
@@ -273,11 +266,16 @@ function contains(arr, datum)
   return loc;
 }
 
+
 function selectedUpdateHandler(selected, controlContainer)
 {
-  var findGeneDisplay = controlContainer.getElementsByClassName("geneDisplay");
-  if (findGeneDisplay.length == 0) return;
-  var geneDisplay = findGeneDisplay[0];
-  var htmlString = selected.map(x => `<span>${x.gene}</span>`).join("");
+  /* update gene display */
+  var geneDisplay = controlContainer.getElementsByClassName("geneDisplay")[0];
+  let htmlString = selected.map(x => `<span>${x.gene}</span>`).join("");
   $(geneDisplay).html(htmlString);
+
+  /* update save btn */
+  var saveSubsetButton = controlContainer.getElementsByClassName("saveSubset")[0];
+  let saveString = selected.length > 0 ? `Save (${selected.length})` : "Save (All)";
+  $(saveSubsetButton).html(saveString);
 }
