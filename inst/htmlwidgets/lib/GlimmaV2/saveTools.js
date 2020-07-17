@@ -82,8 +82,7 @@ function saveSubsetClick(selected, xyTable, countsMatrix)
 {
   if (selected.length == 0)
   {
-    if (confirm(`This will save the table and counts data for all ${xyTable.length} genes. 
-                  Are you sure you want to proceed?`)) 
+    if (confirm(`This will save the table and counts data for all ${xyTable.length} genes.`)) 
     {
       let data = countsMatrix==null ? 
         xyTable : xyTable.map( x => $.extend(x, countsMatrix[x.index]) );
