@@ -9,23 +9,7 @@ lymphomaRNAseq$samples$group <- gsub(
 lymphomaRNAseq <- calcNormFactors(lymphomaRNAseq)
 
 des <- model.matrix(~lymphomaRNAseq$samples$group)
-fit <- estimateDisp(lymphomaRNAseq, design=design)
+fit <- estimateDisp(lymphomaRNAseq, design=des)
 et <- exactTest(fit, pair=c("WT", "Mut"))
 
-temp_dir <- tempdir()
-
-with(
-  lymphomaRNAseq,
-  glMDPlot(
-    et,
-    counts = counts,
-    anno = genes,
-    groups = samples$group,
-    samples = samples$sampleID,
-    display.columns = c("Symbols", "GeneID"),
-    status = decideTestsDGE(et),
-    path = temp_dir
-  )
-)
-
-glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1000)
+glimmaMA(et, counts=lymphomaRNAseq$counts, groups=lymphomaRNAseq$samples$group, width=1200, height=1000)
