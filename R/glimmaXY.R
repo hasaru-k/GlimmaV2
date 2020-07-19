@@ -77,7 +77,7 @@ glimmaMA.DGEExact <- function(
   # create initial table with logCPM and logFC features
   if (is.null(xlab)) xlab <- "logCPM"
   if (is.null(ylab)) ylab <- "logFC"
-  table <- data.frame(round(x$table$logCPM, digits=4), 
+  table <- data.frame(round(x$table$logCPM, digits=4),
                       round(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
 
@@ -129,7 +129,15 @@ glimmaMA.DESeqDataSet  <- function(
   res.df <- as.data.frame(res)
 
   # extract status if it is not given
-  if (is.null(status)) status <- as.numeric(res$padj<0.05)
+  if (is.null(status))
+  {
+    status <- ifelse(
+      res$padj < 0.05,
+      ifelse(res$log2FoldChange < 0, -1, 1),
+      0
+    )
+  }
+  status <- status[!delRows]
 
   # create initial table with logCPM and logFC features
   xvals <- round(log(res.df$baseMean + 0.5), digits=4)
@@ -146,7 +154,13 @@ glimmaMA.DESeqDataSet  <- function(
   if (!is.null(counts) && is.null(groups))
   {
     colData <- SummarizedExperiment::colData(x)
-    if (ncol(colData) > 0) groups <- colData[, 1]
+    if ("group" %in% colnames(colData))
+    {
+      groups <- colData[, "group"]
+    } else
+    {
+      groups <- 1
+    }
   }
 
   # add rownames to LHS of table
@@ -170,9 +184,9 @@ glimmaXY <- function(x, ...)
 #' @export
 glimmaXY.default <- function(
   x,
-  y, 
+  y,
   xlab="x",
-  ylab="y", 
+  ylab="y",
   status=rep(0, length(x)),
   main="XY Plot",
   display.columns = NULL,
@@ -187,7 +201,7 @@ glimmaXY.default <- function(
   x <- round(x, digits=4)
   y <- round(y, digits=4)
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
-  table <- data.frame(x, y) 
+  table <- data.frame(x, y)
   names(table) <- c(xlab, ylab)
   # add rownames to LHS of table if possible
   if (!is.null(counts)) {
@@ -230,14 +244,14 @@ buildXYData <- function(
     groups <- data.frame(group=groups)
     groups <- cbind(groups, sample=colnames(counts))
   }
-  
-  
+
+
   # add colour and anno info to table
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno)) table <- cbind(table, anno)
 
   # set display.columns (columns to show in tooltips and in the table)
-  if (is.null(display.columns)) 
+  if (is.null(display.columns))
   {
     display.columns <- colnames(table)
   } else
@@ -252,9 +266,9 @@ buildXYData <- function(
 
   # error checking on status_colours
   if (is.null(status.colours)) status.colours <- c("dodgerblue", "silver", "firebrick")
-  if (length(status.colours) != 3) stop("status_colours 
+  if (length(status.colours) != 3) stop("status_colours
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
-  
+
   xData <- list(data=list(x=xlab,
                           y=ylab,
                           table=table,
