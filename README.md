@@ -30,9 +30,8 @@ glimmaMA(fit, counts=counts, groups=groups, status.colours=c("#3977db","#3d3f42"
 ```R
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
-### MDS Plot Visualisation
-
-The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown takes *discrete features by default* (and thus provides a range of discrete colourschemes), but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
+### MDS Options
+The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown takes *discrete features by default* but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
 ```R
 glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)
 ```
