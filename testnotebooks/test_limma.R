@@ -1,5 +1,7 @@
 library(Glimma)
+library(GlimmaV2)
 library(limma)
+library(edgeR)
 
 data(lymphomaRNAseq)
 lymphomaRNAseq$samples$group <- gsub(
@@ -13,22 +15,6 @@ v <- voomWithQualityWeights(lymphomaRNAseq, design = des, plot = FALSE)
 fit <- lmFit(v, des)
 fit <- eBayes(fit)
 
-temp_dir <- temp_dir()
+glimmaMA(fit, counts=lymphomaRNAseq$counts, groups=lymphomaRNAseq$samples$group, width=1200, height=1000)
 
-with(
-  lymphomaRNAseq,
-  glMDPlot(
-    fit,
-    counts = counts,
-    anno = genes,
-    groups = samples$group,
-    samples = samples$sample,
-    status = decideTests(fit)[, 2],
-    sample.cols = as.numeric(samples$group),
-    path = temp_dir
-  )
-)
-
-with(lymphomaRNAseq,
-glimmaMA(fit, counts=counts, groups=samples$group, width=1200, height=1000)
-)
+glimmaMA(fit, dge=lymphomaRNAseq, width=1200, height=1000)

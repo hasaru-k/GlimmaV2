@@ -1,4 +1,5 @@
 library(Glimma)
+library(GlimmaV2)
 library(edgeR)
 
 data(lymphomaRNAseq)
@@ -13,3 +14,4 @@ fit <- estimateDisp(lymphomaRNAseq, design=des)
 et <- exactTest(fit, pair=c("WT", "Mut"))
 
 glimmaMA(et, counts=lymphomaRNAseq$counts, groups=lymphomaRNAseq$samples$group, width=1200, height=1000)
+glimmaMA(et, dge=lymphomaRNAseq, width=1200, height=1000)
