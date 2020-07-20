@@ -104,7 +104,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
         buttons: [ { action: () => saveSubsetClick(selected, xyTable, countsMatrix),
                     text: 'Save (All)',
                     attr: {class: 'save-button saveSubset'}} ],
-        scrollY:        (height*0.27).toString() + "px",
+        scrollY:        (height*0.4).toString() + "px",
         scrollX: false,
         orderClasses: false,
         'stripeClasses':['stripe1','stripe2']

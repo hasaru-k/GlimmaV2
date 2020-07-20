@@ -274,8 +274,8 @@ buildXYData <- function(
 #' @import htmlwidgets
 glimmaXYWidget <- function(
   xData,
-  width = 920,
-  height = 920,
+  width,
+  height,
   elementId = NULL,
   ...)
 {
