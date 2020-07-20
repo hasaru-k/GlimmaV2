@@ -192,6 +192,10 @@ glimmaXY.default <- function(
   # add rownames to LHS of table if possible
   if (!is.null(counts)) {
     table <- cbind(gene=rownames(counts), table)
+  } else if (!is.null(rownames(x))) {
+    table <- cbind(gene=rownames(x), table)
+  } else if (!is.null(rownames(y))) {
+    table <- cbind(gene=rownames(y), table)
   } else {
     table <- cbind(gene=1:length(x), table)
   }

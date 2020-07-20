@@ -39,7 +39,9 @@ dtFit <- decideTests(fit)
 
 ```{r}
 # baseline
-glimmaXY(x=fit$coef, y=fit$lod, status=dtFit)
+counts = rnaseq$counts
+groups = rnaseq$samples$group
+glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
 
 

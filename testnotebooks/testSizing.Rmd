@@ -44,7 +44,7 @@ dtFit <- decideTests(fit)
 # MArrayLM plot
 counts <- rnaseq$counts
 groups <- rnaseq$samples$group
-glimmaMA(fit, counts=counts, groups=groups)
+glimmaMA(fit, counts=counts, groups=groups, status.colours=c("","#3d3f42","rgb(219,13,78)"))
 ```
 
 ```{r}
