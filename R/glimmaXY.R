@@ -12,6 +12,7 @@ glimmaMA <- function(x, ...)
 #' @export
 glimmaMA.MArrayLM <- function(
   x,
+  dge = NULL,
   status=limma::decideTests(x),
   coef=ncol(x$coefficients),
   main=colnames(x)[coef],
@@ -24,7 +25,7 @@ glimmaMA.MArrayLM <- function(
   ylab=NULL,
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
   # create initial table with logCPM and logFC features
@@ -36,6 +37,20 @@ glimmaMA.MArrayLM <- function(
   table <- data.frame(xvals, yvals)
   names(table) <- c(xlab, ylab)
 
+  # get data from dge object if not given
+  if (!is.null(dge))
+  {
+    if (is.null(counts))
+    {
+      counts <- dge$counts
+    }
+
+    if (is.null(groups))
+    {
+      groups <- dge$samples$group
+    }
+  }
+
   # add pvalue/adjusted pvalue info from fit object to RHS of table
   AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
@@ -45,7 +60,7 @@ glimmaMA.MArrayLM <- function(
 
   # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
-    
+
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
@@ -59,6 +74,7 @@ glimmaMA.MArrayLM <- function(
 #' @export
 glimmaMA.DGEExact <- function(
   x,
+  dge=NULL,
   status=edgeR::decideTestsDGE(x),
   main=paste(x$comparison[2],"vs",x$comparison[1]),
   p.adj.method = "BH",
@@ -70,7 +86,7 @@ glimmaMA.DGEExact <- function(
   ylab=NULL,
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
 
@@ -80,6 +96,20 @@ glimmaMA.DGEExact <- function(
   table <- data.frame(round(x$table$logCPM, digits=4),
                       round(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
+
+  # get data from dge object if not given
+  if (!is.null(dge))
+  {
+    if (is.null(counts))
+    {
+      counts <- dge$counts
+    }
+
+    if (is.null(groups))
+    {
+      groups <- dge$samples$group
+    }
+  }
 
   # add pvalue/adjusted pvalue info to table
   AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
@@ -93,7 +123,7 @@ glimmaMA.DGEExact <- function(
 
   # error-check status
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  
+
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -120,7 +150,7 @@ glimmaMA.DESeqDataSet  <- function(
   ylab=NULL,
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
 
@@ -195,7 +225,7 @@ glimmaXY.default <- function(
   counts=NULL,
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
   x <- round(x, digits=4)
@@ -217,7 +247,7 @@ glimmaXY.default <- function(
 #' Glimma XY Plot
 #'
 #' Common processing steps for both MA and XY plots.
-#' 
+#'
 #' @importFrom edgeR cpm
 buildXYData <- function(
   table,
