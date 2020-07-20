@@ -35,4 +35,4 @@ The width and height parameters can be adjusted to change the dimensions of the 
 ```
 glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1200)
 ```
-glimmaMA, glimmaXY, and glimmaMDS each take the additional width/height arguments. The default width and height are both 920px; width and height should be scaled in a 1:1 ratio if preserving the original scale is desired.
+All GlimmaV2 functions take optional width/height arguments. The default width and height are both 920px, so they should be modified in a 1:1 ratio if preserving the original scale is desired.
