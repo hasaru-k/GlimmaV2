@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/hasacat/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasacat/GlimmaV2)
+[![Build Status](https://travis-ci.org/hasaru-k/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasacat/GlimmaV2)
 # GlimmaV2
 GlimmaV2 is an interactive R widget for creating plots for differential expression analysis, created using the [Vega](https://vega.github.io/vega/) and [htmlwidgets](https://www.htmlwidgets.org/) frameworks. New features include:
 - multiple gene selections
@@ -30,9 +30,16 @@ glimmaMA(fit, counts=counts, groups=groups, status.colours=c("#3977db","#3d3f42"
 ```R
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
+### MDS Options
+The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown takes *discrete features by default* but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
+```R
+glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)
+```
+The test used to distinguish numeric vs discrete features in the groups dataframe is ```sapply(groups, is.numeric)```, so the appropriate coercions can be used toggle ambiguous features between numeric/discrete.
+
 ### Sizing
 The width and height parameters can be adjusted to change the dimensions of the widget in pixels in the RStudio viewer and in knitted HTML:
-```
+```R
 glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1200)
 ```
 All GlimmaV2 functions take optional width/height arguments. The default width and height are both 920px, so they should be modified in a 1:1 ratio if preserving the original scale is desired.
