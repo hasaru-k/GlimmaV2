@@ -37,6 +37,15 @@ glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)
 ```
 The test used to distinguish numeric vs discrete features in the groups dataframe is ```sapply(groups, is.numeric)```, so the appropriate coercions can be used toggle ambiguous features between numeric/discrete.
 
+### Exporting Standalone HTML
+
+The htmlwidgets::saveWidget() function can be used to generate a single encapsulated GlimmaV2 html file which can be sent to others easily.
+```R
+glMA <- glimmaMA(fit, counts=counts, groups=groups)
+htmlwidgets::saveWidget(glMA, file="glimmaV2Example.html")
+```
+More information on saveWidget function arguments can be found [here](https://rdrr.io/cran/htmlwidgets/man/saveWidget.html).
+
 ### Sizing
 The width and height parameters can be adjusted to change the dimensions of the widget in pixels in the RStudio viewer and in knitted HTML:
 ```R
