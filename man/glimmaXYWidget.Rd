@@ -4,7 +4,16 @@
 \alias{glimmaXYWidget}
 \title{GlimmaXY HTMLWidget Wrapper}
 \usage{
-glimmaXYWidget(xData, width = 920, height = 920, elementId = NULL, ...)
+glimmaXYWidget(xData, width, height, elementId = NULL)
+}
+\arguments{
+\item{xData}{packaged data object returned from buildXYData()}
+
+\item{width}{htmlwidget element width in pixels}
+
+\item{height}{htmlwidget element height in pixels}
+
+\item{elementId}{ID attribute for htmlwidget}
 }
 \description{
 Passes packaged data to JS interface for rendering.

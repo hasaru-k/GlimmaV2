@@ -1,4 +1,38 @@
+MA_details <- function() {
+  c(
+    "@details",
+    "The left plot shows the log-fold-change vs average expression.",
+    "The right plot shows the expression levels of a particular gene of each sample.",
+    "Clicking on genes in the plot brings up the corresponding genes in the table.",
+    "Selecting rows in the table will highlight the corresponding genes in the MA plot.",
+    "Expression values for a gene can be found by hovering over a sample in the RHS plot.",
+    "@return htmlwidget object."
+  )
+}
+
+XY_details <- function() {
+  c(
+    "@details",
+    "The left plot shows the x and y values specified.",
+    "The right plot shows the expression levels of a particular gene of each sample.",
+    "Clicking on genes in the plot brings up the corresponding genes in the table.",
+    "Selecting rows in the table will highlight the corresponding genes in the XY plot.",
+    "Expression values for a gene can be found by hovering over a sample in the RHS plot.",
+    "@return htmlwidget object."
+  )
+}
+
 #' Glimma MA Plot
+#'
+#' 
+#' Draws a two-panel interactive MA plot.
+#'
+#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+#'
+#' @param x the DE object to plot.
+#' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
+#'
+#' @eval MA_details()
 #'
 #' @export
 glimmaMA <- function(x, ...)
@@ -7,6 +41,26 @@ glimmaMA <- function(x, ...)
 }
 
 #' Glimma MA Plot
+#'
+#' Draws a two-panel interactive MA plot from an MArrayLM object.
+#'
+#' @param x the MArrayLM object to plot.
+#' @param status vector giving the control status of each row in the object.
+#' @param coef integer or logical indexing vector indicating which column of object to plot.
+#' @param main Left plot title.
+#' @param p.adj.method character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")
+#' @param display.columns character vector containing names of columns to display in mouseover tooltips and table.
+#' @param anno a dataframe containing gene annotations
+#' @param groups vector/factor representing the experimental group for each sample.
+#' @param counts the matrix of expression values, with samples in columns.
+#' @param xlab x axis label.
+#' @param ylab y axis label.
+#' @param status.colours vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.
+#' @param transform.counts TRUE if counts should be log-cpm transformed, defaults to FALSE.
+#' @param width width of the weidget in pixels.
+#' @param height height of the widget in pixels.
+#'
+#' @eval MA_details()
 #'
 #' @importFrom limma decideTests
 #' @export
@@ -17,11 +71,11 @@ glimmaMA.MArrayLM <- function(
   main=colnames(x)[coef],
   p.adj.method = "BH",
   display.columns = NULL,
-  anno=NULL,
+  anno=x$genes,
   groups=NULL,
   counts=NULL,
-  xlab=NULL,
-  ylab=NULL,
+  xlab="logCPM",
+  ylab="logFC",
   status.colours=NULL,
   transform.counts=FALSE,
   width = 920, 
@@ -31,17 +85,12 @@ glimmaMA.MArrayLM <- function(
   xvals <- round(unname(x$Amean), digits=4)
   yvals <- round(unname(x$coefficients[, coef]), digits=4)
   stopifnot(all(names(x$Amean) == names(x$coefficients[, coef])))
-  if (is.null(xlab)) xlab <- "logCPM"
-  if (is.null(ylab)) ylab <- "logFC"
   table <- data.frame(xvals, yvals)
   names(table) <- c(xlab, ylab)
 
   # add pvalue/adjusted pvalue info from fit object to RHS of table
   AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
-
-  # add gene info from MArrayLM object to table
-  table <- cbind(x$genes, table)
 
   # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
@@ -55,7 +104,14 @@ glimmaMA.MArrayLM <- function(
 
 #' Glimma MA Plot
 #'
+#' Draws a two-panel interactive MA plot from an DGEExact object.
+#'
+#' @inheritParams glimmaMA.MArrayLM
+#'
+#' @eval MA_details()
+#'
 #' @importFrom edgeR decideTestsDGE
+#' @importFrom stats p.adjust
 #' @export
 glimmaMA.DGEExact <- function(
   x,
@@ -66,8 +122,8 @@ glimmaMA.DGEExact <- function(
   anno=NULL,
   groups=NULL,
   counts=NULL,
-  xlab=NULL,
-  ylab=NULL,
+  xlab="logCPM",
+  ylab="logFC",
   status.colours=NULL,
   transform.counts=FALSE,
   width = 920, 
@@ -75,8 +131,6 @@ glimmaMA.DGEExact <- function(
 {
 
   # create initial table with logCPM and logFC features
-  if (is.null(xlab)) xlab <- "logCPM"
-  if (is.null(ylab)) ylab <- "logFC"
   table <- data.frame(round(x$table$logCPM, digits=4), 
                       round(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
@@ -100,11 +154,26 @@ glimmaMA.DGEExact <- function(
 
 #' Glimma MA Plot
 #'
+#' Draws a two-panel interactive MA plot from an DGELRT object.
+#'
+#' @inheritParams glimmaMA.MArrayLM
+#'
+#' @eval MA_details()
+#'
 #' @importFrom edgeR decideTestsDGE
+#' @importFrom stats p.adjust
 #' @export
 glimmaMA.DGELRT <- glimmaMA.DGEExact
 
 #' Glimma MA Plot
+#'
+#' Draws a two-panel interactive MA plot from an DESeqDataSet object.
+#'
+#' @inheritParams glimmaMA.MArrayLM
+#' @param groups vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).
+#'
+#' @eval MA_details()
+#'
 #' @importFrom DESeq2 results counts
 #' @importFrom SummarizedExperiment colData
 #' @export
@@ -116,8 +185,8 @@ glimmaMA.DESeqDataSet  <- function(
   anno=NULL,
   groups=NULL,
   counts=DESeq2::counts(x),
-  xlab=NULL,
-  ylab=NULL,
+  xlab="logCPM",
+  ylab="logFC",
   status.colours=NULL,
   transform.counts=FALSE,
   width = 920, 
@@ -134,8 +203,6 @@ glimmaMA.DESeqDataSet  <- function(
   # create initial table with logCPM and logFC features
   xvals <- round(log(res.df$baseMean + 0.5), digits=4)
   yvals <- round(res.df$log2FoldChange, digits=4)
-  if (is.null(xlab)) xlab <- "logCPM"
-  if (is.null(ylab)) ylab <- "logFC"
   table <- data.frame(xvals, yvals)
   names(table) <- c(xlab, ylab)
 
@@ -159,6 +226,12 @@ glimmaMA.DESeqDataSet  <- function(
 
 #' Glimma XY Plot
 #'
+#' Draws a two-panel interactive XY scatter plot.
+#'
+#' @inheritParams glimmaMA
+#'
+#' @eval XY_details()
+#'
 #' @export
 glimmaXY <- function(x, ...)
 {
@@ -166,6 +239,14 @@ glimmaXY <- function(x, ...)
 }
 
 #' Glimma XY Plot
+#'
+#' Draws a two-panel interactive XY scatter plot.
+#'
+#' @inheritParams glimmaMA.MArrayLM
+#' @param x numeric vector of values to plot on the x-axis of the summary plot.
+#' @param y numeric vector of values to plot on the y-axis of the summary plot.
+#'
+#' @eval XY_details()
 #'
 #' @export
 glimmaXY.default <- function(
@@ -208,6 +289,8 @@ glimmaXY.default <- function(
 #'
 #' Common processing steps for both MA and XY plots.
 #' 
+#' @inheritParams glimmaMA.MArrayLM
+#' @param table dataframe containing xlab and ylab columns for plotting.
 #' @importFrom edgeR cpm
 buildXYData <- function(
   table,
@@ -241,11 +324,9 @@ buildXYData <- function(
   if (!is.null(anno)) table <- cbind(table, anno)
 
   # set display.columns (columns to show in tooltips and in the table)
-  if (is.null(display.columns)) 
-  {
+  if (is.null(display.columns)) {
     display.columns <- colnames(table)
-  } else
-  {
+  } else {
     # if it's specified, make sure at least x, y, gene are displayed in the table and tooltips
     if (!(xlab %in% display.columns)) display.columns <- c(display.columns, xlab)
     if (!(ylab %in% display.columns)) display.columns <- c(display.columns, ylab)
@@ -275,13 +356,16 @@ buildXYData <- function(
 #'
 #' Passes packaged data to JS interface for rendering.
 #'
+#' @param xData packaged data object returned from buildXYData()
+#' @param width htmlwidget element width in pixels
+#' @param height htmlwidget element height in pixels
+#' @param elementId ID attribute for htmlwidget
 #' @import htmlwidgets
 glimmaXYWidget <- function(
   xData,
   width,
   height,
-  elementId = NULL,
-  ...)
+  elementId = NULL)
 {
 
   # create widget
@@ -295,32 +379,4 @@ glimmaXYWidget <- function(
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
 
-}
-
-#' Shiny bindings for GlimmaV2
-#'
-#' Output and render functions for using GlimmaV2 within Shiny
-#' applications and interactive Rmd documents.
-#'
-#' @param outputId output variable to read from
-#' @param width,height Must be a valid CSS unit (like \code{'100\%'},
-#'   \code{'400px'}, \code{'auto'}) or a number, which will be coerced to a
-#'   string and have \code{'px'} appended.
-#' @param expr An expression that generates a GlimmaV2
-#' @param env The environment in which to evaluate \code{expr}.
-#' @param quoted Is \code{expr} a quoted expression (with \code{quote()})? This
-#'   is useful if you want to save an expression in a variable.
-#'
-#' @name GlimmaV2-shiny
-#'
-#' @export
-GlimmaV2Output <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'GlimmaV2', width, height, package = 'GlimmaV2')
-}
-
-#' @rdname GlimmaV2-shiny
-#' @export
-renderGlimmaV2 <- function(expr, env = parent.frame(), quoted = FALSE) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, GlimmaV2Output, env, quoted = TRUE)
 }

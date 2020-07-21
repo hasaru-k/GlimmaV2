@@ -6,6 +6,24 @@
 \usage{
 glimmaMA(x, ...)
 }
+\arguments{
+\item{x}{the DE object to plot.}
+
+\item{...}{additional arguments affecting the plots produced. See specific methods for detailed arguments.}
+}
+\value{
+htmlwidget object.
+}
 \description{
-Glimma MA Plot
+Draws a two-panel interactive MA plot.
+}
+\details{
+The left plot shows the log-fold-change vs average expression.
+The right plot shows the expression levels of a particular gene of each sample.
+Clicking on genes in the plot brings up the corresponding genes in the table.
+Selecting rows in the table will highlight the corresponding genes in the MA plot.
+Expression values for a gene can be found by hovering over a sample in the RHS plot.
+}
+\seealso{
+\code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }
