@@ -31,7 +31,7 @@ glimmaMA(fit, counts=counts, groups=groups, status.colours=c("#3977db","#3d3f42"
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
 ### MDS Options
-The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown takes *discrete features by default* but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
+The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown contains discrete features by default but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
 ```R
 glimmaMDS(rnaseq, groups=groups, continuous.colour=TRUE)
 ```
@@ -51,4 +51,4 @@ The width and height parameters can be adjusted to change the dimensions of the 
 ```R
 glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1200)
 ```
-All GlimmaV2 functions take optional width/height arguments. The default width and height are both 920px, so they should be modified in a 1:1 ratio if preserving the original scale is desired.
+All GlimmaV2 functions take optional width/height arguments. The default glimmaMA/glimmaXY width and height are both 920px, so they should be modified in a 1:1 ratio if preserving the original scale is desired.
