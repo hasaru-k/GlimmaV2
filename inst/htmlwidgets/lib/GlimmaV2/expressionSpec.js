@@ -10,7 +10,25 @@ function createExpressionSpec(width, height, expColumns)
         "padding": 0,
         "autosize": {"type": "fit", "resize": true},
         "title": { "text": {"signal": "title_signal" }},
-        "signals": [ {"name": "title_signal", "value": "" } ],
+        "signals": 
+                [ 
+                    {
+                        "name": "title_signal", 
+                        "value": "" 
+                    },
+                    {
+                        "name": "max_y_axis", 
+                        "value": null,
+                        "bind": { 
+                                  "input": "number",
+                                  "class": "max_y_axis"
+                                }
+                    },
+                    {
+                        "name": "max_y",
+                        "update": "max_y_axis <= 0 ? null : max_y_axis"
+                    }
+                ],
         "data": [ {"name": "table"} ],
         "scales": 
         [
@@ -24,7 +42,8 @@ function createExpressionSpec(width, height, expColumns)
             {
                 "name": "y",
                 "domain": {"data": "table", "field": "count"},
-                "range": "height"
+                "range": "height",
+                "domainMax": {"signal": "max_y"}
             },
             {
                 "name": "color",
