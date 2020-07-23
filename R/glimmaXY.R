@@ -24,7 +24,7 @@ XY_details <- function() {
 
 #' Glimma MA Plot
 #'
-#' 
+#'
 #' Draws a two-panel interactive MA plot.
 #'
 #' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
@@ -66,6 +66,7 @@ glimmaMA <- function(x, ...)
 #' @export
 glimmaMA.MArrayLM <- function(
   x,
+  dge = NULL,
   status=limma::decideTests(x),
   coef=ncol(x$coefficients),
   main=colnames(x)[coef],
@@ -78,7 +79,7 @@ glimmaMA.MArrayLM <- function(
   ylab="logFC",
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
   # create initial table with logCPM and logFC features
@@ -88,13 +89,27 @@ glimmaMA.MArrayLM <- function(
   table <- data.frame(xvals, yvals)
   names(table) <- c(xlab, ylab)
 
+  # get data from dge object if not given
+  if (!is.null(dge))
+  {
+    if (is.null(counts))
+    {
+      counts <- dge$counts
+    }
+
+    if (is.null(groups))
+    {
+      groups <- dge$samples$group
+    }
+  }
+
   # add pvalue/adjusted pvalue info from fit object to RHS of table
   AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
 
   # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
-    
+
   # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
@@ -115,6 +130,7 @@ glimmaMA.MArrayLM <- function(
 #' @export
 glimmaMA.DGEExact <- function(
   x,
+  dge=NULL,
   status=edgeR::decideTestsDGE(x),
   main=paste(x$comparison[2],"vs",x$comparison[1]),
   p.adj.method = "BH",
@@ -126,14 +142,28 @@ glimmaMA.DGEExact <- function(
   ylab="logFC",
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
 
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(x$table$logCPM, digits=4), 
+  table <- data.frame(round(x$table$logCPM, digits=4),
                       round(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
+
+  # get data from dge object if not given
+  if (!is.null(dge))
+  {
+    if (is.null(counts))
+    {
+      counts <- dge$counts
+    }
+
+    if (is.null(groups))
+    {
+      groups <- dge$samples$group
+    }
+  }
 
   # add pvalue/adjusted pvalue info to table
   AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
@@ -147,7 +177,7 @@ glimmaMA.DGEExact <- function(
 
   # error-check status
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-  
+
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -189,7 +219,7 @@ glimmaMA.DESeqDataSet  <- function(
   ylab="logFC",
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
 
@@ -198,7 +228,14 @@ glimmaMA.DESeqDataSet  <- function(
   res.df <- as.data.frame(res)
 
   # extract status if it is not given
-  if (is.null(status)) status <- as.numeric(res$padj<0.05)
+  if (is.null(status))
+  {
+    status <- ifelse(
+      res$padj < 0.05,
+      ifelse(res$log2FoldChange < 0, -1, 1),
+      0
+    )
+  }
 
   # create initial table with logCPM and logFC features
   xvals <- round(log(res.df$baseMean + 0.5), digits=4)
@@ -213,7 +250,13 @@ glimmaMA.DESeqDataSet  <- function(
   if (!is.null(counts) && is.null(groups))
   {
     colData <- SummarizedExperiment::colData(x)
-    if (ncol(colData) > 0) groups <- colData[, 1]
+    if ("group" %in% colnames(colData))
+    {
+      groups <- colData[, "group"]
+    } else
+    {
+      groups <- 1
+    }
   }
 
   # add rownames to LHS of table
@@ -251,9 +294,9 @@ glimmaXY <- function(x, ...)
 #' @export
 glimmaXY.default <- function(
   x,
-  y, 
+  y,
   xlab="x",
-  ylab="y", 
+  ylab="y",
   status=rep(0, length(x)),
   main="XY Plot",
   display.columns = NULL,
@@ -262,13 +305,13 @@ glimmaXY.default <- function(
   counts=NULL,
   status.colours=NULL,
   transform.counts=FALSE,
-  width = 920, 
+  width = 920,
   height = 920)
 {
   x <- round(x, digits=4)
   y <- round(y, digits=4)
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
-  table <- data.frame(x, y) 
+  table <- data.frame(x, y)
   names(table) <- c(xlab, ylab)
   # add rownames to LHS of table if possible
   if (!is.null(counts)) {
@@ -288,7 +331,7 @@ glimmaXY.default <- function(
 #' Glimma XY Plot
 #'
 #' Common processing steps for both MA and XY plots.
-#' 
+#'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
 #' @importFrom edgeR cpm
@@ -317,8 +360,8 @@ buildXYData <- function(
     groups <- data.frame(group=groups)
     groups <- cbind(groups, sample=colnames(counts))
   }
-  
-  
+
+
   # add colour and anno info to table
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno)) table <- cbind(table, anno)
@@ -337,9 +380,9 @@ buildXYData <- function(
 
   # error checking on status_colours
   if (is.null(status.colours)) status.colours <- c("dodgerblue", "silver", "firebrick")
-  if (length(status.colours) != 3) stop("status_colours 
+  if (length(status.colours) != 3) stop("status_colours
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
-  
+
   xData <- list(data=list(x=xlab,
                           y=ylab,
                           table=table,
