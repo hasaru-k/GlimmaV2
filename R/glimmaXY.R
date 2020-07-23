@@ -24,7 +24,7 @@ XY_details <- function() {
 
 #' Glimma MA Plot
 #'
-#' 
+#'
 #' Draws a two-panel interactive MA plot.
 #'
 #' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
@@ -147,7 +147,7 @@ glimmaMA.DGEExact <- function(
 {
 
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(x$table$logCPM, digits=4), 
+  table <- data.frame(round(x$table$logCPM, digits=4),
                       round(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
 
@@ -236,7 +236,6 @@ glimmaMA.DESeqDataSet  <- function(
       0
     )
   }
-  status <- status[!delRows]
 
   # create initial table with logCPM and logFC features
   xvals <- round(log(res.df$baseMean + 0.5), digits=4)
@@ -332,7 +331,7 @@ glimmaXY.default <- function(
 #' Glimma XY Plot
 #'
 #' Common processing steps for both MA and XY plots.
-#' 
+#'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
 #' @importFrom edgeR cpm
