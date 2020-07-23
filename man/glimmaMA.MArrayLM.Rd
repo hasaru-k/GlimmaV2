@@ -6,6 +6,7 @@
 \usage{
 \method{glimmaMA}{MArrayLM}(
   x,
+  dge = NULL,
   status = limma::decideTests(x),
   coef = ncol(x$coefficients),
   main = colnames(x)[coef],
@@ -25,6 +26,9 @@
 \arguments{
 \item{x}{the MArrayLM object to plot.}
 
+\item{dge}{DGEList object used to generate the expression plot. Gene counts are extracted from \code{dge$counts} and
+sample groups from \code{dge$samples$group}.}
+
 \item{status}{vector giving the control status of each row in the object.}
 
 \item{coef}{integer or logical indexing vector indicating which column of object to plot.}
@@ -37,9 +41,9 @@
 
 \item{anno}{a dataframe containing gene annotations}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
 
 \item{xlab}{x axis label.}
 
@@ -64,5 +68,8 @@ The left plot shows the log-fold-change vs average expression.
 The right plot shows the expression levels of a particular gene of each sample.
 Clicking on genes in the plot brings up the corresponding genes in the table.
 Selecting rows in the table will highlight the corresponding genes in the MA plot.
-Expression values for a gene can be found by hovering over a sample in the RHS plot.
+Expression values for a gene can be found by hovering over a sample in the right plot.
+}
+\seealso{
+\code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }

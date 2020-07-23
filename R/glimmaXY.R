@@ -5,7 +5,7 @@ MA_details <- function() {
     "The right plot shows the expression levels of a particular gene of each sample.",
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the MA plot.",
-    "Expression values for a gene can be found by hovering over a sample in the RHS plot.",
+    "Expression values for a gene can be found by hovering over a sample in the right plot.",
     "@return htmlwidget object."
   )
 }
@@ -17,7 +17,7 @@ XY_details <- function() {
     "The right plot shows the expression levels of a particular gene of each sample.",
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the XY plot.",
-    "Expression values for a gene can be found by hovering over a sample in the RHS plot.",
+    "Expression values for a gene can be found by hovering over a sample in the right plot.",
     "@return htmlwidget object."
   )
 }
@@ -45,14 +45,16 @@ glimmaMA <- function(x, ...)
 #' Draws a two-panel interactive MA plot from an MArrayLM object.
 #'
 #' @param x the MArrayLM object to plot.
+#' @param dge DGEList object used to generate the expression plot. Gene counts are extracted from \code{dge$counts} and
+#' sample groups from \code{dge$samples$group}.
 #' @param status vector giving the control status of each row in the object.
 #' @param coef integer or logical indexing vector indicating which column of object to plot.
 #' @param main Left plot title.
 #' @param p.adj.method character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")
 #' @param display.columns character vector containing names of columns to display in mouseover tooltips and table.
 #' @param anno a dataframe containing gene annotations
-#' @param groups vector/factor representing the experimental group for each sample.
-#' @param counts the matrix of expression values, with samples in columns.
+#' @param groups vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.
+#' @param counts the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.
 #' @param xlab x axis label.
 #' @param ylab y axis label.
 #' @param status.colours vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.
@@ -60,6 +62,7 @@ glimmaMA <- function(x, ...)
 #' @param width width of the weidget in pixels.
 #' @param height height of the widget in pixels.
 #'
+#' @seealso \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #'
 #' @importFrom limma decideTests
@@ -122,7 +125,7 @@ glimmaMA.MArrayLM <- function(
 #' Draws a two-panel interactive MA plot from an DGEExact object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#'
+#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #'
 #' @importFrom edgeR decideTestsDGE
@@ -187,7 +190,7 @@ glimmaMA.DGEExact <- function(
 #' Draws a two-panel interactive MA plot from an DGELRT object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#'
+#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #'
 #' @importFrom edgeR decideTestsDGE
@@ -201,7 +204,7 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param groups vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).
-#'
+#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 #' @eval MA_details()
 #'
 #' @importFrom DESeq2 results counts
@@ -272,7 +275,7 @@ glimmaMA.DESeqDataSet  <- function(
 #' Draws a two-panel interactive XY scatter plot.
 #'
 #' @inheritParams glimmaMA
-#'
+#' @seealso \code{\link{glimmaXY.default}}
 #' @eval XY_details()
 #'
 #' @export

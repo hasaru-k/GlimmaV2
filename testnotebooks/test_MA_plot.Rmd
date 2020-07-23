@@ -40,8 +40,8 @@ class(fit)
 
 ```{r}
 # general plot
-glimmaMA(fit, counts=rnaseq$counts, groups=rnaseq$samples$group)
-
+glimmaMA(fit, dge=rnaseq)
+rnaseq$samples$group
 ```
 
 ```{r}

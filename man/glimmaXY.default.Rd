@@ -38,9 +38,9 @@
 
 \item{anno}{a dataframe containing gene annotations}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
 
 \item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
 
@@ -61,5 +61,5 @@ The left plot shows the x and y values specified.
 The right plot shows the expression levels of a particular gene of each sample.
 Clicking on genes in the plot brings up the corresponding genes in the table.
 Selecting rows in the table will highlight the corresponding genes in the XY plot.
-Expression values for a gene can be found by hovering over a sample in the RHS plot.
+Expression values for a gene can be found by hovering over a sample in the right plot.
 }
