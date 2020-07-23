@@ -31,7 +31,7 @@ HTMLWidgets.widget({
         var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
         var xySpec = createXYSpec(x.data, xyTable, width, height);
         xyView = new vega.View(vega.parse(xySpec), {
-          renderer: 'canvas',
+          renderer: 'svg',
           container: xyContainer,
           bind: controlContainer,
           hover: true
