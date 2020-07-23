@@ -33,7 +33,7 @@
 
 \item{groups}{vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
 
 \item{xlab}{x axis label.}
 
@@ -58,5 +58,8 @@ The left plot shows the log-fold-change vs average expression.
 The right plot shows the expression levels of a particular gene of each sample.
 Clicking on genes in the plot brings up the corresponding genes in the table.
 Selecting rows in the table will highlight the corresponding genes in the MA plot.
-Expression values for a gene can be found by hovering over a sample in the RHS plot.
+Expression values for a gene can be found by hovering over a sample in the right plot.
+}
+\seealso{
+\code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 }
