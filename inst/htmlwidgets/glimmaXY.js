@@ -53,7 +53,7 @@ HTMLWidgets.widget({
           countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts);
           var expressionSpec = createExpressionSpec(width, height, x.data.expCols);
           var expressionView = new vega.View(vega.parse(expressionSpec), {
-            renderer: 'canvas',
+            renderer: 'svg',
             container: expressionContainer,
             hover: true
           });

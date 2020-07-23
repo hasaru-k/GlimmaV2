@@ -43,7 +43,7 @@ HTMLWidgets.widget({
                                       width, height, x.data.continuous_colour);
         
         var mdsView = new vega.View(vega.parse(mdsSpec), {
-          renderer: 'canvas',
+          renderer: 'svg',
           container: mdsContainer,
           bind: controlContainer,
           hover: true
@@ -54,7 +54,7 @@ HTMLWidgets.widget({
 
         var eigenSpec = createEigenSpec(eigenData, width, height);
         eigenView = new vega.View(vega.parse(eigenSpec), {
-          renderer: 'canvas',
+          renderer: 'svg',
           container: eigenContainer,
           hover: true
         });
