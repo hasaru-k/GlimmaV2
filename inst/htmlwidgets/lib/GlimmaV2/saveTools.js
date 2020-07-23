@@ -78,7 +78,7 @@ function addSave(controlContainer, view_obj, text="Save Plot")
   }
 }
 
-function saveSubsetClick(selected, xyTable, countsMatrix)
+function saveSubsetClickListener(selected, xyTable, countsMatrix)
 {
   if (selected.length == 0)
   {
