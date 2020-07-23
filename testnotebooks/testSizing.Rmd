@@ -1,0 +1,53 @@
+---
+title: "testSizing"
+output: html_document
+---
+---
+title: "testExp"
+output: html_document
+---
+
+```{r}
+
+### TEST: glimmav1 dataset (MArrayLM) ###
+
+library(Glimma)
+library(limma)
+library(GlimmaV2)
+
+data(lymphomaRNAseq)
+rnaseq <- lymphomaRNAseq
+
+# add lane
+groups <- data.frame(genotype=rnaseq$samples$group,
+                     lane= as.character(c(rep(4,5),3,3)),
+                     miscCont=c(rep(4000,5),300,250),
+                     miscDisc=c("blue","red",rep("green",5)))
+
+# add libsize
+groups <- rnaseq$samples$group
+
+# fit
+design <- model.matrix(~0+groups)
+contrasts <- cbind(Smchd1null.vs.WT=c(-1,1))
+
+# convert raw counts to logCPM values by automatically extracting libsizes and normalisation factors from x
+vm <- voomWithQualityWeights(rnaseq, design=design)
+fit <- lmFit(vm, design=design)
+fit <- contrasts.fit(fit, contrasts)
+fit <- eBayes(fit)
+dtFit <- decideTests(fit)
+
+```
+
+```{r}
+# MArrayLM plot
+counts <- rnaseq$counts
+groups <- rnaseq$samples$group
+glimmaMA(fit, counts=counts, groups=groups, status.colours=c("","#3d3f42","rgb(219,13,78)"))
+```
+
+```{r}
+
+cat("testing sizing")
+```

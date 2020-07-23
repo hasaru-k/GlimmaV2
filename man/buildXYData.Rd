@@ -18,6 +18,29 @@ buildXYData(
   transform.counts
 )
 }
+\arguments{
+\item{table}{dataframe containing xlab and ylab columns for plotting.}
+
+\item{status}{vector giving the control status of each row in the object.}
+
+\item{main}{Left plot title.}
+
+\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+
+\item{anno}{a dataframe containing gene annotations}
+
+\item{counts}{the matrix of expression values, with samples in columns.}
+
+\item{xlab}{x axis label.}
+
+\item{ylab}{y axis label.}
+
+\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+
+\item{groups}{vector/factor representing the experimental group for each sample.}
+
+\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+}
 \description{
 Common processing steps for both MA and XY plots.
 }

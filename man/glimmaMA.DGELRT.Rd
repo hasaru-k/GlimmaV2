@@ -13,14 +13,53 @@
   anno = NULL,
   groups = NULL,
   counts = NULL,
-  xlab = NULL,
-  ylab = NULL,
+  xlab = "logCPM",
+  ylab = "logFC",
   status.colours = NULL,
   transform.counts = FALSE,
   width = 920,
   height = 920
 )
 }
+\arguments{
+\item{x}{the MArrayLM object to plot.}
+
+\item{status}{vector giving the control status of each row in the object.}
+
+\item{main}{Left plot title.}
+
+\item{p.adj.method}{character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")}
+
+\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+
+\item{anno}{a dataframe containing gene annotations}
+
+\item{groups}{vector/factor representing the experimental group for each sample.}
+
+\item{counts}{the matrix of expression values, with samples in columns.}
+
+\item{xlab}{x axis label.}
+
+\item{ylab}{y axis label.}
+
+\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+
+\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+
+\item{width}{width of the weidget in pixels.}
+
+\item{height}{height of the widget in pixels.}
+}
+\value{
+htmlwidget object.
+}
 \description{
-Glimma MA Plot
+Draws a two-panel interactive MA plot from an DGELRT object.
+}
+\details{
+The left plot shows the log-fold-change vs average expression.
+The right plot shows the expression levels of a particular gene of each sample.
+Clicking on genes in the plot brings up the corresponding genes in the table.
+Selecting rows in the table will highlight the corresponding genes in the MA plot.
+Expression values for a gene can be found by hovering over a sample in the RHS plot.
 }

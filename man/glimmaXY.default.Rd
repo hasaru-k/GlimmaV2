@@ -21,6 +21,45 @@
   height = 920
 )
 }
+\arguments{
+\item{x}{numeric vector of values to plot on the x-axis of the summary plot.}
+
+\item{y}{numeric vector of values to plot on the y-axis of the summary plot.}
+
+\item{xlab}{x axis label.}
+
+\item{ylab}{y axis label.}
+
+\item{status}{vector giving the control status of each row in the object.}
+
+\item{main}{Left plot title.}
+
+\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+
+\item{anno}{a dataframe containing gene annotations}
+
+\item{groups}{vector/factor representing the experimental group for each sample.}
+
+\item{counts}{the matrix of expression values, with samples in columns.}
+
+\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+
+\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+
+\item{width}{width of the weidget in pixels.}
+
+\item{height}{height of the widget in pixels.}
+}
+\value{
+htmlwidget object.
+}
 \description{
-Glimma XY Plot
+Draws a two-panel interactive XY scatter plot.
+}
+\details{
+The left plot shows the x and y values specified.
+The right plot shows the expression levels of a particular gene of each sample.
+Clicking on genes in the plot brings up the corresponding genes in the table.
+Selecting rows in the table will highlight the corresponding genes in the XY plot.
+Expression values for a gene can be found by hovering over a sample in the RHS plot.
 }

@@ -32,7 +32,7 @@ contrasts <- cbind(Smchd1null.vs.WT=c(-1,1))
 # convert raw counts to logCPM values by automatically extracting libsizes and normalisation factors from x
 vm <- voomWithQualityWeights(rnaseq, design=design)
 fit <- lmFit(vm, design=design)
-fit <- contrasts.fit(fit, contrasts)
+fit <- contrasts.fit(fit, contrasts) 
 fit <- eBayes(fit)
 dtFit <- decideTests(fit)
 class(fit)
@@ -41,6 +41,7 @@ class(fit)
 ```{r}
 # general plot
 glimmaMA(fit, counts=rnaseq$counts, groups=rnaseq$samples$group)
+
 ```
 
 ```{r}

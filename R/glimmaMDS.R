@@ -1,14 +1,24 @@
+MDS_details <- function() {
+  c(
+    "@details",
+    "The left plot shows two MDS dimensions, with annotations displayed on hover.",
+    "The right panel contains a bar plot of the eigenvalues of each dimension.",
+    "The controls beneath the plots can be used to change the dimensions being displayed.",
+    "@return htmlwidget object."
+  )
+}
+
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot in an html page. The left panel contains the plot between
-#' two MDS dimensions, with annotations displayed on hover. The right panel contains a bar plot of
-#' the eigenvalues of each dimension. The controls below can be used to change the dimensions being
-#' displayed.
-#'
-#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#' Draws a two-panel interactive MDS plot.  
+#' 
+#' @seealso \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @param x the matrix containing the gene expressions.
-#' @param ... the additional arguments.
+#' @param ... the additional arguments affecting the plot produced. See specific methods for detailed arguments.
+#'
+#' @eval MDS_details()
+#' 
 #' @export
 glimmaMDS <- function(x, ...)
 {
@@ -17,10 +27,7 @@ glimmaMDS <- function(x, ...)
 
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot. The left panel contains the plot between
-#' two MDS dimensions, with annotations displayed on hover. The right panel contains a bar plot of
-#' the eigenvalues of each dimension. The controls below can be used to change the dimensions being
-#' displayed.
+#' Draws a two-panel interactive MDS plot.
 #'
 #' @seealso \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
@@ -34,6 +41,10 @@ glimmaMDS <- function(x, ...)
 #' colour is displayed using discrete columns.
 #' @param width custom widget width in pixels
 #' @param height custom widget height in pixels
+#'
+#' @eval MDS_details()
+#' 
+#' @importFrom stats cmdscale as.dist
 #' @export
 glimmaMDS.default <- function(
   x,
@@ -46,9 +57,11 @@ glimmaMDS.default <- function(
   height = 500)
 {
 
-  # helper function
   getCols <- function(x, inds) {
       x[, inds, drop=FALSE]
+  }
+  getRows <- function(x, inds) {
+      x[inds, , drop=FALSE]
   }
 
   # CODE TAKEN FROM GLIMMA
@@ -173,6 +186,9 @@ glimmaMDS.default <- function(
 #'
 #' @inheritParams glimmaMDS.default
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
+#'
+#' @eval MDS_details()
+#' 
 #' @importFrom edgeR cpm
 #' @export
 glimmaMDS.DGEList <- function(
@@ -218,9 +234,14 @@ glimmaMDS.DGEList <- function(
 #'
 #' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
 #' By default, extracts groups as \code{colData(x)} and extracts labels as \code{rownames(colData(x))}.
+#'
 #' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'
-#' @inheritParams glimmaMDS.DGEList
+#' @inheritParams glimmaMDS.default
+#' @param prior.count average count to be added to each observation to avoid taking log of zero.
+#'
+#' @eval MDS_details()
+#'
 #' @importFrom SummarizedExperiment colData
 #' @importFrom edgeR cpm
 #' @importFrom S4Vectors as.data.frame.DataTable

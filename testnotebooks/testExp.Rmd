@@ -40,7 +40,7 @@ dtFit <- decideTests(fit)
 # MArrayLM plot
 counts <- rnaseq$counts
 groups <- rnaseq$samples$group
-glimmaMA(fit, counts=counts, groups=groups)
+glimmaMA(fit, counts=counts, groups=groups, width=900, height=800)
 ```
 
 

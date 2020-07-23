@@ -37,9 +37,17 @@ colour is displayed using discrete columns.}
 
 \item{height}{custom widget height in pixels}
 }
+\value{
+htmlwidget object.
+}
 \description{
 Draws a two-panel interactive MDS plot using a DGEList x.
 By default, extracts \code{labels} as \code{rownames(x$samples)}.
+}
+\details{
+The left plot shows two MDS dimensions, with annotations displayed on hover.
+The right panel contains a bar plot of the eigenvalues of each dimension.
+The controls beneath the plots can be used to change the dimensions being displayed.
 }
 \seealso{
 \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
