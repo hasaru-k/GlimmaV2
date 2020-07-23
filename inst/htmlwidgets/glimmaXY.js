@@ -31,7 +31,7 @@ HTMLWidgets.widget({
         var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
         var xySpec = createXYSpec(x.data, xyTable, width, height);
         xyView = new vega.View(vega.parse(xySpec), {
-          renderer: 'canvas',
+          renderer: 'svg',
           container: xyContainer,
           bind: controlContainer,
           hover: true
@@ -80,15 +80,12 @@ HTMLWidgets.widget({
 });
 
 
-
 function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height)
 {
   // setup the datatable
   var datatableEl = document.createElement("TABLE");
   datatableEl.setAttribute("class", "dataTable");
   controlContainer.appendChild(datatableEl);
-  var xyColumnsInfo = [];
-  x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
   
   var selected = [];
   var graphMode = false;
@@ -98,16 +95,20 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
 
     var datatable = $(datatableEl).DataTable({
         data: xyTable,
-        columns: xyColumnsInfo,
+        columns: x.data.cols.map(el => ({"data": el, "title": el})),
         rowId: "gene",
         dom: '<"geneDisplay">Bfrtip',
-        buttons: [ { action: () => saveSubsetClick(selected, xyTable, countsMatrix),
-                    text: 'Save (All)',
-                    attr: {class: 'save-button saveSubset'}} ],
-        scrollY:        (height*0.4).toString() + "px",
+        buttons: [  
+                    { 
+                      action: () => saveSubsetClick(selected, xyTable, countsMatrix),
+                      text: 'Save (All)',
+                      attr: {class: 'save-button saveSubset'}
+                    }
+                  ],
+        scrollY: (height*0.4).toString() + "px",
         scrollX: false,
         orderClasses: false,
-        'stripeClasses':['stripe1','stripe2']
+        stripeClasses: ['stripe1','stripe2']
     });
 
     // reset graph and table selections
@@ -158,9 +159,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
       function(name, value) 
       {
         var datum = value[0];
-        if (datum == null) return;
 
-        // switch to graph mode if in table mode
         if (!graphMode)
         {
           graphMode = true;
@@ -168,29 +167,22 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
           selected = [];
         }
 
-        // check if datum is in selected
-        // if it is, remove it; otherwise, add it
-        var loc = contains(selected, datum);
-        loc >= 0 ?
-          selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
-          : selected.push(datum);
-
-        // highlight selected points
+        var loc = containsGene(selected, datum);
+        selected = loc >= 0 ? remove(selected, loc) : selected.concat(datum);
+        selectedUpdateHandler(selected, controlContainer);
         xyView.data("selected_points", selected);
         xyView.runAsync();
-        selectedUpdateHandler(selected, controlContainer);
 
-        // edge case: deselect last point
-        if (selected.length == 0) graphMode = false;
+        // edge case: deselecting last point
+        if (selected.length == 0)
+        {
+          graphMode = false;
+        }
 
-        // update table filter based on selected
-        if (!datatable) return;
         datatable.search('').columns().search('').draw();
-        // filter using a regex string: union over genes in selected
         var regex_search = selected.map(x => '^' + x.gene + '$').join('|');
         datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
 
-        /* expression plot */
         let selectEvent = loc < 0;
         expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, datum);
       }
@@ -255,7 +247,7 @@ function processExpression(countsRow, groupsData, expressionView, gene)
   expressionView.runAsync();
 }
 
-function contains(arr, datum)
+function containsGene(arr, datum)
 {
   let loc = -1;
   let i;
@@ -278,4 +270,10 @@ function selectedUpdateHandler(selected, controlContainer)
   var saveSubsetButton = controlContainer.getElementsByClassName("saveSubset")[0];
   let saveString = selected.length > 0 ? `Save (${selected.length})` : "Save (All)";
   $(saveSubsetButton).html(saveString);
+}
+
+function remove(arr, index)
+{
+  let new_arr = arr.slice(0, index).concat(arr.slice(index+1))
+  return new_arr;
 }
