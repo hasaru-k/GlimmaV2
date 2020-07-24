@@ -29,7 +29,7 @@ buildXYData(
 
 \item{anno}{a dataframe containing gene annotations}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
 
 \item{xlab}{x axis label.}
 
@@ -37,7 +37,7 @@ buildXYData(
 
 \item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 }

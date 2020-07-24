@@ -25,7 +25,7 @@ The default mapping between the status vector and color of the gene is given bel
 ```
 Accordingly, the default status.colours argument is ```c("dodgerblue", "silver", "firebrick")```. If no status vector is provided, all genes are given a status value of 0. The colour mapping can be changed by varying the status.colours argument which must be a vector of three valid CSS strings (for example: ```#f304d3```, ```#fff```, ```rgb(253, 12, 134)```, ```steelblue```):
 ```R
-glimmaMA(fit, counts=counts, groups=groups, status.colours=c("#3977db","#3d3f42","#db0d4e"))
+glimmaMA(fit, dge=rnaseq, status.colours=c("#3977db","#3d3f42","#db0d4e"))
 ```
 ```R
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
@@ -41,7 +41,7 @@ The test used to distinguish numeric vs discrete features in the groups datafram
 
 The htmlwidgets::saveWidget() function can be used to generate a single encapsulated GlimmaV2 html file which can be sent to others easily.
 ```R
-glMA <- glimmaMA(fit, counts=counts, groups=groups)
+glMA <- glimmaMA(fit, dge=rnaseq)
 htmlwidgets::saveWidget(glMA, file="glimmaV2Example.html")
 ```
 More information on saveWidget function arguments can be found [here](https://rdrr.io/cran/htmlwidgets/man/saveWidget.html).
@@ -49,6 +49,6 @@ More information on saveWidget function arguments can be found [here](https://rd
 ### Sizing
 The width and height parameters can be adjusted to change the dimensions of the widget in pixels in the RStudio viewer and in knitted HTML:
 ```R
-glimmaMA(fit, counts=counts, groups=groups, width=1200, height=1200)
+glimmaMA(fit, dge=rnaseq, width=1200, height=1200)
 ```
 All GlimmaV2 functions take optional width/height arguments. The default glimmaMA/glimmaXY width and height are both 920px, so they should be modified in a 1:1 ratio if preserving the original scale is desired.
