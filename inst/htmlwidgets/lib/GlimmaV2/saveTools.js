@@ -1,4 +1,4 @@
-function addSave(controlContainer, view_obj, text="Save Plot")
+function addSavePlotButton(controlContainer, view_obj, text="Save Plot")
 {
   // set up button elements
   var dropdownDiv = document.createElement("div");
@@ -78,7 +78,7 @@ function addSave(controlContainer, view_obj, text="Save Plot")
   }
 }
 
-function saveSubsetClickListener(selected, xyTable, countsMatrix)
+function saveTableClickListener(selected, xyTable, countsMatrix)
 {
   if (selected.length == 0)
   {
@@ -116,6 +116,6 @@ function JSONArrayToCSV(array)
     }).join(',')
   })
   csv.unshift(fields.join(',')) // add header column
-   csv = csv.join('\r\n');
+  csv = csv.join('\r\n');
   return csv;
 }

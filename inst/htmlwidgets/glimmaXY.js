@@ -4,9 +4,9 @@ HTMLWidgets.widget({
 
   type: 'output',
 
-  factory: function(el, width, height) {
+  factory: function(el, width, height) 
+  {
 
-    // create general layout elements
     var plotContainer = document.createElement("div");
     var controlContainer = document.createElement("div");
     plotContainer.setAttribute("class", "plotContainer");
@@ -18,7 +18,8 @@ HTMLWidgets.widget({
 
     return {
 
-      renderValue: function(x) {
+      renderValue: function(x) 
+      {
         
         console.log(x);
         var handler = new vegaTooltip.Handler();
@@ -60,15 +61,16 @@ HTMLWidgets.widget({
         }
         
         setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height);
-        addSave(controlContainer, xyView, text="Save (XY)");
-        if (expressionView) addSave(controlContainer, expressionView, text="Save (EXP)");
+        addSavePlotButton(controlContainer, xyView, text="Save (XY)");
+        if (expressionView)
+        {
+          addSavePlotButton(controlContainer, expressionView, text="Save (EXP)");
+        }
 
       },
 
       resize: function(width, height) 
-      {
-        console.log("resize called, width=" + width + ",height=" + height);
-      }
+      {}
 
     };
   }
@@ -77,7 +79,6 @@ HTMLWidgets.widget({
 
 function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height)
 {
-  // setup the datatable
   var datatableEl = document.createElement("TABLE");
   datatableEl.setAttribute("class", "dataTable");
   controlContainer.appendChild(datatableEl);
@@ -100,7 +101,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
                     },
                     { 
                       text: 'Save (All)',
-                      action: () => saveSubsetClickListener(selected, xyTable, countsMatrix),
+                      action: () => saveTableClickListener(state.selected, xyTable, countsMatrix),
                       attr: {class: 'save-button saveSubset'}
                     }
                   ],
@@ -119,6 +120,7 @@ function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, contr
   });
 
 }
+
 
 function clearTableListener(datatable, state, xyView, expressionView, controlContainer)
 {
@@ -157,6 +159,7 @@ function tableClickListener(datatable, state, xyView, expressionView, controlCon
   console.log(state);
 }
 
+
 function XYSignalListener(datatable, state, datum, xyView, expressionView, controlContainer, countsMatrix, x)
 {
   if (!state.graphMode)
@@ -186,6 +189,7 @@ function XYSignalListener(datatable, state, datum, xyView, expressionView, contr
   expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, state.selected, datum);
 }
 
+
 function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selectedPoints, xyRow)
 {
   if (!expressionView) return;
@@ -210,13 +214,18 @@ function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, s
   }
 }
 
+
 function clearExpressionPlot(expressionView)
 {
-  if (!expressionView) return;
+  if (!expressionView)
+  {
+    return;
+  }
   expressionView.data("table", []);
   expressionView.signal("title_signal", "");
   expressionView.runAsync();
 }
+
 
 function processExpression(countsRow, groupsData, expressionView, gene)
 {
@@ -240,13 +249,18 @@ function processExpression(countsRow, groupsData, expressionView, gene)
   expressionView.runAsync();
 }
 
+
 function containsGene(arr, datum)
 {
   let loc = -1;
   let i;
   for (i = 0; i < arr.length; i++)
   {
-    if (arr[i]['gene'] === datum['gene']) loc = i;
+    if (arr[i]['gene'] === datum['gene'])
+    {
+      loc = i;
+      break;
+    } 
   }
   return loc;
 }
@@ -264,6 +278,7 @@ function selectedUpdateHandler(selected, controlContainer)
   let saveString = selected.length > 0 ? `Save (${selected.length})` : "Save (All)";
   $(saveSubsetButton).html(saveString);
 }
+
 
 function remove(arr, index)
 {
