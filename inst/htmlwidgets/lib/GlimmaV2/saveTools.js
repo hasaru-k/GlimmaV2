@@ -78,25 +78,27 @@ function addSavePlotButton(controlContainer, view_obj, text="Save Plot")
   }
 }
 
-function saveTableClickListener(selected, xyTable, countsMatrix)
+
+function saveTableClickListener(state, data)
 {
-  if (selected.length == 0)
+  if (state.selected.length == 0)
   {
-    if (confirm(`This will save the table and counts data for all ${xyTable.length} genes.`)) 
+    if (confirm(`This will save the table and counts data for all ${data.xyTable.length} genes.`)) 
     {
       /* only include counts if it is provided */
-      let data = countsMatrix==null ? 
-        xyTable : xyTable.map( x => $.extend(x, countsMatrix[x.index]) );
-      saveJSONArrayToCSV(data);
+      let arr = data.countsMatrix==null ? 
+        data.xyTable : data.xyTable.map( x => $.extend(x, data.countsMatrix[x.index]) );
+      saveJSONArrayToCSV(arr);
     }
   }
   else
   {
-    let concatData = countsMatrix==null ?
-      selected : selected.map( x => $.extend(x, countsMatrix[x.index]) );
+    let concatData = data.countsMatrix==null ?
+      state.selected : state.selected.map( x => $.extend(x, data.countsMatrix[x.index]) );
     saveJSONArrayToCSV(concatData);
   }
 }
+
 
 function saveJSONArrayToCSV(jsonArray)
 {
@@ -104,6 +106,7 @@ function saveJSONArrayToCSV(jsonArray)
   var blob = new Blob([csvData], { type: "text/csv;charset=utf-8" });
   saveAs(blob, "glimmaTable.csv");
 }
+
 
 /* credit: https://stackoverflow.com/questions/8847766/how-to-convert-json-to-csv-format-and-store-in-a-variable */
 function JSONArrayToCSV(array)
