@@ -31,7 +31,7 @@ HTMLWidgets.widget({
 
         var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
         var xySpec = createXYSpec(x.data, xyTable, width, height);
-        xyView = new vega.View(vega.parse(xySpec), {
+        var xyView = new vega.View(vega.parse(xySpec), {
           renderer: 'svg',
           container: xyContainer,
           bind: controlContainer,
@@ -122,7 +122,7 @@ function setupXYInteraction(data)
       });
 
     datatable.on('click', 'tr', function() { tableClickListener(datatable, state, data, $(this)) } );
-    xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
+    data.xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
   });
 }
 
