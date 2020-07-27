@@ -274,20 +274,6 @@ glimmaMA.DESeqDataSet  <- function(
 #'
 #' Draws a two-panel interactive XY scatter plot.
 #'
-#' @inheritParams glimmaMA
-#' @seealso \code{\link{glimmaXY.default}}
-#' @eval XY_details()
-#'
-#' @export
-glimmaXY <- function(x, ...)
-{
-  UseMethod("glimmaXY")
-}
-
-#' Glimma XY Plot
-#'
-#' Draws a two-panel interactive XY scatter plot.
-#'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x numeric vector of values to plot on the x-axis of the summary plot.
 #' @param y numeric vector of values to plot on the y-axis of the summary plot.
@@ -295,7 +281,7 @@ glimmaXY <- function(x, ...)
 #' @eval XY_details()
 #'
 #' @export
-glimmaXY.default <- function(
+glimmaXY <- function(
   x,
   y,
   xlab="x",

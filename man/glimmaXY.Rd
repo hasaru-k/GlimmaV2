@@ -4,12 +4,51 @@
 \alias{glimmaXY}
 \title{Glimma XY Plot}
 \usage{
-glimmaXY(x, ...)
+glimmaXY(
+  x,
+  y,
+  xlab = "x",
+  ylab = "y",
+  status = rep(0, length(x)),
+  main = "XY Plot",
+  display.columns = NULL,
+  anno = NULL,
+  groups = NULL,
+  counts = NULL,
+  status.colours = NULL,
+  transform.counts = FALSE,
+  width = 920,
+  height = 920
+)
 }
 \arguments{
-\item{x}{the DE object to plot.}
+\item{x}{numeric vector of values to plot on the x-axis of the summary plot.}
 
-\item{...}{additional arguments affecting the plots produced. See specific methods for detailed arguments.}
+\item{y}{numeric vector of values to plot on the y-axis of the summary plot.}
+
+\item{xlab}{x axis label.}
+
+\item{ylab}{y axis label.}
+
+\item{status}{vector giving the control status of each row in the object.}
+
+\item{main}{Left plot title.}
+
+\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+
+\item{anno}{a dataframe containing gene annotations}
+
+\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
+
+\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
+
+\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+
+\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+
+\item{width}{width of the weidget in pixels.}
+
+\item{height}{height of the widget in pixels.}
 }
 \value{
 htmlwidget object.
@@ -23,7 +62,4 @@ The right plot shows the expression levels of a particular gene of each sample.
 Clicking on genes in the plot brings up the corresponding genes in the table.
 Selecting rows in the table will highlight the corresponding genes in the XY plot.
 Expression values for a gene can be found by hovering over a sample in the right plot.
-}
-\seealso{
-\code{\link{glimmaXY.default}}
 }
