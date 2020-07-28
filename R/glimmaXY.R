@@ -22,6 +22,7 @@ XY_details <- function() {
   )
 }
 
+
 #' Glimma MA Plot
 #'
 #'
