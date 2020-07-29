@@ -25,10 +25,10 @@ XY_details <- function() {
 volcano_details <- function() {
   c(
     "@details",
-    "The left plot shows the log-fold-change vs -log10(p-value).",
+    "The left plot shows the log-fold-change vs -log10(pvalue).",
     "The right plot shows the expression levels of a particular gene of each sample.",
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
-    "Selecting rows in the table will highlight the corresponding genes in the MA plot.",
+    "Selecting rows in the table will highlight the corresponding genes in the volcano plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
     "@return htmlwidget object."
   )

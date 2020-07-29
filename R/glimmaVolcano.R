@@ -6,7 +6,6 @@
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
 #' @eval volcano_details()
-#'
 #' @export
 glimmaVolcano <- function(x, ...)
 {
@@ -20,7 +19,6 @@ glimmaVolcano <- function(x, ...)
 #' @inheritParams glimmaMA.MArrayLM
 #' @seealso \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval volcano_details()
-#'
 #' @importFrom limma decideTests
 #' @export
 glimmaVolcano.MArrayLM <- function(
@@ -61,7 +59,6 @@ glimmaVolcano.MArrayLM <- function(
 #' @inheritParams glimmaMA.MArrayLM
 #' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval MA_details()
-#'
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -102,7 +99,6 @@ glimmaVolcano.DGEExact <- function(
 #' @inheritParams glimmaMA.MArrayLM
 #' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval MA_details()
-#'
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -116,7 +112,6 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 #' @param groups vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).
 #' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
 #' @eval MA_details()
-#'
 #' @importFrom DESeq2 results counts
 #' @importFrom SummarizedExperiment colData
 #' @export

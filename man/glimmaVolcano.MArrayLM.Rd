@@ -35,15 +35,15 @@ sample groups from \code{dge$samples$group}.}
 
 \item{main}{Left plot title.}
 
-\item{p.adj.method}{character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")}
+\item{p.adj.method}{character vector indicating multiple testing correction method.}
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
 \item{anno}{a dataframe containing gene annotations}
 
-\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
+\item{groups}{vector/factor representing the experimental group for each sample.}
 
-\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
+\item{counts}{the matrix of expression values, with samples in columns.}
 
 \item{xlab}{x axis label.}
 
@@ -64,10 +64,10 @@ htmlwidget object.
 Draws a two-panel interactive volcano plot from an MArrayLM object.
 }
 \details{
-The left plot shows the log-fold-change vs -log10(p-value).
+The left plot shows the log-fold-change vs -log10(pvalue).
 The right plot shows the expression levels of a particular gene of each sample.
 Clicking on genes in the plot brings up the corresponding genes in the table.
-Selecting rows in the table will highlight the corresponding genes in the MA plot.
+Selecting rows in the table will highlight the corresponding genes in the volcano plot.
 Expression values for a gene can be found by hovering over a sample in the right plot.
 }
 \seealso{

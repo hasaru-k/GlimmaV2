@@ -33,7 +33,7 @@
 
 \item{groups}{vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).}
 
-\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
+\item{counts}{the matrix of expression values, with samples in columns.}
 
 \item{xlab}{x axis label.}
 

@@ -22,11 +22,11 @@ glimmaMA <- function(x, ...)
 #' @param status vector giving the control status of each row in the object.
 #' @param coef integer or logical indexing vector indicating which column of object to plot.
 #' @param main Left plot title.
-#' @param p.adj.method character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")
+#' @param p.adj.method character vector indicating multiple testing correction method.
 #' @param display.columns character vector containing names of columns to display in mouseover tooltips and table.
 #' @param anno a dataframe containing gene annotations
-#' @param groups vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.
-#' @param counts the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.
+#' @param groups vector/factor representing the experimental group for each sample.
+#' @param counts the matrix of expression values, with samples in columns.
 #' @param xlab x axis label.
 #' @param ylab y axis label.
 #' @param status.colours vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.
