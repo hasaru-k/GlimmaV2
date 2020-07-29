@@ -166,6 +166,7 @@ function tableClickListener(datatable, state, data, row)
 
 function XYSignalListener(datatable, state, datum, data)
 {
+  if (datum == null) return;
   if (!state.graphMode)
   {
     state.graphMode = true;
@@ -203,7 +204,7 @@ function expressionUpdateHandler(data, selectEvent, state, xyRow)
   if (selectEvent)
   {
     let countsRow = data.countsMatrix[xyRow.index];
-    processExpression(countsRow, data, xyRow.gene);
+    updateExpressionPlot(countsRow, data, xyRow.gene);
   }
   /* if we deselected the point, check if anything else is selected */
   else
@@ -212,7 +213,7 @@ function expressionUpdateHandler(data, selectEvent, state, xyRow)
     {
       let last = state.selected[state.selected.length-1];
       let countsRow = data.countsMatrix[last.index];
-      processExpression(countsRow, data, last.gene);
+      updateExpressionPlot(countsRow, data, last.gene);
     }
     else
     {
@@ -234,7 +235,7 @@ function clearExpressionPlot(expressionView)
 }
 
 
-function processExpression(countsRow, data, gene)
+function updateExpressionPlot(countsRow, data, gene)
 {
   let groups = data.groups.group;
   let samples = data.groups.sample;

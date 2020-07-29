@@ -38,9 +38,9 @@ glimmaXY(
 
 \item{anno}{a dataframe containing gene annotations}
 
-\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
+\item{groups}{vector/factor representing the experimental group for each sample.}
 
-\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
+\item{counts}{the matrix of expression values, with samples in columns.}
 
 \item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
 
