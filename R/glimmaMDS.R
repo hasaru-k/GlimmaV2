@@ -279,7 +279,7 @@ glimmaMDS.DESeqDataSet <- function(
   {
     if (!is.null(SummarizedExperiment::colData(x))) 
     {
-        groups <- data.frame(SummarizedExperiment::colData(x))
+        groups <- as.data.frame(SummarizedExperiment::colData(x))
     } else 
     {
         groups <- as.character(rep(1, ncol(x)))
