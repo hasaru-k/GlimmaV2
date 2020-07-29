@@ -16,7 +16,7 @@
   groups = dge$samples$group,
   counts = dge$counts,
   xlab = "logFC",
-  ylab = "negLogPValue",
+  ylab = "negLog10PValue",
   status.colours = NULL,
   transform.counts = FALSE,
   width = 920,

@@ -13,7 +13,7 @@
   groups = NULL,
   counts = DESeq2::counts(x),
   xlab = "logFC",
-  ylab = "negLogPValue",
+  ylab = "negLog10PValue",
   status.colours = NULL,
   transform.counts = FALSE,
   width = 920,

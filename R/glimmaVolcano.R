@@ -1,20 +1,8 @@
-volcano_details <- function() {
-  c(
-    "@details",
-    "The left plot shows the log-fold-change vs -log10(p-value).",
-    "The right plot shows the expression levels of a particular gene of each sample.",
-    "Clicking on genes in the plot brings up the corresponding genes in the table.",
-    "Selecting rows in the table will highlight the corresponding genes in the MA plot.",
-    "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
-  )
-}
-
-
 #' Glimma Volcano Plot
 #'
 #' Draws a two-panel interactive MA plot.
-#'
+#' 
+#' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
 #' @eval volcano_details()
@@ -47,34 +35,24 @@ glimmaVolcano.MArrayLM <- function(
   groups=dge$samples$group,
   counts=dge$counts,
   xlab="logFC",
-  ylab="negLogPValue",
+  ylab="negLog10PValue",
   status.colours=NULL,
   transform.counts=FALSE,
   width = 920,
   height = 920)
 {
-
-  # create initial table with logFC and -log10(pvalue) features
-  xvals <- round(unname(x$coefficients[, coef]), digits=4)
-  yvals <- round( -log10(x$p.value[, coef]), digits=4)
-  table <- data.frame(xvals, yvals)
-  names(table) <- c(xlab, ylab)
-
-  # add logCPM and adjusted pvalue to table
+  table <- data.frame(round(unname(x$coefficients[, coef]), digits=4), 
+                      round( -log10(x$p.value[, coef]), digits=4))
+  colnames(table) <- c(xlab, ylab)
   logCPM <- round(unname(x$Amean), digits=4)
   AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
-
-  # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
-
-  # make status single-dimensional
   if (is.matrix(status)) status <- status[, coef]
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
-
 
 #' Glimma Volcano Plot
 #'
@@ -94,36 +72,25 @@ glimmaVolcano.DGEExact <- function(
   main=paste(x$comparison[2],"vs",x$comparison[1]),
   p.adj.method = "BH",
   display.columns = NULL,
-  anno=NULL,
+  anno=x$genes,
   groups=dge$samples$group,
   counts=dge$counts,
   xlab="logFC",
-  ylab="negLogPValue",
+  ylab="negLog10PValue",
   status.colours=NULL,
   transform.counts=FALSE,
   width = 920,
   height = 920)
 {
-
   # create initial table with -log10(pvalue) and logFC features
   table <- data.frame(round(x$table$logFC, digits=4),
                       round(-log10(x$table$PValue), digits=4))
-  names(table) <- c(xlab, ylab)
-
-  # add logCPM/adjusted pvalue info to table
+  colnames(table) <- c(xlab, ylab)
   AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
   logCPM <- round(x$table$logCPM, digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
-
-  # add gene info from DGEExact object to table, if non-null
-  if (!is.null(x$genes)) table <- cbind(x$genes, table)
-
-  # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
-
-  # error-check status
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
-
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -162,18 +129,14 @@ glimmaVolcano.DESeqDataSet  <- function(
   groups=NULL,
   counts=DESeq2::counts(x),
   xlab="logFC",
-  ylab="negLogPValue",
+  ylab="negLog10PValue",
   status.colours=NULL,
   transform.counts=FALSE,
   width = 920,
   height = 920)
 {
-
-  # extract logCPM, logFC from DESeqDataSet
   res <- DESeq2::results(x)
   res.df <- as.data.frame(res)
-
-  # extract status if it is not given
   if (is.null(status))
   {
     status <- ifelse(
@@ -182,32 +145,16 @@ glimmaVolcano.DESeqDataSet  <- function(
       0
     )
   }
-
-  # create initial table with logCPM and logFC features
-  xvals <- round(res.df$log2FoldChange, digits=4)
-  yvals <- round(-log10(res.df$pvalue), digits=4)
-  table <- data.frame(xvals, yvals)
-  names(table) <- c(xlab, ylab)
-
-  # add pvalue/adjusted pvalue info from fit object to table
-  table <- cbind(table, logCPM=round(log(res.df$baseMean + 0.5), digits=4), AdjPValue=round(res.df$padj, digits=4))
-
-  # process groups if counts is non-null, and if groups isn't already given
+  table <- data.frame(round(res.df$log2FoldChange, digits=4),
+                      round(-log10(res.df$pvalue), digits=4))
+  colnames(table) <- c(xlab, ylab)
+  table <- cbind(table, logCPM=round(log(res.df$baseMean + 0.5), digits=4), 
+                        AdjPValue=round(res.df$padj, digits=4))
   if (!is.null(counts) && is.null(groups))
   {
-    colData <- SummarizedExperiment::colData(x)
-    if ("group" %in% colnames(colData))
-    {
-      groups <- colData[, "group"]
-    } else
-    {
-      groups <- 1
-    }
+    groups <- extractGroups(x)
   }
-
-  # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
-
   if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))

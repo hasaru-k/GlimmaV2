@@ -166,6 +166,7 @@ function tableClickListener(datatable, state, data, row)
 
 function XYSignalListener(datatable, state, datum, data)
 {
+  if (datum == null) return;
   if (!state.graphMode)
   {
     state.graphMode = true;
