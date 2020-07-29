@@ -15,7 +15,7 @@ Feedback is welcome, please feel free to open an issue for any enhancements you 
 ## Installation
 You can install the development version of GlimmaV2 using devtools from the R command line.
 ```R
-devtools::install_github("hasacat/GlimmaV2")
+devtools::install_github("hasaru-k/GlimmaV2")
 ```
 ## Options
 ### MA/Volcano/XY Plot Colouring
