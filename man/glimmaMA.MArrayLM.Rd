@@ -17,7 +17,7 @@
   counts = dge$counts,
   xlab = "logCPM",
   ylab = "logFC",
-  status.colours = NULL,
+  status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
   width = 920,
   height = 920

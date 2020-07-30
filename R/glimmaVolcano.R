@@ -34,7 +34,7 @@ glimmaVolcano.MArrayLM <- function(
   counts=dge$counts,
   xlab="logFC",
   ylab="negLog10PValue",
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -47,7 +47,6 @@ glimmaVolcano.MArrayLM <- function(
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -74,7 +73,7 @@ glimmaVolcano.DGEExact <- function(
   counts=dge$counts,
   xlab="logFC",
   ylab="negLog10PValue",
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -87,7 +86,6 @@ glimmaVolcano.DGEExact <- function(
   logCPM <- round(x$table$logCPM, digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -125,7 +123,7 @@ glimmaVolcano.DESeqDataSet  <- function(
   counts=DESeq2::counts(x),
   xlab="logFC",
   ylab="negLog10PValue",
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -150,7 +148,6 @@ glimmaVolcano.DESeqDataSet  <- function(
     groups <- extractGroups(x)
   }
   table <- cbind(gene=rownames(x), table)
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }

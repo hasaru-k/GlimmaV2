@@ -50,7 +50,7 @@ glimmaMA.MArrayLM <- function(
   counts=dge$counts,
   xlab="logCPM",
   ylab="logFC",
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -63,7 +63,6 @@ glimmaMA.MArrayLM <- function(
   table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -90,7 +89,7 @@ glimmaMA.DGEExact <- function(
   counts=dge$counts,
   xlab="logCPM",
   ylab="logFC",
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -101,7 +100,6 @@ glimmaMA.DGEExact <- function(
   AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
   table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -138,7 +136,7 @@ glimmaMA.DESeqDataSet  <- function(
   counts=DESeq2::counts(x),
   xlab="logCPM",
   ylab="logFC",
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -176,7 +174,6 @@ glimmaMA.DESeqDataSet  <- function(
   # add rownames to LHS of table
   table <- cbind(gene=rownames(x), table)
 
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x arg.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -202,7 +199,7 @@ glimmaXY <- function(
   anno=NULL,
   groups=NULL,
   counts=NULL,
-  status.colours=NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
   width = 920,
   height = 920)
@@ -220,7 +217,6 @@ glimmaXY <- function(
   } else {
     table <- cbind(gene=1:length(x), table)
   }
-  if (length(status)!=nrow(table)) stop("Status vector must have the same number of genes as x/y args.")
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))
 }
@@ -257,6 +253,9 @@ buildXYData <- function(
     groups <- cbind(groups, sample=colnames(counts))
   }
 
+  if (length(status)!=nrow(table)) stop("Status vector
+     must have the same number of genes as the main arguments.")
+
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno)) table <- cbind(table, anno)
 
@@ -271,7 +270,6 @@ buildXYData <- function(
 
   table <- data.frame(index=0:(nrow(table)-1), table)
 
-  if (is.null(status.colours)) status.colours <- c("dodgerblue", "silver", "firebrick")
   if (length(status.colours) != 3) stop("status_colours
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
 

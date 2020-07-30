@@ -15,7 +15,7 @@ glimmaXY(
   anno = NULL,
   groups = NULL,
   counts = NULL,
-  status.colours = NULL,
+  status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
   width = 920,
   height = 920

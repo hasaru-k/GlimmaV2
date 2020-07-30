@@ -14,7 +14,7 @@
   counts = DESeq2::counts(x),
   xlab = "logFC",
   ylab = "negLog10PValue",
-  status.colours = NULL,
+  status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
   width = 920,
   height = 920
