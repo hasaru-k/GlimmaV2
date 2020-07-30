@@ -42,9 +42,10 @@ HTMLWidgets.widget({
 
         var countsMatrix = null;
         var expressionView = null;
+        var expressionContainer = null;
         if (x.data.counts != -1)
         {
-          var expressionContainer = document.createElement("div");
+          expressionContainer = document.createElement("div");
           expressionContainer.setAttribute("class", "expressionContainer");
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
@@ -68,7 +69,8 @@ HTMLWidgets.widget({
           controlContainer: controlContainer,
           height: height,
           cols: x.data.cols,
-          groups: x.data.groups
+          groups: x.data.groups,
+          expressionContainer: expressionContainer
         };
 
         setupXYInteraction(data);
@@ -76,6 +78,7 @@ HTMLWidgets.widget({
         if (expressionView)
         {
           addSavePlotButton(controlContainer, expressionView, text="Save (EXP)");
+          addAxisMessage(data);
         }
 
       },
@@ -126,6 +129,7 @@ function setupXYInteraction(data)
   });
 }
 
+
 function clearTableListener(datatable, state, data)
 {
   state.graphMode = false;
@@ -135,7 +139,7 @@ function clearTableListener(datatable, state, data)
   datatable.search('').columns().search('').draw();       
   data.xyView.data("selected_points", state.selected);
   data.xyView.runAsync();
-  clearExpressionPlot(data.expressionView);
+  clearExpressionPlot(data);
   console.log(state);
 }
 
@@ -217,21 +221,23 @@ function expressionUpdateHandler(data, selectEvent, state, xyRow)
     }
     else
     {
-      clearExpressionPlot(data.expressionView);
+      clearExpressionPlot(data);
     }
   }
 }
 
 
-function clearExpressionPlot(expressionView)
+function clearExpressionPlot(data)
 {
-  if (!expressionView)
+  if (!data.expressionView)
   {
     return;
   }
-  expressionView.data("table", []);
-  expressionView.signal("title_signal", "");
-  expressionView.runAsync();
+  data.expressionView.data("table", []);
+  data.expressionView.signal("title_signal", "");
+  data.expressionView.signal("max_count", 0);
+  data.expressionView.runAsync();
+  updateAxisMessage(data);
 }
 
 
@@ -253,7 +259,9 @@ function updateExpressionPlot(countsRow, data, gene)
   console.log(result);
   data.expressionView.data("table", result);
   data.expressionView.signal("title_signal", "Gene " + gene.toString());
+  data.expressionView.signal("max_count", Math.max(...result.map(x => x.count)));
   data.expressionView.runAsync();
+  updateAxisMessage(data);
 }
 
 
@@ -291,4 +299,32 @@ function remove(arr, index)
 {
   let new_arr = arr.slice(0, index).concat(arr.slice(index+1))
   return new_arr;
+}
+
+
+function addAxisMessage(data)
+{
+  var bindings = data.expressionContainer.getElementsByClassName("vega-bindings")[0];
+  var alertBox = document.createElement("div");
+  alertBox.setAttribute("class", "alertBox invisible");
+  data.expressionView.addSignalListener('max_y_axis', 
+    function(name, value) { updateAxisMessage(data) });
+  bindings.appendChild(alertBox);
+}
+
+
+function updateAxisMessage(data)
+{
+  var alertBox = data.expressionContainer.getElementsByClassName("alertBox")[0];
+  let maxCount = data.expressionView.signal("max_count");
+  let userValue = data.expressionView.signal("max_y_axis");
+  if (userValue == null || userValue == "" || Number(userValue) >= maxCount)
+  {
+    alertBox.setAttribute("class", "alertBox invisible");
+  }
+  else
+  {
+    alertBox.innerHTML = `Max count value is ${maxCount}`;
+    alertBox.setAttribute("class", "alertBox danger");
+  }
 }
