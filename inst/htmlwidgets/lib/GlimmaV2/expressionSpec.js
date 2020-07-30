@@ -25,8 +25,12 @@ function createExpressionSpec(width, height, expColumns)
                                 }
                     },
                     {
+                        "name": "max_count",
+                        "value": 0,
+                    },
+                    {
                         "name": "max_y",
-                        "update": "max_y_axis <= 0 ? null : max_y_axis"
+                        "update": " (max_y_axis < max_count) ? null : max_y_axis"
                     }
                 ],
         "data": [ {"name": "table"} ],
