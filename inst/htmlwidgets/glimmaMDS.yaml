@@ -18,4 +18,7 @@ dependencies:
     src: htmlwidgets/lib/GlimmaV2
     script:
       - MDSSpecs.js
+      - XYSpecs.js
+      - expressionSpec.js
+      - makeTooltip.js
       - saveTools.js
