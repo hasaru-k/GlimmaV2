@@ -18,7 +18,7 @@ You can install the development version of GlimmaV2 using devtools from the R co
 devtools::install_github("hasaru-k/GlimmaV2")
 ```
 ## Options
-### MA/Volcano/XY Plot Colouring
+### Plot Colouring (MA/Volcano/XY)
 The default mapping between the status vector and color of the gene is given below:
 ```
 -1 (downreg) => "dodgerblue"
@@ -35,6 +35,13 @@ glimmaVolcano(fit, dge=rnaseq, status.colours=c("blue", "darkgrey", "red"))
 ```R
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
+### Gene Symbol Text (MA/Volcano/XY)
+Gene symbol text will be displayed above selected points if there is a vector named ```symbol``` within the gene annotation supplied as per the example plots shown above. The gene annotation is the ```anno``` argument. 
+
+- for the glimmaVolcano and glimmaMA functions, ```anno``` defaults to ```x$genes``` for DGELRT/DGEExact and MArrayLM objects and defaults to ```NULL``` for DESeqDataSet objects - see ```?glimmaMA```, ```?glimmaVolcano``` for further detail
+- for glimmaXY, ```anno``` is always ```NULL``` by default
+
+
 ### MDS Options
 The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown contains discrete features by default but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
 ```R
