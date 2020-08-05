@@ -223,7 +223,9 @@ glimmaXY <- function(
 
 #' Glimma XY Plot
 #'
-#' Common processing steps for both MA and XY plots.
+#' Common processing steps for both MA, XY and volcano plots.
+#' Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab} as this
+#' tells the frontend what to display on the left plot, as well as other relevant columns.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
@@ -280,7 +282,7 @@ buildXYData <- function(
                           counts=counts,
                           groups=groups,
                           expCols=colnames(groups),
-                          status_colours=status.colours,
+                          statusColours=status.colours,
                           title=main))
   return(xData)
 }

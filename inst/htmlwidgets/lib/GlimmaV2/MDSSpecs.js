@@ -1,6 +1,6 @@
 
 // parametrise graph encoding for MDS plot
-function createMDSSpec(mdsData, dimList, features, width, height, continuous_colour) 
+function createMDSSpec(mdsData, dimList, features, width, height, continuousColour) 
 {
   console.log(features);
 
@@ -19,7 +19,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuous_col
   var tooltip = { "signal" : tooltipString };
   
   // generate colorscheme options
-  var colourschemes = continuous_colour ? ["reds", "blues", "tealblues", "teals", "greens", "browns", "oranges", "reds", "purples", "warmgreys", "greys", "viridis", "plasma", "blueorange", "redblue"]
+  var colourschemes = continuousColour ? ["reds", "blues", "tealblues", "teals", "greens", "browns", "oranges", "reds", "purples", "warmgreys", "greys", "viridis", "plasma", "blueorange", "redblue"]
         : [ "tableau20", "tableau10", "category20", "category20b", "category20c", "set1", "set2", "set3", "pastel1", "pastel2", "paired", "dark2",  "category10", "accent", "viridis", "plasma"];
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
@@ -55,7 +55,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuous_col
         {
           "name": "colour_by",
           "value": features["discrete"][0],
-          "bind": { "input": "select", "options": continuous_colour ? features["numeric"] : features["discrete"] }
+          "bind": { "input": "select", "options": continuousColour ? features["numeric"] : features["discrete"] }
         },
         {
           "name": "shape_by",
@@ -110,7 +110,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuous_col
       },
       {
         "name": "color",
-        "type": continuous_colour ? "linear" : "ordinal",
+        "type": continuousColour ? "linear" : "ordinal",
         "domain": { "data": "source", "field": { "signal": "colour_by" } },
         "range": { "scheme": { "signal": "colourscheme" } }
       },

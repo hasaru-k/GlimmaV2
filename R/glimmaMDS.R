@@ -161,7 +161,7 @@ glimmaMDS.default <- function(
   xData = list(data = list(mdsData=points,
                            eigenData=eigen,
                            features=features,
-                           continuous_colour=continuous.colour,
+                           continuousColour=continuous.colour,
                            dimlist=dimlist))
 
 
