@@ -151,20 +151,14 @@ function tableClickListener(datatable, state, data, row)
     return;
   } 
   row.toggleClass('selected');
-  let selectedRows = datatable.rows('.selected').data();
-  state.selected = [];
-  for (let i = 0; i < selectedRows.length; i++)
-  {
-    state.selected.push(selectedRows[i]);
-  } 
+  let datum = datatable.row(row).data();
+  var loc = containsGene(state.selected, datum);
+  state.selected = loc >= 0 ? remove(state.selected, loc) : state.selected.concat(datum);
+  selectedUpdateHandler(state, data.controlContainer);
   data.xyView.data("selected_points", state.selected);
   data.xyView.runAsync();
-  selectedUpdateHandler(state, data.controlContainer);
-
-  let index = datatable.row(row).index();
   let selectEvent = row.hasClass('selected');
-  expressionUpdateHandler(data, selectEvent, state, data.xyTable[index]);
-  console.log(state);
+  expressionUpdateHandler(data, selectEvent, state, datum);
 }
 
 
