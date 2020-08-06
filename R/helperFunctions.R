@@ -1,4 +1,5 @@
-MA_details <- function() {
+MA_details <- function() 
+{
   c(
     "@details",
     "The left plot shows the log-fold-change vs average expression.",
@@ -10,7 +11,8 @@ MA_details <- function() {
   )
 }
 
-XY_details <- function() {
+XY_details <- function() 
+{
   c(
     "@details",
     "The left plot shows the x and y values specified.",
@@ -22,7 +24,8 @@ XY_details <- function() {
   )
 }
 
-volcano_details <- function() {
+volcano_details <- function() 
+{
   c(
     "@details",
     "The left plot shows the log-fold-change vs -log10(pvalue).",
@@ -34,7 +37,8 @@ volcano_details <- function() {
   )
 }
 
-MDS_details <- function() {
+MDS_details <- function() 
+{
   c(
     "@details",
     "The left plot shows two MDS dimensions, with annotations displayed on hover.",
