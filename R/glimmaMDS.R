@@ -153,8 +153,8 @@ glimmaMDS.default <- function(
   points <- cbind(points, "-" = "0")
   points <- cbind(points, "- " = 0)
   is_numeric <- sapply(groups, is.numeric)
-  numeric <- c(colnames(groups[, is_numeric]), "- ")
-  discrete <- c(colnames(groups[, !is_numeric]), "-")
+  numeric <- c(colnames(groups)[is_numeric], "- ")
+  discrete <- c(colnames(groups)[!is_numeric], "-")
   features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))
 
   # forward data to the widget using xData
@@ -244,7 +244,6 @@ glimmaMDS.DGEList <- function(
 #'
 #' @importFrom SummarizedExperiment colData
 #' @importFrom edgeR cpm
-#' @importFrom S4Vectors as.data.frame.DataTable
 #' @export
 glimmaMDS.DESeqDataSet <- function(
   x,
@@ -280,7 +279,7 @@ glimmaMDS.DESeqDataSet <- function(
   {
     if (!is.null(SummarizedExperiment::colData(x))) 
     {
-        groups <- S4Vectors::as.data.frame.DataTable(SummarizedExperiment::colData(x))
+        groups <- as.data.frame(SummarizedExperiment::colData(x))
     } else 
     {
         groups <- as.character(rep(1, ncol(x)))

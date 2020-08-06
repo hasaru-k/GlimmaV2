@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/hasaru-k/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasacat/GlimmaV2)
+[![Build Status](https://travis-ci.org/hasaru-k/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasaru-k/GlimmaV2)
 # GlimmaV2
 GlimmaV2 is an interactive R widget for creating plots for differential expression analysis, created using the [Vega](https://vega.github.io/vega/) and [htmlwidgets](https://www.htmlwidgets.org/) frameworks. New features include:
 - multiple gene selections
@@ -7,16 +7,18 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 
 Feedback is welcome, please feel free to open an issue for any enhancements you would like to see in future.
 ### MA Plot
-![MA plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/MA_tableselect.gif "MA Plot")
+![MA plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/maplot.gif "MA Plot")
+### Volcano Plot
+![Volcano plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/Volcano_select.gif "Volcano Plot")
 ### MDS Plot
 ![MDS plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/MDS_numeric.gif "MDS Plot")
 ## Installation
 You can install the development version of GlimmaV2 using devtools from the R command line.
 ```R
-devtools::install_github("hasacat/GlimmaV2")
+devtools::install_github("hasaru-k/GlimmaV2")
 ```
 ## Options
-### MA & XY Plot Colouring
+### Plot Colouring (MA/Volcano/XY)
 The default mapping between the status vector and color of the gene is given below:
 ```
 -1 (downreg) => "dodgerblue"
@@ -28,8 +30,18 @@ Accordingly, the default status.colours argument is ```c("dodgerblue", "silver",
 glimmaMA(fit, dge=rnaseq, status.colours=c("#3977db","#3d3f42","#db0d4e"))
 ```
 ```R
+glimmaVolcano(fit, dge=rnaseq, status.colours=c("blue", "darkgrey", "red"))
+```
+```R
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
+### Gene Symbol Text (MA/Volcano/XY)
+Gene symbol text will be displayed above selected points if there is a vector named ```symbol``` within the gene annotation supplied as per the example plots shown above. The gene annotation is the ```anno``` argument. 
+
+- for the glimmaVolcano and glimmaMA functions, ```anno``` defaults to ```x$genes``` for DGELRT/DGEExact and MArrayLM objects and defaults to ```NULL``` for DESeqDataSet objects - see ```?glimmaMA```, ```?glimmaVolcano``` for further detail
+- for glimmaXY, ```anno``` is always ```NULL``` by default
+
+
 ### MDS Options
 The ```scale_by``` dropdown menu contains *numeric* features provided the ```groups``` dataframe, while the ```shape_by``` dropdown contains *discrete* features provided by the ```groups``` dataframe. The ```colour_by``` dropdown contains discrete features by default but can be altered to take numeric features such as library size by setting ```continuous.colour=TRUE```:
 ```R

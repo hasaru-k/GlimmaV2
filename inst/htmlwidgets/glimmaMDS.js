@@ -61,8 +61,8 @@ HTMLWidgets.widget({
         eigenView.runAsync();
         linkPlotsMDS(mdsView, eigenView);
         addBlockElement(controlContainer);
-        addSave(controlContainer, mdsView, text="Save (MDS)");
-        addSave(controlContainer, eigenView, text="Save (VAR)");
+        addSavePlotButton(controlContainer, mdsView, text="Save (MDS)");
+        addSavePlotButton(controlContainer, eigenView, text="Save (VAR)");
 
         reformatElementsMDS(controlContainer);
 

@@ -4,9 +4,9 @@ HTMLWidgets.widget({
 
   type: 'output',
 
-  factory: function(el, width, height) {
+  factory: function(el, width, height) 
+  {
 
-    // create general layout elements
     var plotContainer = document.createElement("div");
     var controlContainer = document.createElement("div");
     plotContainer.setAttribute("class", "plotContainer");
@@ -18,7 +18,8 @@ HTMLWidgets.widget({
 
     return {
 
-      renderValue: function(x) {
+      renderValue: function(x) 
+      {
         
         console.log(x);
         var handler = new vegaTooltip.Handler();
@@ -30,7 +31,7 @@ HTMLWidgets.widget({
 
         var xyTable = HTMLWidgets.dataframeToD3(x.data.table)
         var xySpec = createXYSpec(x.data, xyTable, width, height);
-        xyView = new vega.View(vega.parse(xySpec), {
+        var xyView = new vega.View(vega.parse(xySpec), {
           renderer: 'svg',
           container: xyContainer,
           bind: controlContainer,
@@ -39,14 +40,12 @@ HTMLWidgets.widget({
         xyView.tooltip(handler.call);
         xyView.runAsync();
 
-
-
-        // add expression plot if necessary
         var countsMatrix = null;
         var expressionView = null;
+        var expressionContainer = null;
         if (x.data.counts != -1)
         {
-          var expressionContainer = document.createElement("div");
+          expressionContainer = document.createElement("div");
           expressionContainer.setAttribute("class", "expressionContainer");
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
@@ -59,185 +58,187 @@ HTMLWidgets.widget({
           });
           expressionView.tooltip(handler.call);
           expressionView.runAsync();
-
         }
-        
-        // add datatable, and generate interaction
-        setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height);
-        // add XY plot save button
-        addSave(controlContainer, xyView, text="Save (XY)");
-        if (expressionView) addSave(controlContainer, expressionView, text="Save (EXP)");
+
+        var data =
+        {
+          xyView: xyView,
+          expressionView: expressionView,
+          xyTable: xyTable,
+          countsMatrix: countsMatrix,
+          controlContainer: controlContainer,
+          height: height,
+          cols: x.data.cols,
+          groups: x.data.groups,
+          expressionContainer: expressionContainer
+        };
+
+        setupXYInteraction(data);
+        addSavePlotButton(controlContainer, xyView, text="Save (XY)");
+        if (expressionView)
+        {
+          addSavePlotButton(controlContainer, expressionView, text="Save (EXP)");
+          addAxisMessage(data);
+        }
 
       },
 
       resize: function(width, height) 
-      {
-        console.log("resize called, width=" + width + ",height=" + height);
-      }
+      {}
 
     };
   }
 });
 
 
-
-function setupXYInteraction(xyView, xyTable, countsMatrix, expressionView, controlContainer, x, height)
+function setupXYInteraction(data)
 {
-  // setup the datatable
+  var state = {selected: [], graphMode: false };
   var datatableEl = document.createElement("TABLE");
   datatableEl.setAttribute("class", "dataTable");
-  controlContainer.appendChild(datatableEl);
-  var xyColumnsInfo = [];
-  x.data.cols.forEach(x => xyColumnsInfo.push({"data": x, "title": x}));
-  
-  var selected = [];
-  var graphMode = false;
+  data.controlContainer.appendChild(datatableEl);
 
   $(document).ready(function() 
   {
-
-    var datatable = $(datatableEl).DataTable({
-        data: xyTable,
-        columns: xyColumnsInfo,
+    var datatable = $(datatableEl).DataTable(
+      {
+        data: data.xyTable,
+        columns: data.cols.map(el => ({"data": el, "title": el})),
         rowId: "gene",
         dom: '<"geneDisplay">Bfrtip',
-        buttons: [ { action: () => saveSubsetClick(selected, xyTable, countsMatrix),
-                    text: 'Save (All)',
-                    attr: {class: 'save-button saveSubset'}} ],
-        scrollY:        (height*0.4).toString() + "px",
+        buttons: [  
+                    {
+                      text: 'Clear',
+                      action: () => clearTableListener(datatable, state, data),
+                      attr: {class: 'save-button'}
+                    },
+                    { 
+                      text: 'Save (All)',
+                      action: () => saveTableClickListener(state, data),
+                      attr: {class: 'save-button saveSubset'}
+                    }
+                  ],
+        scrollY: (data.height*0.4).toString() + "px",
         scrollX: false,
         orderClasses: false,
-        'stripeClasses':['stripe1','stripe2']
-    });
-
-    // reset graph and table selections
-    datatable.button().add(0, 
-      {
-        action: function ( e, dt, button, config ) 
-        {
-          graphMode = false;
-          console.log(datatable.rows())
-          /* clear datatable rows and search filter */
-          datatable.rows('.selected').nodes().to$().removeClass('selected');
-          datatable.search('').columns().search('').draw();                      
-          selected = [];
-          selectedUpdateHandler(selected, controlContainer);
-          /* clear XY plot */
-          xyView.data("selected_points", selected);
-          xyView.runAsync();
-          /* clear expression plot */
-          clearExpressionPlot(expressionView);
-        },
-        text: 'Clear',
-        attr: {class: 'save-button'}
+        stripeClasses: ['stripe1','stripe2']
       });
 
-    // map table selections onto the graph (clearing graph selections each time)
-    datatable.on( 'click', 'tr', function () 
-      {
-        // not possible while in graph mode
-        if (graphMode) return;
-        $(this).toggleClass('selected');
-        let selectedRows = datatable.rows('.selected').data();
-        let i;
-        selected = [];
-        for (i = 0; i < selectedRows.length; i++) selected.push(selectedRows[i]);
-        xyView.data("selected_points", selected);
-        xyView.runAsync();
-        selectedUpdateHandler(selected, controlContainer);
-
-        /* expression plot */
-        let index = datatable.row(this).index();
-        let selectEvent = $(this).hasClass('selected');
-        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, xyTable[index]);
-      }
-    );
-
-    // map graph selections onto the table (clearing table selections each time)
-    xyView.addSignalListener('click', 
-      function(name, value) 
-      {
-        var datum = value[0];
-        if (datum == null) return;
-
-        // switch to graph mode if in table mode
-        if (!graphMode)
-        {
-          graphMode = true;
-          datatable.rows('.selected').nodes().to$().removeClass('selected');
-          selected = [];
-        }
-
-        // check if datum is in selected
-        // if it is, remove it; otherwise, add it
-        var loc = contains(selected, datum);
-        loc >= 0 ?
-          selected = selected.slice(0, loc).concat(selected.slice(loc+1)) 
-          : selected.push(datum);
-
-        // highlight selected points
-        xyView.data("selected_points", selected);
-        xyView.runAsync();
-        selectedUpdateHandler(selected, controlContainer);
-
-        // edge case: deselect last point
-        if (selected.length == 0) graphMode = false;
-
-        // update table filter based on selected
-        if (!datatable) return;
-        datatable.search('').columns().search('').draw();
-        // filter using a regex string: union over genes in selected
-        var regex_search = selected.map(x => '^' + x.gene + '$').join('|');
-        datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
-
-        /* expression plot */
-        let selectEvent = loc < 0;
-        expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selected, datum);
-      }
-
-    );
-    
+    datatable.on('click', 'tr', function() { tableClickListener(datatable, state, data, $(this)) } );
+    data.xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
   });
-
 }
 
-function expressionUpdateHandler(expressionView, countsMatrix, x, selectEvent, selectedPoints, xyRow)
+
+function clearTableListener(datatable, state, data)
 {
-  if (!expressionView) return;
+  state.graphMode = false;
+  state.selected = [];
+  selectedUpdateHandler(state, data.controlContainer);
+  datatable.rows('.selected').nodes().to$().removeClass('selected');
+  datatable.search('').columns().search('').draw();       
+  data.xyView.data("selected_points", state.selected);
+  data.xyView.runAsync();
+  clearExpressionPlot(data);
+  console.log(state);
+}
+
+
+function tableClickListener(datatable, state, data, row)
+{
+  if (state.graphMode)
+  {
+    return;
+  } 
+  row.toggleClass('selected');
+  let datum = datatable.row(row).data();
+  var loc = containsGene(state.selected, datum);
+  state.selected = loc >= 0 ? remove(state.selected, loc) : state.selected.concat(datum);
+  selectedUpdateHandler(state, data.controlContainer);
+  data.xyView.data("selected_points", state.selected);
+  data.xyView.runAsync();
+  let selectEvent = row.hasClass('selected');
+  expressionUpdateHandler(data, selectEvent, state, datum);
+}
+
+
+function XYSignalListener(datatable, state, datum, data)
+{
+  if (datum == null) return;
+  if (!state.graphMode)
+  {
+    state.graphMode = true;
+    datatable.rows('.selected').nodes().to$().removeClass('selected');
+    state.selected = [];
+  }
+
+  var loc = containsGene(state.selected, datum);
+  state.selected = loc >= 0 ? remove(state.selected, loc) : state.selected.concat(datum);
+  selectedUpdateHandler(state, data.controlContainer);
+  data.xyView.data("selected_points", state.selected);
+  data.xyView.runAsync();
+
+  // edge case: deselecting last point
+  if (state.selected.length == 0)
+  {
+    state.graphMode = false;
+  }
+
+  datatable.search('').columns().search('').draw();
+  var regex_search = state.selected.map(x => '^' + x.gene + '$').join('|');
+  datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
+
+  let selectEvent = loc < 0;
+  expressionUpdateHandler(data, selectEvent, state, datum);
+}
+
+
+function expressionUpdateHandler(data, selectEvent, state, xyRow)
+{
+  if (!data.expressionView)
+  {
+    return;
+  }
   if (selectEvent)
   {
-    let countsRow = countsMatrix[xyRow.index];
-    processExpression(countsRow, x.data.groups, expressionView, xyRow.gene);
+    let countsRow = data.countsMatrix[xyRow.index];
+    updateExpressionPlot(countsRow, data, xyRow.gene);
   }
   /* if we deselected the point, check if anything else is selected */
   else
   {
-    if (selectedPoints.length > 0)
+    if (state.selected.length > 0)
     {
-      let last = selectedPoints[selectedPoints.length-1];
-      let countsRow = countsMatrix[last.index];
-      processExpression(countsRow, x.data.groups, expressionView, last.gene);
+      let last = state.selected[state.selected.length-1];
+      let countsRow = data.countsMatrix[last.index];
+      updateExpressionPlot(countsRow, data, last.gene);
     }
     else
     {
-      clearExpressionPlot(expressionView);
+      clearExpressionPlot(data);
     }
   }
 }
 
-function clearExpressionPlot(expressionView)
+
+function clearExpressionPlot(data)
 {
-  if (!expressionView) return;
-  expressionView.data("table", []);
-  expressionView.signal("title_signal", "");
-  expressionView.runAsync();
+  if (!data.expressionView)
+  {
+    return;
+  }
+  data.expressionView.data("table", []);
+  data.expressionView.signal("title_signal", "");
+  data.expressionView.signal("max_count", 0);
+  data.expressionView.runAsync();
+  updateAxisMessage(data);
 }
 
-function processExpression(countsRow, groupsData, expressionView, gene)
+
+function updateExpressionPlot(countsRow, data, gene)
 {
-  console.log(groupsData);
-  let groups = groupsData.group;
-  let samples = groupsData.sample;
+  let groups = data.groups.group;
+  let samples = data.groups.sample;
   let result = [];
   for (col in countsRow) 
   {
@@ -250,32 +251,73 @@ function processExpression(countsRow, groupsData, expressionView, gene)
     result.push(curr);
   }
   console.log(result);
-  expressionView.data("table", result);
-  expressionView.signal("title_signal", "Gene " + gene.toString());
-  expressionView.runAsync();
+  data.expressionView.data("table", result);
+  data.expressionView.signal("title_signal", "Gene " + gene.toString());
+  data.expressionView.signal("max_count", Math.max(...result.map(x => x.count)));
+  data.expressionView.runAsync();
+  updateAxisMessage(data);
 }
 
-function contains(arr, datum)
+
+function containsGene(arr, datum)
 {
   let loc = -1;
   let i;
   for (i = 0; i < arr.length; i++)
   {
-    if (arr[i]['gene'] === datum['gene']) loc = i;
+    if (arr[i]['gene'] === datum['gene'])
+    {
+      loc = i;
+      break;
+    } 
   }
   return loc;
 }
 
 
-function selectedUpdateHandler(selected, controlContainer)
+function selectedUpdateHandler(state, controlContainer)
 {
   /* update gene display */
   var geneDisplay = controlContainer.getElementsByClassName("geneDisplay")[0];
-  let htmlString = selected.map(x => `<span>${x.gene}</span>`).join("");
+  let htmlString = state.selected.map(x => `<span>${x.gene}</span>`).join("");
   $(geneDisplay).html(htmlString);
 
   /* update save btn */
   var saveSubsetButton = controlContainer.getElementsByClassName("saveSubset")[0];
-  let saveString = selected.length > 0 ? `Save (${selected.length})` : "Save (All)";
+  let saveString = state.selected.length > 0 ? `Save (${state.selected.length})` : "Save (All)";
   $(saveSubsetButton).html(saveString);
+}
+
+function remove(arr, index)
+{
+  let new_arr = arr.slice(0, index).concat(arr.slice(index+1))
+  return new_arr;
+}
+
+
+function addAxisMessage(data)
+{
+  var bindings = data.expressionContainer.getElementsByClassName("vega-bindings")[0];
+  var alertBox = document.createElement("div");
+  alertBox.setAttribute("class", "alertBox invisible");
+  data.expressionView.addSignalListener('max_y_axis', 
+    function(name, value) { updateAxisMessage(data) });
+  bindings.appendChild(alertBox);
+}
+
+
+function updateAxisMessage(data)
+{
+  var alertBox = data.expressionContainer.getElementsByClassName("alertBox")[0];
+  let maxCount = data.expressionView.signal("max_count");
+  let userValue = data.expressionView.signal("max_y_axis");
+  if (userValue == null || userValue == "" || Number(userValue) >= maxCount)
+  {
+    alertBox.setAttribute("class", "alertBox invisible");
+  }
+  else
+  {
+    alertBox.innerHTML = `Max count value is ${maxCount}`;
+    alertBox.setAttribute("class", "alertBox danger");
+  }
 }

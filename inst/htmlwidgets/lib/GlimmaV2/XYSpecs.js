@@ -97,7 +97,7 @@ function createXYSpec(xyData, xyTable, width, height)
             "x": { "scale": "x", "field": xyData.x },
             "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
-            "size" : [ {"test": "datum.status == 0", "value": 40}, {"value": 100} ],
+            "size" : [ {"test": "datum.status == 0", "value": 5}, {"value": 25} ],
             "opacity": {"value": 0.65},
             "fill": { "scale": "colour_scale", "field": "status" },
             "strokeWidth": {"value": 1},
@@ -115,8 +115,8 @@ function createXYSpec(xyData, xyTable, width, height)
             "x": { "scale": "x", "field": xyData.x },
             "y": { "scale": "y", "field": xyData.y },
             "shape": "circle",
-            "size": {"value": 100},
-            "fill" : {"value" : "darkorange"},
+            "size": {"value": 120},
+            "fill": { "scale": "colour_scale", "field": "status" },
             "strokeWidth": { "value": 1 },
             "stroke": { "value": "black" },
             "opacity": { "value": 1 },
@@ -124,6 +124,22 @@ function createXYSpec(xyData, xyTable, width, height)
           }
         }
       },
+      {
+        "name": "selected_text",
+        "type": "text",
+        "from": { "data": "selected_points" },
+        "encode": {
+          "update": {
+            "x": { "scale": "x", "field": xyData.x },
+            "y": { "scale": "y", "field": xyData.y, "offset": -10 },
+            "fill": { "value": "black" },
+            "fontWeight": {"value": "bold"},
+            "opacity": { "value": 1 },
+            "text": {"field": "symbol"},
+            "fontSize": {"value": 12}
+          }
+        }
+      }
     ]
   };
 }

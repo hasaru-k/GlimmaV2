@@ -13,11 +13,11 @@
   p.adj.method = "BH",
   display.columns = NULL,
   anno = x$genes,
-  groups = NULL,
-  counts = NULL,
+  groups = dge$samples$group,
+  counts = dge$counts,
   xlab = "logCPM",
   ylab = "logFC",
-  status.colours = NULL,
+  status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
   width = 920,
   height = 920
@@ -35,15 +35,15 @@ sample groups from \code{dge$samples$group}.}
 
 \item{main}{Left plot title.}
 
-\item{p.adj.method}{character vector indicating multiple testing correction method. See p.adjust for available methods. (defaults to "BH")}
+\item{p.adj.method}{character vector indicating multiple testing correction method.}
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
 \item{anno}{a dataframe containing gene annotations}
 
-\item{groups}{vector/factor representing the experimental group for each sample. Will override dge$samples$group if dge is provided too.}
+\item{groups}{vector/factor representing the experimental group for each sample.}
 
-\item{counts}{the matrix of expression values, with samples in columns. Will override dge$counts if dge is provided too.}
+\item{counts}{the matrix of expression values, with samples in columns.}
 
 \item{xlab}{x axis label.}
 

@@ -70,6 +70,8 @@
 	margin-right: 2px;
 	margin-bottom: 5px;
 	font-size: 12px;
+	font-family: sans-serif;
+	color: #404040;
 }
 
 /* dropdown controls */
@@ -157,4 +159,36 @@ button.save-button:active {
 
 .show {
 	display: block;
+}
+
+/* vega max y axis setting */
+input .max_y_axis 
+{
+	margin-bottom: 5px;
+    margin-left: 5px;
+    border: solid 1px #b5b5b5;
+    border-radius: 2px;
+}
+
+.alertBox 
+{
+	display: inline;
+	margin-left: 10px;
+	font-family: sans-serif;
+	padding: 1px 1px;
+	font-size: 10pt;
+	color: #383d41;
+	background-color: #e2e3e5;
+	border: 1px solid #d6d8db;
+	border-radius: .25rem;
+}
+.danger 
+{
+	color: #721c24;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+}
+.invisible 
+{
+	display: none;
 }
