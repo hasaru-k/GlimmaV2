@@ -1,13 +1,3 @@
-MDS_details <- function() {
-  c(
-    "@details",
-    "The left plot shows two MDS dimensions, with annotations displayed on hover.",
-    "The right panel contains a bar plot of the eigenvalues of each dimension.",
-    "The controls beneath the plots can be used to change the dimensions being displayed.",
-    "@return htmlwidget object."
-  )
-}
-
 #' Glimma MDS Plot
 #'
 #' Draws a two-panel interactive MDS plot.  
@@ -161,7 +151,7 @@ glimmaMDS.default <- function(
   xData = list(data = list(mdsData=points,
                            eigenData=eigen,
                            features=features,
-                           continuous_colour=continuous.colour,
+                           continuousColour=continuous.colour,
                            dimlist=dimlist))
 
 

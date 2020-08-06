@@ -56,7 +56,7 @@ function createXYSpec(xyData, xyTable, width, height)
         "name": "colour_scale",
         "type": "ordinal",
         "domain": [-1, 0, 1],
-        "range": xyData.status_colours
+        "range": xyData.statusColours
       }
     ],
     "legends": [

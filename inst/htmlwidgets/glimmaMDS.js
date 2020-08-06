@@ -40,7 +40,7 @@ HTMLWidgets.widget({
         /* NB: the createXXSpec functions are defined in lib/GlimmaSpecs */
         var mdsSpec = createMDSSpec(mdsData, x.data.dimlist, 
                                       x.data.features,
-                                      width, height, x.data.continuous_colour);
+                                      width, height, x.data.continuousColour);
         
         var mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'svg',

@@ -2,7 +2,7 @@
 % Please edit documentation in R/glimmaXY.R
 \name{buildXYData}
 \alias{buildXYData}
-\title{Glimma XY Plot}
+\title{XY Data Object Builder}
 \usage{
 buildXYData(
   table,
@@ -42,5 +42,7 @@ buildXYData(
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 }
 \description{
-Common processing steps for both MA and XY plots.
+Common processing steps for both MA, XY and volcano plots.
+Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab} as this
+tells the frontend what to display on the left plot, as well as other relevant columns.
 }

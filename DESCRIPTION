@@ -1,5 +1,5 @@
 Package: GlimmaV2
-Title: What the Package Does (One Line, Title Case)
+Title: Interactive Plots for Differential Expression Analysis
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "First",
@@ -17,7 +17,6 @@ Imports:
     edgeR,
     limma,
     DESeq2,
-    S4Vectors,
     SummarizedExperiment
 Suggests:
     testthat,
