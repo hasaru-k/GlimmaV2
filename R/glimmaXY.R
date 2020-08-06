@@ -141,17 +141,20 @@ glimmaMA.DESeqDataSet  <- function(
   width = 920,
   height = 920)
 {
-
   # extract logCPM, logFC from DESeqDataSet
-  res <- DESeq2::results(x)
-  res.df <- as.data.frame(res)
+  res.df <- as.data.frame(DESeq2::results(x))
+
+  # filter out genes that have missing data
+  complete_genes <- complete.cases(res.df)
+  res.df <- res.df[complete_genes, ]
+  x <- x[complete_genes, ]
 
   # extract status if it is not given
   if (is.null(status))
   {
     status <- ifelse(
-      res$padj < 0.05,
-      ifelse(res$log2FoldChange < 0, -1, 1),
+      res.df$padj < 0.05,
+      ifelse(res.df$log2FoldChange < 0, -1, 1),
       0
     )
   }
@@ -160,7 +163,7 @@ glimmaMA.DESeqDataSet  <- function(
   xvals <- round(log(res.df$baseMean + 0.5), digits=4)
   yvals <- round(res.df$log2FoldChange, digits=4)
   table <- data.frame(xvals, yvals)
-  names(table) <- c(xlab, ylab)
+  colnames(table) <- c(xlab, ylab)
 
   # add pvalue/adjusted pvalue info from fit object to table
   table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
