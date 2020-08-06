@@ -11,17 +11,18 @@
 │       ├── glimmaXY.yaml-------------------------> project dependencies for glimmaMA/XY/Volcano
 │       └── lib
 │           ├── FileSaver
-│           │   └── FileSaver.js
+│           │   └── FileSaver.js-------------------> API used to save CSV files
 │           ├── GlimmaV2
-│           │   ├── expressionSpec.js
-│           │   ├── makeTooltip.js
-│           │   ├── MDSSpecs.js--------------------> contains createMDSSpec(), createEigenSpec()
-│           │   ├── saveTools.js-------------------> houses addSave()
+│           │   ├── expressionSpec.js--------------> houses createExpressionSpec()
+│           │   ├── makeTooltip.js-----------------> houses makeVegaTooltip()
+│           │   ├── MDSSpecs.js--------------------> houses createMDSSpec(), createEigenSpec()
+│           │   ├── saveTools.js-------------------> houses addSavePlotButton(), saveTableClickListener(),
+|           |   |                                       saveJSONArrayToCSV(), JSONArrayToCSV()
 │           │   └── XYSpecs.js---------------------> houses createXYSpec()
 │           ├── vega
 │           │   ├── vega.js------------------------> main vega library
 │           │   ├── vega.min.js
-│           │   └── vega_plots.css-----------------> main stylesheet; consider changing for clarity
+│           │   └── vega_plots.css-----------------> main GlimmaV2 stylesheet; consider changing for clarity
 │           └── vega-tooltip-----------------------> tooltip library
 │               ├── vega-tooltip.css
 │               └── vega-tooltip.js
@@ -40,7 +41,8 @@ GlimmaV2 is rendered within a parent widget HTML element in which it spawns the 
 ### XY/MA/Volcano Plot
 ![XY plot](xy_layout.png "MDS Plot")
 - the controlContainer is dominated by the datatable
-- the datatable itself contains controls for saving the table, resetting selections and searching the data
+- the datatable div contains the selected gene display, buttons for saving and clearing table data as well as a search input form
+- the vega-bindings div within the expressionContainer contains the max_y_axis input form, as well as an alert box to warn the user if the value is not greater than the maximum
 - CSS grid will be used to render xyView and expView plots on the same line to avoid another dependency on bootstrap
 ### MDS Plot
 ![MDS plot](mds_layout.png "MDS Plot")
