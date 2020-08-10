@@ -164,7 +164,7 @@ glimmaMDS.default <- function(
     package = 'GlimmaV2',
     elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
-  ))
+    ))
 
 }
 
