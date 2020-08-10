@@ -7,11 +7,11 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 
 Feedback is welcome, please feel free to open an issue for any enhancements you would like to see in future.
 ### MA Plot
-![MA plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/maplot.gif "MA Plot")
+![MA plot](https://github.com/hasacat/GlimmaV2-docs/blob/master/documentation/maplot.gif "MA Plot")
 ### Volcano Plot
-![Volcano plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/Volcano_select.gif "Volcano Plot")
+![Volcano plot](https://github.com/hasacat/GlimmaV2-docs/blob/master/documentation/Volcano_select.gif "Volcano Plot")
 ### MDS Plot
-![MDS plot](https://github.com/hasacat/GlimmaV2/blob/master/documentation/MDS_numeric.gif "MDS Plot")
+![MDS plot](https://github.com/hasacat/GlimmaV2-docs/blob/master/documentation/MDS_numeric.gif "MDS Plot")
 ## Installation
 You can install the development version of GlimmaV2 using devtools from the R command line.
 ```R
