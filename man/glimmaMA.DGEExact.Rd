@@ -68,5 +68,5 @@ Selecting rows in the table will highlight the corresponding genes in the MA plo
 Expression values for a gene can be found by hovering over a sample in the right plot.
 }
 \seealso{
-\code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+\code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }

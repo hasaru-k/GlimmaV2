@@ -1,9 +1,10 @@
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot. Refer to:
+#' Generic function for drawing a two-panel interactive MDS plot. 
+#' The function invokes the following methods which depend on the class of the first argument:
 #' \itemize{
-#'   \item \code{\link{glimmaMDS.DGEList}} for edgeR-style analysis
-#'   \item \code{\link{glimmaMDS.DESeqDataSet}} for DESeq2-style analysis
+#'   \item \code{\link{glimmaMDS.DGEList}} for edgeR analysis
+#'   \item \code{\link{glimmaMDS.DESeqDataSet}} for DESeq2 analysis
 #'   \item \code{\link{glimmaMDS.default}} for all other object types }
 #'
 #' @param x the matrix containing the gene expressions.
@@ -21,7 +22,7 @@ glimmaMDS <- function(x, ...)
 #'
 #' Draws a two-panel interactive MDS plot.
 #'
-#' @seealso \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @param x the matrix containing the gene expressions.
 #' @param top the number of top most variable genes to use.
@@ -173,7 +174,7 @@ glimmaMDS.default <- function(
 #' Glimma MDS Plot
 #'
 #' Draws a two-panel interactive MDS plot using a DGEList x.
-#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @inheritParams glimmaMDS.default
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
@@ -214,7 +215,7 @@ glimmaMDS.DGEList <- function(
 #'
 #' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
 #'
-#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
+#' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'
 #' @inheritParams glimmaMDS.default
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.

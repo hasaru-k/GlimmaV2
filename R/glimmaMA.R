@@ -1,8 +1,13 @@
 #' Glimma MA Plot
 #'
-#' Draws a two-panel interactive MA plot.
+#' Generic function for drawing a two-panel interactive MA plot. 
+#' The function invokes the following methods which depend on the class of the first argument:
+#' \itemize{
+#'   \item \code{\link{glimmaMA.MArrayLM}} for limma analysis
+#'   \item \code{\link{glimmaMA.DGEExact}} for edgeR analysis, produced from \code{\link{exactTest}}
+#'   \item \code{\link{glimmaMA.DGELRT}} for edgeR analysis, produced from \code{\link{glmLRT}}
+#'   \item \code{\link{glimmaMA.DESeqDataSet}} for DESeq2 analysis }
 #'
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
 #' @eval MA_details()
@@ -33,7 +38,7 @@ glimmaMA <- function(x, ...)
 #' @param transform.counts TRUE if counts should be log-cpm transformed, defaults to FALSE.
 #' @param width width of the weidget in pixels.
 #' @param height height of the widget in pixels.
-#' @seealso \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom limma decideTests
 #' @export
@@ -72,7 +77,7 @@ glimmaMA.MArrayLM <- function(
 #' Draws a two-panel interactive MA plot from an DGEExact object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
@@ -109,7 +114,7 @@ glimmaMA.DGEExact <- function(
 #' Draws a two-panel interactive MA plot from an DGELRT object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
@@ -122,7 +127,7 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param groups vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 #' @eval MA_details()
 #' @importFrom DESeq2 results counts
 #' @importFrom stats complete.cases

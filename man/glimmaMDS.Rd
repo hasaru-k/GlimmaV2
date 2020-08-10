@@ -15,10 +15,11 @@ glimmaMDS(x, ...)
 htmlwidget object.
 }
 \description{
-Draws a two-panel interactive MDS plot. Refer to:
+Generic function for drawing a two-panel interactive MDS plot. 
+The function invokes the following methods which depend on the class of the first argument:
 \itemize{
-  \item \code{\link{glimmaMDS.DGEList}} for edgeR-style analysis
-  \item \code{\link{glimmaMDS.DESeqDataSet}} for DESeq2-style analysis
+  \item \code{\link{glimmaMDS.DGEList}} for edgeR analysis
+  \item \code{\link{glimmaMDS.DESeqDataSet}} for DESeq2 analysis
   \item \code{\link{glimmaMDS.default}} for all other object types }
 }
 \details{

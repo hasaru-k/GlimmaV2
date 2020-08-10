@@ -49,5 +49,5 @@ The right panel contains a bar plot of the eigenvalues of each dimension.
 The controls beneath the plots can be used to change the dimensions being displayed.
 }
 \seealso{
-\code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
+\code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 }
