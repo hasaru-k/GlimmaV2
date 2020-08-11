@@ -4,12 +4,13 @@
 \alias{extractGroups}
 \title{extractGroups}
 \usage{
-extractGroups(x)
+extractGroups(cdata)
 }
 \arguments{
-\item{x}{SummarizedExperiment object}
+\item{cdata}{SummarizedExperiment column data matrix}
 }
 \description{
-extract groups vector from colData(x) if it is present; otherwise return
+Extracts the column named \code{group} from column data matrix
+of a SummarizedExperiment object if it is present. Otherwise return a
 vector of 1s.
 }

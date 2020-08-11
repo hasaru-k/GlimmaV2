@@ -10,7 +10,7 @@
   main = "Volcano Plot",
   display.columns = NULL,
   anno = NULL,
-  groups = NULL,
+  groups = extractGroups(colData(x)),
   counts = DESeq2::counts(x),
   xlab = "logFC",
   ylab = "negLog10PValue",
@@ -29,9 +29,9 @@
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations}
+\item{anno}{a dataframe containing gene annotations.}
 
-\item{groups}{vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).}
+\item{groups}{vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.}
 
 \item{counts}{the matrix of expression values, with samples in columns.}
 

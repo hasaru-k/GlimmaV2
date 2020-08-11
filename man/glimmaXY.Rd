@@ -36,7 +36,7 @@ glimmaXY(
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations}
+\item{anno}{a dataframe containing gene annotations.}
 
 \item{groups}{vector/factor representing the experimental group for each sample.}
 
