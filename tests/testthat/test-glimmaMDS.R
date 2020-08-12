@@ -1,14 +1,45 @@
 context("glimmaMDS")
 library(GlimmaV2)
 library(edgeR)
+library(Glimma)
+library(DESeq2)
+
+setup
+({
+    data(lymphomaRNAseq)
+    dge <- lymphomaRNAseq
+    dds <- DESeqDataSetFromMatrix(countData = dge$counts,
+                                  colData = dge$samples,
+                                  rowData = dge$genes,
+                                  design = ~genotype)
+})
 
 test_that("MDS error when x has < 3 dimensions", 
 {
-    files_under <- c("testdata/GSM1545535_10_6_5_11.txt", "testdata/GSM1545536_9_6_5_11.txt")
-    files_enough <- c("testdata/GSM1545535_10_6_5_11.txt", "testdata/GSM1545536_9_6_5_11.txt",
-                        "testdata/GSM1545538_purep53.txt")
-    x1 <- readDGE(files_under, columns=c(1,3))
-    x2 <- readDGE(files_enough, columns=c(1,3))
-    expect_error(glimmaMDS(x1))
-    expect_silent(glimmaMDS(x2))
+    for (x in list(dge, dds))
+    {
+        expect_error(glimmaMDS(x[, 1:2]))
+        expect_silent(glimmaMDS(x[, 1:3]))
+    }
+})
+
+test_that("Saving MDS with no filename arg works",
+{
+    for (x in list(dge, dds))
+    {
+        glimmaMDS(x, save=TRUE)
+        expect_equal(file.exists("glimmaMDS.html"), TRUE)
+        unlink("glimmaMDS.html")
+    }
+})
+
+test_that("Saving MDS with filename argument works", 
+{
+    testname <- "testMDSabc.html"
+    for (x in list(dge, dds))
+    {
+        glimmaMDS(dge, save=TRUE, filename=testname)
+        expect_equal(file.exists(testname), TRUE)
+        unlink(testname)
+    }
 })
