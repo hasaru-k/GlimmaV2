@@ -30,8 +30,10 @@ glimmaMDS <- function(x, ...)
 #' @param groups the experimental group to which samples belong.
 #' @param gene.selection 	"pairwise" if most variable genes are to be chosen for each pair of samples or
 #' "common" to select the same genes for all comparisons.
-#' @param continuous.colour if TRUE, colour is displayed using continuous columns in groups; if false,
-#' colour is displayed using discrete columns.
+#' @param continuous.colour if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
+#' colour is displayed using discrete factors.
+#' @param save if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.
+#' @param filename name of the standalone HTML file created if \code{save} is \code{TRUE}.
 #' @param width custom widget width in pixels
 #' @param height custom widget height in pixels
 #'
@@ -46,6 +48,8 @@ glimmaMDS.default <- function(
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   continuous.colour=FALSE,
+  save=FALSE,
+  filename="glimmaMDS.html",
   width = 900, 
   height = 500)
 {
@@ -157,9 +161,8 @@ glimmaMDS.default <- function(
                            continuousColour=continuous.colour,
                            dimlist=dimlist))
 
-
   # create widget
-  return(htmlwidgets::createWidget(
+  widget <- htmlwidgets::createWidget(
     name = 'glimmaMDS',
     xData,
     width = width,
@@ -167,8 +170,18 @@ glimmaMDS.default <- function(
     package = 'GlimmaV2',
     elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
-    ))
+  )
 
+  if (!save)
+  {
+    return(widget)
+  }
+  else
+  {
+    message("Saving widget...")
+    htmlwidgets::saveWidget(widget, file=filename)
+    message(filename, " generated.")
+  }
 }
 
 #' Glimma MDS Plot
@@ -191,6 +204,8 @@ glimmaMDS.DGEList <- function(
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
   continuous.colour = FALSE,
+  save=FALSE,
+  filename="glimmaMDS.html",
   width = 900, 
   height = 500)
 {
@@ -207,6 +222,8 @@ glimmaMDS.DGEList <- function(
     groups=groups,
     gene.selection=gene.selection,
     continuous.colour=continuous.colour,
+    save=save,
+    filename=filename,
     width=width,
     height=height))
 }
@@ -233,6 +250,8 @@ glimmaMDS.DESeqDataSet <- function(
   gene.selection = c("pairwise", "common"),
   prior.count = 0.25,
   continuous.colour = FALSE,
+  save=FALSE,
+  filename="glimmaMDS.html",
   width = 900, 
   height = 500)
 {
@@ -256,6 +275,8 @@ glimmaMDS.DESeqDataSet <- function(
     groups=groups,
     gene.selection=gene.selection,
     continuous.colour=continuous.colour,
+    save=save,
+    filename=filename,
     width=width,
     height=height))
 }

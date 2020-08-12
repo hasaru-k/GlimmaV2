@@ -4,7 +4,7 @@
 \alias{glimmaXYWidget}
 \title{GlimmaXY HTMLWidget Wrapper}
 \usage{
-glimmaXYWidget(xData, width, height, elementId = NULL)
+glimmaXYWidget(xData, width, height, save, filename)
 }
 \arguments{
 \item{xData}{packaged data object returned from buildXYData()}

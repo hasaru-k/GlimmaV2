@@ -12,6 +12,8 @@
   gene.selection = c("pairwise", "common"),
   prior.count = 0.25,
   continuous.colour = FALSE,
+  save = FALSE,
+  filename = "glimmaMDS.html",
   width = 900,
   height = 500
 )
@@ -30,15 +32,19 @@
 
 \item{prior.count}{average count to be added to each observation to avoid taking log of zero.}
 
-\item{continuous.colour}{if TRUE, colour is displayed using continuous columns in groups; if false,
-colour is displayed using discrete columns.}
+\item{continuous.colour}{if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
+colour is displayed using discrete factors.}
+
+\item{save}{if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.}
+
+\item{filename}{name of the standalone HTML file created if \code{save} is \code{TRUE}.}
 
 \item{width}{custom widget width in pixels}
 
 \item{height}{custom widget height in pixels}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{save} argument is \code{TRUE}.
 }
 \description{
 Draws a two-panel interactive MDS plot using a DESeqDataset x.

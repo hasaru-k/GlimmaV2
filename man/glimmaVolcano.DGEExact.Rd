@@ -18,6 +18,8 @@
   ylab = "negLog10PValue",
   status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
+  save = FALSE,
+  filename = "glimmaVolcano.html",
   width = 920,
   height = 920
 )
@@ -50,12 +52,16 @@ sample groups from \code{dge$samples$group}.}
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
+\item{save}{if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.}
+
+\item{filename}{name of the standalone HTML file created if \code{save} is \code{TRUE}.}
+
 \item{width}{width of the weidget in pixels.}
 
 \item{height}{height of the widget in pixels.}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{save} argument is \code{TRUE}.
 }
 \description{
 Draws a two-panel interactive volcano plot from an DGEExact object.
