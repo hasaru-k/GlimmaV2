@@ -20,6 +20,8 @@ glimmaXY <- function(
   counts=NULL,
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
+  save=FALSE,
+  filename="glimmaXY.html",
   width = 920,
   height = 920)
 {
@@ -115,19 +117,25 @@ buildXYData <- function(
 #' @param height htmlwidget element height in pixels
 #' @param elementId ID attribute for htmlwidget
 #' @import htmlwidgets
-glimmaXYWidget <- function(
-  xData,
-  width,
-  height,
-  elementId = NULL)
+glimmaXYWidget <- function(xData, width, height, save, filename)
 {
-  htmlwidgets::createWidget(
+  widget <- htmlwidgets::createWidget(
     name = 'glimmaXY',
     xData,
     width = width,
     height = height,
     package = 'GlimmaV2',
-    elementId = elementId,
+    elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
+  if (!save)
+  {
+    return(widget)
+  }
+  else
+  {
+    message("Saving widget...")
+    htmlwidgets::saveWidget(widget, file=filename)
+    message(filename, " generated.")
+  }
 }

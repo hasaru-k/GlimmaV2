@@ -7,7 +7,7 @@ MA_details <- function()
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the MA plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or ```NULL``` if save option is ```TRUE```."
   )
 }
 
@@ -20,7 +20,7 @@ XY_details <- function()
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the XY plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or ```NULL``` if save option is ```TRUE```."
   )
 }
 
@@ -33,7 +33,7 @@ volcano_details <- function()
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the volcano plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or ```NULL``` if save option is ```TRUE```."
   )
 }
 
