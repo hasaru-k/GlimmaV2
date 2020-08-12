@@ -43,8 +43,8 @@ glimmaXY <- function(
 #' XY Data Object Builder
 #'
 #' Common processing steps for both MA, XY and volcano plots.
-#' Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab} as this
-#' tells the frontend what to display on the left plot, as well as other relevant columns.
+#' Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab}
+#' as well as a unique identifier column labelled \code{gene}.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.

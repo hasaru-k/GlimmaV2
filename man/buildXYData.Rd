@@ -27,7 +27,7 @@ buildXYData(
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations}
+\item{anno}{a dataframe containing gene annotations.}
 
 \item{counts}{the matrix of expression values, with samples in columns.}
 
@@ -43,6 +43,6 @@ buildXYData(
 }
 \description{
 Common processing steps for both MA, XY and volcano plots.
-Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab} as this
-tells the frontend what to display on the left plot, as well as other relevant columns.
+Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab}
+as well as a unique identifier column labelled \code{gene}.
 }

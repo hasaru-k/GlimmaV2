@@ -7,7 +7,7 @@
 \method{glimmaMDS}{DGEList}(
   x,
   top = 500,
-  labels = NULL,
+  labels = rownames(x$samples),
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
@@ -42,7 +42,6 @@ htmlwidget object.
 }
 \description{
 Draws a two-panel interactive MDS plot using a DGEList x.
-By default, extracts \code{labels} as \code{rownames(x$samples)}.
 }
 \details{
 The left plot shows two MDS dimensions, with annotations displayed on hover.
@@ -50,5 +49,5 @@ The right panel contains a bar plot of the eigenvalues of each dimension.
 The controls beneath the plots can be used to change the dimensions being displayed.
 }
 \seealso{
-\code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
+\code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
 }

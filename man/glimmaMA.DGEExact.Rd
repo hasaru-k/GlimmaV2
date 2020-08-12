@@ -36,7 +36,7 @@ sample groups from \code{dge$samples$group}.}
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations}
+\item{anno}{a dataframe containing gene annotations.}
 
 \item{groups}{vector/factor representing the experimental group for each sample.}
 
@@ -68,5 +68,5 @@ Selecting rows in the table will highlight the corresponding genes in the MA plo
 Expression values for a gene can be found by hovering over a sample in the right plot.
 }
 \seealso{
-\code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+\code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }

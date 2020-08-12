@@ -1,8 +1,13 @@
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive MA plot.
-#' 
-#' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
+#' Generic function for drawing a two-panel interactive volcano plot. 
+#' The function invokes the following methods which depend on the class of the first argument:
+#' \itemize{
+#'   \item \code{\link{glimmaVolcano.MArrayLM}} for limma analysis
+#'   \item \code{\link{glimmaVolcano.DGEExact}} for edgeR analysis, produced from \code{\link{exactTest}}
+#'   \item \code{\link{glimmaVolcano.DGELRT}} for edgeR analysis, produced from \code{\link{glmLRT}}
+#'   \item \code{\link{glimmaVolcano.DESeqDataSet}} for DESeq2 analysis }
+#'
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
 #' @eval volcano_details()
@@ -17,7 +22,7 @@ glimmaVolcano <- function(x, ...)
 #' Draws a two-panel interactive volcano plot from an MArrayLM object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
+#' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval volcano_details()
 #' @importFrom limma decideTests
 #' @export
@@ -56,7 +61,7 @@ glimmaVolcano.MArrayLM <- function(
 #' Draws a two-panel interactive volcano plot from an DGEExact object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
+#' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
@@ -95,7 +100,7 @@ glimmaVolcano.DGEExact <- function(
 #' Draws a two-panel interactive volcano plot from an DGELRT object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
+#' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
@@ -107,8 +112,8 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 #' Draws a two-panel interactive volcano plot from an DESeqDataSet object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @param groups vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).
-#' @seealso \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
+#' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
+#' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
 #' @eval MA_details()
 #' @importFrom DESeq2 results counts
 #' @importFrom SummarizedExperiment colData
@@ -119,7 +124,7 @@ glimmaVolcano.DESeqDataSet  <- function(
   main="Volcano Plot",
   display.columns = NULL,
   anno=NULL,
-  groups=NULL,
+  groups=extractGroups(colData(x)),
   counts=DESeq2::counts(x),
   xlab="logFC",
   ylab="negLog10PValue",
@@ -128,25 +133,29 @@ glimmaVolcano.DESeqDataSet  <- function(
   width = 920,
   height = 920)
 {
-  res <- DESeq2::results(x)
-  res.df <- as.data.frame(res)
+  res.df <- as.data.frame(DESeq2::results(x))
+
+  # filter out genes that have missing data
+  complete_genes <- complete.cases(res.df)
+  res.df <- res.df[complete_genes, ]
+  x <- x[complete_genes, ]
+
+  # extract status if it is not given
   if (is.null(status))
   {
     status <- ifelse(
-      res$padj < 0.05,
-      ifelse(res$log2FoldChange < 0, -1, 1),
+      res.df$padj < 0.05,
+      ifelse(res.df$log2FoldChange < 0, -1, 1),
       0
     )
   }
+
+  # create initial table with logFC and -log10(pvalue) features
   table <- data.frame(round(res.df$log2FoldChange, digits=4),
                       round(-log10(res.df$pvalue), digits=4))
   colnames(table) <- c(xlab, ylab)
   table <- cbind(table, logCPM=round(log(res.df$baseMean + 0.5), digits=4), 
                         AdjPValue=round(res.df$padj, digits=4))
-  if (!is.null(counts) && is.null(groups))
-  {
-    groups <- extractGroups(x)
-  }
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height))

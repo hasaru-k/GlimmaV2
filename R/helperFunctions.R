@@ -50,20 +50,18 @@ MDS_details <- function()
 
 #' extractGroups
 #'
-#' extract groups vector from colData(x) if it is present; otherwise return
+#' Extracts the column named \code{group} from column data matrix
+#' of a SummarizedExperiment object if it is present. Otherwise return a
 #' vector of 1s.
 #'
-#' @param x SummarizedExperiment object
-#' @importFrom SummarizedExperiment colData
-extractGroups <- function(x)
+#' @param cdata SummarizedExperiment column data matrix
+extractGroups <- function(cdata)
 {
-  colData <- SummarizedExperiment::colData(x)
-  if ("group" %in% colnames(colData))
+  if ("group" %in% colnames(cdata))
   {
-    groups <- colData[, "group"]
+    return(cdata[, "group"])
   } else
   {
-    groups <- 1
+    return(1)
   }
-  return(groups)
 }
