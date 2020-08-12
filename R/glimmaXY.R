@@ -115,7 +115,8 @@ buildXYData <- function(
 #' @param xData packaged data object returned from buildXYData()
 #' @param width htmlwidget element width in pixels
 #' @param height htmlwidget element height in pixels
-#' @param elementId ID attribute for htmlwidget
+#' @param save if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.
+#' @param filename name of the standalone HTML file created if \code{save} is \code{TRUE}.
 #' @import htmlwidgets
 glimmaXYWidget <- function(xData, width, height, save, filename)
 {

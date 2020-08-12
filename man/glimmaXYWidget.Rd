@@ -13,7 +13,9 @@ glimmaXYWidget(xData, width, height, save, filename)
 
 \item{height}{htmlwidget element height in pixels}
 
-\item{elementId}{ID attribute for htmlwidget}
+\item{save}{if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.}
+
+\item{filename}{name of the standalone HTML file created if \code{save} is \code{TRUE}.}
 }
 \description{
 Passes packaged data to JS interface for rendering.
