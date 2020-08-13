@@ -43,9 +43,9 @@ test_that("Volcano plot returns widget",
     expect_equal(is.null(result), FALSE)
 })
 
-test_that("Saving MA plot works", 
+test_that("Saving volcano plot works", 
 {
-    testname <- "testMAabc.html"
+    testname <- "testVolcano.html"
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
     {
