@@ -12,6 +12,7 @@
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
   continuous.colour = FALSE,
+  html = NULL,
   width = 900,
   height = 500
 )
@@ -30,15 +31,17 @@
 
 \item{prior.count}{average count to be added to each observation to avoid taking log of zero.}
 
-\item{continuous.colour}{if TRUE, colour is displayed using continuous columns in groups; if false,
-colour is displayed using discrete columns.}
+\item{continuous.colour}{if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
+colour is displayed using discrete factors.}
+
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 
 \item{width}{custom widget width in pixels}
 
 \item{height}{custom widget height in pixels}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MDS plot using a DGEList x.

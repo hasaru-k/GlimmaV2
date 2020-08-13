@@ -12,7 +12,7 @@ glimmaVolcano(x, ...)
 \item{...}{additional arguments affecting the plots produced. See specific methods for detailed arguments.}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Generic function for drawing a two-panel interactive volcano plot. 

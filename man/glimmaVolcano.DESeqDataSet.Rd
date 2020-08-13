@@ -16,6 +16,7 @@
   ylab = "negLog10PValue",
   status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
+  html = NULL,
   width = 920,
   height = 920
 )
@@ -43,12 +44,14 @@
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
+
 \item{width}{width of the weidget in pixels.}
 
 \item{height}{height of the widget in pixels.}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive volcano plot from an DESeqDataSet object.
