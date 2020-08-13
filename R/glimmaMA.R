@@ -36,8 +36,7 @@ glimmaMA <- function(x, ...)
 #' @param ylab y axis label.
 #' @param status.colours vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.
 #' @param transform.counts TRUE if counts should be log-cpm transformed, defaults to FALSE.
-#' @param save if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.
-#' @param filename name of the standalone HTML file created if \code{save} is \code{TRUE}.
+#' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @param width width of the weidget in pixels.
 #' @param height height of the widget in pixels.
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
@@ -59,8 +58,7 @@ glimmaMA.MArrayLM <- function(
   ylab="logFC",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaMA.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -73,7 +71,7 @@ glimmaMA.MArrayLM <- function(
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height, save, filename))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma MA Plot
@@ -100,8 +98,7 @@ glimmaMA.DGEExact <- function(
   ylab="logFC",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaMA.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -112,7 +109,7 @@ glimmaMA.DGEExact <- function(
   table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height, save, filename))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma MA Plot
@@ -151,8 +148,7 @@ glimmaMA.DESeqDataSet  <- function(
   ylab="logFC",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaMA.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -180,5 +176,5 @@ glimmaMA.DESeqDataSet  <- function(
   table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height, save, filename))
+  return(glimmaXYWidget(xData, width, height, html))
 }

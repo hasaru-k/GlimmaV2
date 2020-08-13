@@ -12,7 +12,7 @@
   gene.selection = c("pairwise", "common"),
   continuous.colour = FALSE,
   save = FALSE,
-  filename = "glimmaMDS.html",
+  html = NULL,
   width = 900,
   height = 500
 )
@@ -32,9 +32,7 @@
 \item{continuous.colour}{if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
 colour is displayed using discrete factors.}
 
-\item{save}{if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.}
-
-\item{filename}{name of the standalone HTML file created if \code{save} is \code{TRUE}.}
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 
 \item{width}{custom widget width in pixels}
 

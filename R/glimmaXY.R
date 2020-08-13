@@ -20,8 +20,7 @@ glimmaXY <- function(
   counts=NULL,
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaXY.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -39,7 +38,7 @@ glimmaXY <- function(
     table <- cbind(gene=1:length(x), table)
   }
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' XY Data Object Builder
@@ -115,10 +114,9 @@ buildXYData <- function(
 #' @param xData packaged data object returned from buildXYData()
 #' @param width htmlwidget element width in pixels
 #' @param height htmlwidget element height in pixels
-#' @param save if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.
-#' @param filename name of the standalone HTML file created if \code{save} is \code{TRUE}.
+#' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @import htmlwidgets
-glimmaXYWidget <- function(xData, width, height, save, filename)
+glimmaXYWidget <- function(xData, width, height, html)
 {
   widget <- htmlwidgets::createWidget(
     name = 'glimmaXY',
@@ -129,14 +127,14 @@ glimmaXYWidget <- function(xData, width, height, save, filename)
     elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
-  if (!save)
+  if (is.null(html))
   {
     return(widget)
   }
   else
   {
     message("Saving widget...")
-    htmlwidgets::saveWidget(widget, file=filename)
-    message(filename, " generated.")
+    htmlwidgets::saveWidget(widget, file=html)
+    message(html, " generated.")
   }
 }

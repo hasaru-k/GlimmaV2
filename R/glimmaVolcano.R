@@ -41,8 +41,7 @@ glimmaVolcano.MArrayLM <- function(
   ylab="negLog10PValue",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaVolcano.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -55,7 +54,7 @@ glimmaVolcano.MArrayLM <- function(
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height, save, filename))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma Volcano Plot
@@ -82,8 +81,7 @@ glimmaVolcano.DGEExact <- function(
   ylab="negLog10PValue",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaVolcano.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -96,7 +94,7 @@ glimmaVolcano.DGEExact <- function(
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height, save, filename))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma Volcano Plot
@@ -134,8 +132,7 @@ glimmaVolcano.DESeqDataSet  <- function(
   ylab="negLog10PValue",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
-  save=FALSE,
-  filename="glimmaVolcano.html",
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -164,5 +161,5 @@ glimmaVolcano.DESeqDataSet  <- function(
                         AdjPValue=round(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height, save, filename))
+  return(glimmaXYWidget(xData, width, height, html))
 }

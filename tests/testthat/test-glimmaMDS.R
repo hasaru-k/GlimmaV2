@@ -23,22 +23,22 @@ test_that("MDS error when x has < 3 dimensions",
     }
 })
 
-test_that("Saving MDS with no filename arg works",
+test_that("glimmaMDS doesn't export HTML file unless you ask it to",
 {
     for (x in list(dge, dds))
     {
-        glimmaMDS(x, save=TRUE)
-        expect_equal(file.exists("glimmaMDS.html"), TRUE)
-        unlink("glimmaMDS.html")
+        result <- glimmaMDS(x)
+        expect_equal(is.null(result), FALSE)
     }
 })
 
-test_that("Saving MDS with filename argument works", 
+test_that("Saving MDS works", 
 {
     testname <- "testMDSabc.html"
     for (x in list(dge, dds))
     {
-        glimmaMDS(dge, save=TRUE, filename=testname)
+        result <- glimmaMDS(dge, html=testname)
+        expect_equal(result, NULL)
         expect_equal(file.exists(testname), TRUE)
         unlink(testname)
     }

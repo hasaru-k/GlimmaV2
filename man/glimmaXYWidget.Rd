@@ -4,7 +4,7 @@
 \alias{glimmaXYWidget}
 \title{GlimmaXY HTMLWidget Wrapper}
 \usage{
-glimmaXYWidget(xData, width, height, save, filename)
+glimmaXYWidget(xData, width, height, html)
 }
 \arguments{
 \item{xData}{packaged data object returned from buildXYData()}
@@ -13,9 +13,7 @@ glimmaXYWidget(xData, width, height, save, filename)
 
 \item{height}{htmlwidget element height in pixels}
 
-\item{save}{if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.}
-
-\item{filename}{name of the standalone HTML file created if \code{save} is \code{TRUE}.}
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 }
 \description{
 Passes packaged data to JS interface for rendering.

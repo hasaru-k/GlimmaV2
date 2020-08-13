@@ -17,8 +17,7 @@ glimmaXY(
   counts = NULL,
   status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
-  save = FALSE,
-  filename = "glimmaXY.html",
+  html = NULL,
   width = 920,
   height = 920
 )
@@ -48,9 +47,7 @@ glimmaXY(
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
-\item{save}{if \code{TRUE}, widget will be exported to standalone HTML file rather than being displayed.}
-
-\item{filename}{name of the standalone HTML file created if \code{save} is \code{TRUE}.}
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 
 \item{width}{width of the weidget in pixels.}
 
