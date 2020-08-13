@@ -168,6 +168,12 @@ glimmaMA.DESeqDataSet  <- function(
       0
     )
   }
+  else
+  {
+    if (length(status)!=length(complete_genes)) stop("Status vector
+      must have the same number of genes as the main arguments.")
+    status <- status[complete_genes]
+  }
 
   # create initial table with logCPM and logFC features
   table <- data.frame(round(log(res.df$baseMean + 0.5), digits=4), 

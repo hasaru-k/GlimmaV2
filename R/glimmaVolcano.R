@@ -152,6 +152,12 @@ glimmaVolcano.DESeqDataSet  <- function(
       0
     )
   }
+  else
+  {
+    if (length(status)!=length(complete_genes)) stop("Status vector
+      must have the same number of genes as the main arguments.")
+    status <- status[complete_genes]
+  }
 
   # create initial table with logFC and -log10(pvalue) features
   table <- data.frame(round(res.df$log2FoldChange, digits=4),

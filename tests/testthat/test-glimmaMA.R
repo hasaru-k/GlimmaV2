@@ -60,3 +60,37 @@ test_that("Saving MA plot works",
     expect_equal(file.exists(testname), TRUE)
     unlink(testname)
 })
+
+test_that("Length of the status.colours must be exactly 3", 
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        expect_error(glimmaMA(x, dge=dge, status.colours=c("green","red")))
+    }
+    # DESeqDataset
+    expect_error(glimmaMA(dds, status.colours=c("green","red")))
+})
+
+test_that("Length of status vector must match the other args", 
+{
+    rand <- 25000
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        expect_error(glimmaMA(x, dge=dge, status=rep(0, rand)))
+        expect_silent(glimmaMA(x, dge=dge, status=rep(0, nrow(x))))
+    }
+    # DESeqDataset
+    expect_error(glimmaMA(dds, status=rep(0, rand)))
+    expect_silent(glimmaMA(dds, status=rep(0, nrow(dds))))
+})
+
+test_that("User cannot provide counts argument without groups argument for edgeR/limma objects", 
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        expect_error(glimmaMA(x, counts=dge$counts))
+    }
+})

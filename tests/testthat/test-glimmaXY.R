@@ -32,3 +32,9 @@ test_that("Saving XY plot works",
     expect_equal(file.exists(testname), TRUE)
     unlink(testname)
 })
+
+test_that("X and Y args must have the same length", 
+{
+    expect_error(glimmaXY(x=1:3, y=1:4))
+    expect_silent(glimmaXY(x=1:4, y=1:4))
+})
