@@ -12,7 +12,7 @@ glimmaMDS(x, ...)
 \item{...}{the additional arguments affecting the plot produced. See specific methods for detailed arguments.}
 }
 \value{
-htmlwidget object or \code{NULL} if \code{save} argument is \code{TRUE}.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Generic function for drawing a two-panel interactive MDS plot. 

@@ -61,7 +61,7 @@ sample groups from \code{dge$samples$group}.}
 \item{height}{height of the widget in pixels.}
 }
 \value{
-htmlwidget object or \code{NULL} if \code{save} argument is \code{TRUE}.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive volcano plot from an MArrayLM object.

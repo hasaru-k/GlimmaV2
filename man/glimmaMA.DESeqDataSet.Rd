@@ -51,7 +51,7 @@
 \item{height}{height of the widget in pixels.}
 }
 \value{
-htmlwidget object or \code{NULL} if \code{save} argument is \code{TRUE}.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MA plot from an DESeqDataSet object.

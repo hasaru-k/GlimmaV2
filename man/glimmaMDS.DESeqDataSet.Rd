@@ -41,7 +41,7 @@ colour is displayed using discrete factors.}
 \item{height}{custom widget height in pixels}
 }
 \value{
-htmlwidget object or \code{NULL} if \code{save} argument is \code{TRUE}.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MDS plot using a DESeqDataset x.
