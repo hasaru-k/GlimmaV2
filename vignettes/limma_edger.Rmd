@@ -12,6 +12,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+## pre-load to avoid load messages in report
+library(GlimmaV2)
+library(limma)
+library(edgeR)
 ```
 
 # Introduction
@@ -86,7 +91,7 @@ Like in the MDS plot, the plots can be saved to either PNG or SVG formats.
 
 # Saving widgets
 
-The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can signficantly slow down the page. It is instead recommended to save the plots using `htmlwidgets::saveWidget` and linking it.
+The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can signficantly slow down the page. It is instead recommended to save the plots using `htmlwidgets::saveWidget` and linking to it via markdown hyperlinks.
 
 ```{r, eval = FALSE}
 # creates ma-plot.html in working directory
