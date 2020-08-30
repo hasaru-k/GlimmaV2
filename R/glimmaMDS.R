@@ -1,6 +1,6 @@
 #' Glimma MDS Plot
 #'
-#' Generic function for drawing a two-panel interactive MDS plot. 
+#' Generic function for drawing a two-panel interactive MDS plot.
 #' The function invokes the following methods which depend on the class of the first argument:
 #' \itemize{
 #'   \item \code{\link{glimmaMDS.DGEList}} for edgeR analysis
@@ -11,7 +11,7 @@
 #' @param ... the additional arguments affecting the plot produced. See specific methods for detailed arguments.
 #'
 #' @eval MDS_details()
-#' 
+#'
 #' @export
 glimmaMDS <- function(x, ...)
 {
@@ -37,7 +37,7 @@ glimmaMDS <- function(x, ...)
 #' @param height custom widget height in pixels
 #'
 #' @eval MDS_details()
-#' 
+#'
 #' @importFrom stats cmdscale as.dist
 #' @export
 glimmaMDS.default <- function(
@@ -49,7 +49,7 @@ glimmaMDS.default <- function(
   continuous.colour=FALSE,
   save=FALSE,
   html=NULL,
-  width = 900, 
+  width = 900,
   height = 500)
 {
 
@@ -107,7 +107,7 @@ glimmaMDS.default <- function(
               dd[i, j] <- sqrt(mean(topdist))
           }
       }
-  } else 
+  } else
   {
   # Same genes used for all comparisons
       if (nprobes > top) {
@@ -192,19 +192,19 @@ glimmaMDS.default <- function(
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
 #'
 #' @eval MDS_details()
-#' 
+#'
 #' @importFrom edgeR cpm
 #' @export
 glimmaMDS.DGEList <- function(
   x,
   top = 500,
   labels = rownames(x$samples),
-  groups = as.character(rep(1, ncol(x))),
+  groups = x$samples,
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
   continuous.colour = FALSE,
   html=NULL,
-  width = 900, 
+  width = 900,
   height = 500)
 {
   if (is.null(labels))
@@ -227,7 +227,7 @@ glimmaMDS.DGEList <- function(
 
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
+#' Draws a two-panel interactive MDS plot using a DESeqDataset x.
 #'
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'
@@ -248,7 +248,7 @@ glimmaMDS.DESeqDataSet <- function(
   prior.count = 0.25,
   continuous.colour = FALSE,
   html=NULL,
-  width = 900, 
+  width = 900,
   height = 500)
 {
   if (is.null(labels))
