@@ -52,6 +52,12 @@ HTMLWidgets.widget({
         mdsView.tooltip(handler.call);
         mdsView.runAsync();
 
+        window.alert("Just starting testColourMessage");
+        var alertBox = document.createElement("div");
+        alertbox.setAttribute("class", "alertBox danger");
+        mdsContainer.appendChild(alertbox);
+        //testColourMessage(mdsView, controlContainer);
+
         var eigenSpec = createEigenSpec(eigenData, width, height);
         eigenView = new vega.View(vega.parse(eigenSpec), {
           renderer: 'svg',
@@ -65,6 +71,8 @@ HTMLWidgets.widget({
         addSavePlotButton(controlContainer, eigenView, text="Save (VAR)");
 
         reformatElementsMDS(controlContainer);
+
+
 
       },
 
@@ -130,4 +138,31 @@ function reformatElementsMDS(controlContainer)
     // it is used to display all signals after x_axis, y_axis to display on a different line
     else if (i > 2) binds[i].className += " signal";
   }
+}
+
+function testColourMessage(view, container) {
+  view.addSignalListener('colourscheme', function(name, value) {
+    window.alert("Colour changed");
+    var alertBox = container.getElementsByClassName("alertBox")[0];
+    alertBox.innerHTML =`TESTING`;
+    alertBox.setAttribute("class", "alertBox danger");
+    //updateColourMessage(mdsView, mdsContainer, value);
+  })
+
+  /*
+  mdsContainer.appendChild(alertBox);
+    mdsView.addSignalListener('colourscheme', function(name, value) {
+      var alertBox = document.createElement("div");
+      alertBox.innerHTML = `THIS IS A STRING`;
+      alertBox.setAttribute("class", "alertBox danger");
+      mdsContainer.appendChild(alertBox);
+    })
+    */
+}
+
+function updateColourMessage(mdsView, mdsContainer, value) {
+  var alertBox = mdsContainer.getElementsByClassName("alertBox")[0];
+  alertBox.innerHTML = `Current colourScheme is ${value}`;
+  alertBox.setAttribute("class", "alertBox danger");
+  window.alert("Message changed");
 }
