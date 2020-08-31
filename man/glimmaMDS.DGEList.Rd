@@ -7,11 +7,12 @@
 \method{glimmaMDS}{DGEList}(
   x,
   top = 500,
-  labels = NULL,
+  labels = rownames(x$samples),
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
   continuous.colour = FALSE,
+  html = NULL,
   width = 900,
   height = 500
 )
@@ -30,19 +31,20 @@
 
 \item{prior.count}{average count to be added to each observation to avoid taking log of zero.}
 
-\item{continuous.colour}{if TRUE, colour is displayed using continuous columns in groups; if false,
-colour is displayed using discrete columns.}
+\item{continuous.colour}{if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
+colour is displayed using discrete factors.}
+
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 
 \item{width}{custom widget width in pixels}
 
 \item{height}{custom widget height in pixels}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MDS plot using a DGEList x.
-By default, extracts \code{labels} as \code{rownames(x$samples)}.
 }
 \details{
 The left plot shows two MDS dimensions, with annotations displayed on hover.
@@ -50,5 +52,5 @@ The right panel contains a bar plot of the eigenvalues of each dimension.
 The controls beneath the plots can be used to change the dimensions being displayed.
 }
 \seealso{
-\code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
+\code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
 }

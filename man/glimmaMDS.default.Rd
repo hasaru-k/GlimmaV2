@@ -11,6 +11,8 @@
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   continuous.colour = FALSE,
+  save = FALSE,
+  html = NULL,
   width = 900,
   height = 500
 )
@@ -27,15 +29,17 @@
 \item{gene.selection}{"pairwise" if most variable genes are to be chosen for each pair of samples or
 "common" to select the same genes for all comparisons.}
 
-\item{continuous.colour}{if TRUE, colour is displayed using continuous columns in groups; if false,
-colour is displayed using discrete columns.}
+\item{continuous.colour}{if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
+colour is displayed using discrete factors.}
+
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 
 \item{width}{custom widget width in pixels}
 
 \item{height}{custom widget height in pixels}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MDS plot.
@@ -46,5 +50,5 @@ The right panel contains a bar plot of the eigenvalues of each dimension.
 The controls beneath the plots can be used to change the dimensions being displayed.
 }
 \seealso{
-\code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+\code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 }

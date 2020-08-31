@@ -7,7 +7,7 @@ MA_details <- function()
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the MA plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or \\code{NULL} if \\code{html} argument is specified."
   )
 }
 
@@ -20,7 +20,7 @@ XY_details <- function()
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the XY plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or \\code{NULL} if \\code{html} argument is specified."
   )
 }
 
@@ -33,7 +33,7 @@ volcano_details <- function()
     "Clicking on genes in the plot brings up the corresponding genes in the table.",
     "Selecting rows in the table will highlight the corresponding genes in the volcano plot.",
     "Expression values for a gene can be found by hovering over a sample in the right plot.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or \\code{NULL} if \\code{html} argument is specified."
   )
 }
 
@@ -44,26 +44,24 @@ MDS_details <- function()
     "The left plot shows two MDS dimensions, with annotations displayed on hover.",
     "The right panel contains a bar plot of the eigenvalues of each dimension.",
     "The controls beneath the plots can be used to change the dimensions being displayed.",
-    "@return htmlwidget object."
+    "@return htmlwidget object or \\code{NULL} if \\code{html} argument is specified."
   )
 }
 
 #' extractGroups
 #'
-#' extract groups vector from colData(x) if it is present; otherwise return
+#' Extracts the column named \code{group} from column data matrix
+#' of a SummarizedExperiment object if it is present. Otherwise return a
 #' vector of 1s.
 #'
-#' @param x SummarizedExperiment object
-#' @importFrom SummarizedExperiment colData
-extractGroups <- function(x)
+#' @param cdata SummarizedExperiment column data matrix
+extractGroups <- function(cdata)
 {
-  colData <- SummarizedExperiment::colData(x)
-  if ("group" %in% colnames(colData))
+  if ("group" %in% colnames(cdata))
   {
-    groups <- colData[, "group"]
+    return(cdata[, "group"])
   } else
   {
-    groups <- 1
+    return(1)
   }
-  return(groups)
 }

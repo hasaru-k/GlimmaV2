@@ -1,14 +1,17 @@
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot.  
-#' 
-#' @seealso \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#' Generic function for drawing a two-panel interactive MDS plot.
+#' The function invokes the following methods which depend on the class of the first argument:
+#' \itemize{
+#'   \item \code{\link{glimmaMDS.DGEList}} for edgeR analysis
+#'   \item \code{\link{glimmaMDS.DESeqDataSet}} for DESeq2 analysis
+#'   \item \code{\link{glimmaMDS.default}} for all other object types }
 #'
 #' @param x the matrix containing the gene expressions.
 #' @param ... the additional arguments affecting the plot produced. See specific methods for detailed arguments.
 #'
 #' @eval MDS_details()
-#' 
+#'
 #' @export
 glimmaMDS <- function(x, ...)
 {
@@ -19,7 +22,7 @@ glimmaMDS <- function(x, ...)
 #'
 #' Draws a two-panel interactive MDS plot.
 #'
-#' @seealso \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @param x the matrix containing the gene expressions.
 #' @param top the number of top most variable genes to use.
@@ -27,13 +30,14 @@ glimmaMDS <- function(x, ...)
 #' @param groups the experimental group to which samples belong.
 #' @param gene.selection 	"pairwise" if most variable genes are to be chosen for each pair of samples or
 #' "common" to select the same genes for all comparisons.
-#' @param continuous.colour if TRUE, colour is displayed using continuous columns in groups; if false,
-#' colour is displayed using discrete columns.
+#' @param continuous.colour if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
+#' colour is displayed using discrete factors.
+#' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @param width custom widget width in pixels
 #' @param height custom widget height in pixels
 #'
 #' @eval MDS_details()
-#' 
+#'
 #' @importFrom stats cmdscale as.dist
 #' @export
 glimmaMDS.default <- function(
@@ -43,7 +47,9 @@ glimmaMDS.default <- function(
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   continuous.colour=FALSE,
-  width = 900, 
+  save=FALSE,
+  html=NULL,
+  width = 900,
   height = 500)
 {
 
@@ -101,7 +107,7 @@ glimmaMDS.default <- function(
               dd[i, j] <- sqrt(mean(topdist))
           }
       }
-  } else 
+  } else
   {
   # Same genes used for all comparisons
       if (nprobes > top) {
@@ -154,9 +160,8 @@ glimmaMDS.default <- function(
                            continuousColour=continuous.colour,
                            dimlist=dimlist))
 
-
   # create widget
-  return(htmlwidgets::createWidget(
+  widget <- htmlwidgets::createWidget(
     name = 'glimmaMDS',
     xData,
     width = width,
@@ -164,49 +169,49 @@ glimmaMDS.default <- function(
     package = 'GlimmaV2',
     elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
-    ))
+  )
 
+  if (is.null(html))
+  {
+    return(widget)
+  }
+  else
+  {
+    message("Saving widget...")
+    htmlwidgets::saveWidget(widget, file=html)
+    message(html, " generated.")
+  }
 }
 
 #' Glimma MDS Plot
 #'
 #' Draws a two-panel interactive MDS plot using a DGEList x.
-#' By default, extracts \code{labels} as \code{rownames(x$samples)}.
-#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @inheritParams glimmaMDS.default
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
 #'
 #' @eval MDS_details()
-#' 
+#'
 #' @importFrom edgeR cpm
 #' @export
 glimmaMDS.DGEList <- function(
   x,
   top = 500,
-  labels = NULL,
-  groups = as.character(rep(1, ncol(x))),
+  labels = rownames(x$samples),
+  groups = x$samples,
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
   continuous.colour = FALSE,
-  width = 900, 
+  html=NULL,
+  width = 900,
   height = 500)
 {
-
-  # extract sample groups based on DGEList class, if we need to
   if (is.null(labels))
   {
-    if (!is.null(x$samples$groups))
-    {
-      labels <- rownames(x$samples)
-    } else
-    {
-      labels <- as.character(seq_len(ncol(x)))
-    }
+    labels <- as.character(seq_len(ncol(x)))
   }
-
   transformed_counts <- edgeR::cpm(x, log=TRUE, prior.count = prior.count)
-
   # call main processing function
   return(glimmaMDS.default(
     transformed_counts,
@@ -215,17 +220,16 @@ glimmaMDS.DGEList <- function(
     groups=groups,
     gene.selection=gene.selection,
     continuous.colour=continuous.colour,
+    html=html,
     width=width,
     height=height))
-
 }
 
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
-#' By default, extracts groups as \code{colData(x)} and extracts labels as \code{rownames(colData(x))}.
+#' Draws a two-panel interactive MDS plot using a DESeqDataset x.
 #'
-#' @seealso \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
+#' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'
 #' @inheritParams glimmaMDS.default
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
@@ -238,44 +242,28 @@ glimmaMDS.DGEList <- function(
 glimmaMDS.DESeqDataSet <- function(
   x,
   top = 500,
-  labels = NULL,
-  groups = NULL,
+  labels = rownames(SummarizedExperiment::colData(x)),
+  groups = as.data.frame(SummarizedExperiment::colData(x)),
   gene.selection = c("pairwise", "common"),
   prior.count = 0.25,
   continuous.colour = FALSE,
-  width = 900, 
+  html=NULL,
+  width = 900,
   height = 500)
 {
-
-  # extract sample groups based on DESeqDataSet class, if we need to
-  if (is.null(labels)) 
+  if (is.null(labels))
   {
-    if (!is.null(SummarizedExperiment::colData(x))) 
-    {
-      labels <- rownames(SummarizedExperiment::colData(x))
-    } else 
-    {
-      labels <- as.character(seq_len(ncol(x)))
-    }
+    labels <- as.character(seq_len(ncol(x)))
   }
-
+  if (is.null(groups))
+  {
+    groups <- as.character(rep(1, ncol(x)))
+  }
   transformed_counts <- edgeR::cpm(
       DESeq2::counts(x),
       log = TRUE,
       prior.count = prior.count
   )
-
-  if (is.null(groups)) 
-  {
-    if (!is.null(SummarizedExperiment::colData(x))) 
-    {
-        groups <- as.data.frame(SummarizedExperiment::colData(x))
-    } else 
-    {
-        groups <- as.character(rep(1, ncol(x)))
-    }
-  }
-
   return(glimmaMDS.default(
     transformed_counts,
     top=top,
@@ -283,7 +271,7 @@ glimmaMDS.DESeqDataSet <- function(
     groups=groups,
     gene.selection=gene.selection,
     continuous.colour=continuous.colour,
+    html=html,
     width=width,
     height=height))
-
 }

@@ -1,8 +1,13 @@
 #' Glimma MA Plot
 #'
-#' Draws a two-panel interactive MA plot.
+#' Generic function for drawing a two-panel interactive MA plot. 
+#' The function invokes the following methods which depend on the class of the first argument:
+#' \itemize{
+#'   \item \code{\link{glimmaMA.MArrayLM}} for limma analysis
+#'   \item \code{\link{glimmaMA.DGEExact}} for edgeR analysis, produced from \code{\link{exactTest}}
+#'   \item \code{\link{glimmaMA.DGELRT}} for edgeR analysis, produced from \code{\link{glmLRT}}
+#'   \item \code{\link{glimmaMA.DESeqDataSet}} for DESeq2 analysis }
 #'
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
 #' @eval MA_details()
@@ -24,16 +29,17 @@ glimmaMA <- function(x, ...)
 #' @param main Left plot title.
 #' @param p.adj.method character vector indicating multiple testing correction method.
 #' @param display.columns character vector containing names of columns to display in mouseover tooltips and table.
-#' @param anno a dataframe containing gene annotations
+#' @param anno a dataframe containing gene annotations.
 #' @param groups vector/factor representing the experimental group for each sample.
 #' @param counts the matrix of expression values, with samples in columns.
 #' @param xlab x axis label.
 #' @param ylab y axis label.
 #' @param status.colours vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.
 #' @param transform.counts TRUE if counts should be log-cpm transformed, defaults to FALSE.
+#' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @param width width of the weidget in pixels.
 #' @param height height of the widget in pixels.
-#' @seealso \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom limma decideTests
 #' @export
@@ -52,6 +58,7 @@ glimmaMA.MArrayLM <- function(
   ylab="logFC",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -64,7 +71,7 @@ glimmaMA.MArrayLM <- function(
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma MA Plot
@@ -72,7 +79,7 @@ glimmaMA.MArrayLM <- function(
 #' Draws a two-panel interactive MA plot from an DGEExact object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
@@ -91,6 +98,7 @@ glimmaMA.DGEExact <- function(
   ylab="logFC",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -101,7 +109,7 @@ glimmaMA.DGEExact <- function(
   table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma MA Plot
@@ -109,7 +117,7 @@ glimmaMA.DGEExact <- function(
 #' Draws a two-panel interactive MA plot from an DGELRT object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
@@ -121,11 +129,12 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #' Draws a two-panel interactive MA plot from an DESeqDataSet object.
 #'
 #' @inheritParams glimmaMA.MArrayLM
-#' @param groups vector/factor representing the experimental group for each sample; defaults to the first column of colData(x).
-#' @seealso \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
+#' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
+#' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 #' @eval MA_details()
 #' @importFrom DESeq2 results counts
 #' @importFrom stats complete.cases
+#' @importFrom SummarizedExperiment colData
 #' @export
 glimmaMA.DESeqDataSet  <- function(
   x,
@@ -133,16 +142,16 @@ glimmaMA.DESeqDataSet  <- function(
   main="MA Plot",
   display.columns = NULL,
   anno=NULL,
-  groups=NULL,
+  groups=extractGroups(colData(x)),
   counts=DESeq2::counts(x),
   xlab="logCPM",
   ylab="logFC",
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
+  html=NULL,
   width = 920,
   height = 920)
 {
-  # extract logCPM, logFC from DESeqDataSet
   res.df <- as.data.frame(DESeq2::results(x))
 
   # filter out genes that have missing data
@@ -159,25 +168,19 @@ glimmaMA.DESeqDataSet  <- function(
       0
     )
   }
-
-  # create initial table with logCPM and logFC features
-  xvals <- round(log(res.df$baseMean + 0.5), digits=4)
-  yvals <- round(res.df$log2FoldChange, digits=4)
-  table <- data.frame(xvals, yvals)
-  colnames(table) <- c(xlab, ylab)
-
-  # add pvalue/adjusted pvalue info from fit object to table
-  table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
-
-  # process groups if counts is non-null, and if groups isn't already given
-  if (!is.null(counts) && is.null(groups))
+  else
   {
-    groups <- extractGroups(x)
+    if (length(status)!=length(complete_genes)) stop("Status vector
+      must have the same number of genes as the main arguments.")
+    status <- status[complete_genes]
   }
 
-  # add rownames to LHS of table
+  # create initial table with logCPM and logFC features
+  table <- data.frame(round(log(res.df$baseMean + 0.5), digits=4), 
+                      round(res.df$log2FoldChange, digits=4))
+  colnames(table) <- c(xlab, ylab)
+  table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
-
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height))
+  return(glimmaXYWidget(xData, width, height, html))
 }

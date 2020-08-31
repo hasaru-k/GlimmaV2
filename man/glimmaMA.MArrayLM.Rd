@@ -19,6 +19,7 @@
   ylab = "logFC",
   status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
+  html = NULL,
   width = 920,
   height = 920
 )
@@ -39,7 +40,7 @@ sample groups from \code{dge$samples$group}.}
 
 \item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations}
+\item{anno}{a dataframe containing gene annotations.}
 
 \item{groups}{vector/factor representing the experimental group for each sample.}
 
@@ -53,12 +54,14 @@ sample groups from \code{dge$samples$group}.}
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
+\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
+
 \item{width}{width of the weidget in pixels.}
 
 \item{height}{height of the widget in pixels.}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MA plot from an MArrayLM object.
@@ -71,5 +74,5 @@ Selecting rows in the table will highlight the corresponding genes in the MA plo
 Expression values for a gene can be found by hovering over a sample in the right plot.
 }
 \seealso{
-\code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
+\code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }

@@ -20,3 +20,7 @@ Imports:
     SummarizedExperiment
 Suggests:
     testthat,
+    Glimma,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -20,6 +20,7 @@ glimmaXY <- function(
   counts=NULL,
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
+  html=NULL,
   width = 920,
   height = 920)
 {
@@ -37,14 +38,14 @@ glimmaXY <- function(
     table <- cbind(gene=1:length(x), table)
   }
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
-  return(glimmaXYWidget(xData, width, height))
+  return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' XY Data Object Builder
 #'
 #' Common processing steps for both MA, XY and volcano plots.
-#' Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab} as this
-#' tells the frontend what to display on the left plot, as well as other relevant columns.
+#' Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab}
+#' as well as a unique identifier column labelled \code{gene}.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
@@ -113,21 +114,27 @@ buildXYData <- function(
 #' @param xData packaged data object returned from buildXYData()
 #' @param width htmlwidget element width in pixels
 #' @param height htmlwidget element height in pixels
-#' @param elementId ID attribute for htmlwidget
+#' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @import htmlwidgets
-glimmaXYWidget <- function(
-  xData,
-  width,
-  height,
-  elementId = NULL)
+glimmaXYWidget <- function(xData, width, height, html)
 {
-  htmlwidgets::createWidget(
+  widget <- htmlwidgets::createWidget(
     name = 'glimmaXY',
     xData,
     width = width,
     height = height,
     package = 'GlimmaV2',
-    elementId = elementId,
+    elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
+  if (is.null(html))
+  {
+    return(widget)
+  }
+  else
+  {
+    message("Saving widget...")
+    htmlwidgets::saveWidget(widget, file=html)
+    message(html, " generated.")
+  }
 }

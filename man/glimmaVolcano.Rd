@@ -12,10 +12,16 @@ glimmaVolcano(x, ...)
 \item{...}{additional arguments affecting the plots produced. See specific methods for detailed arguments.}
 }
 \value{
-htmlwidget object.
+htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Draws a two-panel interactive MA plot.
+Generic function for drawing a two-panel interactive volcano plot. 
+The function invokes the following methods which depend on the class of the first argument:
+\itemize{
+  \item \code{\link{glimmaVolcano.MArrayLM}} for limma analysis
+  \item \code{\link{glimmaVolcano.DGEExact}} for edgeR analysis, produced from \code{\link{exactTest}}
+  \item \code{\link{glimmaVolcano.DGELRT}} for edgeR analysis, produced from \code{\link{glmLRT}}
+  \item \code{\link{glimmaVolcano.DESeqDataSet}} for DESeq2 analysis }
 }
 \details{
 The left plot shows the log-fold-change vs -log10(pvalue).
@@ -23,7 +29,4 @@ The right plot shows the expression levels of a particular gene of each sample.
 Clicking on genes in the plot brings up the corresponding genes in the table.
 Selecting rows in the table will highlight the corresponding genes in the volcano plot.
 Expression values for a gene can be found by hovering over a sample in the right plot.
-}
-\seealso{
-\code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 }

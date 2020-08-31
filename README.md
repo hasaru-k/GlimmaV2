@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/hasaru-k/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasaru-k/GlimmaV2)
+[![codecov](https://codecov.io/gh/hasaru-k/GlimmaV2/branch/master/graph/badge.svg)](https://codecov.io/gh/hasaru-k/GlimmaV2)
 # GlimmaV2
 GlimmaV2 is an interactive R widget for creating plots for differential expression analysis, created using the [Vega](https://vega.github.io/vega/) and [htmlwidgets](https://www.htmlwidgets.org/) frameworks. New features include:
 - multiple gene selections
@@ -51,13 +52,16 @@ The test used to distinguish numeric vs discrete features in the groups datafram
 
 ### Exporting Standalone HTML
 
-The htmlwidgets::saveWidget() function can be used to generate a single encapsulated GlimmaV2 html file which can be sent to others easily.
+Specifying a filename using the ```html``` argument (*including the extension*) in any of the GlimmaV2 functions will export the widget to a standalone single HTML file, rather than displaying/returning the widget in R Markdown.
+
+```R
+glimmaMA(fit, dge=rnaseq, html="MA_plot.html")
+```
+If more flexibility is required (ex. varying the background colour, whether or not the file should be standalone), the user can call ```htmlwidgets::saveWidget()``` on instantiated widgets which has [further options](https://rdrr.io/cran/htmlwidgets/man/saveWidget.html).
 ```R
 glMA <- glimmaMA(fit, dge=rnaseq)
 htmlwidgets::saveWidget(glMA, file="glimmaV2Example.html")
 ```
-More information on saveWidget function arguments can be found [here](https://rdrr.io/cran/htmlwidgets/man/saveWidget.html).
-
 ### Sizing
 The width and height parameters can be adjusted to change the dimensions of the widget in pixels in the RStudio viewer and in knitted HTML:
 ```R
