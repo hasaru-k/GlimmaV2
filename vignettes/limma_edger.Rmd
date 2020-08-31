@@ -1,0 +1,106 @@
+---
+title: "Introduction using limma or edgeR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{limma}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+## pre-load to avoid load messages in report
+library(GlimmaV2)
+library(limma)
+library(edgeR)
+```
+
+# Introduction
+
+In this vignette we present the basic features of GlimmaV2. The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow with only a single contrast has been performed for simplicity. We can use either limma or edgeR to fit the models and they both share upstream steps in common.
+
+To begin, the DGEList object from the workflow has been included with the package as internal data.
+
+```{r}
+library(GlimmaV2)
+library(limma)
+library(edgeR)
+
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+```
+
+# MDS Plot
+
+The multidimensional scaling (MDS) plot is frequently used to explore differences in samples. When data has been MDS transformed, the first two dimensions explain the greatest variance between samples, and the amount of variance decreases monotonically with increasing dimension.
+
+The GlimmaV2 MDS allows different dimensions to be plotted against each other, and for the colours of the points to be changed based on predefined factors. The grouping variables are taken from the `samples` component of `DGEList` objects used in `limma` and `edgeR`. Change the "colour_by" option in the widget created to see that the samples separate by experimental group, it's also possible to adjust the sizing scale of the points, shape and colour scheme.
+
+The plots can be saved using the "Save" buttons to either PNG or SVG formats.
+
+```{r}
+glimmaMDS(dge, groups = dge$samples)
+```
+
+# MA Plot
+
+The MA plot is a visulisation that plots the log-fold-change between experimental groups (M) against the mean across all the samples (A) for each gene.
+
+To create this plot we first need to run differential expression (DE) analysis for our data. We load in design and contrast matrices generated from the RNAseq123 workflow.
+
+```{r}
+design <- readRDS(
+  system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+contr.matrix <- readRDS(
+  system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+```
+
+## Using limma
+
+We fit our DE analysis using `voom`, this leaves us with an object that contains test statistics for each gene.
+
+```{r}
+v <- voom(dge, design)
+vfit <- lmFit(v, design)
+vfit <- contrasts.fit(vfit, contrasts = contr.matrix)
+efit <- eBayes(vfit)
+```
+
+## Using edgeR
+
+```{r}
+dge <- estimateDisp(dge, design)
+gfit <- glmFit(dge, design)
+glrt <- glmLRT(gfit, design, contrast = contr.matrix)
+```
+
+The MA plot can then be created using the fitted object containing the statistics about the genes, and the `dge` object containing information about the samples and raw counts.
+
+```{r}
+glimmaMA(efit, dge = dge) # swap efit for gfit to use edgeR results
+```
+
+Clicking points or rows will plot the gene expression of the gene in each sample. Genes can be saerched using the search box, and multiple genes can be selected on the table. Gene information and expression can be saved for the selected genes or all genes when none are selected.
+
+A maximum value for the y-axis of the expression plot can be set to compare gene expression between genes on a comparable scale, however this will not affect genes that have expression greater than the set maximum.
+
+Like in the MDS plot, the plots can be saved to either PNG or SVG formats.
+
+# Saving widgets
+
+The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can signficantly slow down the page. It is instead recommended to save the plots using `htmlwidgets::saveWidget` and linking to it via markdown hyperlinks.
+
+```{r, eval = FALSE}
+# creates ma-plot.html in working directory
+# link to it in Rmarkdown using [MA-plot](ma-plot.html)
+htmlwidgets::saveWidget(glimmaMA(efit, dge = dge), "ma-plot.html")
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
