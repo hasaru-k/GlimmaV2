@@ -50,6 +50,7 @@ glimmaXY <- function(
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
 #' @importFrom edgeR cpm
+#' @keywords internal
 buildXYData <- function(
   table,
   status,
@@ -116,6 +117,7 @@ buildXYData <- function(
 #' @param height htmlwidget element height in pixels
 #' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @import htmlwidgets
+#' @keywords internal
 glimmaXYWidget <- function(xData, width, height, html)
 {
   widget <- htmlwidgets::createWidget(
