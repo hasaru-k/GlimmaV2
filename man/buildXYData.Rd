@@ -46,3 +46,4 @@ Common processing steps for both MA, XY and volcano plots.
 Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab}
 as well as a unique identifier column labelled \code{gene}.
 }
+\keyword{internal}

@@ -15,7 +15,7 @@ glimmaMDS(x, ...)
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Generic function for drawing a two-panel interactive MDS plot. 
+Generic function for drawing a two-panel interactive MDS plot.
 The function invokes the following methods which depend on the class of the first argument:
 \itemize{
   \item \code{\link{glimmaMDS.DGEList}} for edgeR analysis
@@ -26,4 +26,16 @@ The function invokes the following methods which depend on the class of the firs
 The left plot shows two MDS dimensions, with annotations displayed on hover.
 The right panel contains a bar plot of the eigenvalues of each dimension.
 The controls beneath the plots can be used to change the dimensions being displayed.
+}
+\examples{
+\dontrun{
+# using DGEList object
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+glimmaMDS(dge)
+
+# using matrix object
+expr <- edgeR::cpm(dge, log = TRUE)
+glimmaMDS(expr)
+}
+
 }

@@ -14,3 +14,4 @@ Extracts the column named \code{group} from column data matrix
 of a SummarizedExperiment object if it is present. Otherwise return a
 vector of 1s.
 }
+\keyword{internal}
