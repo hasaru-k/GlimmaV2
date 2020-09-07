@@ -44,7 +44,7 @@ dds <- DESeqDataSetFromMatrix(
 
 The multidimensional scaling (MDS) plot is frequently used to explore differences in samples. When data has been MDS transformed, the first two dimensions explain the greatest variance between samples, and the amount of variance decreases monotonically with increasing dimension.
 
-The GlimmaV2 MDS allows different dimensions to be plotted against each other, and for the colours of the points to be changed based on predefined factors. The grouping variables are taken from the `samples` component of `DGEList` objects used in `limma` and `edgeR`. Change the "colour_by" option in the widget created to see that the samples separate by experimental group, it's also possible to adjust the sizing scale of the points, shape and colour scheme.
+The GlimmaV2 MDS allows different dimensions to be plotted against each other, and for the colours of the points to be changed based on predefined factors. Change the "colour_by" option in the widget created to see that the samples separate by experimental group, it's also possible to adjust the sizing scale of the points, shape and colour scheme.
 
 The plots can be saved using the "Save" buttons to either PNG or SVG formats.
 
@@ -68,7 +68,7 @@ The MA plot can then be created using the `dds` object that now contains fitted 
 glimmaMA(dds)
 ```
 
-Clicking points or rows will plot the gene expression of the gene in each sample. Genes can be saerched using the search box, and multiple genes can be selected on the table. Gene information and expression can be saved for the selected genes or all genes when none are selected.
+Clicking points or rows will plot the gene expression of the gene in each sample. Genes can be searched using the search box, and multiple genes can be selected on the table. Gene information and expression can be saved for the selected genes or all genes when none are selected.
 
 A maximum value for the y-axis of the expression plot can be set to compare gene expression between genes on a comparable scale, however this will not affect genes that have expression greater than the set maximum.
 
