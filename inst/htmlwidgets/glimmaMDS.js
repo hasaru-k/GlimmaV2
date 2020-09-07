@@ -52,12 +52,6 @@ HTMLWidgets.widget({
         mdsView.tooltip(handler.call);
         mdsView.runAsync();
 
-        window.alert("Just starting testColourMessage");
-        var alertBox = document.createElement("div");
-        alertbox.setAttribute("class", "alertBox danger");
-        mdsContainer.appendChild(alertbox);
-        //testColourMessage(mdsView, controlContainer);
-
         var eigenSpec = createEigenSpec(eigenData, width, height);
         eigenView = new vega.View(vega.parse(eigenSpec), {
           renderer: 'svg',
@@ -66,14 +60,14 @@ HTMLWidgets.widget({
         });
         eigenView.runAsync();
         linkPlotsMDS(mdsView, eigenView);
+
+        addColourMessage(x.data, mdsView, controlContainer);      
+
         addBlockElement(controlContainer);
         addSavePlotButton(controlContainer, mdsView, text="Save (MDS)");
         addSavePlotButton(controlContainer, eigenView, text="Save (VAR)");
 
         reformatElementsMDS(controlContainer);
-
-
-
       },
 
       resize: function(width, height) 
@@ -140,29 +134,55 @@ function reformatElementsMDS(controlContainer)
   }
 }
 
-function testColourMessage(view, container) {
-  view.addSignalListener('colourscheme', function(name, value) {
-    window.alert("Colour changed");
-    var alertBox = container.getElementsByClassName("alertBox")[0];
-    alertBox.innerHTML =`TESTING`;
-    alertBox.setAttribute("class", "alertBox danger");
-    //updateColourMessage(mdsView, mdsContainer, value);
-  })
-
-  /*
-  mdsContainer.appendChild(alertBox);
-    mdsView.addSignalListener('colourscheme', function(name, value) {
-      var alertBox = document.createElement("div");
-      alertBox.innerHTML = `THIS IS A STRING`;
-      alertBox.setAttribute("class", "alertBox danger");
-      mdsContainer.appendChild(alertBox);
-    })
-    */
+function filter(arr)
+{
+  var newarr = [arr[0]];
+  var i, z;
+  for (i = 1; i < arr.length; i++) {
+    unique = true;
+    for (z = 0; z < newarr.length; z++) {
+      if (arr[i] == newarr[z]) {
+        unique=false;
+        break;
+      }
+    }
+    if (unique) newarr.push(arr[i]);
+  }
+  return newarr;
 }
 
-function updateColourMessage(mdsView, mdsContainer, value) {
-  var alertBox = mdsContainer.getElementsByClassName("alertBox")[0];
-  alertBox.innerHTML = `Current colourScheme is ${value}`;
-  alertBox.setAttribute("class", "alertBox danger");
-  window.alert("Message changed");
+function addColourMessage(data, view, container)
+{
+  var alertBox = document.createElement("div");
+  alertBox.setAttribute("class", "alertBox invisible");
+  // update the warning box when colourscheme signal changes
+  view.addSignalListener('colourscheme',
+    function(name, value) { updateColourMessage(data, container, view, value) });
+  // update warning box when the colour_by signal changes
+  view.addSignalListener('colour_by',
+    function(name, value) {
+      updateColourMessage(data, container, view, view.signal('colourscheme'))
+    });
+  container.appendChild(alertBox);
+}
+
+function updateColourMessage(data, container, view, value)
+{
+  var alertBox = container.getElementsByClassName("alertBox")[0];
+  let schemeCount = vega.scheme(value).length;
+  let colourBy = view.signal("colour_by");
+  let colourCount = filter(data.mdsData[colourBy]).length;
+
+  alertBox.setAttribute("class", "alertBox invisible");
+
+  if (data.continuousColour == true) return;
+  if (value == "plasma" || value == "viridis") return;
+  if (colourBy == "-") return;
+
+  if (schemeCount < colourCount) {
+    alertBox.innerHTML = `${schemeCount} distinct colours supported`;
+    alertBox.setAttribute("class", "alertBox warning");
+  } else {
+    alertBox.setAttribute("class", "alertBox invisible");
+  }
 }

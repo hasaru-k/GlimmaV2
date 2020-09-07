@@ -192,3 +192,9 @@ input .max_y_axis
 {
 	display: none;
 }
+.warning
+{
+	color:  #000000;
+	background-color: #c4c4c2;
+	border: 1px solid #706e6e;
+}
