@@ -62,6 +62,15 @@ If more flexibility is required (ex. varying the background colour, whether or n
 glMA <- glimmaMA(fit, dge=rnaseq)
 htmlwidgets::saveWidget(glMA, file="glimmaV2Example.html")
 ```
+
+### Fixing Expression Y-Axis (MA/Volcano/XY)
+
+GlimmaV2 automatically rescales the y-axis of the expression plot depending on which gene is currently selected. This can make it difficult to compare the expression of different genes. In order to fix the y-axis when selecting between multiple genes, you can specify a maximum y-value in the ```max_y_axis``` input form.
+
+| Rescaling Axis  | Fixed Axis |
+| ------------- | ------------- |
+| ![](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/unfixed_axis.gif "")  | ![](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/fix_axis.gif "")  |
+
 ### Sizing
 The width and height parameters can be adjusted to change the dimensions of the widget in pixels in the RStudio viewer and in knitted HTML:
 ```R
