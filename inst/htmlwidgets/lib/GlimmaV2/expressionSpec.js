@@ -58,7 +58,13 @@ function createExpressionSpec(width, height, expColumns)
         ],
         "axes": 
         [
-            {"scale": "x", "orient": "bottom", "title": "group"},
+            {
+                "scale": "x",
+                "orient": "bottom",
+                "title": "group",
+                "labelAngle": 45,
+                "labelAlign": "left"
+            },
             {
                 "scale": "y",
                 "grid": true,

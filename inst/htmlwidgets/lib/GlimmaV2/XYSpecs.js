@@ -76,7 +76,7 @@ function createXYSpec(xyData, xyTable, width, height)
         "domain": false,
         "orient": "bottom",
         "tickCount": 5,
-        "title": xyData.x
+        "title": xyData.x,
       },
       {
         "scale": "y",
