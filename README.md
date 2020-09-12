@@ -1,6 +1,10 @@
+<p align="center">
+  <img src="https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/glimmav2.png">
+</p>
+
 [![Build Status](https://travis-ci.org/hasaru-k/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasaru-k/GlimmaV2)
 [![codecov](https://codecov.io/gh/hasaru-k/GlimmaV2/branch/master/graph/badge.svg)](https://codecov.io/gh/hasaru-k/GlimmaV2)
-# GlimmaV2
+# 
 GlimmaV2 is an interactive R widget for creating plots for differential expression analysis, created using the [Vega](https://vega.github.io/vega/) and [htmlwidgets](https://www.htmlwidgets.org/) frameworks. New features include:
 - multiple gene selections
 - full integration with R markdown
