@@ -8,7 +8,7 @@
   x,
   top = 500,
   labels = rownames(x$samples),
-  groups = as.character(rep(1, ncol(x))),
+  groups = x$samples,
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
   continuous.colour = FALSE,
