@@ -15,7 +15,8 @@ glimmaMA(x, ...)
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Generic function for drawing a two-panel interactive MA plot. 
+Generic function for drawing a two-panel interactive MA plot, a special case of the
+glimmaXY plot. 
 The function invokes the following methods which depend on the class of the first argument:
 \itemize{
   \item \code{\link{glimmaMA.MArrayLM}} for limma analysis
