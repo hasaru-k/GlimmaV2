@@ -49,6 +49,14 @@ The left plot shows two MDS dimensions, with annotations displayed on hover.
 The right panel contains a bar plot of the eigenvalues of each dimension.
 The controls beneath the plots can be used to change the dimensions being displayed.
 }
+\examples{
+\dontrun{
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+expr <- edgeR::cpm(dge, log = TRUE)
+glimmaMDS(expr)
+}
+
+}
 \seealso{
 \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 }

@@ -33,6 +33,15 @@ The controls beneath the plots can be used to change the dimensions being displa
 dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
 glimmaMDS(dge)
 
+# using DESeqDataSet
+dds <- DESeqDataSetFromMatrix(
+ countData = dge$counts,
+ colData = dge$samples,
+ rowData = dge$genes,
+ design = ~group
+)
+glimmaMDS(dds)
+
 # using matrix object
 expr <- edgeR::cpm(dge, log = TRUE)
 glimmaMDS(expr)

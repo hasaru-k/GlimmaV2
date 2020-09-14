@@ -12,6 +12,26 @@
 #'
 #' @eval MDS_details()
 #'
+#' @examples
+#' \dontrun{
+#' # using DGEList object
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' glimmaMDS(dge)
+#'
+#' # using DESeqDataSet
+#' dds <- DESeqDataSetFromMatrix(
+#'  countData = dge$counts,
+#'  colData = dge$samples,
+#'  rowData = dge$genes,
+#'  design = ~group
+#' )
+#' glimmaMDS(dds)
+#'
+#' # using matrix object
+#' expr <- edgeR::cpm(dge, log = TRUE)
+#' glimmaMDS(expr)
+#' }
+#'
 #' @export
 glimmaMDS <- function(x, ...)
 {
@@ -37,6 +57,13 @@ glimmaMDS <- function(x, ...)
 #' @param height custom widget height in pixels
 #'
 #' @eval MDS_details()
+#'
+#' @examples
+#' \dontrun{
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' expr <- edgeR::cpm(dge, log = TRUE)
+#' glimmaMDS(expr)
+#' }
 #'
 #' @importFrom stats cmdscale as.dist
 #' @export
@@ -193,6 +220,12 @@ glimmaMDS.default <- function(
 #'
 #' @eval MDS_details()
 #'
+#' @examples
+#' \dontrun{
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' glimmaMDS(dge)
+#' }
+#'
 #' @importFrom edgeR cpm
 #' @export
 glimmaMDS.DGEList <- function(
@@ -235,6 +268,18 @@ glimmaMDS.DGEList <- function(
 #' @param prior.count average count to be added to each observation to avoid taking log of zero.
 #'
 #' @eval MDS_details()
+#'
+#' @examples
+#' \dontrun{
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' dds <- DESeqDataSetFromMatrix(
+#'  countData = dge$counts,
+#'  colData = dge$samples,
+#'  rowData = dge$genes,
+#'  design = ~group
+#' )
+#' glimmaMDS(dds)
+#' }
 #'
 #' @importFrom SummarizedExperiment colData
 #' @importFrom edgeR cpm
