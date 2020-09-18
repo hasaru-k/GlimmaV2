@@ -52,8 +52,8 @@ function createExpressionSpec(width, height, expColumns)
             {
                 "name": "color",
                 "type": "ordinal",
-                "domain": { "data": "table", "field": "sample" },
-                "range": { "scheme": "category20" }
+                "domain": { "data": "table", "field": "group" },
+                "range": { "scheme": "tableau20" }
             },
         ],
         "axes": 
@@ -84,7 +84,7 @@ function createExpressionSpec(width, height, expColumns)
                         "x": {"scale": "x", "field": "group"},
                         "y": {"scale": "y", "field": "count"},
                         "shape": {"value": "circle"},
-                        "fill": { "scale": "color", "field": "sample" },
+                        "fill": { "scale": "color", "field": "group" },
                         "strokeWidth": {"value": 1},
                         "opacity": {"value": 0.6},
                         "size": {"value": 100},
