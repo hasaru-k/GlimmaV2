@@ -125,6 +125,10 @@ function setupXYInteraction(data)
       });
 
     datatable.on('click', 'tr', function() { tableClickListener(datatable, state, data, $(this)) } );
+    data.xyView.addSignalListener('tester', function(name, value) {
+      alert("new value: " + value);
+      datatableEl.set
+    })
     data.xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
   });
 }

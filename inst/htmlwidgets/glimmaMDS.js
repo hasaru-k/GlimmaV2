@@ -182,7 +182,7 @@ function updateColourMessage(data, container, view, value)
   if (schemeCount < colourCount) {
     alertBox.innerHTML = `Warning: not enough distinct colours. ${colourCount} supported.`;
 
-    alertBox.setAttribute("class", "alertBox danger");
+    alertBox.setAttribute("class", "alertBox warning");
   } else {
     alertBox.setAttribute("class", "alertBox invisible");
   }

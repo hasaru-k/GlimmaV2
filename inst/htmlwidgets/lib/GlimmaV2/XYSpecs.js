@@ -19,6 +19,11 @@ function createXYSpec(xyData, xyTable, width, height)
           "name": "click", "value": null,
           "on": [ {"events": "mousedown", "update": "[datum, now()]" } ]
         }
+//        {
+//          "name": "tester",
+//          "value": 0,
+//          "bind": {"input": "select", "options": [0,1,2,3,4]}
+//        }
       ],
     "data": 
       [
