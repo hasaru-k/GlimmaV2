@@ -58,7 +58,14 @@ function createExpressionSpec(width, height, expColumns)
         ],
         "axes": 
         [
-            {"scale": "x", "orient": "bottom", "title": "group"},
+            {
+                "scale": "x",
+                "orient": "bottom",
+                "title": "group",
+                "labelAngle": -45,
+                "labelAlign": "right",
+                "labelOffset": -3 // change this or get rid of it?
+            },
             {
                 "scale": "y",
                 "grid": true,

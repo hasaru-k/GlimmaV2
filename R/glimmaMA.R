@@ -1,7 +1,9 @@
 #' Glimma MA Plot
 #'
+
 #' Generic function for drawing a two-panel interactive MA plot, a special case of the
 #' glimmaXY plot. 
+
 #' The function invokes the following methods which depend on the class of the first argument:
 #' \itemize{
 #'   \item \code{\link{glimmaMA.MArrayLM}} for limma analysis
@@ -64,7 +66,7 @@ glimmaMA.MArrayLM <- function(
   height = 920)
 {
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(unname(x$Amean), digits=4), 
+  table <- data.frame(round(unname(x$Amean), digits=4),
                       round(unname(x$coefficients[, coef]), digits=4))
   names(table) <- c(xlab, ylab)
   AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
@@ -177,7 +179,7 @@ glimmaMA.DESeqDataSet  <- function(
   }
 
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(log(res.df$baseMean + 0.5), digits=4), 
+  table <- data.frame(round(log(res.df$baseMean + 0.5), digits=4),
                       round(res.df$log2FoldChange, digits=4))
   colnames(table) <- c(xlab, ylab)
   table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
