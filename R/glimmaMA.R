@@ -98,7 +98,8 @@ glimmaMA.MArrayLM <- function(
 
 #' Glimma MA Plot
 #'
-#' Draws a two-panel interactive MA plot from an DGEExact object.
+#' Draws a two-panel interactive MA plot from an DGEExact object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x DGEExact object from which summary statistics are extracted from to create summary (left) plot.
@@ -142,7 +143,8 @@ glimmaMA.DGEExact <- function(
 
 #' Glimma MA Plot
 #'
-#' Draws a two-panel interactive MA plot from an DGELRT object.
+#' Draws a two-panel interactive MA plot from an DGELRT object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
 #' @inheritParams glimmaMA.DGEExact
 #' @param x DGELRT object from which summary statistics are extracted from to create summary (left) plot.
@@ -155,7 +157,8 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 
 #' Glimma MA Plot
 #'
-#' Draws a two-panel interactive MA plot from an DESeqDataSet object.
+#' Draws a two-panel interactive MA plot from an DESeqDataSet object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x DESeqDataSet object from which summary statistics are extracted from to create summary (left) plot.

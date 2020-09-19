@@ -24,18 +24,16 @@
 )
 }
 \arguments{
-\item{x}{\code{MArrayLM} object from which summary statistics are extracted from to create 
-summary (left) plot.}
+\item{x}{DGEExact object from which summary statistics are extracted from to create summary (left) plot.}
 
 \item{dge}{\code{DGEList} object with \code{nrow(x)} rows from which expression values are 
 extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
 and sample groups from \code{dge$samples$group}.}
 
-\item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
-By default genes in the summary plot are coloured based on its differential expression status 
-using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
-the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
-1 marks up-regulated genes.}
+\item{status}{vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are 
+coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
+by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
+expression difference, and 1 marks up-regulated genes.}
 
 \item{main}{character string for the main title of summary plot.}
 
@@ -73,15 +71,12 @@ should be included in the file name e.g. "file.html".}
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Draws a two-panel interactive volcano plot from an DGEExact object.
+Draws a two-panel interactive volcano plot from an DGEExact object. This is a special case of the
+\code{glimmaXY} plot.
 }
 \details{
-The summary plot on the left represents gene-wise log-fold-change (logFC) on the y-axis versus average gene 
-    expression calculated as log-counts-per-million (logCPM) values. 
-    We call our summary plot an MA plot because this type of plot was originally referred to as an MA plot in 
-    the \code{limma} package, with the M-value representing logFC and A-value representing average expression - 
-    it has since been renamed to MD plot in the \code{limma} package.
-    The expression plot on the right displays sample expression values for a single gene.
+The summary plot on the left represents gene-wise log-fold-change (logFC) on the x-axis versus 
+    \code{-log10(pvalue)}. The expression plot on the right displays sample expression values for a single gene.
     Interactions with the htmlwidget include clicking on genes (points) in the summary plot to bring up 
     associated sample expression values in the expression plot, as well as the summary statistics in the table below.
     Alternatively, users can interact with the table by clicking on genes (rows) to highlight genes in the summary plot, 

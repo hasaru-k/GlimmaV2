@@ -57,7 +57,8 @@ should be included in the file name e.g. "file.html".}
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Draws a two-panel interactive MA plot from an DESeqDataSet object.
+Draws a two-panel interactive MA plot from an DESeqDataSet object. This is a special case of the
+\code{glimmaXY} plot.
 }
 \details{
 The summary plot on the left represents gene-wise log-fold-change (logFC) on the y-axis versus average gene 

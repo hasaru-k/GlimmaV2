@@ -20,7 +20,8 @@ glimmaVolcano <- function(x, ...)
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an MArrayLM object.
+#' Draws a two-panel interactive volcano plot from an MArrayLM object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
@@ -60,11 +61,12 @@ glimmaVolcano.MArrayLM <- function(
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an DGEExact object.
+#' Draws a two-panel interactive volcano plot from an DGEExact object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DGEExact
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
-#' @eval MA_details()
+#' @eval volcano_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -100,11 +102,12 @@ glimmaVolcano.DGEExact <- function(
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an DGELRT object.
+#' Draws a two-panel interactive volcano plot from an DGELRT object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DGELRT
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
-#' @eval MA_details()
+#' @eval volcano_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -112,12 +115,13 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an DESeqDataSet object.
+#' Draws a two-panel interactive volcano plot from an DESeqDataSet object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DESeqDataSet
 #' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
-#' @eval MA_details()
+#' @eval volcano_details()
 #' @importFrom DESeq2 results counts
 #' @importFrom SummarizedExperiment colData
 #' @export
