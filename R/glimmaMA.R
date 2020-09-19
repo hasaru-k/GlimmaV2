@@ -53,8 +53,12 @@ glimmaMA <- function(x, ...)
 #' @param display.columns character vector containing names of columns from \code{anno} from
 #' which to display in mouseover tooltips and table.
 #'
-#' @param status.colours vector of length 3 containing valid CSS strings for colours associated
+#' @param status.cols vector of length 3 containing valid CSS strings for colours associated
 #' with \code{status}  in the order of -1, 0 and 1.
+#'
+#' @param sample.cols character vector of length \code{ncol(counts)} containing valid CSS strings
+#' for colours associated with each sample to be displayed on the expression plot. If left
+#' unspecified, samples will be coloured according to \code{groups}.
 #'
 #' @param p.adj.method character string specifying p-value adjustment method.
 #' @param transform.counts TRUE if counts should be log-cpm transformed using
@@ -80,7 +84,8 @@ glimmaMA.MArrayLM <- function(
   status=limma::decideTests(x),
   anno=x$genes,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   p.adj.method = "BH",
   transform.counts=FALSE,
   main=colnames(x)[coef],
@@ -98,7 +103,7 @@ glimmaMA.MArrayLM <- function(
   table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
@@ -127,7 +132,8 @@ glimmaMA.DGEExact <- function(
   status=edgeR::decideTestsDGE(x),
   anno=x$genes,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   p.adj.method = "BH",
   transform.counts=FALSE,
   main=paste(x$comparison[2],"vs",x$comparison[1]),
@@ -143,7 +149,7 @@ glimmaMA.DGEExact <- function(
   AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
   table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
@@ -184,7 +190,8 @@ glimmaMA.DESeqDataSet  <- function(
   status=NULL,
   anno=NULL,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   transform.counts=FALSE,
   main="MA Plot",
   xlab="logCPM",
@@ -222,6 +229,6 @@ glimmaMA.DESeqDataSet  <- function(
   colnames(table) <- c(xlab, ylab)
   table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }

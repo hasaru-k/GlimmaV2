@@ -24,7 +24,8 @@ glimmaXY <- function(
   status=rep(0, length(x)),
   anno=NULL,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   transform.counts=FALSE,
   main="XY Plot",
   html=NULL,
@@ -44,7 +45,7 @@ glimmaXY <- function(
   } else {
     table <- cbind(gene=1:length(x), table)
   }
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
@@ -66,7 +67,8 @@ buildXYData <- function(
   counts,
   xlab,
   ylab,
-  status.colours,
+  status.cols,
+  sample.cols,
   groups,
   transform.counts)
 {
@@ -99,7 +101,7 @@ buildXYData <- function(
 
   table <- data.frame(index=0:(nrow(table)-1), table)
 
-  if (length(status.colours) != 3) stop("status_colours
+  if (length(status.cols) != 3) stop("status.cols
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
 
   xData <- list(data=list(x=xlab,
@@ -109,7 +111,8 @@ buildXYData <- function(
                           counts=counts,
                           groups=groups,
                           expCols=colnames(groups),
-                          statusColours=status.colours,
+                          statusColours=status.cols,
+                          sampleColours= if (is.null(sample.cols)) {-1} else {sample.cols},
                           title=main))
   return(xData)
 }

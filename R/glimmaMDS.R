@@ -47,7 +47,6 @@ glimmaMDS.default <- function(
   groups = as.character(rep(1, ncol(x))),
   gene.selection = c("pairwise", "common"),
   continuous.colour=FALSE,
-  save=FALSE,
   html=NULL,
   width = 900,
   height = 500)

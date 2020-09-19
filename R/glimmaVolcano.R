@@ -37,7 +37,8 @@ glimmaVolcano.MArrayLM <- function(
   status=limma::decideTests(x),
   anno=x$genes,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   p.adj.method = "BH",
   transform.counts=FALSE,
   main=colnames(x)[coef],
@@ -55,7 +56,7 @@ glimmaVolcano.MArrayLM <- function(
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
@@ -78,7 +79,8 @@ glimmaVolcano.DGEExact <- function(
   status=edgeR::decideTestsDGE(x),
   anno=x$genes,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   p.adj.method = "BH",
   transform.counts=FALSE,
   main=paste(x$comparison[2],"vs",x$comparison[1]),
@@ -96,7 +98,7 @@ glimmaVolcano.DGEExact <- function(
   logCPM <- round(x$table$logCPM, digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
@@ -132,7 +134,8 @@ glimmaVolcano.DESeqDataSet  <- function(
   status=NULL,
   anno=NULL,
   display.columns = NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   transform.counts=FALSE,
   main="Volcano Plot",
   xlab="logFC",
@@ -171,6 +174,6 @@ glimmaVolcano.DESeqDataSet  <- function(
   table <- cbind(table, logCPM=round(log(res.df$baseMean + 0.5), digits=4), 
                         AdjPValue=round(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }

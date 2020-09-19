@@ -12,7 +12,8 @@
   status = edgeR::decideTestsDGE(x),
   anno = x$genes,
   display.columns = NULL,
-  status.colours = c("dodgerblue", "silver", "firebrick"),
+  status.cols = c("dodgerblue", "silver", "firebrick"),
+  sample.cols = NULL,
   p.adj.method = "BH",
   transform.counts = FALSE,
   main = paste(x$comparison[2], "vs", x$comparison[1]),
@@ -47,8 +48,12 @@ expression difference, and 1 marks up-regulated genes.}
 \item{display.columns}{character vector containing names of columns from \code{anno} from
 which to display in mouseover tooltips and table.}
 
-\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
+\item{status.cols}{vector of length 3 containing valid CSS strings for colours associated
 with \code{status}  in the order of -1, 0 and 1.}
+
+\item{sample.cols}{character vector of length \code{ncol(counts)} containing valid CSS strings
+for colours associated with each sample to be displayed on the expression plot. If left
+unspecified, samples will be coloured according to \code{groups}.}
 
 \item{p.adj.method}{character string specifying p-value adjustment method.}
 

@@ -13,7 +13,8 @@ buildXYData(
   counts,
   xlab,
   ylab,
-  status.colours,
+  status.cols,
+  sample.cols,
   groups,
   transform.counts
 )
@@ -42,8 +43,12 @@ e.g. logCPM or logRPKM values.}
 
 \item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
+\item{status.cols}{vector of length 3 containing valid CSS strings for colours associated
 with \code{status}  in the order of -1, 0 and 1.}
+
+\item{sample.cols}{character vector of length \code{ncol(counts)} containing valid CSS strings
+for colours associated with each sample to be displayed on the expression plot. If left
+unspecified, samples will be coloured according to \code{groups}.}
 
 \item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
 expression plot.}

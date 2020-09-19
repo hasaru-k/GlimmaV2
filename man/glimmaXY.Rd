@@ -14,7 +14,8 @@ glimmaXY(
   status = rep(0, length(x)),
   anno = NULL,
   display.columns = NULL,
-  status.colours = c("dodgerblue", "silver", "firebrick"),
+  status.cols = c("dodgerblue", "silver", "firebrick"),
+  sample.cols = NULL,
   transform.counts = FALSE,
   main = "XY Plot",
   html = NULL,
@@ -45,8 +46,12 @@ A value of -1 marks a down-regulated gene, 0 marks a gene with no expression dif
 \item{display.columns}{character vector containing names of columns from \code{anno} from
 which to display in mouseover tooltips and table.}
 
-\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
+\item{status.cols}{vector of length 3 containing valid CSS strings for colours associated
 with \code{status}  in the order of -1, 0 and 1.}
+
+\item{sample.cols}{character vector of length \code{ncol(counts)} containing valid CSS strings
+for colours associated with each sample to be displayed on the expression plot. If left
+unspecified, samples will be coloured according to \code{groups}.}
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed using
 \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
