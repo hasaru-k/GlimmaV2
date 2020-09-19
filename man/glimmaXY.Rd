@@ -27,31 +27,41 @@ glimmaXY(
 
 \item{y}{numeric vector of values to plot on the y-axis of the summary plot.}
 
-\item{xlab}{x axis label.}
+\item{xlab}{character string for the x-axis label of summary plot.}
 
-\item{ylab}{y axis label.}
+\item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{status}{vector giving the control status of each row in the object.}
+\item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
+By default genes in the summary plot are coloured based on its differential expression status 
+using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
+the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+1 marks up-regulated genes.}
 
-\item{main}{Left plot title.}
+\item{main}{character string for the main title of summary plot.}
 
-\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+\item{display.columns}{character vector containing names of columns from \code{anno} from
+which to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations.}
+\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
+expression plot.}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
+This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+e.g. logCPM or logRPKM values.}
 
-\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
+with \code{status}  in the order of -1, 0 and 1.}
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
-\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
+\item{html}{character string for naming HTML file for exportation of widget. The extension 
+should be included in the file name e.g. "file.html".}
 
-\item{width}{width of the weidget in pixels.}
+\item{width}{numeric value indicating width of widget in pixels.}
 
-\item{height}{height of the widget in pixels.}
+\item{height}{numeric value indicating width of height in pixels.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
