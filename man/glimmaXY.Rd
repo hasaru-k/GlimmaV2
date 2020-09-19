@@ -9,14 +9,14 @@ glimmaXY(
   y,
   xlab = "x",
   ylab = "y",
-  status = rep(0, length(x)),
-  main = "XY Plot",
-  display.columns = NULL,
-  anno = NULL,
-  groups = NULL,
   counts = NULL,
+  groups = NULL,
+  status = rep(0, length(x)),
+  anno = NULL,
+  display.columns = NULL,
   status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
+  main = "XY Plot",
   html = NULL,
   width = 920,
   height = 920
@@ -31,26 +31,27 @@ glimmaXY(
 
 \item{ylab}{character string for the y-axis label of summary plot.}
 
+\item{counts}{numeric matrix with \code{length(x)} rows containing gene expression values. This can be used to replace
+raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.}
+
+\item{groups}{vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.}
+
 \item{status}{vector of length \code{length(x)} indicating the status of each gene.
 A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
 1 marks an up-regulated gene.}
 
-\item{main}{character string for the main title of summary plot.}
+\item{anno}{dataframe with \code{length(x)} rows containing gene annotations.}
 
 \item{display.columns}{character vector containing names of columns from \code{anno} from
 which to display in mouseover tooltips and table.}
 
-\item{anno}{dataframe with \code{length(x)} rows containing gene annotations.}
-
-\item{groups}{vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.}
-
-\item{counts}{numeric matrix with \code{length(x)} rows containing gene expression values. This can be used to replace
-raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.}
-
 \item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
 with \code{status}  in the order of -1, 0 and 1.}
 
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
+
+\item{main}{character string for the main title of summary plot.}
 
 \item{html}{character string for naming HTML file for exportation of widget. The extension 
 should be included in the file name e.g. "file.html".}

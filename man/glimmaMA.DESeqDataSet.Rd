@@ -6,16 +6,16 @@
 \usage{
 \method{glimmaMA}{DESeqDataSet}(
   x,
-  status = NULL,
-  main = "MA Plot",
-  display.columns = NULL,
-  anno = NULL,
-  groups = extractGroups(colData(x)),
   counts = DESeq2::counts(x),
-  xlab = "logCPM",
-  ylab = "logFC",
+  groups = extractGroups(colData(x)),
+  status = NULL,
+  anno = NULL,
+  display.columns = NULL,
   status.colours = c("dodgerblue", "silver", "firebrick"),
   transform.counts = FALSE,
+  main = "MA Plot",
+  xlab = "logCPM",
+  ylab = "logFC",
   html = NULL,
   width = 920,
   height = 920
@@ -24,27 +24,28 @@
 \arguments{
 \item{x}{DESeqDataSet object from which summary statistics are extracted from to create summary (left) plot.}
 
+\item{counts}{numeric matrix with nrow(x) rows containing gene expression values.}
+
+\item{groups}{vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.}
+
 \item{status}{vector of length nrow(x) indicating the status of each gene.}
 
-\item{main}{character string for the main title of summary plot.}
+\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
 
 \item{display.columns}{character vector containing names of columns from \code{anno} from
 which to display in mouseover tooltips and table.}
 
-\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
+\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
+with \code{status}  in the order of -1, 0 and 1.}
 
-\item{groups}{vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.}
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 
-\item{counts}{numeric matrix with nrow(x) rows containing gene expression values.}
+\item{main}{character string for the main title of summary plot.}
 
 \item{xlab}{character string for the x-axis label of summary plot.}
 
 \item{ylab}{character string for the y-axis label of summary plot.}
-
-\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
-with \code{status}  in the order of -1, 0 and 1.}
-
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
 \item{html}{character string for naming HTML file for exportation of widget. The extension 
 should be included in the file name e.g. "file.html".}

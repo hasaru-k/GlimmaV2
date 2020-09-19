@@ -20,6 +20,7 @@ glimmaMA <- function(x, ...)
   UseMethod("glimmaMA")
 }
 
+
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an MArrayLM object. This is a special case of the
@@ -32,31 +33,36 @@ glimmaMA <- function(x, ...)
 #' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
 #' and sample groups from \code{dge$samples$group}.
 #'
+#' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values. 
+#' This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+#' e.g. logCPM or logRPKM values.
+#'
+#' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in 
+#' expression plot.
+#'
+#' @param coef integer indicating the column in \code{x} from the summary plot is created.
+#'
 #' @param status vector of length \code{nrow(x)} indicating the status of each gene. 
 #' By default genes in the summary plot are coloured based on its differential expression status 
 #' using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
 #' the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
 #' 1 marks up-regulated genes.
 #'
-#' @param coef integer indicating the column in \code{x} from the summary plot is created.
-#' @param main character string for the main title of summary plot.
-#' @param p.adj.method character string specifying p-value adjustment method.
+#' @param anno dataframe with \code{nrow(x)} rows containing gene annotations.
+#'
 #' @param display.columns character vector containing names of columns from \code{anno} from
 #' which to display in mouseover tooltips and table.
 #'
-#' @param anno dataframe with \code{nrow(x)} rows containing gene annotations.
-#' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in 
-#' expression plot.
-#'
-#' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values. 
-#' This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
-#' e.g. logCPM or logRPKM values.
-#' @param xlab character string for the x-axis label of summary plot.
-#' @param ylab character string for the y-axis label of summary plot.
 #' @param status.colours vector of length 3 containing valid CSS strings for colours associated
 #' with \code{status}  in the order of -1, 0 and 1.
 #'
-#' @param transform.counts TRUE if counts should be log-cpm transformed, defaults to FALSE.
+#' @param p.adj.method character string specifying p-value adjustment method.
+#' @param transform.counts TRUE if counts should be log-cpm transformed using
+#' \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.
+#'
+#' @param main character string for the main title of summary plot.
+#' @param xlab character string for the x-axis label of summary plot.
+#' @param ylab character string for the y-axis label of summary plot.
 #' @param html character string for naming HTML file for exportation of widget. The extension 
 #' should be included in the file name e.g. "file.html".
 #' @param width numeric value indicating width of widget in pixels.
@@ -68,18 +74,18 @@ glimmaMA <- function(x, ...)
 glimmaMA.MArrayLM <- function(
   x,
   dge = NULL,
-  status=limma::decideTests(x),
-  coef=ncol(x$coefficients),
-  main=colnames(x)[coef],
-  p.adj.method = "BH",
-  display.columns = NULL,
-  anno=x$genes,
-  groups=dge$samples$group,
   counts=dge$counts,
+  groups=dge$samples$group,
+  coef=ncol(x$coefficients),
+  status=limma::decideTests(x),
+  anno=x$genes,
+  display.columns = NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
+  p.adj.method = "BH",
+  transform.counts=FALSE,
+  main=colnames(x)[coef],
   xlab="logCPM",
   ylab="logFC",
-  status.colours=c("dodgerblue", "silver", "firebrick"),
-  transform.counts=FALSE,
   html=NULL,
   width = 920,
   height = 920)
@@ -116,17 +122,17 @@ glimmaMA.MArrayLM <- function(
 glimmaMA.DGEExact <- function(
   x,
   dge=NULL,
-  status=edgeR::decideTestsDGE(x),
-  main=paste(x$comparison[2],"vs",x$comparison[1]),
-  p.adj.method = "BH",
-  display.columns = NULL,
-  anno=x$genes,
-  groups=dge$samples$group,
   counts=dge$counts,
+  groups=dge$samples$group,
+  status=edgeR::decideTestsDGE(x),
+  anno=x$genes,
+  display.columns = NULL,
+  status.colours=c("dodgerblue", "silver", "firebrick"),
+  p.adj.method = "BH",
+  transform.counts=FALSE,
+  main=paste(x$comparison[2],"vs",x$comparison[1]),
   xlab="logCPM",
   ylab="logFC",
-  status.colours=c("dodgerblue", "silver", "firebrick"),
-  transform.counts=FALSE,
   html=NULL,
   width = 920,
   height = 920)
@@ -173,16 +179,16 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #' @export
 glimmaMA.DESeqDataSet  <- function(
   x,
-  status=NULL,
-  main="MA Plot",
-  display.columns = NULL,
-  anno=NULL,
-  groups=extractGroups(colData(x)),
   counts=DESeq2::counts(x),
-  xlab="logCPM",
-  ylab="logFC",
+  groups=extractGroups(colData(x)),
+  status=NULL,
+  anno=NULL,
+  display.columns = NULL,
   status.colours=c("dodgerblue", "silver", "firebrick"),
   transform.counts=FALSE,
+  main="MA Plot",
+  xlab="logCPM",
+  ylab="logFC",
   html=NULL,
   width = 920,
   height = 920)

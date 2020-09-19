@@ -7,18 +7,18 @@
 \method{glimmaVolcano}{MArrayLM}(
   x,
   dge = NULL,
-  status = limma::decideTests(x),
-  coef = ncol(x$coefficients),
-  main = colnames(x)[coef],
-  p.adj.method = "BH",
-  display.columns = NULL,
-  anno = x$genes,
-  groups = dge$samples$group,
   counts = dge$counts,
+  groups = dge$samples$group,
+  coef = ncol(x$coefficients),
+  status = limma::decideTests(x),
+  anno = x$genes,
+  display.columns = NULL,
+  status.colours = c("dodgerblue", "silver", "firebrick"),
+  p.adj.method = "BH",
+  transform.counts = FALSE,
+  main = colnames(x)[coef],
   xlab = "logFC",
   ylab = "negLog10PValue",
-  status.colours = c("dodgerblue", "silver", "firebrick"),
-  transform.counts = FALSE,
   html = NULL,
   width = 920,
   height = 920
@@ -32,38 +32,39 @@ summary (left) plot.}
 extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
 and sample groups from \code{dge$samples$group}.}
 
+\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
+This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+e.g. logCPM or logRPKM values.}
+
+\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
+expression plot.}
+
+\item{coef}{integer indicating the column in \code{x} from the summary plot is created.}
+
 \item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
 By default genes in the summary plot are coloured based on its differential expression status 
 using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
 the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
 1 marks up-regulated genes.}
 
-\item{coef}{integer indicating the column in \code{x} from the summary plot is created.}
-
-\item{main}{character string for the main title of summary plot.}
-
-\item{p.adj.method}{character string specifying p-value adjustment method.}
+\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
 
 \item{display.columns}{character vector containing names of columns from \code{anno} from
 which to display in mouseover tooltips and table.}
 
-\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
+\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
+with \code{status}  in the order of -1, 0 and 1.}
 
-\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
-expression plot.}
+\item{p.adj.method}{character string specifying p-value adjustment method.}
 
-\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
-This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
-e.g. logCPM or logRPKM values.}
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
+
+\item{main}{character string for the main title of summary plot.}
 
 \item{xlab}{character string for the x-axis label of summary plot.}
 
 \item{ylab}{character string for the y-axis label of summary plot.}
-
-\item{status.colours}{vector of length 3 containing valid CSS strings for colours associated
-with \code{status}  in the order of -1, 0 and 1.}
-
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
 
 \item{html}{character string for naming HTML file for exportation of widget. The extension 
 should be included in the file name e.g. "file.html".}

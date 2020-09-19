@@ -48,7 +48,8 @@ with \code{status}  in the order of -1, 0 and 1.}
 \item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
 expression plot.}
 
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 }
 \description{
 Common processing steps for both MA, XY and volcano plots.
