@@ -104,7 +104,7 @@ glimmaMA.MArrayLM <- function(
 #' @param x DGEExact object from which summary statistics are extracted from to create summary (left) plot.
 #' @param status vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are 
 #' coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
-#' by calling the edgeR::() function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
+#' by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
 #' expression difference, and 1 marks up-regulated genes.
 #'
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
@@ -144,13 +144,8 @@ glimmaMA.DGEExact <- function(
 #'
 #' Draws a two-panel interactive MA plot from an DGELRT object.
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DGEExact
 #' @param x DGELRT object from which summary statistics are extracted from to create summary (left) plot.
-#' @param status vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are 
-#' coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
-#' by calling the edgeR::() function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
-#' expression difference, and 1 marks up-regulated genes.
-#'
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #' @importFrom edgeR decideTestsDGE

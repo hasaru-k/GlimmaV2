@@ -32,7 +32,7 @@ and sample groups from \code{dge$samples$group}.}
 
 \item{status}{vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are 
 coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
-by calling the edgeR::() function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
+by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
 expression difference, and 1 marks up-regulated genes.}
 
 \item{main}{character string for the main title of summary plot.}
