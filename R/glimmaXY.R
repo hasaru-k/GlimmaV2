@@ -37,6 +37,7 @@ glimmaXY <- function(
   } else {
     table <- cbind(gene=1:length(x), table)
   }
+
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
@@ -71,6 +72,7 @@ buildXYData <- function(
     if (transform.counts) counts <- edgeR::cpm(counts, log=TRUE)
     counts <- data.frame(counts)
     if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
+    level <- levels(groups)
     groups <- data.frame(group=groups)
     groups <- cbind(groups, sample=colnames(counts))
   }
@@ -101,6 +103,7 @@ buildXYData <- function(
                           cols=display.columns,
                           counts=counts,
                           groups=groups,
+                          levels=level,
                           expCols=colnames(groups),
                           statusColours=status.colours,
                           title=main))

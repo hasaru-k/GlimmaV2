@@ -64,14 +64,14 @@ function createExpressionSpec(width, height, expColumns)
                 "title": "group",
                 "labelAngle": -45,
                 "labelAlign": "right",
-                "labelOffset": -3 // change this or get rid of it?
+                "labelOffset": -3
             },
             {
                 "scale": "y",
                 "grid": true,
                 "orient": "left",
                 "titlePadding": 5,
-                "title": "count"
+                "title": "expression"
             }
         ],
         "marks": 
