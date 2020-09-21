@@ -18,6 +18,7 @@ glimmaMDS <- function(x, ...)
   UseMethod("glimmaMDS")
 }
 
+
 #' Glimma MDS Plot
 #'
 #' Draws a two-panel interactive MDS plot.
@@ -25,16 +26,25 @@ glimmaMDS <- function(x, ...)
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @param x the matrix containing the gene expressions.
-#' @param top the number of top most variable genes to use.
-#' @param labels the labels for each sample.
-#' @param groups the experimental group to which samples belong.
-#' @param gene.selection 	"pairwise" if most variable genes are to be chosen for each pair of samples or
-#' "common" to select the same genes for all comparisons.
-#' @param continuous.colour if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
-#' colour is displayed using discrete factors.
-#' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
-#' @param width custom widget width in pixels
-#' @param height custom widget height in pixels
+#' 
+#' @param groups vector or data frame object with associated sample information such as experimental groups. 
+#' The information is displayed in mouseover tooltips, and appropriate vector(s) can be used to adjust the plot using \code{scale_by}, \code{colour_by} 
+#' and \code{shape_by} drop-down boxes of the widget.
+#' 
+#' @param labels character vector of sample names or labels.
+#' 
+#' @param continuous.colour \code{TRUE} if continuous colour schemes should be used. Defaults to \code{FALSE} where distinct colour schemes are used.
+#' 
+#' @param top integer indiating number of top genes used to calculate pairwise distances.
+#' 
+#' @param gene.selection character string specifying how genes are selected from the plot - "pairwise" if most variable genes are to be chosen for each pair of 
+#' samples,  or "common" to select the same genes for all comparisons.
+#' 
+#' @param html character string for naming HTML file or exportation of widget. The extension should be included in the file name e.g. "file.hml".
+#' 
+#' @param width numeric value indicating width of widget in pixels.
+#' 
+#' @param height numeric value indicating width of widget in pixels.
 #'
 #' @eval MDS_details()
 #'
@@ -42,12 +52,11 @@ glimmaMDS <- function(x, ...)
 #' @export
 glimmaMDS.default <- function(
   x,
-  top = 500,
-  labels = as.character(seq_len(ncol(x))),
   groups = as.character(rep(1, ncol(x))),
-  gene.selection = c("pairwise", "common"),
+  labels = as.character(seq_len(ncol(x))),
   continuous.colour=FALSE,
-  save=FALSE,
+  top = 500,
+  gene.selection = c("pairwise", "common"),
   html=NULL,
   width = 900,
   height = 500)
@@ -189,7 +198,9 @@ glimmaMDS.default <- function(
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @inheritParams glimmaMDS.default
-#' @param prior.count average count to be added to each observation to avoid taking log of zero.
+#' @param x \code{DGEList} object containing gene counts in \code{x$counts}.
+#' @param prior.count integer indicating the average count to be added to each observation to avoid taking log of zero when 
+#' raw counts are transformed to log-counts-per-million values.
 #'
 #' @eval MDS_details()
 #'
@@ -197,12 +208,12 @@ glimmaMDS.default <- function(
 #' @export
 glimmaMDS.DGEList <- function(
   x,
-  top = 500,
-  labels = rownames(x$samples),
   groups = x$samples,
+  labels = rownames(x$samples),
+  continuous.colour = FALSE,
+  top = 500,
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
-  continuous.colour = FALSE,
   html=NULL,
   width = 900,
   height = 500)
@@ -231,8 +242,8 @@ glimmaMDS.DGEList <- function(
 #'
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'
-#' @inheritParams glimmaMDS.default
-#' @param prior.count average count to be added to each observation to avoid taking log of zero.
+#' @inheritParams glimmaMDS.DGEList
+#' @param x \code{DESeqDataSet} object containing gene counts.
 #'
 #' @eval MDS_details()
 #'
@@ -241,12 +252,12 @@ glimmaMDS.DGEList <- function(
 #' @export
 glimmaMDS.DESeqDataSet <- function(
   x,
-  top = 500,
-  labels = rownames(SummarizedExperiment::colData(x)),
   groups = as.data.frame(SummarizedExperiment::colData(x)),
+  labels = rownames(SummarizedExperiment::colData(x)),
+  continuous.colour = FALSE,
+  top = 500,
   gene.selection = c("pairwise", "common"),
   prior.count = 0.25,
-  continuous.colour = FALSE,
   html=NULL,
   width = 900,
   height = 500)

@@ -7,71 +7,94 @@
 \method{glimmaVolcano}{MArrayLM}(
   x,
   dge = NULL,
-  status = limma::decideTests(x),
-  coef = ncol(x$coefficients),
-  main = colnames(x)[coef],
-  p.adj.method = "BH",
-  display.columns = NULL,
-  anno = x$genes,
-  groups = dge$samples$group,
   counts = dge$counts,
+  groups = dge$samples$group,
+  coef = ncol(x$coefficients),
+  status = limma::decideTests(x),
+  anno = x$genes,
+  display.columns = NULL,
+  status.cols = c("dodgerblue", "silver", "firebrick"),
+  sample.cols = NULL,
+  p.adj.method = "BH",
+  transform.counts = FALSE,
+  main = colnames(x)[coef],
   xlab = "logFC",
   ylab = "negLog10PValue",
-  status.colours = c("dodgerblue", "silver", "firebrick"),
-  transform.counts = FALSE,
   html = NULL,
   width = 920,
   height = 920
 )
 }
 \arguments{
-\item{x}{the MArrayLM object to plot.}
+\item{x}{\code{MArrayLM} object from which summary statistics are extracted from to create 
+summary (left) plot.}
 
-\item{dge}{DGEList object used to generate the expression plot. Gene counts are extracted from \code{dge$counts} and
-sample groups from \code{dge$samples$group}.}
+\item{dge}{\code{DGEList} object with \code{nrow(x)} rows from which expression values are 
+extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
+and sample groups from \code{dge$samples$group}.}
 
-\item{status}{vector giving the control status of each row in the object.}
+\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
+This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+e.g. logCPM or logRPKM values.}
 
-\item{coef}{integer or logical indexing vector indicating which column of object to plot.}
+\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
+expression plot.}
 
-\item{main}{Left plot title.}
+\item{coef}{integer indicating the column in \code{x} from the summary plot is created.}
 
-\item{p.adj.method}{character vector indicating multiple testing correction method.}
+\item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
+By default genes in the summary plot are coloured based on its differential expression status 
+using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
+the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+1 marks up-regulated genes.}
 
-\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
 
-\item{anno}{a dataframe containing gene annotations.}
+\item{display.columns}{character vector containing names of columns from \code{anno} from
+which to display in mouseover tooltips and table.}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{status.cols}{vector of length 3 containing valid CSS strings for colours associated
+with \code{status}  in the order of -1, 0 and 1.}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{sample.cols}{character vector of length \code{ncol(counts)} containing valid CSS strings
+for colours associated with each sample to be displayed on the expression plot. If left
+unspecified, samples will be coloured according to \code{groups}.}
 
-\item{xlab}{x axis label.}
+\item{p.adj.method}{character string specifying p-value adjustment method.}
 
-\item{ylab}{y axis label.}
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 
-\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+\item{main}{character string for the main title of summary plot.}
 
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+\item{xlab}{character string for the x-axis label of summary plot.}
 
-\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
+\item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{width}{width of the weidget in pixels.}
+\item{html}{character string for naming HTML file for exportation of widget. The extension 
+should be included in the file name e.g. "file.html".}
 
-\item{height}{height of the widget in pixels.}
+\item{width}{numeric value indicating width of widget in pixels.}
+
+\item{height}{numeric value indicating width of height in pixels.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Draws a two-panel interactive volcano plot from an MArrayLM object.
+Draws a two-panel interactive volcano plot from an MArrayLM object. This is a special case of the
+\code{glimmaXY} plot.
 }
 \details{
-The left plot shows the log-fold-change vs -log10(pvalue).
-The right plot shows the expression levels of a particular gene of each sample.
-Clicking on genes in the plot brings up the corresponding genes in the table.
-Selecting rows in the table will highlight the corresponding genes in the volcano plot.
-Expression values for a gene can be found by hovering over a sample in the right plot.
+The summary plot on the left represents gene-wise log-fold-change (logFC) on the x-axis versus 
+    \code{-log10(pvalue)}. The expression plot on the right displays sample expression values for a single gene.
+    Interactions with the htmlwidget include clicking on genes (points) in the summary plot to bring up 
+    associated sample expression values in the expression plot, as well as the summary statistics in the table below.
+    Alternatively, users can interact with the table by clicking on genes (rows) to highlight genes in the summary plot, 
+    as well as bring up associated sample expression values in the expression plot. 
+    Briefly, other interactive features include a search box for the table, buttons to save plots and data 
+    (summary statistics and expression values), additional pop-up information when hovering on points in plots, 
+    and rescaling of the y-axis in the expression plot.
 }
 \seealso{
 \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}

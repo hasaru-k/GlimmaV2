@@ -1,8 +1,9 @@
-function createExpressionSpec(width, height, expColumns)
+function createExpressionSpec(width, height, expColumns, sampleColours)
 {
     /* must match counts term in processExpression */
     expColumns.push("count");
     let tooltip = makeVegaTooltip(expColumns);
+    let colourField = sampleColours == -1 ? "group" : "sample";
     return {
         "$schema": "https://vega.github.io/schema/vega/v5.json",
         "width": width*0.40,
@@ -52,8 +53,8 @@ function createExpressionSpec(width, height, expColumns)
             {
                 "name": "color",
                 "type": "ordinal",
-                "domain": { "data": "table", "field": "group" },
-                "range": { "scheme": "tableau20" }
+                "domain": { "data": "table", "field": colourField },
+                "range": sampleColours == -1 ? { "scheme": "tableau20" } : sampleColours
             },
         ],
         "axes": 
@@ -84,7 +85,7 @@ function createExpressionSpec(width, height, expColumns)
                         "x": {"scale": "x", "field": "group"},
                         "y": {"scale": "y", "field": "count"},
                         "shape": {"value": "circle"},
-                        "fill": { "scale": "color", "field": "group" },
+                        "fill": { "scale": "color", "field": colourField },
                         "strokeWidth": {"value": 1},
                         "opacity": {"value": 0.6},
                         "size": {"value": 100},
