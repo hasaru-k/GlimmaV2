@@ -19,7 +19,7 @@ HTMLWidgets.widget({
     return {
 
       renderValue: function(x) {
-        
+
         console.log(x);
 
         var handler = new vegaTooltip.Handler();
@@ -29,19 +29,19 @@ HTMLWidgets.widget({
         var eigenContainer = document.createElement("div");
         mdsContainer.setAttribute("class", "mdsContainer");
         eigenContainer.setAttribute("class", "eigenContainer");
-        
+
         plotContainer.appendChild(mdsContainer);
         plotContainer.appendChild(eigenContainer);
-        
+
         processDataMDS(x);
         var mdsData = HTMLWidgets.dataframeToD3(x.data.mdsData);
         var eigenData = HTMLWidgets.dataframeToD3(x.data.eigenData);
-        
+
         /* NB: the createXXSpec functions are defined in lib/GlimmaSpecs */
-        var mdsSpec = createMDSSpec(mdsData, x.data.dimlist, 
+        var mdsSpec = createMDSSpec(mdsData, x.data.dimlist,
                                       x.data.features,
                                       width, height, x.data.continuousColour);
-        
+
         var mdsView = new vega.View(vega.parse(mdsSpec), {
           renderer: 'svg',
           container: mdsContainer,
@@ -60,15 +60,17 @@ HTMLWidgets.widget({
         });
         eigenView.runAsync();
         linkPlotsMDS(mdsView, eigenView);
+
+        addColourMessage(x.data, mdsView, controlContainer);
+
         addBlockElement(controlContainer);
         addSavePlotButton(controlContainer, mdsView, text="Save (MDS)");
         addSavePlotButton(controlContainer, eigenView, text="Save (VAR)");
 
         reformatElementsMDS(controlContainer);
-
       },
 
-      resize: function(width, height) 
+      resize: function(width, height)
       {}
 
     };
@@ -102,7 +104,7 @@ function processDataMDS(x)
 
 function linkPlotsMDS(mdsView, eigenView)
 {
-  
+
   // highlight variance plot when we change a signal in the MDS plot
   mdsView.addSignalListener('x_axis', function(name, value) {
     var externalSelectValue = parseInt(value.substring(3));
@@ -129,5 +131,59 @@ function reformatElementsMDS(controlContainer)
     if (i == 2) binds[i].className += " separator_signal";
     // it is used to display all signals after x_axis, y_axis to display on a different line
     else if (i > 2) binds[i].className += " signal";
+  }
+}
+
+function filter(arr)
+{
+  var newarr = [arr[0]];
+  var i, z;
+  for (i = 1; i < arr.length; i++) {
+    unique = true;
+    for (z = 0; z < newarr.length; z++) {
+      if (arr[i] == newarr[z]) {
+        unique=false;
+        break;
+      }
+    }
+    if (unique) newarr.push(arr[i]);
+  }
+  return newarr;
+}
+
+function addColourMessage(data, view, container)
+{
+  var alertBox = document.createElement("div");
+  alertBox.setAttribute("class", "alertBox invisible");
+  // update the warning box when colourscheme signal changes
+  view.addSignalListener('colourscheme',
+    function(name, value) { updateColourMessage(data, container, view, value) });
+  // update warning box when the colour_by signal changes
+  view.addSignalListener('colour_by',
+    function(name, value) {
+      updateColourMessage(data, container, view, view.signal('colourscheme'));
+    });
+  container.appendChild(alertBox);
+}
+
+function updateColourMessage(data, container, view, value)
+{
+  var alertBox = container.getElementsByClassName("alertBox")[0];
+  let schemeCount = vega.scheme(value).length;
+  let colourBy = view.signal("colour_by");
+  let colourCount = filter(data.mdsData[colourBy]).length;
+
+  alertBox.setAttribute("class", "alertBox invisible");
+
+  if (data.continuousColour) return;
+  if (value == "plasma" || value == "viridis") return;
+  if (colourBy == "-") return;
+
+  if (schemeCount < colourCount) {
+    alertBox.innerHTML = `Warning: not enough distinct colours. ${colourCount} supported.`;
+
+    alertBox.setAttribute("class", "alertBox warning");
+  } else {
+    alertBox.setAttribute("class", "alertBox invisible");
   }
 }

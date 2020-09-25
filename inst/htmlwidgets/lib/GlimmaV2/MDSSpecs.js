@@ -20,7 +20,8 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
   
   // generate colorscheme options
   var colourschemes = continuousColour ? ["reds", "blues", "tealblues", "teals", "greens", "browns", "oranges", "reds", "purples", "warmgreys", "greys", "viridis", "plasma", "blueorange", "redblue"]
-        : [ "tableau20", "tableau10", "category20", "category20b", "category20c", "set1", "set2", "set3", "pastel1", "pastel2", "paired", "dark2",  "category10", "accent", "viridis", "plasma"];
+            : ["accent", "category10", "category20", "category20b", "category20c", "dark2", "paired", "pastel1", "pastel2", "set1", "set2", "set3", "tableau10", "tableau20"]
+  //        : [ "tableau20", "tableau10", "category20", "category20b", "category20c", "set1", "set2", "set3", "pastel1", "pastel2", "paired", "dark2", "category10", "accent", "viridis", "plasma"];
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -64,7 +65,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
         },
         {
           "name": "colourscheme",
-          "value": colourschemes[0],
+          "value": colourschemes[1],
           "bind": { "input": "select", "options": colourschemes }
         }
       ],

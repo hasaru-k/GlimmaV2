@@ -9,14 +9,15 @@ glimmaXY(
   y,
   xlab = "x",
   ylab = "y",
-  status = rep(0, length(x)),
-  main = "XY Plot",
-  display.columns = NULL,
-  anno = NULL,
-  groups = NULL,
   counts = NULL,
-  status.colours = c("dodgerblue", "silver", "firebrick"),
+  groups = NULL,
+  status = rep(0, length(x)),
+  anno = NULL,
+  display.columns = NULL,
+  status.cols = c("dodgerblue", "silver", "firebrick"),
+  sample.cols = NULL,
   transform.counts = FALSE,
+  main = "XY Plot",
   html = NULL,
   width = 920,
   height = 920
@@ -27,31 +28,42 @@ glimmaXY(
 
 \item{y}{numeric vector of values to plot on the y-axis of the summary plot.}
 
-\item{xlab}{x axis label.}
+\item{xlab}{character string for the x-axis label of summary plot.}
 
-\item{ylab}{y axis label.}
+\item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{status}{vector giving the control status of each row in the object.}
+\item{counts}{numeric matrix with \code{length(x)} rows containing gene expression values. This can be used to replace
+raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.}
 
-\item{main}{Left plot title.}
+\item{groups}{vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.}
 
-\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+\item{status}{vector of length \code{length(x)} indicating the status of each gene.
+A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
+1 marks an up-regulated gene.}
 
-\item{anno}{a dataframe containing gene annotations.}
+\item{anno}{dataframe with \code{length(x)} rows containing gene annotations.}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{display.columns}{character vector containing names of columns from \code{anno} from
+which to display in mouseover tooltips and table.}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{status.cols}{vector of length 3 containing valid CSS strings for colours associated
+with \code{status}  in the order of -1, 0 and 1.}
 
-\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+\item{sample.cols}{character vector of length \code{ncol(counts)} containing valid CSS strings
+for colours associated with each sample to be displayed on the expression plot. If left
+unspecified, samples will be coloured according to \code{groups}.}
 
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 
-\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
+\item{main}{character string for the main title of summary plot.}
 
-\item{width}{width of the weidget in pixels.}
+\item{html}{character string for naming HTML file for exportation of widget. The extension 
+should be included in the file name e.g. "file.html".}
 
-\item{height}{height of the widget in pixels.}
+\item{width}{numeric value indicating width of widget in pixels.}
+
+\item{height}{numeric value indicating width of height in pixels.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
@@ -60,9 +72,13 @@ htmlwidget object or \code{NULL} if \code{html} argument is specified.
 Draws a two-panel interactive XY scatter plot.
 }
 \details{
-The left plot shows the x and y values specified.
-The right plot shows the expression levels of a particular gene of each sample.
-Clicking on genes in the plot brings up the corresponding genes in the table.
-Selecting rows in the table will highlight the corresponding genes in the XY plot.
-Expression values for a gene can be found by hovering over a sample in the right plot.
+The summary plot on the left displays the x and y values specified. 
+    The expression plot on the right displays sample expression values for a single gene.
+    Interactions with the htmlwidget include clicking on genes (points) in the summary plot to bring up 
+    associated sample expression values in the expression plot, as well as the summary statistics in the table below.
+    Alternatively, users can interact with the table by clicking on genes (rows) to highlight genes in the summary plot, 
+    as well as bring up associated sample expression values in the expression plot. 
+    Briefly, other interactive features include a search box for the table, buttons to save plots and data 
+    (summary statistics and expression values), additional pop-up information when hovering on points in plots, 
+    and rescaling of the y-axis in the expression plot.
 }

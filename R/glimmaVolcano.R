@@ -20,7 +20,8 @@ glimmaVolcano <- function(x, ...)
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an MArrayLM object.
+#' Draws a two-panel interactive volcano plot from an MArrayLM object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
@@ -30,18 +31,19 @@ glimmaVolcano <- function(x, ...)
 glimmaVolcano.MArrayLM <- function(
   x,
   dge = NULL,
-  status=limma::decideTests(x),
-  coef=ncol(x$coefficients),
-  main=colnames(x)[coef],
-  p.adj.method = "BH",
-  display.columns = NULL,
-  anno=x$genes,
-  groups=dge$samples$group,
   counts=dge$counts,
+  groups=dge$samples$group,
+  coef=ncol(x$coefficients),
+  status=limma::decideTests(x),
+  anno=x$genes,
+  display.columns = NULL,
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
+  p.adj.method = "BH",
+  transform.counts=FALSE,
+  main=colnames(x)[coef],
   xlab="logFC",
   ylab="negLog10PValue",
-  status.colours=c("dodgerblue", "silver", "firebrick"),
-  transform.counts=FALSE,
   html=NULL,
   width = 920,
   height = 920)
@@ -54,34 +56,36 @@ glimmaVolcano.MArrayLM <- function(
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an DGEExact object.
+#' Draws a two-panel interactive volcano plot from an DGEExact object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DGEExact
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
-#' @eval MA_details()
+#' @eval volcano_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
 glimmaVolcano.DGEExact <- function(
   x,
   dge=NULL,
-  status=edgeR::decideTestsDGE(x),
-  main=paste(x$comparison[2],"vs",x$comparison[1]),
-  p.adj.method = "BH",
-  display.columns = NULL,
-  anno=x$genes,
-  groups=dge$samples$group,
   counts=dge$counts,
+  groups=dge$samples$group,
+  status=edgeR::decideTestsDGE(x),
+  anno=x$genes,
+  display.columns = NULL,
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
+  p.adj.method = "BH",
+  transform.counts=FALSE,
+  main=paste(x$comparison[2],"vs",x$comparison[1]),
   xlab="logFC",
   ylab="negLog10PValue",
-  status.colours=c("dodgerblue", "silver", "firebrick"),
-  transform.counts=FALSE,
   html=NULL,
   width = 920,
   height = 920)
@@ -94,17 +98,18 @@ glimmaVolcano.DGEExact <- function(
   logCPM <- round(x$table$logCPM, digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an DGELRT object.
+#' Draws a two-panel interactive volcano plot from an DGELRT object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DGELRT
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
-#' @eval MA_details()
+#' @eval volcano_details()
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -112,27 +117,29 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 
 #' Glimma Volcano Plot
 #'
-#' Draws a two-panel interactive volcano plot from an DESeqDataSet object.
+#' Draws a two-panel interactive volcano plot from an DESeqDataSet object. This is a special case of the
+#' \code{glimmaXY} plot. 
 #'
-#' @inheritParams glimmaMA.MArrayLM
+#' @inheritParams glimmaMA.DESeqDataSet
 #' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
-#' @eval MA_details()
+#' @eval volcano_details()
 #' @importFrom DESeq2 results counts
 #' @importFrom SummarizedExperiment colData
 #' @export
 glimmaVolcano.DESeqDataSet  <- function(
   x,
-  status=NULL,
-  main="Volcano Plot",
-  display.columns = NULL,
-  anno=NULL,
-  groups=extractGroups(colData(x)),
   counts=DESeq2::counts(x),
+  groups=extractGroups(colData(x)),
+  status=NULL,
+  anno=NULL,
+  display.columns = NULL,
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
+  transform.counts=FALSE,
+  main="Volcano Plot",
   xlab="logFC",
   ylab="negLog10PValue",
-  status.colours=c("dodgerblue", "silver", "firebrick"),
-  transform.counts=FALSE,
   html=NULL,
   width = 920,
   height = 920)
@@ -167,6 +174,6 @@ glimmaVolcano.DESeqDataSet  <- function(
   table <- cbind(table, logCPM=round(log(res.df$baseMean + 0.5), digits=4), 
                         AdjPValue=round(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }

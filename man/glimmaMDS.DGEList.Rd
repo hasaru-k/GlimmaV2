@@ -6,39 +6,41 @@
 \usage{
 \method{glimmaMDS}{DGEList}(
   x,
-  top = 500,
-  labels = rownames(x$samples),
   groups = x$samples,
+  labels = rownames(x$samples),
+  continuous.colour = FALSE,
+  top = 500,
   gene.selection = c("pairwise", "common"),
   prior.count = 2,
-  continuous.colour = FALSE,
   html = NULL,
   width = 900,
   height = 500
 )
 }
 \arguments{
-\item{x}{the matrix containing the gene expressions.}
+\item{x}{\code{DGEList} object containing gene counts in \code{x$counts}.}
 
-\item{top}{the number of top most variable genes to use.}
+\item{groups}{vector or data frame object with associated sample information such as experimental groups. 
+The information is displayed in mouseover tooltips, and appropriate vector(s) can be used to adjust the plot using \code{scale_by}, \code{colour_by} 
+and \code{shape_by} drop-down boxes of the widget.}
 
-\item{labels}{the labels for each sample.}
+\item{labels}{character vector of sample names or labels.}
 
-\item{groups}{the experimental group to which samples belong.}
+\item{continuous.colour}{\code{TRUE} if continuous colour schemes should be used. Defaults to \code{FALSE} where distinct colour schemes are used.}
 
-\item{gene.selection}{"pairwise" if most variable genes are to be chosen for each pair of samples or
-"common" to select the same genes for all comparisons.}
+\item{top}{integer indiating number of top genes used to calculate pairwise distances.}
 
-\item{prior.count}{average count to be added to each observation to avoid taking log of zero.}
+\item{gene.selection}{character string specifying how genes are selected from the plot - "pairwise" if most variable genes are to be chosen for each pair of 
+samples,  or "common" to select the same genes for all comparisons.}
 
-\item{continuous.colour}{if \code{TRUE}, colour is displayed using continuous columns in groups; otherwise,
-colour is displayed using discrete factors.}
+\item{prior.count}{integer indicating the average count to be added to each observation to avoid taking log of zero when 
+raw counts are transformed to log-counts-per-million values.}
 
-\item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
+\item{html}{character string for naming HTML file or exportation of widget. The extension should be included in the file name e.g. "file.hml".}
 
-\item{width}{custom widget width in pixels}
+\item{width}{numeric value indicating width of widget in pixels.}
 
-\item{height}{custom widget height in pixels}
+\item{height}{numeric value indicating width of widget in pixels.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
@@ -47,9 +49,16 @@ htmlwidget object or \code{NULL} if \code{html} argument is specified.
 Draws a two-panel interactive MDS plot using a DGEList x.
 }
 \details{
-The left plot shows two MDS dimensions, with annotations displayed on hover.
-The right panel contains a bar plot of the eigenvalues of each dimension.
-The controls beneath the plots can be used to change the dimensions being displayed.
+The left plot shows two MDS dimensions, with sample annotations displayed on hover.
+     The right panel contains a bar plot of the eigenvalues of each dimension.
+     The controls beneath the plots can be used to change the dimensions being displayed, and the scale, colour and shape of points.
+     The interactive MDS plot allows users to adjust sample points by scale, colour and shape for multiple vectors associated with 
+     sample information. This is carried out most effectively when \code{x$samples} includes an abundance of sample information, or 
+     when a data frame object is supplied to \code{groups}. If a simple character or factor vector is given to \code{groups} 
+     (with the default of \code{continous.colour=FALSE}), then sample points will have no scaling options, but can only be adjusted 
+     in colour and shape by \code{groups} and \code{labels}. Instead, if \code{groups} is a numeric vector (e.g. library size or 
+     expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with 
+     \code{continous.colour=TRUE}.
 }
 \examples{
 \dontrun{

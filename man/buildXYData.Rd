@@ -13,7 +13,8 @@ buildXYData(
   counts,
   xlab,
   ylab,
-  status.colours,
+  status.cols,
+  sample.cols,
   groups,
   transform.counts
 )
@@ -21,25 +22,39 @@ buildXYData(
 \arguments{
 \item{table}{dataframe containing xlab and ylab columns for plotting.}
 
-\item{status}{vector giving the control status of each row in the object.}
+\item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
+By default genes in the summary plot are coloured based on its differential expression status 
+using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
+the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+1 marks up-regulated genes.}
 
-\item{main}{Left plot title.}
+\item{main}{character string for the main title of summary plot.}
 
-\item{display.columns}{character vector containing names of columns to display in mouseover tooltips and table.}
+\item{display.columns}{character vector containing names of columns from \code{anno} from
+which to display in mouseover tooltips and table.}
 
-\item{anno}{a dataframe containing gene annotations.}
+\item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
 
-\item{counts}{the matrix of expression values, with samples in columns.}
+\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
+This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+e.g. logCPM or logRPKM values.}
 
-\item{xlab}{x axis label.}
+\item{xlab}{character string for the x-axis label of summary plot.}
 
-\item{ylab}{y axis label.}
+\item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{status.colours}{vector of three valid CSS strings representing colours for genes with status [-1, 0 and 1] respectively.}
+\item{status.cols}{vector of length 3 containing valid CSS strings for colours associated
+with \code{status}  in the order of -1, 0 and 1.}
 
-\item{groups}{vector/factor representing the experimental group for each sample.}
+\item{sample.cols}{character vector of length \code{ncol(counts)} containing valid CSS strings
+for colours associated with each sample to be displayed on the expression plot. If left
+unspecified, samples will be coloured according to \code{groups}.}
 
-\item{transform.counts}{TRUE if counts should be log-cpm transformed, defaults to FALSE.}
+\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
+expression plot.}
+
+\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 }
 \description{
 Common processing steps for both MA, XY and volcano plots.

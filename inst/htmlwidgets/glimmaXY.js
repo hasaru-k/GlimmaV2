@@ -50,7 +50,7 @@ HTMLWidgets.widget({
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
           countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts);
-          var expressionSpec = createExpressionSpec(width, height, x.data.expCols);
+          var expressionSpec = createExpressionSpec(width, height, x.data.expCols, x.data.sampleColours);
           var expressionView = new vega.View(vega.parse(expressionSpec), {
             renderer: 'svg',
             container: expressionContainer,
@@ -125,6 +125,10 @@ function setupXYInteraction(data)
       });
 
     datatable.on('click', 'tr', function() { tableClickListener(datatable, state, data, $(this)) } );
+    data.xyView.addSignalListener('tester', function(name, value) {
+      alert("new value: " + value);
+      datatableEl.set
+    })
     data.xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
   });
 }

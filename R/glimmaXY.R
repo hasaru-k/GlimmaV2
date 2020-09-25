@@ -5,6 +5,13 @@
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x numeric vector of values to plot on the x-axis of the summary plot.
 #' @param y numeric vector of values to plot on the y-axis of the summary plot.
+#' @param status vector of length \code{length(x)} indicating the status of each gene.
+#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
+#' 1 marks an up-regulated gene.
+#' @param anno dataframe with \code{length(x)} rows containing gene annotations.
+#' @param groups vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.
+#' @param counts numeric matrix with \code{length(x)} rows containing gene expression values. This can be used to replace
+#' raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.
 #' @eval XY_details()
 #' @export
 glimmaXY <- function(
@@ -12,14 +19,15 @@ glimmaXY <- function(
   y,
   xlab="x",
   ylab="y",
-  status=rep(0, length(x)),
-  main="XY Plot",
-  display.columns = NULL,
-  anno=NULL,
-  groups=NULL,
   counts=NULL,
-  status.colours=c("dodgerblue", "silver", "firebrick"),
+  groups=NULL,
+  status=rep(0, length(x)),
+  anno=NULL,
+  display.columns = NULL,
+  status.cols=c("dodgerblue", "silver", "firebrick"),
+  sample.cols=NULL,
   transform.counts=FALSE,
+  main="XY Plot",
   html=NULL,
   width = 920,
   height = 920)
@@ -37,7 +45,7 @@ glimmaXY <- function(
   } else {
     table <- cbind(gene=1:length(x), table)
   }
-  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.colours, groups, transform.counts)
+  xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
 
@@ -60,7 +68,8 @@ buildXYData <- function(
   counts,
   xlab,
   ylab,
-  status.colours,
+  status.cols,
+  sample.cols,
   groups,
   transform.counts)
 {
@@ -93,7 +102,7 @@ buildXYData <- function(
 
   table <- data.frame(index=0:(nrow(table)-1), table)
 
-  if (length(status.colours) != 3) stop("status_colours
+  if (length(status.cols) != 3) stop("status.cols
           arg must have exactly 3 elements for [downreg, notDE, upreg]")
 
   xData <- list(data=list(x=xlab,
@@ -103,7 +112,8 @@ buildXYData <- function(
                           counts=counts,
                           groups=groups,
                           expCols=colnames(groups),
-                          statusColours=status.colours,
+                          statusColours=status.cols,
+                          sampleColours= if (is.null(sample.cols)) {-1} else {sample.cols},
                           title=main))
   return(xData)
 }
