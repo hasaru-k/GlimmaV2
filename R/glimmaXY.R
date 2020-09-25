@@ -6,7 +6,7 @@
 #' @param x numeric vector of values to plot on the x-axis of the summary plot.
 #' @param y numeric vector of values to plot on the y-axis of the summary plot.
 #' @param status vector of length \code{length(x)} indicating the status of each gene.
-#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
+#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and
 #' 1 marks an up-regulated gene.
 #' @param anno dataframe with \code{length(x)} rows containing gene annotations.
 #' @param groups vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.
@@ -78,7 +78,12 @@ buildXYData <- function(
     counts <- -1
   } else {
     # df format for serialisation
-    if (transform.counts) counts <- edgeR::cpm(counts, log=TRUE)
+    if (transform.counts) {
+      if (!all.equal(counts, as.integer(counts))) {
+        warning("count transform requested but not all count values are integers.")
+      }
+      counts <- edgeR::cpm(counts, log=TRUE)
+    }
     counts <- data.frame(counts)
     if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     groups <- data.frame(group=groups)
