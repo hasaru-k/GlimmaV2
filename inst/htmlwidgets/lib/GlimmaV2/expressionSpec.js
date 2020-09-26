@@ -54,7 +54,7 @@ function createExpressionSpec(width, height, expColumns, sampleColours)
                 "name": "color",
                 "type": "ordinal",
                 "domain": { "data": "table", "field": colourField },
-                "range": sampleColours == -1 ? { "scheme": "tableau20" } : sampleColours
+                "range": sampleColours == -1 ? { "scheme": "category10" } : sampleColours
             },
         ],
         "axes": 

@@ -6,7 +6,7 @@
 #' @param x numeric vector of values to plot on the x-axis of the summary plot.
 #' @param y numeric vector of values to plot on the y-axis of the summary plot.
 #' @param status vector of length \code{length(x)} indicating the status of each gene.
-#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
+#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and
 #' 1 marks an up-regulated gene.
 #' @param anno dataframe with \code{length(x)} rows containing gene annotations.
 #' @param groups vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.
@@ -33,6 +33,7 @@ glimmaXY <- function(
   height = 920)
 {
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
+
   table <- data.frame(round(x, digits=4),  round(y, digits=4))
   colnames(table) <- c(xlab, ylab)
   # add rownames to LHS of table
@@ -76,11 +77,18 @@ buildXYData <- function(
 
   if (is.null(counts)) {
     counts <- -1
+    level <- NULL
   } else {
     # df format for serialisation
     if (transform.counts) counts <- edgeR::cpm(counts, log=TRUE)
     counts <- data.frame(counts)
-    if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
+    #if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
+    if (is.null(groups)) {
+      groups <- factor("samples")
+    } else {
+      if (ncol(counts) != length(groups)) stop("Length of groups must be equal to the number of columns in counts.\n")
+    }
+
     level <- levels(groups)
     groups <- data.frame(group=groups)
     groups <- cbind(groups, sample=colnames(counts))

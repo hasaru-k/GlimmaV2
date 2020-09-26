@@ -24,28 +24,28 @@ glimmaMA <- function(x, ...)
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an MArrayLM object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
-#' @param x \code{MArrayLM} object from which summary statistics are extracted from to create 
+#' @param x \code{MArrayLM} object from which summary statistics are extracted from to create
 #' summary (left) plot.
 #'
-#' @param dge \code{DGEList} object with \code{nrow(x)} rows from which expression values are 
-#' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
+#' @param dge \code{DGEList} object with \code{nrow(x)} rows from which expression values are
+#' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
 #' and sample groups from \code{dge$samples$group}.
 #'
-#' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values. 
-#' This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+#' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values.
+#' This can be used to replace raw gene counts from \code{dge$counts} with transformed counts
 #' e.g. logCPM or logRPKM values.
 #'
-#' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in 
+#' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in
 #' expression plot.
 #'
 #' @param coef integer indicating the column in \code{x} from the summary plot is created.
 #'
-#' @param status vector of length \code{nrow(x)} indicating the status of each gene. 
-#' By default genes in the summary plot are coloured based on its differential expression status 
+#' @param status vector of length \code{nrow(x)} indicating the status of each gene.
+#' By default genes in the summary plot are coloured based on its differential expression status
 #' using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
-#' the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+#' the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and
 #' 1 marks up-regulated genes.
 #'
 #' @param anno dataframe with \code{nrow(x)} rows containing gene annotations.
@@ -67,7 +67,7 @@ glimmaMA <- function(x, ...)
 #' @param main character string for the main title of summary plot.
 #' @param xlab character string for the x-axis label of summary plot.
 #' @param ylab character string for the y-axis label of summary plot.
-#' @param html character string for naming HTML file for exportation of widget. The extension 
+#' @param html character string for naming HTML file for exportation of widget. The extension
 #' should be included in the file name e.g. "file.html".
 #' @param width numeric value indicating width of widget in pixels.
 #' @param height numeric value indicating width of height in pixels.
@@ -113,13 +113,13 @@ glimmaMA.MArrayLM <- function(
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an DGEExact object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x DGEExact object from which summary statistics are extracted from to create summary (left) plot.
-#' @param status vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are 
+#' @param status vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are
 #' coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
-#' by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
+#' by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no
 #' expression difference, and 1 marks up-regulated genes.
 #'
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
@@ -162,7 +162,7 @@ glimmaMA.DGEExact <- function(
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an DGELRT object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.DGEExact
 #' @param x DGELRT object from which summary statistics are extracted from to create summary (left) plot.
@@ -176,7 +176,7 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an DESeqDataSet object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x DESeqDataSet object from which summary statistics are extracted from to create summary (left) plot.
