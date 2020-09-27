@@ -52,7 +52,7 @@ unspecified, samples will be coloured according to \code{groups}.}
 
 \item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{html}{character string for naming HTML file for exportation of widget. The extension 
+\item{html}{character string for naming HTML file for exportation of widget. The extension
 should be included in the file name e.g. "file.html".}
 
 \item{width}{numeric value indicating width of widget in pixels.}
