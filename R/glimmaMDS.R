@@ -46,24 +46,24 @@ glimmaMDS <- function(x, ...)
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @param x the matrix containing the gene expressions.
-#' 
-#' @param groups vector or data frame object with associated sample information such as experimental groups. 
-#' The information is displayed in mouseover tooltips, and appropriate vector(s) can be used to adjust the plot using \code{scale_by}, \code{colour_by} 
+#'
+#' @param groups vector or data frame object with associated sample information such as experimental groups.
+#' The information is displayed in mouseover tooltips, and appropriate vector(s) can be used to adjust the plot using \code{scale_by}, \code{colour_by}
 #' and \code{shape_by} drop-down boxes of the widget.
-#' 
+#'
 #' @param labels character vector of sample names or labels.
-#' 
+#'
 #' @param continuous.colour \code{TRUE} if continuous colour schemes should be used. Defaults to \code{FALSE} where distinct colour schemes are used.
-#' 
+#'
 #' @param top integer indiating number of top genes used to calculate pairwise distances.
-#' 
-#' @param gene.selection character string specifying how genes are selected from the plot - "pairwise" if most variable genes are to be chosen for each pair of 
+#'
+#' @param gene.selection character string specifying how genes are selected from the plot - "pairwise" if most variable genes are to be chosen for each pair of
 #' samples,  or "common" to select the same genes for all comparisons.
-#' 
+#'
 #' @param html character string for naming HTML file or exportation of widget. The extension should be included in the file name e.g. "file.hml".
-#' 
+#'
 #' @param width numeric value indicating width of widget in pixels.
-#' 
+#'
 #' @param height numeric value indicating width of widget in pixels.
 #'
 #' @eval MDS_details()
@@ -226,7 +226,7 @@ glimmaMDS.default <- function(
 #'
 #' @inheritParams glimmaMDS.default
 #' @param x \code{DGEList} object containing gene counts in \code{x$counts}.
-#' @param prior.count integer indicating the average count to be added to each observation to avoid taking log of zero when 
+#' @param prior.count integer indicating the average count to be added to each observation to avoid taking log of zero when
 #' raw counts are transformed to log-counts-per-million values.
 #'
 #' @eval MDS_details()
@@ -302,7 +302,7 @@ glimmaMDS.DESeqDataSet <- function(
   continuous.colour = FALSE,
   top = 500,
   gene.selection = c("pairwise", "common"),
-  prior.count = 0.25,
+  prior.count = 2,
   html=NULL,
   width = 900,
   height = 500)

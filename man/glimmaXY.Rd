@@ -38,7 +38,7 @@ raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM v
 \item{groups}{vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.}
 
 \item{status}{vector of length \code{length(x)} indicating the status of each gene.
-A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
+A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and
 1 marks an up-regulated gene.}
 
 \item{anno}{dataframe with \code{length(x)} rows containing gene annotations.}
