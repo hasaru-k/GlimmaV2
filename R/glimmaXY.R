@@ -33,7 +33,7 @@ glimmaXY <- function(
   height = 920)
 {
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
-  table <- data.frame(round(x, digits=4),  round(y, digits=4))
+  table <- data.frame(signif(x, digits=4), signif(y, digits=4))
   colnames(table) <- c(xlab, ylab)
   # add rownames to LHS of table
   if (!is.null(counts)) {

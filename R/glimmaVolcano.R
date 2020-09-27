@@ -21,7 +21,7 @@ glimmaVolcano <- function(x, ...)
 #' Glimma Volcano Plot
 #'
 #' Draws a two-panel interactive volcano plot from an MArrayLM object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
@@ -48,11 +48,11 @@ glimmaVolcano.MArrayLM <- function(
   width = 920,
   height = 920)
 {
-  table <- data.frame(round(unname(x$coefficients[, coef]), digits=4), 
-                      round( -log10(x$p.value[, coef]), digits=4))
+  table <- data.frame(signif(unname(x$coefficients[, coef]), digits=4),
+                      signif( -log10(x$p.value[, coef]), digits=4))
   colnames(table) <- c(xlab, ylab)
-  logCPM <- round(unname(x$Amean), digits=4)
-  AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
+  logCPM <- signif(unname(x$Amean), digits=4)
+  AdjPValue <- signif(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
@@ -63,7 +63,7 @@ glimmaVolcano.MArrayLM <- function(
 #' Glimma Volcano Plot
 #'
 #' Draws a two-panel interactive volcano plot from an DGEExact object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.DGEExact
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
@@ -91,11 +91,11 @@ glimmaVolcano.DGEExact <- function(
   height = 920)
 {
   # create initial table with -log10(pvalue) and logFC features
-  table <- data.frame(round(x$table$logFC, digits=4),
-                      round(-log10(x$table$PValue), digits=4))
+  table <- data.frame(signif(x$table$logFC, digits=4),
+                      signif(-log10(x$table$PValue), digits=4))
   colnames(table) <- c(xlab, ylab)
-  AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
-  logCPM <- round(x$table$logCPM, digits=4)
+  AdjPValue <- signif(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
+  logCPM <- signif(x$table$logCPM, digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
@@ -105,7 +105,7 @@ glimmaVolcano.DGEExact <- function(
 #' Glimma Volcano Plot
 #'
 #' Draws a two-panel interactive volcano plot from an DGELRT object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.DGELRT
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
@@ -118,7 +118,7 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 #' Glimma Volcano Plot
 #'
 #' Draws a two-panel interactive volcano plot from an DESeqDataSet object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.DESeqDataSet
 #' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
@@ -168,11 +168,11 @@ glimmaVolcano.DESeqDataSet  <- function(
   }
 
   # create initial table with logFC and -log10(pvalue) features
-  table <- data.frame(round(res.df$log2FoldChange, digits=4),
-                      round(-log10(res.df$pvalue), digits=4))
+  table <- data.frame(signif(res.df$log2FoldChange, digits=4),
+                      signif(-log10(res.df$pvalue), digits=4))
   colnames(table) <- c(xlab, ylab)
-  table <- cbind(table, logCPM=round(log(res.df$baseMean + 0.5), digits=4), 
-                        AdjPValue=round(res.df$padj, digits=4))
+  table <- cbind(table, logCPM=signif(log(res.df$baseMean + 0.5), digits=4),
+                        AdjPValue=signif(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))

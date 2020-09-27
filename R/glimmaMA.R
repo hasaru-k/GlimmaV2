@@ -96,11 +96,11 @@ glimmaMA.MArrayLM <- function(
   height = 920)
 {
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(unname(x$Amean), digits=4),
-                      round(unname(x$coefficients[, coef]), digits=4))
+  table <- data.frame(signif(unname(x$Amean), digits=4),
+                      signif(unname(x$coefficients[, coef]), digits=4))
   names(table) <- c(xlab, ylab)
-  AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
-  table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
+  AdjPValue <- signif(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
+  table <- cbind(table, PValue=signif(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
@@ -143,11 +143,11 @@ glimmaMA.DGEExact <- function(
   width = 920,
   height = 920)
 {
-  table <- data.frame(round(x$table$logCPM, digits=4),
-                      round(x$table$logFC, digits=4))
+  table <- data.frame(signif(x$table$logCPM, digits=4),
+                      signif(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
-  AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
-  table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
+  AdjPValue <- signif(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
+  table <- cbind(table, PValue=signif(x$table$PValue, digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
@@ -228,10 +228,10 @@ glimmaMA.DESeqDataSet  <- function(
   }
 
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(log(res.df$baseMean + 0.5), digits=4),
-                      round(res.df$log2FoldChange, digits=4))
+  table <- data.frame(signif(log(res.df$baseMean + 0.5), digits=4),
+                      signif(res.df$log2FoldChange, digits=4))
   colnames(table) <- c(xlab, ylab)
-  table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
+  table <- cbind(table, PValue=signif(res.df$pvalue, digits=4), AdjPValue=signif(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
