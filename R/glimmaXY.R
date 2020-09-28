@@ -74,7 +74,6 @@ buildXYData <- function(
   groups,
   transform.counts)
 {
-
   if (is.null(counts)) {
     counts <- -1
     level <- NULL
