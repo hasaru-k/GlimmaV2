@@ -54,7 +54,7 @@ function createExpressionSpec(width, height, expColumns, sampleColours)
                 "name": "color",
                 "type": "ordinal",
                 "domain": { "data": "table", "field": colourField },
-                "range": sampleColours == -1 ? { "scheme": "tableau20" } : sampleColours
+                "range": sampleColours == -1 ? { "scheme": "category10" } : sampleColours
             },
         ],
         "axes": 
@@ -65,14 +65,14 @@ function createExpressionSpec(width, height, expColumns, sampleColours)
                 "title": "group",
                 "labelAngle": -45,
                 "labelAlign": "right",
-                "labelOffset": -3 // change this or get rid of it?
+                "labelOffset": -3
             },
             {
                 "scale": "y",
                 "grid": true,
                 "orient": "left",
                 "titlePadding": 5,
-                "title": "count"
+                "title": "expression"
             }
         ],
         "marks": 

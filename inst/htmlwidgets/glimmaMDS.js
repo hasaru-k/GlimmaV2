@@ -134,23 +134,6 @@ function reformatElementsMDS(controlContainer)
   }
 }
 
-function filter(arr)
-{
-  var newarr = [arr[0]];
-  var i, z;
-  for (i = 1; i < arr.length; i++) {
-    unique = true;
-    for (z = 0; z < newarr.length; z++) {
-      if (arr[i] == newarr[z]) {
-        unique=false;
-        break;
-      }
-    }
-    if (unique) newarr.push(arr[i]);
-  }
-  return newarr;
-}
-
 function addColourMessage(data, view, container)
 {
   var alertBox = document.createElement("div");
@@ -171,8 +154,7 @@ function updateColourMessage(data, container, view, value)
   var alertBox = container.getElementsByClassName("alertBox")[0];
   let schemeCount = vega.scheme(value).length;
   let colourBy = view.signal("colour_by");
-  let colourCount = filter(data.mdsData[colourBy]).length;
-
+  let colourCount = [...new Set(data.mdsData[colourBy])].length;
   alertBox.setAttribute("class", "alertBox invisible");
 
   if (data.continuousColour) return;
