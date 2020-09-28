@@ -22,10 +22,10 @@ buildXYData(
 \arguments{
 \item{table}{dataframe containing xlab and ylab columns for plotting.}
 
-\item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
-By default genes in the summary plot are coloured based on its differential expression status 
+\item{status}{vector of length \code{nrow(x)} indicating the status of each gene.
+By default genes in the summary plot are coloured based on its differential expression status
 using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
-the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and
 1 marks up-regulated genes.}
 
 \item{main}{character string for the main title of summary plot.}
@@ -35,8 +35,8 @@ which to display in mouseover tooltips and table.}
 
 \item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
 
-\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
-This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values.
+This can be used to replace raw gene counts from \code{dge$counts} with transformed counts
 e.g. logCPM or logRPKM values.}
 
 \item{xlab}{character string for the x-axis label of summary plot.}
@@ -50,7 +50,7 @@ with \code{status}  in the order of -1, 0 and 1.}
 for colours associated with each sample to be displayed on the expression plot. If left
 unspecified, samples will be coloured according to \code{groups}.}
 
-\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
+\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in
 expression plot.}
 
 \item{transform.counts}{TRUE if counts should be log-cpm transformed using
@@ -61,3 +61,4 @@ Common processing steps for both MA, XY and volcano plots.
 Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab}
 as well as a unique identifier column labelled \code{gene}.
 }
+\keyword{internal}

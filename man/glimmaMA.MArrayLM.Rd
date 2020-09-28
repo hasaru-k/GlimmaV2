@@ -26,26 +26,26 @@
 )
 }
 \arguments{
-\item{x}{\code{MArrayLM} object from which summary statistics are extracted from to create 
+\item{x}{\code{MArrayLM} object from which summary statistics are extracted from to create
 summary (left) plot.}
 
-\item{dge}{\code{DGEList} object with \code{nrow(x)} rows from which expression values are 
-extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
+\item{dge}{\code{DGEList} object with \code{nrow(x)} rows from which expression values are
+extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
 and sample groups from \code{dge$samples$group}.}
 
-\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values. 
-This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+\item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values.
+This can be used to replace raw gene counts from \code{dge$counts} with transformed counts
 e.g. logCPM or logRPKM values.}
 
-\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in 
+\item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in
 expression plot.}
 
 \item{coef}{integer indicating the column in \code{x} from the summary plot is created.}
 
-\item{status}{vector of length \code{nrow(x)} indicating the status of each gene. 
-By default genes in the summary plot are coloured based on its differential expression status 
+\item{status}{vector of length \code{nrow(x)} indicating the status of each gene.
+By default genes in the summary plot are coloured based on its differential expression status
 using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
-the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and
 1 marks up-regulated genes.}
 
 \item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}
@@ -71,7 +71,7 @@ unspecified, samples will be coloured according to \code{groups}.}
 
 \item{ylab}{character string for the y-axis label of summary plot.}
 
-\item{html}{character string for naming HTML file for exportation of widget. The extension 
+\item{html}{character string for naming HTML file for exportation of widget. The extension
 should be included in the file name e.g. "file.html".}
 
 \item{width}{numeric value indicating width of widget in pixels.}

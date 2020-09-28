@@ -34,3 +34,24 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
      expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with 
      \code{continous.colour=TRUE}.
 }
+\examples{
+\dontrun{
+# using DGEList object
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+glimmaMDS(dge)
+
+# using DESeqDataSet
+dds <- DESeqDataSetFromMatrix(
+ countData = dge$counts,
+ colData = dge$samples,
+ rowData = dge$genes,
+ design = ~group
+)
+glimmaMDS(dds)
+
+# using matrix object
+expr <- edgeR::cpm(dge, log = TRUE)
+glimmaMDS(expr)
+}
+
+}

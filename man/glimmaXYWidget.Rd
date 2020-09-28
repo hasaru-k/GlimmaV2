@@ -18,3 +18,4 @@ glimmaXYWidget(xData, width, height, html)
 \description{
 Passes packaged data to JS interface for rendering.
 }
+\keyword{internal}

@@ -1,4 +1,4 @@
-MA_details <- function() 
+MA_details <- function()
 {
   c(
     "@details",
@@ -19,7 +19,7 @@ MA_details <- function()
   )
 }
 
-XY_details <- function() 
+XY_details <- function()
 {
   c(
     "@details",
@@ -36,7 +36,7 @@ XY_details <- function()
   )
 }
 
-volcano_details <- function() 
+volcano_details <- function()
 {
   c(
     "@details",
@@ -53,7 +53,7 @@ volcano_details <- function()
   )
 }
 
-MDS_details <- function() 
+MDS_details <- function()
 {
   c(
     "@details",
@@ -78,6 +78,7 @@ MDS_details <- function()
 #' vector of 1s.
 #'
 #' @param cdata SummarizedExperiment column data matrix
+#' @keywords internal
 extractGroups <- function(cdata)
 {
   if ("group" %in% colnames(cdata))
