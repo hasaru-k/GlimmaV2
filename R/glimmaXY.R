@@ -6,7 +6,7 @@
 #' @param x numeric vector of values to plot on the x-axis of the summary plot.
 #' @param y numeric vector of values to plot on the y-axis of the summary plot.
 #' @param status vector of length \code{length(x)} indicating the status of each gene.
-#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and 
+#' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and
 #' 1 marks an up-regulated gene.
 #' @param anno dataframe with \code{length(x)} rows containing gene annotations.
 #' @param groups vector of length \code{ncol(counts)} representing categorisation of samples in expression plot.
@@ -33,7 +33,7 @@ glimmaXY <- function(
   height = 920)
 {
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
-  table <- data.frame(round(x, digits=4),  round(y, digits=4))
+  table <- data.frame(signif(x, digits=4), signif(y, digits=4))
   colnames(table) <- c(xlab, ylab)
   # add rownames to LHS of table
   if (!is.null(counts)) {
@@ -58,6 +58,7 @@ glimmaXY <- function(
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
 #' @importFrom edgeR cpm
+#' @keywords internal
 buildXYData <- function(
   table,
   status,
@@ -77,7 +78,12 @@ buildXYData <- function(
     counts <- -1
   } else {
     # df format for serialisation
-    if (transform.counts) counts <- edgeR::cpm(counts, log=TRUE)
+    if (transform.counts) {
+      if (!all.equal(counts, as.integer(counts))) {
+        warning("count transform requested but not all count values are integers.")
+      }
+      counts <- edgeR::cpm(counts, log=TRUE)
+    }
     counts <- data.frame(counts)
     if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     groups <- data.frame(group=groups)
@@ -126,6 +132,7 @@ buildXYData <- function(
 #' @param height htmlwidget element height in pixels
 #' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
 #' @import htmlwidgets
+#' @keywords internal
 glimmaXYWidget <- function(xData, width, height, html)
 {
   widget <- htmlwidgets::createWidget(

@@ -2,7 +2,7 @@
 #'
 
 #' Generic function for drawing a two-panel interactive MA plot, a special case of the
-#' glimmaXY plot. 
+#' glimmaXY plot.
 
 #' The function invokes the following methods which depend on the class of the first argument:
 #' \itemize{
@@ -24,28 +24,28 @@ glimmaMA <- function(x, ...)
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an MArrayLM object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
-#' @param x \code{MArrayLM} object from which summary statistics are extracted from to create 
+#' @param x \code{MArrayLM} object from which summary statistics are extracted from to create
 #' summary (left) plot.
 #'
-#' @param dge \code{DGEList} object with \code{nrow(x)} rows from which expression values are 
-#' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts} 
+#' @param dge \code{DGEList} object with \code{nrow(x)} rows from which expression values are
+#' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
 #' and sample groups from \code{dge$samples$group}.
 #'
-#' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values. 
-#' This can be used to replace raw gene counts from \code{dge$counts} with transformed counts 
+#' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values.
+#' This can be used to replace raw gene counts from \code{dge$counts} with transformed counts
 #' e.g. logCPM or logRPKM values.
 #'
-#' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in 
+#' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in
 #' expression plot.
 #'
 #' @param coef integer indicating the column in \code{x} from the summary plot is created.
 #'
-#' @param status vector of length \code{nrow(x)} indicating the status of each gene. 
-#' By default genes in the summary plot are coloured based on its differential expression status 
+#' @param status vector of length \code{nrow(x)} indicating the status of each gene.
+#' By default genes in the summary plot are coloured based on its differential expression status
 #' using an adjusted p-value cutoff of 5\% by calling the \code{limma::decideTests} function, where
-#' the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and 
+#' the value of -1 marks down-regulated genes, 0 marks genes with no expression difference, and
 #' 1 marks up-regulated genes.
 #'
 #' @param anno dataframe with \code{nrow(x)} rows containing gene annotations.
@@ -67,7 +67,7 @@ glimmaMA <- function(x, ...)
 #' @param main character string for the main title of summary plot.
 #' @param xlab character string for the x-axis label of summary plot.
 #' @param ylab character string for the y-axis label of summary plot.
-#' @param html character string for naming HTML file for exportation of widget. The extension 
+#' @param html character string for naming HTML file for exportation of widget. The extension
 #' should be included in the file name e.g. "file.html".
 #' @param width numeric value indicating width of widget in pixels.
 #' @param height numeric value indicating width of height in pixels.
@@ -96,11 +96,11 @@ glimmaMA.MArrayLM <- function(
   height = 920)
 {
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(unname(x$Amean), digits=4),
-                      round(unname(x$coefficients[, coef]), digits=4))
+  table <- data.frame(signif(unname(x$Amean), digits=4),
+                      signif(unname(x$coefficients[, coef]), digits=4))
   names(table) <- c(xlab, ylab)
-  AdjPValue <- round(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
-  table <- cbind(table, PValue=round(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
+  AdjPValue <- signif(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
+  table <- cbind(table, PValue=signif(x$p.value[, coef], digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   if (is.matrix(status)) status <- status[, coef]
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
@@ -110,13 +110,13 @@ glimmaMA.MArrayLM <- function(
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an DGEExact object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x DGEExact object from which summary statistics are extracted from to create summary (left) plot.
-#' @param status vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are 
+#' @param status vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are
 #' coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
-#' by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no 
+#' by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no
 #' expression difference, and 1 marks up-regulated genes.
 #'
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
@@ -143,11 +143,11 @@ glimmaMA.DGEExact <- function(
   width = 920,
   height = 920)
 {
-  table <- data.frame(round(x$table$logCPM, digits=4),
-                      round(x$table$logFC, digits=4))
+  table <- data.frame(signif(x$table$logCPM, digits=4),
+                      signif(x$table$logFC, digits=4))
   names(table) <- c(xlab, ylab)
-  AdjPValue <- round(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
-  table <- cbind(table, PValue=round(x$table$PValue, digits=4), AdjPValue=AdjPValue)
+  AdjPValue <- signif(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
+  table <- cbind(table, PValue=signif(x$table$PValue, digits=4), AdjPValue=AdjPValue)
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
@@ -156,7 +156,7 @@ glimmaMA.DGEExact <- function(
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an DGELRT object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.DGEExact
 #' @param x DGELRT object from which summary statistics are extracted from to create summary (left) plot.
@@ -170,7 +170,7 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #' Glimma MA Plot
 #'
 #' Draws a two-panel interactive MA plot from an DESeqDataSet object. This is a special case of the
-#' \code{glimmaXY} plot. 
+#' \code{glimmaXY} plot.
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x DESeqDataSet object from which summary statistics are extracted from to create summary (left) plot.
@@ -207,6 +207,10 @@ glimmaMA.DESeqDataSet  <- function(
   res.df <- res.df[complete_genes, ]
   x <- x[complete_genes, ]
 
+  total_genes <- length(complete_genes)
+  filtered_genes <- sum(!complete_genes)
+  message(filtered_genes, " of ", total_genes, " genes were filtered out in DESeq2 tests")
+
   # extract status if it is not given
   if (is.null(status))
   {
@@ -224,10 +228,10 @@ glimmaMA.DESeqDataSet  <- function(
   }
 
   # create initial table with logCPM and logFC features
-  table <- data.frame(round(log(res.df$baseMean + 0.5), digits=4),
-                      round(res.df$log2FoldChange, digits=4))
+  table <- data.frame(signif(log(res.df$baseMean + 0.5), digits=4),
+                      signif(res.df$log2FoldChange, digits=4))
   colnames(table) <- c(xlab, ylab)
-  table <- cbind(table, PValue=round(res.df$pvalue, digits=4), AdjPValue=round(res.df$padj, digits=4))
+  table <- cbind(table, PValue=signif(res.df$pvalue, digits=4), AdjPValue=signif(res.df$padj, digits=4))
   table <- cbind(gene=rownames(x), table)
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))

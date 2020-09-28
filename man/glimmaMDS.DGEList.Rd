@@ -20,8 +20,8 @@
 \arguments{
 \item{x}{\code{DGEList} object containing gene counts in \code{x$counts}.}
 
-\item{groups}{vector or data frame object with associated sample information such as experimental groups. 
-The information is displayed in mouseover tooltips, and appropriate vector(s) can be used to adjust the plot using \code{scale_by}, \code{colour_by} 
+\item{groups}{vector or data frame object with associated sample information such as experimental groups.
+The information is displayed in mouseover tooltips, and appropriate vector(s) can be used to adjust the plot using \code{scale_by}, \code{colour_by}
 and \code{shape_by} drop-down boxes of the widget.}
 
 \item{labels}{character vector of sample names or labels.}
@@ -30,10 +30,10 @@ and \code{shape_by} drop-down boxes of the widget.}
 
 \item{top}{integer indiating number of top genes used to calculate pairwise distances.}
 
-\item{gene.selection}{character string specifying how genes are selected from the plot - "pairwise" if most variable genes are to be chosen for each pair of 
+\item{gene.selection}{character string specifying how genes are selected from the plot - "pairwise" if most variable genes are to be chosen for each pair of
 samples,  or "common" to select the same genes for all comparisons.}
 
-\item{prior.count}{integer indicating the average count to be added to each observation to avoid taking log of zero when 
+\item{prior.count}{integer indicating the average count to be added to each observation to avoid taking log of zero when
 raw counts are transformed to log-counts-per-million values.}
 
 \item{html}{character string for naming HTML file or exportation of widget. The extension should be included in the file name e.g. "file.hml".}
@@ -59,6 +59,13 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
      in colour and shape by \code{groups} and \code{labels}. Instead, if \code{groups} is a numeric vector (e.g. library size or 
      expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with 
      \code{continous.colour=TRUE}.
+}
+\examples{
+\dontrun{
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+glimmaMDS(dge)
+}
+
 }
 \seealso{
 \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
