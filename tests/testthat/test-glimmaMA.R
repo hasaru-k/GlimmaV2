@@ -30,7 +30,7 @@ setup
 
 })
 
-test_that("MA Plot returns widget", 
+test_that("MA Plot returns widget",
 {
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
@@ -43,7 +43,7 @@ test_that("MA Plot returns widget",
     expect_equal(is.null(result), FALSE)
 })
 
-test_that("Saving MA plot works", 
+test_that("Saving MA plot works",
 {
     testname <- "testMAabc.html"
     # MArrayLM, DGEExact/DGELRT
@@ -61,18 +61,18 @@ test_that("Saving MA plot works",
     unlink(testname)
 })
 
-test_that("Length of the status.colours must be exactly 3", 
+test_that("Length of the status.colours must be exactly 3",
 {
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
     {
-        expect_error(glimmaMA(x, dge=dge, status.colours=c("green","red")))
+        expect_error(glimmaMA(x, dge=dge, status.cols=c("green","red")))
     }
     # DESeqDataset
-    expect_error(glimmaMA(dds, status.colours=c("green","red")))
+    expect_error(glimmaMA(dds, status.cols=c("green","red")))
 })
 
-test_that("Length of status vector must match the other args", 
+test_that("Length of status vector must match the other args",
 {
     rand <- 25000
     # MArrayLM, DGEExact/DGELRT
@@ -83,10 +83,10 @@ test_that("Length of status vector must match the other args",
     }
     # DESeqDataset
     expect_error(glimmaMA(dds, status=rep(0, rand)))
-    expect_silent(glimmaMA(dds, status=rep(0, nrow(dds))))
+    expect_message(glimmaMA(dds, status=rep(0, nrow(dds))), "genes were filtered out in DESeq2 tests")
 })
 
-test_that("User cannot provide counts argument without groups argument for edgeR/limma objects", 
+test_that("User cannot provide counts argument without groups argument for edgeR/limma objects",
 {
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
