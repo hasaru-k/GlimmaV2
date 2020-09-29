@@ -43,7 +43,7 @@ glimmaXY <- function(
   } else if (!is.null(rownames(y))) {
     table <- cbind(gene=rownames(y), table)
   } else {
-    table <- cbind(gene=1:length(x), table)
+    table <- cbind(gene=seq_along(x), table)
   }
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
