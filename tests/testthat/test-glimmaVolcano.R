@@ -30,7 +30,7 @@ setup
 
 })
 
-test_that("Volcano plot returns widget", 
+test_that("Volcano plot returns widget",
 {
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
@@ -43,7 +43,7 @@ test_that("Volcano plot returns widget",
     expect_equal(is.null(result), FALSE)
 })
 
-test_that("Saving volcano plot works", 
+test_that("Saving volcano plot works",
 {
     testname <- "testVolcano.html"
     # MArrayLM, DGEExact/DGELRT

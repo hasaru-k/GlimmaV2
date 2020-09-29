@@ -14,7 +14,7 @@ setup
                                   design = ~genotype)
 })
 
-test_that("MDS error when x has < 3 dimensions", 
+test_that("MDS error when x has < 3 dimensions",
 {
     for (x in list(dge, dds))
     {
@@ -32,7 +32,7 @@ test_that("glimmaMDS doesn't export HTML file unless you ask it to",
     }
 })
 
-test_that("Saving MDS works", 
+test_that("Saving MDS works",
 {
     testname <- "testMDSabc.html"
     for (x in list(dge, dds))
