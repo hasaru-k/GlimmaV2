@@ -8,7 +8,7 @@ function createXYSpec(xyData, xyTable, width, height)
     "description": "Testing ground for GlimmaV2",
     "width": xyData.counts == -1 ? (width*0.9) : (width * 0.5),
     "height": height * 0.35,
-    "padding": 0,
+    "padding": {"left": 0, "top": 0, "right": 0, "bottom": 10},
     "autosize": {"type": "fit", "resize": true},
     "title": {
       "text": xyData.title
@@ -81,7 +81,7 @@ function createXYSpec(xyData, xyTable, width, height)
         "domain": false,
         "orient": "bottom",
         "tickCount": 5,
-        "title": xyData.x,
+        "title": xyData.x
       },
       {
         "scale": "y",

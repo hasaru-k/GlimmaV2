@@ -8,7 +8,7 @@ function createExpressionSpec(width, height, expColumns, sampleColours)
         "$schema": "https://vega.github.io/schema/vega/v5.json",
         "width": width*0.40,
         "height": height*0.35,
-        "padding": 0,
+        "padding": {"left": 0, "top": 0, "right": 0, "bottom": 10},
         "autosize": {"type": "fit", "resize": true},
         "title": { "text": {"signal": "title_signal" }},
         "signals": 
@@ -65,7 +65,7 @@ function createExpressionSpec(width, height, expColumns, sampleColours)
                 "title": "group",
                 "labelAngle": -45,
                 "labelAlign": "right",
-                "labelOffset": -3
+                "labelOffset": -3  
             },
             {
                 "scale": "y",

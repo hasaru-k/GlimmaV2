@@ -88,7 +88,7 @@ buildXYData <- function(
     counts <- data.frame(counts)
     #if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     if (is.null(groups)) {
-      groups <- factor("samples")
+      groups <- factor("group")
     } else {
       if (ncol(counts) != length(groups)) stop("Length of groups must be equal to the number of columns in counts.\n")
     }
