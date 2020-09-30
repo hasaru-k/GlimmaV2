@@ -13,7 +13,12 @@
 #'
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
+#'
 #' @eval MA_details()
+#'
+#' @examples
+#' methods(glimmaMA) # show methods for glimmaMA
+#'
 #' @export
 glimmaMA <- function(x, ...)
 {
