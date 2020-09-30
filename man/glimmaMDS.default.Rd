@@ -48,12 +48,12 @@ Draws a two-panel interactive MDS plot.
 The left plot shows two MDS dimensions, with sample annotations displayed on hover.
      The right panel contains a bar plot of the eigenvalues of each dimension.
      The controls beneath the plots can be used to change the dimensions being displayed, and the scale, colour and shape of points.
-     The interactive MDS plot allows users to adjust sample points by scale, colour and shape for multiple vectors associated with 
-     sample information. This is carried out most effectively when \code{x$samples} includes an abundance of sample information, or 
-     when a data frame object is supplied to \code{groups}. If a simple character or factor vector is given to \code{groups} 
-     (with the default of \code{continous.colour=FALSE}), then sample points will have no scaling options, but can only be adjusted 
-     in colour and shape by \code{groups} and \code{labels}. Instead, if \code{groups} is a numeric vector (e.g. library size or 
-     expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with 
+     The interactive MDS plot allows users to adjust sample points by scale, colour and shape for multiple vectors associated with
+     sample information. This is carried out most effectively when \code{x$samples} includes an abundance of sample information, or
+     when a data frame object is supplied to \code{groups}. If a simple character or factor vector is given to \code{groups}
+     (with the default of \code{continous.colour=FALSE}), then sample points will have no scaling options, but can only be adjusted
+     in colour and shape by \code{groups} and \code{labels}. Instead, if \code{groups} is a numeric vector (e.g. library size or
+     expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with
      \code{continous.colour=TRUE}.
 }
 \examples{

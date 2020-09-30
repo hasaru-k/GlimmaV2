@@ -81,14 +81,14 @@ Draws a two-panel interactive volcano plot from an DGEExact object. This is a sp
 \code{glimmaXY} plot.
 }
 \details{
-The summary plot on the left represents gene-wise log-fold-change (logFC) on the x-axis versus 
+The summary plot on the left represents gene-wise log-fold-change (logFC) on the x-axis versus
     \code{-log10(pvalue)}. The expression plot on the right displays sample expression values for a single gene.
-    Interactions with the htmlwidget include clicking on genes (points) in the summary plot to bring up 
+    Interactions with the htmlwidget include clicking on genes (points) in the summary plot to bring up
     associated sample expression values in the expression plot, as well as the summary statistics in the table below.
-    Alternatively, users can interact with the table by clicking on genes (rows) to highlight genes in the summary plot, 
-    as well as bring up associated sample expression values in the expression plot. 
-    Briefly, other interactive features include a search box for the table, buttons to save plots and data 
-    (summary statistics and expression values), additional pop-up information when hovering on points in plots, 
+    Alternatively, users can interact with the table by clicking on genes (rows) to highlight genes in the summary plot,
+    as well as bring up associated sample expression values in the expression plot.
+    Briefly, other interactive features include a search box for the table, buttons to save plots and data
+    (summary statistics and expression values), additional pop-up information when hovering on points in plots,
     and rescaling of the y-axis in the expression plot.
 }
 \seealso{

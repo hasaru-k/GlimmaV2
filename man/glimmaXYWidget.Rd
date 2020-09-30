@@ -15,6 +15,9 @@ glimmaXYWidget(xData, width, height, html)
 
 \item{html}{name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.}
 }
+\value{
+htmlwidget object for XY plot internal use
+}
 \description{
 Passes packaged data to JS interface for rendering.
 }
