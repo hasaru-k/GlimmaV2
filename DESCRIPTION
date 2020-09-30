@@ -1,33 +1,71 @@
 Package: GlimmaV2
-Title: Interactive Plots for Differential Expression Analysis
-Version: 0.99.0
+Type: Package
+Title: Interactive HTML graphics
+Version: 1.16.0
 Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+    c(
+        person(
+            "Shian", "Su",
+            role = c("aut", "cre"),
+            email = "su.s@wehi.edu.au"
+        ),
+        person(
+            "Hasaru", "Kariyawasam",
+            role = c("aut")
+        ),
+        person(
+            "Oliver", "Voogd",
+            role = c("aut")
+        ),
+        person(
+            "Matthew", "Ritchie",
+            role = c("aut")
+        ),
+        person(
+            "Charity", "Law",
+            role = c("aut")
+        ),
+        person(
+            "Stuart", "Lee",
+            role = c("ctb")
+        ),
+        person(
+            "Isaac", "Virshup",
+            role = c("ctb")
+        )
+    )
+Description: This package generates interactive visualisations for analysis of RNA-sequencing data using output from limma, edgeR or DESeq2 packages in an HTML page. The interactions are built on top of the popular static representations of analysis results in order to provide additional information.
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1
-biocViews: 
-  Software,
-  Visualization,
-  RNASeq,
-  GeneExpression,
-  DifferentialExpression
-Imports: 
+biocViews:
+    DifferentialExpression,
+    GeneExpression,
+    Microarray,
+    ReportWriting,
+    RNASeq,
+    Sequencing,
+    Visualization
+Imports:
+    S4Vectors,
     htmlwidgets,
     edgeR,
-    limma,
     DESeq2,
+    limma,
     SummarizedExperiment,
     stats
 Suggests:
     testthat,
-    Glimma,
     knitr,
-    rmarkdown
+    rmarkdown,
+    BiocStyle,
+    IRanges,
+    GenomicRanges,
+    testthat,
+    knitr,
+    rmarkdown,
+    pryr
+License: GPL-3
+URL: https://github.com/hasaru-k/GlimmaV2
+BugReports: https://github.com/hasaru-k/GlimmaV2/issues
+LazyData: true
 VignetteBuilder: knitr
