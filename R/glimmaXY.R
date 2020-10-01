@@ -106,7 +106,11 @@ buildXYData <- function(
      must have the same number of genes as the main arguments.")
 
   table <- cbind(table, status=as.vector(status))
-  if (!is.null(anno)) table <- cbind(table, anno)
+  if (!is.null(anno))
+  {
+    colnames(anno) <- gsub("symbol", "symbol", colnames(anno), ignore.case=TRUE)
+    table <- cbind(table, anno)
+  }
 
   if (is.null(display.columns)) {
     display.columns <- colnames(table)
