@@ -56,6 +56,9 @@ expression plot.}
 \item{transform.counts}{TRUE if counts should be log-cpm transformed using
 \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 }
+\value{
+object for XY plot internal use
+}
 \description{
 Common processing steps for both MA, XY and volcano plots.
 Expects a dataframe, \code{table}, which contains two columns labelled \code{xlab} and \code{ylab}

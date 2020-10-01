@@ -150,9 +150,9 @@ glimmaMDS.default <- function(
           o <- order(rowMeans( (x-rowMeans(x))^2 ), decreasing=TRUE)
           x <- getRows(x, o[1L:top])
       }
-      for (i in 2L:(nsamples)) {
-          dists <- (x[, i] - x[, 1:(i-1), drop=FALSE]) ^ 2
-          dd[i, 1L:(i-1L)] <- sqrt(colMeans(dists))
+      for (i in 2:nsamples) {
+          dists <- (x[, i] - x[, seq_len(i-1), drop=FALSE]) ^ 2
+          dd[i, seq_len(i-1L)] <- sqrt(colMeans(dists))
       }
   }
 
@@ -162,9 +162,7 @@ glimmaMDS.default <- function(
   # Method for MDS objects
   points <- a1$points
 
-  if (!is.data.frame(groups) && class(groups) != "DataFrame") groups <- data.frame(groups)
-
-
+  if (!is.data.frame(groups) && !is(groups, "DataFrame")) groups <- data.frame(groups)
 
   # add labels to groups
   groups <- data.frame(labels, groups)
@@ -177,14 +175,14 @@ glimmaMDS.default <- function(
   points <- data.frame(points, groups)
 
   eigen <- data.frame(
-      name = 1:min(ndim, 8),
-      eigen = round(a1$eig[1:min(ndim, 8)]/sum(a1$eig), 2)
+      name = seq_len(min(ndim, 8)),
+      eigen = round(a1$eig[seq_len(min(ndim, 8))]/sum(a1$eig), 2)
   )
 
   # add this column for no dimensionality in Vega
   points <- cbind(points, "-" = "0")
   points <- cbind(points, "- " = 0)
-  is_numeric <- sapply(groups, is.numeric)
+  is_numeric <- vapply(groups, is.numeric, logical(0))
   numeric <- c(colnames(groups)[is_numeric], "- ")
   discrete <- c(colnames(groups)[!is_numeric], "-")
   features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))

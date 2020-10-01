@@ -13,7 +13,12 @@
 #'
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
+#'
 #' @eval MA_details()
+#'
+#' @examples
+#' methods(glimmaMA) # show methods for glimmaMA
+#'
 #' @export
 glimmaMA <- function(x, ...)
 {
@@ -96,7 +101,7 @@ glimmaMA.MArrayLM <- function(
   height = 920)
 {
   # check if the number of rows of x and the dge object are equal
-  if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.\n")
+  if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
   # create initial table with logCPM and logFC features
   table <- data.frame(signif(unname(x$Amean), digits=4),
@@ -147,7 +152,7 @@ glimmaMA.DGEExact <- function(
   height = 920)
 {
   # check if the number of rows of x and the dge object are equal
-  if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.\n")
+  if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
   table <- data.frame(signif(x$table$logCPM, digits=4),
                       signif(x$table$logFC, digits=4))

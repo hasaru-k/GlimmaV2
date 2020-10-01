@@ -9,6 +9,9 @@ extractGroups(cdata)
 \arguments{
 \item{cdata}{SummarizedExperiment column data matrix}
 }
+\value{
+groups column of data if present, otherwise 1
+}
 \description{
 Extracts the column named \code{group} from column data matrix
 of a SummarizedExperiment object if it is present. Otherwise return a

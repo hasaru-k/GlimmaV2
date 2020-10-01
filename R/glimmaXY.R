@@ -13,6 +13,7 @@
 #' @param counts numeric matrix with \code{length(x)} rows containing gene expression values. This can be used to replace
 #' raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.
 #' @eval XY_details()
+#'
 #' @export
 glimmaXY <- function(
   x,
@@ -43,7 +44,7 @@ glimmaXY <- function(
   } else if (!is.null(rownames(y))) {
     table <- cbind(gene=rownames(y), table)
   } else {
-    table <- cbind(gene=1:length(x), table)
+    table <- cbind(gene=seq_along(x), table)
   }
 
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
@@ -58,6 +59,9 @@ glimmaXY <- function(
 #'
 #' @inheritParams glimmaMA.MArrayLM
 #' @param table dataframe containing xlab and ylab columns for plotting.
+#'
+#' @return object for XY plot internal use
+#'
 #' @importFrom edgeR cpm
 #' @keywords internal
 buildXYData <- function(
@@ -140,7 +144,11 @@ buildXYData <- function(
 #' @param width htmlwidget element width in pixels
 #' @param height htmlwidget element height in pixels
 #' @param html name of HTML file (including extension) to export widget into rather than displaying the widget; \code{NULL} by default.
+#'
+#' @return htmlwidget object for XY plot internal use
+#'
 #' @import htmlwidgets
+#'
 #' @keywords internal
 glimmaXYWidget <- function(xData, width, height, html)
 {
