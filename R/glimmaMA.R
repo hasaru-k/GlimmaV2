@@ -100,6 +100,9 @@ glimmaMA.MArrayLM <- function(
   width = 920,
   height = 920)
 {
+  # check if the number of rows of x and the dge object are equal
+  if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.\n")
+
   # create initial table with logCPM and logFC features
   table <- data.frame(signif(unname(x$Amean), digits=4),
                       signif(unname(x$coefficients[, coef]), digits=4))
@@ -148,8 +151,12 @@ glimmaMA.DGEExact <- function(
   width = 920,
   height = 920)
 {
+  # check if the number of rows of x and the dge object are equal
+  if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.\n")
+
   table <- data.frame(signif(x$table$logCPM, digits=4),
                       signif(x$table$logFC, digits=4))
+
   names(table) <- c(xlab, ylab)
   AdjPValue <- signif(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
   table <- cbind(table, PValue=signif(x$table$PValue, digits=4), AdjPValue=AdjPValue)

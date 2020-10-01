@@ -70,6 +70,7 @@ HTMLWidgets.widget({
           height: height,
           cols: x.data.cols,
           groups: x.data.groups,
+          levels: x.data.levels,
           expressionContainer: expressionContainer
         };
 
@@ -125,10 +126,6 @@ function setupXYInteraction(data)
       });
 
     datatable.on('click', 'tr', function() { tableClickListener(datatable, state, data, $(this)) } );
-    data.xyView.addSignalListener('tester', function(name, value) {
-      alert("new value: " + value);
-      datatableEl.set
-    })
     data.xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
   });
 }
@@ -243,6 +240,7 @@ function updateExpressionPlot(countsRow, data, gene)
 {
   let groups = data.groups.group;
   let samples = data.groups.sample;
+  let levels = data.levels;
   let result = [];
   for (col in countsRow) 
   {
@@ -254,7 +252,9 @@ function updateExpressionPlot(countsRow, data, gene)
     curr["count"] = countsRow[col];
     result.push(curr);
   }
-  console.log(result);
+  if (levels != null) {
+    result.sort((a, b) => levels.indexOf(a.group) - levels.indexOf(b.group));
+  }
   data.expressionView.data("table", result);
   data.expressionView.signal("title_signal", "Gene " + gene.toString());
   data.expressionView.signal("max_count", Math.max(...result.map(x => x.count)));
