@@ -46,7 +46,6 @@ biocViews:
     Sequencing,
     Visualization
 Imports:
-    S4Vectors,
     htmlwidgets,
     edgeR,
     DESeq2,
