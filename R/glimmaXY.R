@@ -92,7 +92,7 @@ buildXYData <- function(
     counts <- data.frame(counts)
     #if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     if (is.null(groups)) {
-      groups <- factor("samples")
+      groups <- factor("group")
     } else {
       if (ncol(counts) != length(groups)) stop("Length of groups must be equal to the number of columns in counts.\n")
     }
@@ -106,7 +106,11 @@ buildXYData <- function(
      must have the same number of genes as the main arguments.")
 
   table <- cbind(table, status=as.vector(status))
-  if (!is.null(anno)) table <- cbind(table, anno)
+  if (!is.null(anno))
+  {
+    colnames(anno) <- gsub("symbol", "symbol", colnames(anno), ignore.case=TRUE)
+    table <- cbind(table, anno)
+  }
 
   if (is.null(display.columns)) {
     display.columns <- colnames(table)

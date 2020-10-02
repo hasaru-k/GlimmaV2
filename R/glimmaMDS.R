@@ -220,6 +220,7 @@ glimmaMDS.default <- function(
 #' Glimma MDS Plot
 #'
 #' Draws a two-panel interactive MDS plot using a DGEList x.
+#' Transforms counts using \code{edgeR::cpm(x, log=TRUE, prior.count = prior.count)}.
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DESeqDataSet}}
 #'
 #' @inheritParams glimmaMDS.default
@@ -269,7 +270,8 @@ glimmaMDS.DGEList <- function(
 
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot using a DESeqDataset x.
+#' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
+#' Transforms counts using \code{edgeR::cpm(DESeq2::counts(x), log = TRUE, prior.count = prior.count)}.
 #'
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 #'

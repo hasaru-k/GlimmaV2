@@ -47,6 +47,7 @@ htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
 Draws a two-panel interactive MDS plot using a DGEList x.
+Transforms counts using \code{edgeR::cpm(x, log=TRUE, prior.count = prior.count)}.
 }
 \details{
 The left plot shows two MDS dimensions, with sample annotations displayed on hover.

@@ -1,4 +1,4 @@
-function addSavePlotButton(controlContainer, view_obj, text="Save Plot")
+function addSavePlotButton(controlContainer, xy_obj, exp_obj, text="Save Plot") 
 {
   // set up button elements
   var dropdownDiv = document.createElement("div");
@@ -11,38 +11,24 @@ function addSavePlotButton(controlContainer, view_obj, text="Save Plot")
   var dropdownContent = document.createElement("div");
   dropdownContent.setAttribute("class", "dropdown-content");
   
-  var pngSaveBtn = document.createElement("a");
-  pngSaveBtn.setAttribute("href", "#")
-  pngSaveBtn.innerText = "PNG";
-  pngSaveBtn.onclick = function() {
-    view_obj.toImageURL('png', scaleFactor=3).then(function (url) {
-      var link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('download', 'vega-export.png');
-      link.dispatchEvent(new MouseEvent('click'));
-    });
-  };
+  var pngSummaryBtn = addSaveButtonElement(xy_obj, text="Summary plot (PNG)", type='png');
+  var svgSummaryBtn = addSaveButtonElement(xy_obj, text="Summary plot (SVG)", type='png');
   
-  var svgSaveBtn = document.createElement("a");
-  svgSaveBtn.setAttribute("href", "#");
-  svgSaveBtn.innerText = "SVG";
-  svgSaveBtn.onclick = function() {
-    view_obj.toImageURL('svg', scaleFactor=3).then(function (url) {
-      var link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('download', 'vega-export.svg');
-      link.dispatchEvent(new MouseEvent('click'));
-    });
-  };
-
   // add elements to container
   dropdownDiv.appendChild(dropdownButton);
   dropdownDiv.appendChild(dropdownContent);
 
-  dropdownContent.appendChild(pngSaveBtn);
-  dropdownContent.appendChild(svgSaveBtn);
+  dropdownContent.appendChild(pngSummaryBtn);
+  dropdownContent.appendChild(svgSummaryBtn);
+
+  // add the expression buttons if expression plot is active
+  if (exp_obj) {
+    var pngExpressionBtn = addSaveButtonElement(exp_obj, text="Expression plot (PNG)", type='png');
+    var svgExpressionBtn = addSaveButtonElement(exp_obj, text="Expression plot (SVG)", type='svg');
+  
+    dropdownContent.appendChild(pngExpressionBtn);
+    dropdownContent.appendChild(svgExpressionBtn);
+  }
 
   // set up dropdown action
   dropdownButton.onclick = function() {
@@ -78,6 +64,22 @@ function addSavePlotButton(controlContainer, view_obj, text="Save Plot")
   }
 }
 
+function addSaveButtonElement(view_obj, text, type) {
+  // create a save button element for the save dropdown
+  var saveButton = document.createElement("a");
+  saveButton.setAttribute("href", "#")
+  saveButton.innerText = text;
+  saveButton.onclick = function() {
+    view_obj.toImageURL(type, scaleFactor=3).then(function (url) {
+      var link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', 'vega-export.' + type);
+      link.dispatchEvent(new MouseEvent('click'));
+    });
+  };
+  return saveButton;
+}
 
 function saveTableClickListener(state, data)
 {

@@ -46,7 +46,8 @@ raw counts are transformed to log-counts-per-million values.}
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
 }
 \description{
-Draws a two-panel interactive MDS plot using a DESeqDataset x.
+Draws a two-panel interactive MDS plot using a DESeqDataset x. 
+Transforms counts using \code{edgeR::cpm(DESeq2::counts(x), log = TRUE, prior.count = prior.count)}.
 }
 \details{
 The left plot shows two MDS dimensions, with sample annotations displayed on hover.

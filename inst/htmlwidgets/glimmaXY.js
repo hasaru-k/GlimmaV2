@@ -75,13 +75,10 @@ HTMLWidgets.widget({
         };
 
         setupXYInteraction(data);
-        addSavePlotButton(controlContainer, xyView, text="Save (XY)");
-        if (expressionView)
-        {
-          addSavePlotButton(controlContainer, expressionView, text="Save (EXP)");
+        addSavePlotButton(controlContainer, xyView, expressionView, "Save Plot");
+        if (expressionView) {
           addAxisMessage(data);
         }
-
       },
 
       resize: function(width, height) 
