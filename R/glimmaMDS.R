@@ -182,7 +182,7 @@ glimmaMDS.default <- function(
   # add this column for no dimensionality in Vega
   points <- cbind(points, "-" = "0")
   points <- cbind(points, "- " = 0)
-  is_numeric <- vapply(groups, is.numeric, logical(0))
+  is_numeric <- vapply(groups, is.numeric, logical(1))
   numeric <- c(colnames(groups)[is_numeric], "- ")
   discrete <- c(colnames(groups)[!is_numeric], "-")
   features <- list(numeric=numeric, discrete=discrete, all=c(numeric,discrete))
