@@ -46,6 +46,7 @@ biocViews:
     Sequencing,
     Visualization
 Imports:
+    Glimma,
     htmlwidgets,
     edgeR,
     DESeq2,
