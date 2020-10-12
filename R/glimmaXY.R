@@ -33,6 +33,7 @@ glimmaXY <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
   table <- data.frame(signif(x, digits=4), signif(y, digits=4))
   colnames(table) <- c(xlab, ylab)
@@ -83,12 +84,27 @@ buildXYData <- function(
     level <- NULL
   } else {
     # df format for serialisation
-    if (transform.counts) {
-      if (!all.equal(counts, as.integer(counts))) {
+    if (transform.counts != "none") {
+      if (!all.equal(counts, round(counts))) {
         warning("count transform requested but not all count values are integers.")
       }
-      counts <- edgeR::cpm(counts, log=TRUE)
+
+      if (transform.counts == "logcpm") {
+        counts <- edgeR::cpm(counts, log=TRUE)
+      } else if (transform.counts == "cpm") {
+        counts <- edgeR::cpm(counts, log=FALSE)
+      } else if (transform.counts == "rpkm") {
+        if (is.null(anno$length)) {
+          stop("no 'length' column in gene annotation, rpkm cannot be computed")
+        }
+
+        if (!is.numeric(anno$length)) {
+          stop("'length' column of gene annotation must be numeric values")
+        }
+        counts <- edgeR::rpkm(counts, gene.length = anno$length)
+      }
     }
+
     counts <- data.frame(counts)
     #if (is.null(groups)) stop("If counts arg is supplied, groups arg must be non-null.")
     if (is.null(groups)) {

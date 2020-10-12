@@ -16,7 +16,7 @@
   status.cols = c("dodgerblue", "silver", "firebrick"),
   sample.cols = NULL,
   p.adj.method = "BH",
-  transform.counts = FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main = colnames(x)[coef],
   xlab = "logFC",
   ylab = "negLog10PValue",
@@ -62,7 +62,7 @@ unspecified, samples will be coloured according to \code{groups}.}
 
 \item{p.adj.method}{character string specifying p-value adjustment method.}
 
-\item{transform.counts}{TRUE if counts should be log-cpm transformed using
+\item{transform.counts}{the type of transform used on the counts log-cpm by default.
 \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
 
 \item{main}{character string for the main title of summary plot.}
