@@ -136,6 +136,7 @@ buildXYData <- function(
                           expCols=colnames(groups),
                           statusColours=status.cols,
                           sampleColours= if (is.null(sample.cols)) {-1} else {sample.cols},
+                          samples=colnames(counts),
                           title=main))
   return(xData)
 }
