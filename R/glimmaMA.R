@@ -66,7 +66,7 @@ glimmaMA <- function(x, ...)
 #' unspecified, samples will be coloured according to \code{groups}.
 #'
 #' @param p.adj.method character string specifying p-value adjustment method.
-#' @param transform.counts TRUE if counts should be log-cpm transformed using
+#' @param transform.counts the type of transform used on the counts log-cpm by default.
 #' \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.
 #'
 #' @param main character string for the main title of summary plot.
@@ -92,7 +92,7 @@ glimmaMA.MArrayLM <- function(
   status.cols=c("dodgerblue", "silver", "firebrick"),
   sample.cols=NULL,
   p.adj.method = "BH",
-  transform.counts=FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main=colnames(x)[coef],
   xlab="logCPM",
   ylab="logFC",
@@ -100,6 +100,7 @@ glimmaMA.MArrayLM <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   # check if the number of rows of x and the dge object are equal
   if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
@@ -143,7 +144,7 @@ glimmaMA.DGEExact <- function(
   status.cols=c("dodgerblue", "silver", "firebrick"),
   sample.cols=NULL,
   p.adj.method = "BH",
-  transform.counts=FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main=paste(x$comparison[2],"vs",x$comparison[1]),
   xlab="logCPM",
   ylab="logFC",
@@ -151,6 +152,7 @@ glimmaMA.DGEExact <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   # check if the number of rows of x and the dge object are equal
   if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
@@ -204,7 +206,7 @@ glimmaMA.DESeqDataSet  <- function(
   display.columns = NULL,
   status.cols=c("dodgerblue", "silver", "firebrick"),
   sample.cols=NULL,
-  transform.counts=FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main="MA Plot",
   xlab="logCPM",
   ylab="logFC",
@@ -212,6 +214,7 @@ glimmaMA.DESeqDataSet  <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   res.df <- as.data.frame(DESeq2::results(x))
 
   # filter out genes that have missing data
