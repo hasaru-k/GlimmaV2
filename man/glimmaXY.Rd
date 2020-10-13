@@ -16,7 +16,7 @@ glimmaXY(
   display.columns = NULL,
   status.cols = c("dodgerblue", "silver", "firebrick"),
   sample.cols = NULL,
-  transform.counts = FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main = "XY Plot",
   html = NULL,
   width = 920,
