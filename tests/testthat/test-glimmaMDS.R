@@ -1,17 +1,18 @@
 context("glimmaMDS")
 library(GlimmaV2)
 library(edgeR)
-library(Glimma)
 library(DESeq2)
 
 setup
 ({
-    data(lymphomaRNAseq)
-    dge <- lymphomaRNAseq
-    dds <- DESeqDataSetFromMatrix(countData = dge$counts,
-                                  colData = dge$samples,
-                                  rowData = dge$genes,
-                                  design = ~genotype)
+    dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+
+    # DESeqDataset
+    dds <- DESeq2::DESeqDataSetFromMatrix(
+        countData = dge$counts,
+        colData = dge$samples,
+        rowData = dge$genes,
+        design = ~group)
 })
 
 test_that("MDS error when x has < 3 dimensions",

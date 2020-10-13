@@ -1,13 +1,10 @@
 context("glimmaXY")
 library(GlimmaV2)
 library(edgeR)
-library(limma)
-library(Glimma)
 
 setup
 ({
-    data(lymphomaRNAseq)
-    dge <- lymphomaRNAseq
+    dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
     dge <- calcNormFactors(dge)
     des <- model.matrix(~dge$samples$group)
     v <- voomWithQualityWeights(dge, design = des, plot = FALSE)
