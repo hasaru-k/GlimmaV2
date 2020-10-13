@@ -6,8 +6,7 @@ library(DESeq2)
 
 setup
 ({
-    data(lymphomaRNAseq)
-    dge <- lymphomaRNAseq
+    dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
     dge <- calcNormFactors(dge)
     des <- model.matrix(~dge$samples$group)
 
@@ -21,13 +20,12 @@ setup
     dgeexact <- exactTest(fit)
 
     # DESeqDataset
-    dds <- DESeqDataSetFromMatrix(
+    dds <- DESeq2::DESeqDataSetFromMatrix(
         countData = dge$counts,
         colData = dge$samples,
         rowData = dge$genes,
-        design = ~genotype)
+        design = ~group)
     dds <- DESeq(dds)
-
 })
 
 test_that("Volcano plot returns widget",
