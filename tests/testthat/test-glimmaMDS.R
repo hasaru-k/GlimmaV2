@@ -1,7 +1,6 @@
 context("glimmaMDS")
 library(GlimmaV2)
 library(edgeR)
-library(Glimma)
 library(DESeq2)
 
 setup

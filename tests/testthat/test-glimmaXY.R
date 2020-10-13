@@ -1,8 +1,6 @@
 context("glimmaXY")
 library(GlimmaV2)
 library(edgeR)
-library(limma)
-library(Glimma)
 
 setup
 ({
