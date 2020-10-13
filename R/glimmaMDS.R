@@ -76,6 +76,7 @@ glimmaMDS <- function(x, ...)
 #' }
 #'
 #' @importFrom stats cmdscale as.dist
+#' @importFrom methods is
 #' @export
 glimmaMDS.default <- function(
   x,
@@ -162,7 +163,7 @@ glimmaMDS.default <- function(
   # Method for MDS objects
   points <- a1$points
 
-  if (!is.data.frame(groups) && !is(groups, "DataFrame")) groups <- data.frame(groups)
+  if (!is.data.frame(groups) && !methods::is(groups, "DataFrame")) groups <- data.frame(groups)
 
   # add labels to groups
   groups <- data.frame(labels, groups)
