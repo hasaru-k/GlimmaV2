@@ -59,9 +59,6 @@ Suggests:
     BiocStyle,
     IRanges,
     GenomicRanges,
-    testthat,
-    knitr,
-    rmarkdown,
     pryr
 License: GPL-3
 URL: https://github.com/hasaru-k/GlimmaV2
