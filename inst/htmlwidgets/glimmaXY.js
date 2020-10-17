@@ -79,6 +79,12 @@ HTMLWidgets.widget({
         if (expressionView) {
           addAxisMessage(data);
         }
+
+        // getting that button element here does not work!
+        //var buttonCont = document.getElementsByClassName("buttonContainer")[1];
+
+      
+        
       },
 
       resize: function(width, height) 
@@ -104,18 +110,26 @@ function setupXYInteraction(data)
         columns: data.cols.map(el => ({"data": el, "title": el})),
         rowId: "gene",
         dom: '<"geneDisplay">Bfrtip',
-        buttons: [  
+        buttons: {
+          dom: {
+            buttonContainer: {
+              tag: 'div',
+              className: 'buttonContainer'
+            }
+          },
+          buttons: [
                     {
-                      text: 'Clear',
+                      text: 'Clear (0)',
                       action: () => clearTableListener(datatable, state, data),
-                      attr: {class: 'save-button'}
+                      attr: {class: 'save-button clearSubset'}
                     },
                     { 
-                      text: 'Save (All)',
-                      action: () => saveTableClickListener(state, data),
+                      text: 'Save Data',
+                      action: () => showDataDropdown(),
                       attr: {class: 'save-button saveSubset'}
                     }
-                  ],
+                  ]
+                },
         scrollY: (data.height*0.4).toString() + "px",
         scrollX: false,
         orderClasses: false,
@@ -124,9 +138,17 @@ function setupXYInteraction(data)
 
     datatable.on('click', 'tr', function() { tableClickListener(datatable, state, data, $(this)) } );
     data.xyView.addSignalListener('click', function(name, value) { XYSignalListener(datatable, state, value[0], data) } );
+
+    $(document.getElementsByClassName("saveSubset")[0]).html(`Save Data`);
+    addSaveDataElement(state, data, `Save All`, `Save (0)`);
   });
 }
 
+
+function showDataDropdown() {
+  let dataDropdown = document.getElementsByClassName("dataDropdown")[0];
+  dropdownOnClick(dataDropdown);
+}
 
 function clearTableListener(datatable, state, data)
 {
@@ -284,9 +306,12 @@ function selectedUpdateHandler(state, controlContainer)
   $(geneDisplay).html(htmlString);
 
   /* update save btn */
-  var saveSubsetButton = controlContainer.getElementsByClassName("saveSubset")[0];
-  let saveString = state.selected.length > 0 ? `Save (${state.selected.length})` : "Save (All)";
-  $(saveSubsetButton).html(saveString);
+  var saveSubsetButton = controlContainer.getElementsByClassName("saveSelectButton")[0];
+  $(saveSubsetButton).html(`Save (${state.selected.length})`);
+
+  /* update clear btn */
+  var clearSubsetButton = controlContainer.getElementsByClassName("clearSubset")[0];
+  $(clearSubsetButton).html(`Clear (${state.selected.length})`);
 }
 
 function remove(arr, index)

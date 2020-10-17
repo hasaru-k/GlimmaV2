@@ -81,6 +81,10 @@
 	margin-right: 7px;
 }
 
+/* Datatables button container styling */
+.buttonContainer {
+	display: inline-block;
+}
 
 button.save-button {
     box-sizing: border-box;

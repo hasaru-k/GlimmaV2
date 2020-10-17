@@ -250,7 +250,8 @@ glimmaMDS.DGEList <- function(
   width = 900,
   height = 500)
 {
-  if (length(groups) != ncol(x)) stop ("Length of groups argument must equal the number of columns in the DGE object")
+  if (!is.null(groups) && NROW(groups) != ncol(x)) stop ("Length of groups argument must equal the number of columns in the DGE object")
+  if (is.null(groups)) groups = rep.int(1, ncol(x))
   if (is.null(labels))
   {
     labels <- as.character(seq_len(ncol(x)))
@@ -271,7 +272,7 @@ glimmaMDS.DGEList <- function(
 
 #' Glimma MDS Plot
 #'
-#' Draws a two-panel interactive MDS plot using a DESeqDataset x. 
+#' Draws a two-panel interactive MDS plot using a DESeqDataset x.
 #' Transforms counts using \code{edgeR::cpm(DESeq2::counts(x), log = TRUE, prior.count = prior.count)}.
 #'
 #' @seealso \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}

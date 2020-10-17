@@ -32,13 +32,7 @@ function addSavePlotButton(controlContainer, xy_obj, exp_obj, text="Save Plot")
 
   // set up dropdown action
   dropdownButton.onclick = function() {
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      for (const dropdown_i of dropdowns) {
-        if (dropdown_i.classList.contains("show")) {
-          dropdown_i.classList.remove("show");
-        }
-      }
-    dropdownContent.classList.toggle("show");
+    dropdownOnClick(dropdownContent);
   };
 
   controlContainer.appendChild(dropdownDiv);
@@ -64,10 +58,20 @@ function addSavePlotButton(controlContainer, xy_obj, exp_obj, text="Save Plot")
   }
 }
 
+function dropdownOnClick(dropdownContent) {
+  var dropdowns = document.getElementsByClassName("dropdown-content");
+  for (const dropdown_i of dropdowns){
+    if (dropdown_i.classList.contains("show")) {
+      dropdown_i.classList.remove("show");
+    }
+  }
+  dropdownContent.classList.toggle("show");
+}
+
 function addSaveButtonElement(view_obj, text, type) {
   // create a save button element for the save dropdown
   var saveButton = document.createElement("a");
-  saveButton.setAttribute("href", "#")
+  saveButton.setAttribute("href", "#");
   saveButton.innerText = text;
   saveButton.onclick = function() {
     view_obj.toImageURL(type, scaleFactor=3).then(function (url) {
@@ -81,9 +85,38 @@ function addSaveButtonElement(view_obj, text, type) {
   return saveButton;
 }
 
-function saveTableClickListener(state, data)
+function addSaveDataElement(state, data, saveAllText, saveSelectText) {
+  buttonContainer = document.getElementsByClassName("saveSubset")[0].parentElement;
+
+  var dropdownDiv = document.createElement("div");
+  dropdownDiv.setAttribute("class", "dropdown");
+
+  var dropdownContent = document.createElement("div");
+  dropdownContent.setAttribute("class", "dropdown-content dataDropdown");
+
+  var saveSelectBtn = document.createElement("a");
+  saveSelectBtn.setAttribute("href", "#");
+  saveSelectBtn.setAttribute("class", "saveSelectButton");
+  saveSelectBtn.innerText = saveSelectText;
+  saveSelectBtn.onclick = function() {
+    saveTableClickListener(state, data, false);
+  };
+
+  var saveAllBtn = document.createElement("a");
+  saveAllBtn.setAttribute("href", "#");
+  saveAllBtn.innerText = saveAllText;
+  saveAllBtn.onclick = function() {
+    saveTableClickListener(state, data, true);
+  };
+
+  dropdownContent.appendChild(saveSelectBtn);
+  dropdownContent.appendChild(saveAllBtn);
+  buttonContainer.appendChild(dropdownContent);
+} 
+
+function saveTableClickListener(state, data, save_all)
 {
-  if (state.selected.length == 0)
+  if (save_all)
   {
     if (confirm(`This will save the table and counts data for all ${data.xyTable.length} genes.`)) 
     {
