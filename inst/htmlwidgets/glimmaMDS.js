@@ -64,8 +64,8 @@ HTMLWidgets.widget({
         addColourMessage(x.data, mdsView, controlContainer);
 
         addBlockElement(controlContainer);
-        addSavePlotButton(controlContainer, mdsView, text="Save (MDS)");
-        addSavePlotButton(controlContainer, eigenView, text="Save (VAR)");
+        addSavePlotButton(controlContainer, mdsView, eigenView, text="Save Plot",
+                          summaryText="MDS", expressionText="VAR");
 
         reformatElementsMDS(controlContainer);
       },

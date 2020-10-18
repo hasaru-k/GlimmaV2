@@ -250,12 +250,14 @@ glimmaMDS.DGEList <- function(
   width = 900,
   height = 500)
 {
+
   if (is.vector(groups) && (length(groups) != ncol(x))) {
     stop("length of groups argument must equal the number of columns in the DGE object")
   }
   if (is.data.frame(groups) && nrow(groups) != ncol(x)) {
     stop("number of rows in groups argument must equal the number of columns in the DGE object")
   }
+
   if (is.null(labels))
   {
     labels <- as.character(seq_len(ncol(x)))
