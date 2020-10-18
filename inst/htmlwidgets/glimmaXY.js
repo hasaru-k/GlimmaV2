@@ -50,7 +50,7 @@ HTMLWidgets.widget({
           plotContainer.appendChild(expressionContainer);
           xyContainer.setAttribute("class", "xyContainer");
           countsMatrix = HTMLWidgets.dataframeToD3(x.data.counts);
-          var expressionSpec = createExpressionSpec(width, height, x.data.expCols, x.data.sampleColours);
+          var expressionSpec = createExpressionSpec(width, height, x.data.expCols, x.data.sampleColours, x.data.samples);
           var expressionView = new vega.View(vega.parse(expressionSpec), {
             renderer: 'svg',
             container: expressionContainer,

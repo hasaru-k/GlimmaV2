@@ -40,7 +40,7 @@ glimmaVolcano.MArrayLM <- function(
   status.cols=c("dodgerblue", "silver", "firebrick"),
   sample.cols=NULL,
   p.adj.method = "BH",
-  transform.counts=FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main=colnames(x)[coef],
   xlab="logFC",
   ylab="negLog10PValue",
@@ -48,6 +48,7 @@ glimmaVolcano.MArrayLM <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   table <- data.frame(signif(unname(x$coefficients[, coef]), digits=4),
                       signif( -log10(x$p.value[, coef]), digits=4))
   colnames(table) <- c(xlab, ylab)
@@ -82,7 +83,7 @@ glimmaVolcano.DGEExact <- function(
   status.cols=c("dodgerblue", "silver", "firebrick"),
   sample.cols=NULL,
   p.adj.method = "BH",
-  transform.counts=FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main=paste(x$comparison[2],"vs",x$comparison[1]),
   xlab="logFC",
   ylab="negLog10PValue",
@@ -90,6 +91,7 @@ glimmaVolcano.DGEExact <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   # create initial table with -log10(pvalue) and logFC features
   table <- data.frame(signif(x$table$logFC, digits=4),
                       signif(-log10(x$table$PValue), digits=4))
@@ -136,7 +138,7 @@ glimmaVolcano.DESeqDataSet  <- function(
   display.columns = NULL,
   status.cols=c("dodgerblue", "silver", "firebrick"),
   sample.cols=NULL,
-  transform.counts=FALSE,
+  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main="Volcano Plot",
   xlab="logFC",
   ylab="negLog10PValue",
@@ -144,6 +146,7 @@ glimmaVolcano.DESeqDataSet  <- function(
   width = 920,
   height = 920)
 {
+  transform.counts <- match.arg(transform.counts)
   res.df <- as.data.frame(DESeq2::results(x))
 
   # filter out genes that have missing data
