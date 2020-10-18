@@ -1,4 +1,5 @@
-function addSavePlotButton(controlContainer, xy_obj, exp_obj, text="Save Plot") 
+function addSavePlotButton(controlContainer, xy_obj, exp_obj=null, 
+  text="Save Plot", summaryText="Summary plot", expressionText="Expression plot") 
 {
   // set up button elements
   var dropdownDiv = document.createElement("div");
@@ -11,8 +12,8 @@ function addSavePlotButton(controlContainer, xy_obj, exp_obj, text="Save Plot")
   var dropdownContent = document.createElement("div");
   dropdownContent.setAttribute("class", "dropdown-content");
   
-  var pngSummaryBtn = addSaveButtonElement(xy_obj, text="Summary plot (PNG)", type='png');
-  var svgSummaryBtn = addSaveButtonElement(xy_obj, text="Summary plot (SVG)", type='png');
+  var pngSummaryBtn = addSaveButtonElement(xy_obj, text=summaryText+" (PNG)", type='png');
+  var svgSummaryBtn = addSaveButtonElement(xy_obj, text=summaryText+" (SVG)", type='png');
   
   // add elements to container
   dropdownDiv.appendChild(dropdownButton);
@@ -23,8 +24,8 @@ function addSavePlotButton(controlContainer, xy_obj, exp_obj, text="Save Plot")
 
   // add the expression buttons if expression plot is active
   if (exp_obj) {
-    var pngExpressionBtn = addSaveButtonElement(exp_obj, text="Expression plot (PNG)", type='png');
-    var svgExpressionBtn = addSaveButtonElement(exp_obj, text="Expression plot (SVG)", type='svg');
+    var pngExpressionBtn = addSaveButtonElement(exp_obj, text=expressionText+" (PNG)", type='png');
+    var svgExpressionBtn = addSaveButtonElement(exp_obj, text=expressionText+" (SVG)", type='svg');
   
     dropdownContent.appendChild(pngExpressionBtn);
     dropdownContent.appendChild(svgExpressionBtn);

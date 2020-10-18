@@ -79,12 +79,6 @@ HTMLWidgets.widget({
         if (expressionView) {
           addAxisMessage(data);
         }
-
-        // getting that button element here does not work!
-        //var buttonCont = document.getElementsByClassName("buttonContainer")[1];
-
-      
-        
       },
 
       resize: function(width, height) 
