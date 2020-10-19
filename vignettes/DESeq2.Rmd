@@ -19,7 +19,7 @@ library(edgeR)
 library(DESeq2)
 ```
 
-# Introduction
+## Introduction
 
 In this vignette we present the basic features of GlimmaV2. The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow with only a single contrast has been performed for simplicity. Here we use DESeq2 to fit the model.
 
@@ -40,23 +40,48 @@ dds <- DESeqDataSetFromMatrix(
 )
 ```
 
-# MDS Plot
+## MDS Plot
 
 The multidimensional scaling (MDS) plot is frequently used to explore differences in samples. When data has been MDS transformed, the first two dimensions explain the greatest variance between samples, and the amount of variance decreases monotonically with increasing dimension.
 
-The GlimmaV2 MDS allows different dimensions to be plotted against each other, and for the colours of the points to be changed based on predefined factors. Change the "colour_by" option in the widget created to see that the samples separate by experimental group, it's also possible to adjust the sizing scale of the points, shape and colour scheme.
+The Glimma MDS contains two main components:
 
-The plots can be saved using the "Save" buttons to either PNG or SVG formats.
+1. a plot showing two MDS dimensions, and
+2. a plot of the eigenvalues of each dimension
+
+
+The Glimma MDS allows different dimensions to be plotted against each other, with the proportion of variability explained by each dimension highlighted in the barplot alongside it. The interactive MDS plot can be created simply with a single argument for a DESeqDataSet object. The points in the MDS plot can have their size, colour and shape changed based on the information that is stored in the colData of the DESeqDataSet.
 
 ```{r}
 glimmaMDS(dds)
 ```
 
-# MA Plot
+### Interactions with the plot
+In the plot above, try:
 
-The MA plot is a visulisation that plots the log-fold-change between experimental groups (M) against the mean across all the samples (A) for each gene.
++ Scaling the points by library size (lib_size).
++ Changing the colour of points by group using the colour_by field.
++ Changing the colour scheme using to colour points using the colourscheme field.
++ Altering the shape of points by sample sequencing lane using the shape_by field.
++ Changing the dimensions plotted on the x-axis (x_axis) to dim2 and y-axis (y_axis) to dim3.
++ Saving the plots in either PNG or SVG formats using the "Save Plot" button.
 
-To create this plot we first need to run differential expression (DE) analysis for our data using the `DESeq` function.
+### Modifications to the pot
+Some helpful customisations to the plot include:
+#> Anything?
+
+## MA Plot
+
+The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the mean expression across all the samples (A) for each gene.
+
+The Glimma MA plot contains two main components:
+
+1. a plot of summary statistics across all genes that have been tested, and
+2. a plot of gene expression from individual samples for a given gene
+
+The second plot shows gene expression from the last selected sample, which can be selected from the table or directly from the summary plot.
+
+To create the MA plot we first need to run differential expression (DE) analysis for our data using the `DESeq` function.
 
 ```{r}
 dds <- DESeq(dds, quiet=TRUE)
@@ -68,15 +93,25 @@ The MA plot can then be created using the `dds` object that now contains fitted 
 glimmaMA(dds)
 ```
 
-Clicking points or rows will plot the gene expression of the gene in each sample. Genes can be searched using the search box, and multiple genes can be selected on the table. Gene information and expression can be saved for the selected genes or all genes when none are selected.
 
-A maximum value for the y-axis of the expression plot can be set to compare gene expression between genes on a comparable scale, however this will not affect genes that have expression greater than the set maximum.
+### Interactions with the plot
+In the plot above, try:
 
-Like in the MDS plot, the plots can be saved to either PNG or SVG formats.
++ Clicking points in the summary plot or rows in the table to plot the gene expression of the selection.
+    + Clicking genes in the table after selecting individual points will remove the previous selection.
++ Searching for individual genes using the search box. The search results are displayed in the table.
+    + If genes are currently selected, the search box will not function.
++ Setting a maximum value for the y-axis of the expression plot using the max_y_axis field. 
+    + This allows for comparison of gene expression between genes on a comparable scale.
++ Saving the currently selected genes using the Save Data dropdown. 
+    + From here, you can also choose to save the entire table.
++ Saving the summary plot or expression plot in either PNG or SVG formats, using the "Save Data" dropdown.
 
-# Saving widgets
+### Modifications to the plot
 
-The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can signficantly slow down the page. It is instead recommended to save the plots using `htmlwidgets::saveWidget` and linking to it via markdown hyperlinks.
+## Saving widgets
+
+The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can significantly slow down the page. It is instead recommended to save the plots using `htmlwidgets::saveWidget` and linking to it via markdown hyperlinks.
 
 ```{r, eval = FALSE}
 # creates ma-plot.html in working directory
@@ -84,7 +119,7 @@ The plots created are automatically embedded into Rmarkdown reports, but having 
 htmlwidgets::saveWidget(glimmaMA(dds), "ma-plot.html")
 ```
 
-# Session Info
+## Session Info
 
 ```{r}
 sessionInfo()
