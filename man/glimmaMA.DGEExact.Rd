@@ -95,6 +95,21 @@ The summary plot on the left represents gene-wise log-fold-change (logFC) on the
     (summary statistics and expression values), additional pop-up information when hovering on points in plots,
     and rescaling of the y-axis in the expression plot.
 }
+\examples{
+dge <- readRDS(
+  system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+design <- readRDS(
+  system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+contr.matrix <- readRDS(
+  system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+
+dge <- edgeR::estimateDisp(dge, design)
+gfit <- edgeR::glmFit(dge, design)
+glrt <- edgeR::glmLRT(gfit, design, contrast = contr.matrix)
+
+glimmaMA(glrt, dge = dge)
+
+}
 \seealso{
 \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }

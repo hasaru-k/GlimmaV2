@@ -14,6 +14,21 @@
 #' raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.
 #' @eval XY_details()
 #'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' design <- readRDS(
+#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#' contr.matrix <- readRDS(
+#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'
+#' v <- limma::voom(dge, design)
+#' vfit <- limma::lmFit(v, design)
+#' vfit <- limma::contrasts.fit(vfit, contrasts = contr.matrix)
+#' efit <- limma::eBayes(vfit)
+#'
+#' glimmaXY(efit$Amean, efit$coefficients)
+#'
 #' @export
 glimmaXY <- function(
   x,

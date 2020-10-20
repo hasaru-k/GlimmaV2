@@ -12,6 +12,22 @@
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
 #' @eval volcano_details()
+#'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' design <- readRDS(
+#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#' contr.matrix <- readRDS(
+#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'
+#' v <- limma::voom(dge, design)
+#' vfit <- limma::lmFit(v, design)
+#' vfit <- limma::contrasts.fit(vfit, contrasts = contr.matrix)
+#' efit <- limma::eBayes(vfit)
+#'
+#' glimmaVolcano(efit, dge = dge)
+#'
 #' @export
 glimmaVolcano <- function(x, ...)
 {
@@ -69,6 +85,21 @@ glimmaVolcano.MArrayLM <- function(
 #' @inheritParams glimmaMA.DGEExact
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval volcano_details()
+#'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' design <- readRDS(
+#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#' contr.matrix <- readRDS(
+#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'
+#' dge <- edgeR::estimateDisp(dge, design)
+#' gfit <- edgeR::glmFit(dge, design)
+#' glrt <- edgeR::glmLRT(gfit, design, contrast = contr.matrix)
+#'
+#' glimmaVolcano(glrt, dge = dge)
+#'
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -126,6 +157,21 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 #' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
 #' @eval volcano_details()
+#'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'
+#' dds <- DESeq2::DESeqDataSetFromMatrix(
+#'   countData = dge$counts,
+#'   colData = dge$samples,
+#'   rowData = dge$genes,
+#'   design = ~group
+#' )
+#'
+#' dds <- DESeq2::DESeq(dds, quiet=TRUE)
+#' glimmaVolcano(dds)
+#'
 #' @importFrom DESeq2 results counts
 #' @importFrom SummarizedExperiment colData
 #' @export

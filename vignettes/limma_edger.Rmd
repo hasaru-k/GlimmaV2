@@ -100,7 +100,7 @@ glrt <- glmLRT(gfit, design, contrast = contr.matrix)
 The MA plot can then be created using the fitted object containing the statistics about the genes, and the `dge` object containing information about the samples and raw counts.
 
 ```{r}
-glimmaMA(efit, dge = dge) # swap efit for gfit to use edgeR results
+glimmaMA(efit, dge = dge) # swap efit for glrt to use edgeR results
 ```
 
 ### Interactions with the plot

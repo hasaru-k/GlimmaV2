@@ -45,6 +45,8 @@ biocViews:
     RNASeq,
     Sequencing,
     Visualization
+Depends:
+  R (>= 4.0.0)
 Imports:
     htmlwidgets,
     edgeR,

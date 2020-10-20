@@ -13,13 +13,12 @@
 #' @eval MDS_details()
 #'
 #' @examples
-#' \dontrun{
-#' # using DGEList object
+#'
 #' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
 #' glimmaMDS(dge)
 #'
 #' # using DESeqDataSet
-#' dds <- DESeqDataSetFromMatrix(
+#' dds <- DESeq2::DESeqDataSetFromMatrix(
 #'  countData = dge$counts,
 #'  colData = dge$samples,
 #'  rowData = dge$genes,
@@ -30,7 +29,7 @@
 #' # using matrix object
 #' expr <- edgeR::cpm(dge, log = TRUE)
 #' glimmaMDS(expr)
-#' }
+#'
 #'
 #' @export
 glimmaMDS <- function(x, ...)
@@ -69,11 +68,9 @@ glimmaMDS <- function(x, ...)
 #' @eval MDS_details()
 #'
 #' @examples
-#' \dontrun{
 #' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
 #' expr <- edgeR::cpm(dge, log = TRUE)
 #' glimmaMDS(expr)
-#' }
 #'
 #' @importFrom stats cmdscale as.dist
 #' @export
@@ -231,10 +228,8 @@ glimmaMDS.default <- function(
 #' @eval MDS_details()
 #'
 #' @examples
-#' \dontrun{
 #' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
 #' glimmaMDS(dge)
-#' }
 #'
 #' @importFrom edgeR cpm
 #' @export
@@ -289,16 +284,14 @@ glimmaMDS.DGEList <- function(
 #' @eval MDS_details()
 #'
 #' @examples
-#' \dontrun{
 #' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
-#' dds <- DESeqDataSetFromMatrix(
+#' dds <- DESeq2::DESeqDataSetFromMatrix(
 #'  countData = dge$counts,
 #'  colData = dge$samples,
 #'  rowData = dge$genes,
 #'  design = ~group
 #' )
 #' glimmaMDS(dds)
-#' }
 #'
 #' @importFrom SummarizedExperiment colData
 #' @importFrom edgeR cpm

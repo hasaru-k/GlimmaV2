@@ -82,3 +82,19 @@ The summary plot on the left displays the x and y values specified.
     (summary statistics and expression values), additional pop-up information when hovering on points in plots,
     and rescaling of the y-axis in the expression plot.
 }
+\examples{
+dge <- readRDS(
+  system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+design <- readRDS(
+  system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+contr.matrix <- readRDS(
+  system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+
+v <- limma::voom(dge, design)
+vfit <- limma::lmFit(v, design)
+vfit <- limma::contrasts.fit(vfit, contrasts = contr.matrix)
+efit <- limma::eBayes(vfit)
+
+glimmaXY(efit$Amean, efit$coefficients)
+
+}

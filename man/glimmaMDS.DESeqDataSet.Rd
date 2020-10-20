@@ -62,16 +62,14 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
      \code{continous.colour=TRUE}.
 }
 \examples{
-\dontrun{
 dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
-dds <- DESeqDataSetFromMatrix(
+dds <- DESeq2::DESeqDataSetFromMatrix(
  countData = dge$counts,
  colData = dge$samples,
  rowData = dge$genes,
  design = ~group
 )
 glimmaMDS(dds)
-}
 
 }
 \seealso{

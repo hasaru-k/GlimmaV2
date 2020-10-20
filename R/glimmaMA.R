@@ -78,6 +78,21 @@ glimmaMA <- function(x, ...)
 #' @param height numeric value indicating width of height in pixels.
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
+#'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' design <- readRDS(
+#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#' contr.matrix <- readRDS(
+#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'
+#' v <- limma::voom(dge, design)
+#' vfit <- limma::lmFit(v, design)
+#' vfit <- limma::contrasts.fit(vfit, contrasts = contr.matrix)
+#' efit <- limma::eBayes(vfit)
+#'
+#' glimmaMA(efit, dge = dge)
 #' @importFrom limma decideTests
 #' @export
 glimmaMA.MArrayLM <- function(
@@ -130,6 +145,21 @@ glimmaMA.MArrayLM <- function(
 #'
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
+#'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' design <- readRDS(
+#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#' contr.matrix <- readRDS(
+#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'
+#' dge <- edgeR::estimateDisp(dge, design)
+#' gfit <- edgeR::glmFit(dge, design)
+#' glrt <- edgeR::glmLRT(gfit, design, contrast = contr.matrix)
+#'
+#' glimmaMA(glrt, dge = dge)
+#'
 #' @importFrom edgeR decideTestsDGE
 #' @importFrom stats p.adjust
 #' @export
@@ -193,6 +223,21 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #' @param groups vector/factor representing the experimental group for each sample; see \code{\link{extractGroups}} for default value.
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 #' @eval MA_details()
+#'
+#' @examples
+#' dge <- readRDS(
+#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'
+#' dds <- DESeq2::DESeqDataSetFromMatrix(
+#'   countData = dge$counts,
+#'   colData = dge$samples,
+#'   rowData = dge$genes,
+#'   design = ~group
+#' )
+#'
+#' dds <- DESeq2::DESeq(dds, quiet=TRUE)
+#' glimmaMA(dds)
+#'
 #' @importFrom DESeq2 results counts
 #' @importFrom stats complete.cases
 #' @importFrom SummarizedExperiment colData
