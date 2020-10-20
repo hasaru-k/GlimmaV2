@@ -81,6 +81,21 @@ The summary plot on the left represents gene-wise log-fold-change (logFC) on the
     (summary statistics and expression values), additional pop-up information when hovering on points in plots,
     and rescaling of the y-axis in the expression plot.
 }
+\examples{
+dge <- readRDS(
+  system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+
+dds <- DESeq2::DESeqDataSetFromMatrix(
+  countData = dge$counts,
+  colData = dge$samples,
+  rowData = dge$genes,
+  design = ~group
+)
+
+dds <- DESeq2::DESeq(dds, quiet=TRUE)
+glimmaMA(dds)
+
+}
 \seealso{
 \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 }

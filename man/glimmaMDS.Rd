@@ -35,13 +35,12 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
      \code{continous.colour=TRUE}.
 }
 \examples{
-\dontrun{
-# using DGEList object
+
 dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
 glimmaMDS(dge)
 
 # using DESeqDataSet
-dds <- DESeqDataSetFromMatrix(
+dds <- DESeq2::DESeqDataSetFromMatrix(
  countData = dge$counts,
  colData = dge$samples,
  rowData = dge$genes,
@@ -52,6 +51,6 @@ glimmaMDS(dds)
 # using matrix object
 expr <- edgeR::cpm(dge, log = TRUE)
 glimmaMDS(expr)
-}
+
 
 }
