@@ -80,7 +80,7 @@ glrt <- glmLRT(gfit, design, contrast = contr.matrix)
 The MA plot can then be created using the fitted object containing the statistics about the genes, and the `dge` object containing information about the samples and raw counts.
 
 ```{r}
-glimmaMA(efit, dge = dge) # swap efit for gfit to use edgeR results
+glimmaMA(efit, dge = dge) # swap efit for glrt to use edgeR results
 ```
 
 Clicking points or rows will plot the gene expression of the gene in each sample. Genes can be searched using the search box, and multiple genes can be selected on the table. Gene information and expression can be saved for the selected genes or all genes when none are selected.
