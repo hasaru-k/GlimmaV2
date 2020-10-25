@@ -399,10 +399,12 @@ glMDPlot.DGEExact <- glMDPlot.DGELRT
 #' vfit <- eBayes(vfit)
 #' results <- decideTests(vfit,p.value=0.01)
 #'
+#' \donttest{
 #' glMDPlot(vfit, counts=x$counts, anno=x$genes, groups=genotype, samples=1:7,
 #'          status=results[,2], main="MD plot: Wild-type vs Smchd1",
 #'          display.columns=c("Symbols", "GeneID", "GeneName"),
 #'          folder="Smchd1-Lymphoma")
+#' }
 #' }
 #'
 #' @method glMDPlot MArrayLM

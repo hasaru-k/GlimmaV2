@@ -1,2 +1,2 @@
 library(testthat)
-test_check("GlimmaV2")
+test_check("Glimma")

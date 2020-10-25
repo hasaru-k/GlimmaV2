@@ -1,11 +1,11 @@
 context("glimmaVolcano")
-library(GlimmaV2)
+library(Glimma)
 library(edgeR)
 library(DESeq2)
 
 setup
 ({
-    dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+    dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
     dge <- calcNormFactors(dge)
     des <- model.matrix(~dge$samples$group)
 

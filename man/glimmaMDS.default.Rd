@@ -13,7 +13,8 @@
   gene.selection = c("pairwise", "common"),
   html = NULL,
   width = 900,
-  height = 500
+  height = 500,
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ samples,  or "common" to select the same genes for all comparisons.}
 \item{width}{numeric value indicating width of widget in pixels.}
 
 \item{height}{numeric value indicating width of widget in pixels.}
+
+\item{...}{additional unused arguments.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
@@ -57,7 +60,7 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
      \code{continous.colour=TRUE}.
 }
 \examples{
-dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 expr <- edgeR::cpm(dge, log = TRUE)
 glimmaMDS(expr)
 

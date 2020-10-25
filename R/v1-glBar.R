@@ -17,7 +17,7 @@ glBar <- function(x, ...) {
     UseMethod("glBar")
 }
 
-#' Glimma MD Plot
+#' Glimma Bar Plot
 #'
 #' Default method for interactive bar plot.
 #'

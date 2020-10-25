@@ -84,11 +84,11 @@ The summary plot on the left displays the x and y values specified.
 }
 \examples{
 dge <- readRDS(
-  system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+  system.file("RNAseq123/dge.rds", package = "Glimma"))
 design <- readRDS(
-  system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+  system.file("RNAseq123/design.rds", package = "Glimma"))
 contr.matrix <- readRDS(
-  system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+  system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 
 v <- limma::voom(dge, design)
 vfit <- limma::lmFit(v, design)

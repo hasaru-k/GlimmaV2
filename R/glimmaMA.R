@@ -76,16 +76,17 @@ glimmaMA <- function(x, ...)
 #' should be included in the file name e.g. "file.html".
 #' @param width numeric value indicating width of widget in pixels.
 #' @param height numeric value indicating width of height in pixels.
+#' @param ... addition unused arguments.
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' design <- readRDS(
-#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/design.rds", package = "Glimma"))
 #' contr.matrix <- readRDS(
-#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 #'
 #' v <- limma::voom(dge, design)
 #' vfit <- limma::lmFit(v, design)
@@ -113,7 +114,8 @@ glimmaMA.MArrayLM <- function(
   ylab="logFC",
   html=NULL,
   width = 920,
-  height = 920)
+  height = 920,
+  ...)
 {
   transform.counts <- match.arg(transform.counts)
   # check if the number of rows of x and the dge object are equal
@@ -148,11 +150,11 @@ glimmaMA.MArrayLM <- function(
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' design <- readRDS(
-#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/design.rds", package = "Glimma"))
 #' contr.matrix <- readRDS(
-#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 #'
 #' dge <- edgeR::estimateDisp(dge, design)
 #' gfit <- edgeR::glmFit(dge, design)
@@ -180,7 +182,8 @@ glimmaMA.DGEExact <- function(
   ylab="logFC",
   html=NULL,
   width = 920,
-  height = 920)
+  height = 920,
+  ...)
 {
   transform.counts <- match.arg(transform.counts)
   # check if the number of rows of x and the dge object are equal
@@ -226,7 +229,7 @@ glimmaMA.DGELRT <- glimmaMA.DGEExact
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #'
 #' dds <- DESeq2::DESeqDataSetFromMatrix(
 #'   countData = dge$counts,
@@ -257,7 +260,8 @@ glimmaMA.DESeqDataSet  <- function(
   ylab="logFC",
   html=NULL,
   width = 920,
-  height = 920)
+  height = 920,
+  ...)
 {
   transform.counts <- match.arg(transform.counts)
   res.df <- as.data.frame(DESeq2::results(x))

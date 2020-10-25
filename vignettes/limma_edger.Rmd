@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 
 ## pre-load to avoid load messages in report
-library(GlimmaV2)
+library(Glimma)
 library(limma)
 library(edgeR)
 ```
@@ -26,11 +26,11 @@ In this vignette we present the basic features of GlimmaV2. The data presented h
 To begin, the DGEList object from the workflow has been included with the package as internal data.
 
 ```{r}
-library(GlimmaV2)
+library(Glimma)
 library(limma)
 library(edgeR)
 
-dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 ```
 
 ## MDS Plot
@@ -73,9 +73,9 @@ To create this plot we first need to run differential expression (DE) analysis f
 
 ```{r}
 design <- readRDS(
-  system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+  system.file("RNAseq123/design.rds", package = "Glimma"))
 contr.matrix <- readRDS(
-  system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+  system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 ```
 
 ### Using limma
