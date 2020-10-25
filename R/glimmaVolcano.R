@@ -15,11 +15,11 @@
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' design <- readRDS(
-#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/design.rds", package = "Glimma"))
 #' contr.matrix <- readRDS(
-#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 #'
 #' v <- limma::voom(dge, design)
 #' vfit <- limma::lmFit(v, design)
@@ -62,7 +62,8 @@ glimmaVolcano.MArrayLM <- function(
   ylab="negLog10PValue",
   html=NULL,
   width = 920,
-  height = 920)
+  height = 920,
+  ...)
 {
   transform.counts <- match.arg(transform.counts)
   table <- data.frame(signif(unname(x$coefficients[, coef]), digits=4),
@@ -88,11 +89,11 @@ glimmaVolcano.MArrayLM <- function(
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' design <- readRDS(
-#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/design.rds", package = "Glimma"))
 #' contr.matrix <- readRDS(
-#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 #'
 #' dge <- edgeR::estimateDisp(dge, design)
 #' gfit <- edgeR::glmFit(dge, design)
@@ -120,7 +121,8 @@ glimmaVolcano.DGEExact <- function(
   ylab="negLog10PValue",
   html=NULL,
   width = 920,
-  height = 920)
+  height = 920,
+  ...)
 {
   transform.counts <- match.arg(transform.counts)
   # create initial table with -log10(pvalue) and logFC features
@@ -160,7 +162,7 @@ glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #'
 #' dds <- DESeq2::DESeqDataSetFromMatrix(
 #'   countData = dge$counts,
@@ -190,7 +192,8 @@ glimmaVolcano.DESeqDataSet  <- function(
   ylab="negLog10PValue",
   html=NULL,
   width = 920,
-  height = 920)
+  height = 920,
+  ...)
 {
   transform.counts <- match.arg(transform.counts)
   res.df <- as.data.frame(DESeq2::results(x))

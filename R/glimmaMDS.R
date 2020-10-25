@@ -14,7 +14,7 @@
 #'
 #' @examples
 #'
-#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' glimmaMDS(dge)
 #'
 #' # using DESeqDataSet
@@ -64,11 +64,12 @@ glimmaMDS <- function(x, ...)
 #' @param width numeric value indicating width of widget in pixels.
 #'
 #' @param height numeric value indicating width of widget in pixels.
+#' @param ... additional unused arguments.
 #'
 #' @eval MDS_details()
 #'
 #' @examples
-#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' expr <- edgeR::cpm(dge, log = TRUE)
 #' glimmaMDS(expr)
 #'
@@ -83,7 +84,8 @@ glimmaMDS.default <- function(
   gene.selection = c("pairwise", "common"),
   html=NULL,
   width = 900,
-  height = 500)
+  height = 500,
+  ...)
 {
 
   getCols <- function(x, inds) {
@@ -197,7 +199,7 @@ glimmaMDS.default <- function(
     xData,
     width = width,
     height = height,
-    package = 'GlimmaV2',
+    package = 'Glimma',
     elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
@@ -228,7 +230,7 @@ glimmaMDS.default <- function(
 #' @eval MDS_details()
 #'
 #' @examples
-#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' glimmaMDS(dge)
 #'
 #' @importFrom edgeR cpm
@@ -243,7 +245,8 @@ glimmaMDS.DGEList <- function(
   prior.count = 2,
   html=NULL,
   width = 900,
-  height = 500)
+  height = 500,
+  ...)
 {
 
   if (is.vector(groups) && (length(groups) != ncol(x))) {
@@ -284,7 +287,7 @@ glimmaMDS.DGEList <- function(
 #' @eval MDS_details()
 #'
 #' @examples
-#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#' dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' dds <- DESeq2::DESeqDataSetFromMatrix(
 #'  countData = dge$counts,
 #'  colData = dge$samples,
@@ -306,7 +309,8 @@ glimmaMDS.DESeqDataSet <- function(
   prior.count = 2,
   html=NULL,
   width = 900,
-  height = 500)
+  height = 500,
+  ...)
 {
   if (is.null(labels))
   {

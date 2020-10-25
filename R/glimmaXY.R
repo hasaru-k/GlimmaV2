@@ -16,11 +16,11 @@
 #'
 #' @examples
 #' dge <- readRDS(
-#'   system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/dge.rds", package = "Glimma"))
 #' design <- readRDS(
-#'   system.file("RNAseq123/design.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/design.rds", package = "Glimma"))
 #' contr.matrix <- readRDS(
-#'   system.file("RNAseq123/contr.matrix.rds", package = "GlimmaV2"))
+#'   system.file("RNAseq123/contr.matrix.rds", package = "Glimma"))
 #'
 #' v <- limma::voom(dge, design)
 #' vfit <- limma::lmFit(v, design)
@@ -193,7 +193,7 @@ glimmaXYWidget <- function(xData, width, height, html)
     xData,
     width = width,
     height = height,
-    package = 'GlimmaV2',
+    package = 'Glimma',
     elementId = NULL,
     sizingPolicy = htmlwidgets::sizingPolicy(defaultWidth=width, defaultHeight=height, browser.fill=TRUE, viewer.suppress=TRUE)
   )
