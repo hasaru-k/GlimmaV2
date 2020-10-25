@@ -21,7 +21,8 @@
   ylab = "negLog10PValue",
   html = NULL,
   width = 920,
-  height = 920
+  height = 920,
+  ...
 )
 }
 \arguments{
@@ -72,6 +73,8 @@ should be included in the file name e.g. "file.html".}
 \item{width}{numeric value indicating width of widget in pixels.}
 
 \item{height}{numeric value indicating width of height in pixels.}
+
+\item{...}{addition unused arguments.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.

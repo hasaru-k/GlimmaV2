@@ -36,7 +36,7 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
 }
 \examples{
 
-dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 glimmaMDS(dge)
 
 # using DESeqDataSet
