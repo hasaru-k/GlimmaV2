@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 
 ## pre-load to avoid load messages in report
-library(GlimmaV2)
+library(Glimma)
 library(edgeR)
 library(DESeq2)
 ```
@@ -26,11 +26,11 @@ In this vignette we present the basic features of GlimmaV2. The data presented h
 To begin, the DGEList object from the workflow has been included with the package as internal data. We will convert this to a DESeq data object.
 
 ```{r}
-library(GlimmaV2)
+library(Glimma)
 library(edgeR)
 library(DESeq2)
 
-dge <- readRDS(system.file("RNAseq123/dge.rds", package = "GlimmaV2"))
+dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 
 dds <- DESeqDataSetFromMatrix(
   countData = dge$counts,
