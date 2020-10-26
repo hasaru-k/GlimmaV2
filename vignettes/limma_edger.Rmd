@@ -21,7 +21,9 @@ library(edgeR)
 
 ## Introduction
 
-In this vignette we present the basic features of GlimmaV2. The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow with only a single contrast has been performed for simplicity. We can use either limma or edgeR to fit the models and they both share upstream steps in common.
+In this vignette we present the basic features of Glimma. 
+Glimma is an interactive R widget for creating plots for differential expression analysis, created using the Vega and htmlwidgets frameworks. The created plots can be embedded in R Markdown, or exported as standalone HTML documents.
+The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow and only a single contrast has been performed for simplicity. We can use either limma or edgeR to fit the models and they both share upstream steps in common.
 
 To begin, the DGEList object from the workflow has been included with the package as internal data.
 
@@ -37,7 +39,7 @@ dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
 
 The multidimensional scaling (MDS) plot is frequently used to explore differences in samples. When data has been MDS transformed, the first two dimensions explain the greatest variance between samples, and the amount of variance decreases monotonically with increasing dimension.
 
-The Glimma MDS contains two main components:
+The Glimma MDS plot contains two main components:
 
 1. a plot showing two MDS dimensions, and
 2. a plot of the eigenvalues of each dimension
@@ -58,9 +60,17 @@ In the plot above, try:
 + Changing the dimensions plotted on the x-axis (x_axis) to dim2 and y-axis (y_axis) to dim3.
 + Saving the plots in either PNG or SVG formats using the "Save Plot" button.
 
+### Modifications to the plot
+Some customisations to the plot include:
+
++ `glimmaMDS(dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget - default width and height is 920px.
++ `glimmaMDS(dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required.
++ `glimmaMDS(dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by`.
+
+
 ## MA Plot
 
-The MA plot is a visulisation that plots the log-fold-change between experimental groups (M) against the mean expression across all the samples (A) for each gene.
+The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the mean expression across all the samples (A) for each gene.
 
 The Glimma MA plot contains two main components:
 
@@ -116,9 +126,23 @@ In the plot above, try:
     + From here, you can also choose to save the entire table.
 + Saving the summary plot or expression plot in either PNG or SVG formats, using the "Save Data" dropdown.
 
+### Modifications to the plot
+Some customisations to the plot include:
+
++ `glimmaMA(efit, dge=dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget
+    + Default width and height is 920px.
++ `glimmaMA(efit, dge=dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used
+    + Useful for when a large number of differential selections are required.
++ `glimmaMA(efit, dge=dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups
+    + This information is displayed in mouseover tooltips and can be used to adjust the plot using scale_by, colour_by and shape_by.
++ `glimmaMA(efit, dge=dge, status.cols=c("powderblue", "seashell", "salmon")`, which customises the colours associated with the status of each gene
+    + These need to be valid CSS colour strings.
++ `glimmaMA(efit, dge=dge, sample.cols=colours)`, which colours each sample based on the character vector of valid CSS colour strings `colours`
+    + This vector needs to be of length `ncol(dge$counts)` or `ncol(counts)` if specified.
+
 ## Saving widgets
 
-The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can signficantly slow down the page. It is instead recommended to save the plots using `htmlwidgets::saveWidget` and linking to it via markdown hyperlinks.
+The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can significantly slow down the page. It is instead recommended to save the plots and link to them via markdown hyperlinks. Plots can be saved either by providing the `html` argument a filename, or by using `htmlwidgets::saveWidget`, which also provides further customisation options.
 
 ```{r, eval = FALSE}
 # creates ma-plot.html in working directory

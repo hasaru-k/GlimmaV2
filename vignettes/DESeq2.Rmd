@@ -21,7 +21,9 @@ library(DESeq2)
 
 ## Introduction
 
-In this vignette we present the basic features of GlimmaV2. The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow with only a single contrast has been performed for simplicity. Here we use DESeq2 to fit the model.
+In this vignette we present the basic features of Glimma. 
+Glimma is an interactive R widget for creating plots for differential expression analysis, created using the Vega and htmlwidgets frameworks. The created plots can be embedded in R Markdown, or exported as standalone HTML documents.
+The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow with only a single contrast has been performed for simplicity. Here we use DESeq2 to fit the model.
 
 To begin, the DGEList object from the workflow has been included with the package as internal data. We will convert this to a DESeq data object.
 
@@ -68,7 +70,11 @@ In the plot above, try:
 
 ### Modifications to the pot
 Some helpful customisations to the plot include:
-#> Anything?
+
++ `glimmaMDS(dds, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget - default width and height is 920px.
++ `glimmaMDS(dds, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required.
++ `glimmaMDS(dds, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by`.
+
 
 ## MA Plot
 
@@ -108,6 +114,18 @@ In the plot above, try:
 + Saving the summary plot or expression plot in either PNG or SVG formats, using the "Save Data" dropdown.
 
 ### Modifications to the plot
+Some customisations to the plot include:
+
++ `glimmaMA(dds, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget
+    + Default width and height is 920px.
++ `glimmaMA(dds, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used
+    + Useful for when a large number of differential selections are required.
++ `glimmaMA(dds, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups
+    + This information is displayed in mouseover tooltips and can be used to adjust the plot using scale_by, colour_by and shape_by.
++ `glimmaMA(dds, status.cols=c("powderblue", "seashell", "salmon")`, which customises the colours associated with the status of each gene
+    + These need to be valid CSS colour strings.
++ `glimmaMA(dds, sample.cols=colours)`, which colours each sample based on the character vector of valid CSS colour strings `colours`
+    + This vector needs to be of length `ncol(dge$counts)` or `ncol(counts)` if specified.
 
 ## Saving widgets
 
