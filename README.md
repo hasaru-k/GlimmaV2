@@ -41,7 +41,7 @@ glimmaVolcano(fit, dge=rnaseq, status.colours=c("blue", "darkgrey", "red"))
 glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
 ### Gene Symbol Text (MA/Volcano/XY)
-Gene symbol text will be displayed above selected points if there is a vector named ```symbol``` within the gene annotation supplied as per the example plots shown above. The gene annotation is the ```anno``` argument. 
+Gene symbol text will be displayed above selected points if there is a ```symbol``` column (case-insensitive) within the gene annotation supplied as per the example plots shown above. The gene annotation is the ```anno``` argument. 
 
 - for the glimmaVolcano and glimmaMA functions, ```anno``` defaults to ```x$genes``` for DGELRT/DGEExact and MArrayLM objects and defaults to ```NULL``` for DESeqDataSet objects - see ```?glimmaMA```, ```?glimmaVolcano``` for further detail
 - for glimmaXY, ```anno``` is always ```NULL``` by default
