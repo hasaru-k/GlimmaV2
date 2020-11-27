@@ -3,6 +3,15 @@
 function createXYSpec(xyData, xyTable, width, height)
 {
   var tooltip = makeVegaTooltip(xyData.cols);
+
+  if (xyData.annoCols != -1) {
+    // if an annotation is given, search for a symbol column (case insensitive)
+    var symbolIndex = xyData.annoCols.map(x => x.toLowerCase()).indexOf("symbol");
+    var symbolField = symbolIndex >= 0 ? xyData.annoCols[symbolIndex] : "symbol";
+    console.log(`symbolIndex = ${symbolIndex}`);
+    console.log(`symbolField = ${symbolIndex}`);
+  }
+
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
@@ -140,7 +149,7 @@ function createXYSpec(xyData, xyTable, width, height)
             "fill": { "value": "black" },
             "fontWeight": {"value": "bold"},
             "opacity": { "value": 1 },
-            "text": {"field": "symbol"},
+            "text": {"field": xyData.annoCols == -1 ? "symbol" : symbolField },
             "fontSize": {"value": 12}
           }
         }

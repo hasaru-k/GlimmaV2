@@ -139,7 +139,6 @@ buildXYData <- function(
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno))
   {
-    colnames(anno) <- gsub("symbol", "symbol", colnames(anno), ignore.case=TRUE)
     table <- cbind(table, anno)
   }
 
@@ -165,6 +164,7 @@ buildXYData <- function(
                           groups=groups,
                           levels=level,
                           expCols=colnames(groups),
+                          annoCols= if (is.null(anno)) {-1} else {colnames(anno)},
                           statusColours=status.cols,
                           sampleColours= if (is.null(sample.cols)) {-1} else {sample.cols},
                           samples=colnames(counts),
