@@ -4,12 +4,10 @@ function createXYSpec(xyData, xyTable, width, height)
 {
   var tooltip = makeVegaTooltip(xyData.cols);
 
+  // if an annotation is given, search for a symbol column (case insensitive)
   if (xyData.annoCols != -1) {
-    // if an annotation is given, search for a symbol column (case insensitive)
     var symbolIndex = xyData.annoCols.map(x => x.toLowerCase()).indexOf("symbol");
     var symbolField = symbolIndex >= 0 ? xyData.annoCols[symbolIndex] : "symbol";
-    console.log(`symbolIndex = ${symbolIndex}`);
-    console.log(`symbolField = ${symbolIndex}`);
   }
 
   return {
@@ -28,11 +26,6 @@ function createXYSpec(xyData, xyTable, width, height)
           "name": "click", "value": null,
           "on": [ {"events": "mousedown", "update": "[datum, now()]" } ]
         }
-//        {
-//          "name": "tester",
-//          "value": 0,
-//          "bind": {"input": "select", "options": [0,1,2,3,4]}
-//        }
       ],
     "data": 
       [
@@ -120,6 +113,7 @@ function createXYSpec(xyData, xyTable, width, height)
           }
         }
       },
+      // overlaying selected points
       {
         "name": "selected_marks",
         "type": "symbol",
@@ -138,6 +132,7 @@ function createXYSpec(xyData, xyTable, width, height)
           }
         }
       },
+      // symbol text
       {
         "name": "selected_text",
         "type": "text",
