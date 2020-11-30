@@ -88,10 +88,57 @@ HTMLWidgets.widget({
   }
 });
 
+function getStateMachine(data)
+{
+  var state = 
+  { 
+    selected: [], 
+    graphMode: false,
+    setSelected: function(selected) {
+      this.selected = selected;
+      this.selectedUpdateHandler();
+    },
+    toggleGene: function(gene) {
+      let loc = containsGene(this.selected, gene);
+      var new_arr = loc >= 0 ? remove(this.selected, loc) : this.selected.concat(gene);
+      this.setSelected(new_arr);
+      this.expressionUpdateHandler(loc < 0, gene);
+    },
+    selectedUpdateHandler: function() {
+      /* update gene display */
+      let htmlString = this.selected.map(x => `<span>${x.gene}</span>`).join("");
+      $(data.controlContainer.getElementsByClassName("geneDisplay")[0])
+        .html(htmlString);
+      /* update save btn */
+      $(data.controlContainer.getElementsByClassName("saveSelectButton")[0])
+        .html(`Save (${this.selected.length})`);
+      /* update clear btn */
+      $(data.controlContainer.getElementsByClassName("clearSubset")[0])
+        .html(`Clear (${this.selected.length})`);
+    },
+    expressionUpdateHandler: function(selectionOccurred, gene) {
+      if (!data.expressionView) return;
+      if (selectionOccurred) {
+        let countsRow = data.countsMatrix[gene.index];
+        updateExpressionPlot(countsRow, data, gene.gene);
+      }
+      else if (this.selected.length > 0) {
+        let last = this.selected[this.selected.length-1];
+        let countsRow = data.countsMatrix[last.index];
+        updateExpressionPlot(countsRow, data, last.gene);
+      }
+      else {
+        clearExpressionPlot(data);
+      }
+    }
+  };
+  return state;
+}
 
 function setupXYInteraction(data)
 {
-  var state = {selected: [], graphMode: false };
+
+  var state = getStateMachine(data);
   var datatableEl = document.createElement("TABLE");
   datatableEl.setAttribute("class", "dataTable");
   data.controlContainer.appendChild(datatableEl);
@@ -147,8 +194,7 @@ function showDataDropdown() {
 function clearTableListener(datatable, state, data)
 {
   state.graphMode = false;
-  state.selected = [];
-  selectedUpdateHandler(state, data.controlContainer);
+  state.setSelected([]);
   datatable.rows('.selected').nodes().to$().removeClass('selected');
   datatable.search('').columns().search('').draw();       
   data.xyView.data("selected_points", state.selected);
@@ -166,15 +212,10 @@ function tableClickListener(datatable, state, data, row)
   } 
   row.toggleClass('selected');
   let datum = datatable.row(row).data();
-  var loc = containsGene(state.selected, datum);
-  state.selected = loc >= 0 ? remove(state.selected, loc) : state.selected.concat(datum);
-  selectedUpdateHandler(state, data.controlContainer);
+  state.toggleGene(datum);
   data.xyView.data("selected_points", state.selected);
   data.xyView.runAsync();
-  let selectEvent = row.hasClass('selected');
-  expressionUpdateHandler(data, selectEvent, state, datum);
 }
-
 
 function XYSignalListener(datatable, state, datum, data)
 {
@@ -183,57 +224,20 @@ function XYSignalListener(datatable, state, datum, data)
   {
     state.graphMode = true;
     datatable.rows('.selected').nodes().to$().removeClass('selected');
-    state.selected = [];
+    state.setSelected([]);
   }
 
-  var loc = containsGene(state.selected, datum);
-  state.selected = loc >= 0 ? remove(state.selected, loc) : state.selected.concat(datum);
-  selectedUpdateHandler(state, data.controlContainer);
-  data.xyView.data("selected_points", state.selected);
-  data.xyView.runAsync();
-
+  state.toggleGene(datum);
   // edge case: deselecting last point
   if (state.selected.length == 0)
-  {
     state.graphMode = false;
-  }
+  data.xyView.data("selected_points", state.selected);
+  data.xyView.runAsync();
 
   datatable.search('').columns().search('').draw();
   var regex_search = state.selected.map(x => '^' + x.gene + '$').join('|');
   datatable.columns(0).search(regex_search, regex=true, smart=false).draw();
-
-  let selectEvent = loc < 0;
-  expressionUpdateHandler(data, selectEvent, state, datum);
 }
-
-
-function expressionUpdateHandler(data, selectEvent, state, xyRow)
-{
-  if (!data.expressionView)
-  {
-    return;
-  }
-  if (selectEvent)
-  {
-    let countsRow = data.countsMatrix[xyRow.index];
-    updateExpressionPlot(countsRow, data, xyRow.gene);
-  }
-  /* if we deselected the point, check if anything else is selected */
-  else
-  {
-    if (state.selected.length > 0)
-    {
-      let last = state.selected[state.selected.length-1];
-      let countsRow = data.countsMatrix[last.index];
-      updateExpressionPlot(countsRow, data, last.gene);
-    }
-    else
-    {
-      clearExpressionPlot(data);
-    }
-  }
-}
-
 
 function clearExpressionPlot(data)
 {
@@ -275,7 +279,12 @@ function updateExpressionPlot(countsRow, data, gene)
   updateAxisMessage(data);
 }
 
-
+/**
+ * Searches an array gene data objects to determine if it contains a given gene.
+ * @param  {Array} arr array of gene data objects.
+ * @param  {datum} datum given gene object
+ * @return {Integer} -1 if the given gene is not found; index of the gene in arr otherwise.
+ */
 function containsGene(arr, datum)
 {
   let loc = -1;
@@ -291,29 +300,17 @@ function containsGene(arr, datum)
   return loc;
 }
 
-
-function selectedUpdateHandler(state, controlContainer)
+/**
+ * Removes an element at the given index from an array and returns the result.
+ * @param  {Array} arr array of elements.
+ * @param  {Integer} i index i of element to be removed from arr.
+ * @return {Array} modified array with element at index i removed.
+ */
+function remove(arr, i)
 {
-  /* update gene display */
-  var geneDisplay = controlContainer.getElementsByClassName("geneDisplay")[0];
-  let htmlString = state.selected.map(x => `<span>${x.gene}</span>`).join("");
-  $(geneDisplay).html(htmlString);
-
-  /* update save btn */
-  var saveSubsetButton = controlContainer.getElementsByClassName("saveSelectButton")[0];
-  $(saveSubsetButton).html(`Save (${state.selected.length})`);
-
-  /* update clear btn */
-  var clearSubsetButton = controlContainer.getElementsByClassName("clearSubset")[0];
-  $(clearSubsetButton).html(`Clear (${state.selected.length})`);
-}
-
-function remove(arr, index)
-{
-  let new_arr = arr.slice(0, index).concat(arr.slice(index+1))
+  let new_arr = arr.slice(0, i).concat(arr.slice(i+1))
   return new_arr;
 }
-
 
 function addAxisMessage(data)
 {
