@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/glimmav2.png">
+  <img src="https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/glimma_des1.png">
 </p>
 
 [![Build Status](https://travis-ci.org/hasaru-k/GlimmaV2.svg?branch=master)](https://travis-ci.org/hasaru-k/GlimmaV2)
