@@ -66,8 +66,7 @@ glimmaMA <- function(x, ...)
 #' unspecified, samples will be coloured according to \code{groups}.
 #'
 #' @param p.adj.method character string specifying p-value adjustment method.
-#' @param transform.counts the type of transform used on the counts log-cpm by default.
-#' \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.
+#' @param transform.counts the type of transform used on the counts. defaults to log-cpm using \code{edgeR::cpm(counts, log=TRUE)}.
 #'
 #' @param main character string for the main title of summary plot.
 #' @param xlab character string for the x-axis label of summary plot.
@@ -118,6 +117,7 @@ glimmaMA.MArrayLM <- function(
   ...)
 {
   transform.counts <- match.arg(transform.counts)
+  print(transform.counts)
   # check if the number of rows of x and the dge object are equal
   if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
@@ -265,7 +265,6 @@ glimmaMA.DESeqDataSet  <- function(
 {
   transform.counts <- match.arg(transform.counts)
   res.df <- as.data.frame(DESeq2::results(x))
-
   # filter out genes that have missing data
   complete_genes <- complete.cases(res.df)
   res.df <- res.df[complete_genes, ]

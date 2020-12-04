@@ -88,7 +88,6 @@ HTMLWidgets.widget({
   }
 });
 
-
 class State {
 
   /**
@@ -180,7 +179,7 @@ function setupXYInteraction(data)
         data: data.xyTable,
         columns: data.cols.map(el => ({"data": el, "title": el})),
         rowId: "gene",
-        dom: '<"geneDisplay">Bfrtip',
+        dom: '<"geneDisplay fade-in">Bfrtip',
         buttons: {
           dom: {
             buttonContainer: {

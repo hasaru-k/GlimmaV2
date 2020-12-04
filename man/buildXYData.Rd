@@ -53,8 +53,7 @@ unspecified, samples will be coloured according to \code{groups}.}
 \item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in
 expression plot.}
 
-\item{transform.counts}{the type of transform used on the counts log-cpm by default.
-\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
+\item{transform.counts}{the type of transform used on the counts. defaults to log-cpm using \code{edgeR::cpm(counts, log=TRUE)}.}
 }
 \value{
 object for XY plot internal use

@@ -58,8 +58,7 @@ unspecified, samples will be coloured according to \code{groups}.}
 
 \item{p.adj.method}{character string specifying p-value adjustment method.}
 
-\item{transform.counts}{the type of transform used on the counts log-cpm by default.
-\code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.}
+\item{transform.counts}{the type of transform used on the counts. defaults to log-cpm using \code{edgeR::cpm(counts, log=TRUE)}.}
 
 \item{main}{character string for the main title of summary plot.}
 
