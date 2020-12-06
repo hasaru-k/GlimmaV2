@@ -117,7 +117,6 @@ glimmaMA.MArrayLM <- function(
   ...)
 {
   transform.counts <- match.arg(transform.counts)
-  print(transform.counts)
   # check if the number of rows of x and the dge object are equal
   if (nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
