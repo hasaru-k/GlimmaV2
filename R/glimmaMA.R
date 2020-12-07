@@ -66,8 +66,7 @@ glimmaMA <- function(x, ...)
 #' unspecified, samples will be coloured according to \code{groups}.
 #'
 #' @param p.adj.method character string specifying p-value adjustment method.
-#' @param transform.counts the type of transform used on the counts log-cpm by default.
-#' \code{edgeR::cpm(counts, log=TRUE)}; defaults to FALSE.
+#' @param transform.counts the type of transform used on the counts. defaults to log-cpm using \code{edgeR::cpm(counts, log=TRUE)}.
 #'
 #' @param main character string for the main title of summary plot.
 #' @param xlab character string for the x-axis label of summary plot.
@@ -105,7 +104,7 @@ glimmaMA.MArrayLM <- function(
   status=limma::decideTests(x),
   anno=x$genes,
   display.columns = NULL,
-  status.cols=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
   p.adj.method = "BH",
   transform.counts = c("logcpm", "cpm", "rpkm", "none"),
@@ -173,7 +172,7 @@ glimmaMA.DGEExact <- function(
   status=edgeR::decideTestsDGE(x),
   anno=x$genes,
   display.columns = NULL,
-  status.cols=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
   p.adj.method = "BH",
   transform.counts = c("logcpm", "cpm", "rpkm", "none"),
@@ -252,7 +251,7 @@ glimmaMA.DESeqDataSet  <- function(
   status=NULL,
   anno=NULL,
   display.columns = NULL,
-  status.cols=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
   transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main="MA Plot",
@@ -265,7 +264,6 @@ glimmaMA.DESeqDataSet  <- function(
 {
   transform.counts <- match.arg(transform.counts)
   res.df <- as.data.frame(DESeq2::results(x))
-
   # filter out genes that have missing data
   complete_genes <- complete.cases(res.df)
   res.df <- res.df[complete_genes, ]

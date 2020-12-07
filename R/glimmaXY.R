@@ -40,7 +40,7 @@ glimmaXY <- function(
   status=rep(0, length(x)),
   anno=NULL,
   display.columns = NULL,
-  status.cols=c("dodgerblue", "silver", "firebrick"),
+  status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
   transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main="XY Plot",
@@ -139,7 +139,6 @@ buildXYData <- function(
   table <- cbind(table, status=as.vector(status))
   if (!is.null(anno))
   {
-    colnames(anno) <- gsub("symbol", "symbol", colnames(anno), ignore.case=TRUE)
     table <- cbind(table, anno)
   }
 
@@ -165,6 +164,7 @@ buildXYData <- function(
                           groups=groups,
                           levels=level,
                           expCols=colnames(groups),
+                          annoCols= if (is.null(anno)) {-1} else {colnames(anno)},
                           statusColours=status.cols,
                           sampleColours= if (is.null(sample.cols)) {-1} else {sample.cols},
                           samples=colnames(counts),

@@ -973,9 +973,42 @@ label
 {
   padding: 2px 6px;
   font-size: 8pt;
-  background-color: #949494;
-  border-radius: 8px;
-  margin: 0px 2px;
+  background-color: #313131;
+  border-radius: 4px;
+  margin: 0px 3px;
   color: white;
   user-select: none;
+}
+
+.fade-in span {
+animation: fadeIn ease 0.5s;
+-webkit-animation: fadeIn ease 0.5s;
+-moz-animation: fadeIn ease 0.5s;
+-o-animation: fadeIn ease 0.5s;
+-ms-animation: fadeIn ease 0.5s;
+}
+
+@keyframes fadeIn {
+0% {opacity:0.5;}
+100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+0% {opacity:0.5;}
+100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+0% {opacity:0.5;}
+100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+0% {opacity:0.5;}
+100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+0% {opacity:0.5;}
+100% {opacity:1;}
 }

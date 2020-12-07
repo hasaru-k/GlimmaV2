@@ -1,4 +1,5 @@
 context("Test MD Plot")
+library("pryr")
 
 test_that("id.column deprecation warning works", {
     temp_dir <- normalizePath(tempdir())
