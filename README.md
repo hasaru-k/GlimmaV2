@@ -10,6 +10,8 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 - full integration with R markdown
 - exporting plots to PNG/SVG/CSV formats
 
+#### Available on [Bioconductor](https://bioconductor.org/packages/release/bioc/html/Glimma.html).
+
 Feedback is welcome, please feel free to open an issue for any enhancements you would like to see in future.
 ### MA Plot
 ![MA plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/maplot.gif "MA Plot")
