@@ -19,6 +19,9 @@ library(scater)
 library(scran)
 library(Glimma)
 library(edgeR)
+
+library(AnnotationHub)
+setAnnotationHubOption("ASK", FALSE)
 ```
 
 This vignette demonstrates usage of Glimma on a single cell dataset. The data
