@@ -13,7 +13,7 @@
   status = limma::decideTests(x),
   anno = x$genes,
   display.columns = NULL,
-  status.cols = c("dodgerblue", "silver", "firebrick"),
+  status.cols = c("#1052bd", "silver", "#cc212f"),
   sample.cols = NULL,
   p.adj.method = "BH",
   transform.counts = c("logcpm", "cpm", "rpkm", "none"),

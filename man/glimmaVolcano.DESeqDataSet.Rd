@@ -11,7 +11,7 @@
   status = NULL,
   anno = NULL,
   display.columns = NULL,
-  status.cols = c("dodgerblue", "silver", "firebrick"),
+  status.cols = c("#1052bd", "silver", "#cc212f"),
   sample.cols = NULL,
   transform.counts = c("logcpm", "cpm", "rpkm", "none"),
   main = "Volcano Plot",

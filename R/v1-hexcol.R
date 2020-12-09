@@ -6,10 +6,6 @@
 #'
 #' @return hex codes for colours
 #'
-#' @examples
-#' as.hexcol(c(1, 2, 3))
-#' as.hexcol(c("red", "black", "green"))
-#'
 #' @importFrom grDevices palette col2rgb
 as.hexcol <- function(x) {
     charToHexCol <- function(x) {
