@@ -10,6 +10,8 @@
 #'   \item \code{\link{glimmaMA.DGEExact}} for edgeR analysis, produced from \code{\link{exactTest}}
 #'   \item \code{\link{glimmaMA.DGELRT}} for edgeR analysis, produced from \code{\link{glmLRT}}
 #'   \item \code{\link{glimmaMA.DESeqDataSet}} for DESeq2 analysis }
+
+#' glimmaMD is an alias for glimmaMA.
 #'
 #' @param x the DE object to plot.
 #' @param ... additional arguments affecting the plots produced. See specific methods for detailed arguments.
@@ -25,6 +27,11 @@ glimmaMA <- function(x, ...)
   UseMethod("glimmaMA")
 }
 
+#' @rdname glimmaMA
+#' @export
+glimmaMD <- function(x, ...) {
+  glimmaMA(x, ...)
+}
 
 #' Glimma MA Plot
 #'

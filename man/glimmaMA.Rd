@@ -2,9 +2,12 @@
 % Please edit documentation in R/glimmaMA.R
 \name{glimmaMA}
 \alias{glimmaMA}
+\alias{glimmaMD}
 \title{Glimma MA Plot}
 \usage{
 glimmaMA(x, ...)
+
+glimmaMD(x, ...)
 }
 \arguments{
 \item{x}{the DE object to plot.}
@@ -23,6 +26,7 @@ The function invokes the following methods which depend on the class of the firs
   \item \code{\link{glimmaMA.DGEExact}} for edgeR analysis, produced from \code{\link{exactTest}}
   \item \code{\link{glimmaMA.DGELRT}} for edgeR analysis, produced from \code{\link{glmLRT}}
   \item \code{\link{glimmaMA.DESeqDataSet}} for DESeq2 analysis }
+glimmaMD is an alias for glimmaMA.
 }
 \details{
 The summary plot on the left represents gene-wise log-fold-change (logFC) on the y-axis versus average gene

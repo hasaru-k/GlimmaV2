@@ -15,8 +15,3 @@ hex codes for colours
 \description{
 Convert numbers and R colour strings into corresponding hex codes for colours
 }
-\examples{
-as.hexcol(c(1, 2, 3))
-as.hexcol(c("red", "black", "green"))
-
-}

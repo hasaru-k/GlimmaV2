@@ -1,0 +1,167 @@
+---
+title: "Single Cells with edgeR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{singlecell}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+## pre-load to avoid load messages in report
+library(scRNAseq)
+library(scater)
+library(scran)
+library(Glimma)
+library(edgeR)
+
+library(AnnotationHub)
+setAnnotationHubOption("ASK", FALSE)
+```
+
+This vignette demonstrates usage of Glimma on a single cell dataset. The data
+here comes from brain cells from the Zeisel A et al. (2015) study on mouse brain
+single cells. We will use the MDS plot to perform unsupervised clustering of the
+cells. A pseudo-bulk single cell aggregation approach with edgeR will be used
+to test for differential expression, and two styles of MA plots will be used to
+investigate the results.
+
+This is a simplified workflow not intended to represent best practice, but to
+produce reasonable looking plots in the minimal amount of code. Please refer
+to a resource such [Orchestrating Single-Cell Analysis with Bioconductor](https://bioconductor.org/books/release/OSCA/) (OSCA)
+for appropriate workflows for analysis.
+
+We start by loading in the data using the scRNAseq package.
+
+```{r}
+library(scRNAseq)
+library(scater)
+library(scran)
+library(Glimma)
+library(edgeR)
+
+sce <- ZeiselBrainData(ensembl=TRUE)
+```
+
+Once the data is loaded in we follow the OSCA procedure for identifying highly
+variable genes for creating a multi-dimensional scaling (MDS) plot. We use the
+functions provided by scran to identify the most highly variable genes rather
+than the algorithm within glimmaMDS, as scran is tailored towards single cells.
+
+```{r}
+sce <- logNormCounts(sce)
+
+var_mod <- modelGeneVar(sce)
+hvg_genes <- getTopHVGs(var_mod, n=500)
+hvg_sce <- sce[hvg_genes, ]
+
+hvg_sce <- logNormCounts(hvg_sce)
+```
+
+Choosing to colour the MDS plot using `level1class` reveals separation between
+cell types.
+
+```{r}
+glimmaMDS(
+    exprs(hvg_sce),
+    groups = colData(hvg_sce)
+)
+```
+
+To demonstrate the MA plot we will perform a differential expression analysis
+using the pseudo-bulk approach. This involves creating pseudo-bulk samples by
+aggregating single cells as an analogue of biological replicates. Here the
+pseudo-bulk samples will be generated from combinations of `level1class` and
+`level2class`, the cells belonging to unique combinations of the two factors
+will be aggregated into samples.
+
+```{r}
+colData(sce)$pb_group <-
+    paste0(colData(sce)$level1class,
+           "_",
+           colData(sce)$level2class)
+
+sce_counts <- counts(sce)
+pb_counts <- t(rowsum(t(sce_counts), colData(sce)$pb_group))
+
+pb_samples <- colnames(pb_counts)
+pb_samples <- gsub("astrocytes_ependymal", "astrocytes-ependymal", pb_samples)
+pb_split <- do.call(rbind, strsplit(pb_samples, "_"))
+pb_sample_anno <- data.frame(
+    sample = pb_samples,
+    cell_type = pb_split[, 1],
+    sample_group = pb_split[, 2]
+)
+```
+
+With the pseudo-bulk annotations and counts we can construct a DGEList object.
+
+```{r}
+pb_dge <- DGEList(
+    counts = pb_counts,
+    samples = pb_sample_anno,
+    group = pb_sample_anno$cell_type
+)
+
+pb_dge <- calcNormFactors(pb_dge)
+```
+
+With this we perform differential expression analysis between "pyramidal SS" and
+"pyramidal CA1" samples using edgeR's generalised linear models.
+
+```{r}
+design <- model.matrix(~0 + cell_type, data = pb_dge$samples)
+colnames(design) <- make.names(gsub("cell_type", "", colnames(design)))
+
+pb_dge <- estimateDisp(pb_dge, design)
+
+contr <- makeContrasts("pyramidal.SS - pyramidal.CA1", levels = design)
+
+pb_fit <- glmFit(pb_dge, design)
+pb_lrt <- glmLRT(pb_fit, contrast = contr)
+```
+
+The results of this analysis can be visualised using `glimmaMA()` as it would be
+for bulk RNA-seq.
+
+```{r}
+glimmaMA(pb_lrt, dge = pb_dge)
+```
+
+An alternative view of the data can be constructed using the single cells in the
+expression plot rather than the pseudo-bulk samples. Since the MA plot is
+related to the expressions by only the genes in the rows, another expression
+matrix containing the same genes can be substituted in as below.
+
+We construct a new DGE list from the raw single cell counts, then filter it 
+down to just the cells used in our comparison and further down-sampled to 100
+cells. This is done because Glimma does not handle a large number of cells well,
+the limit being a few hundred for most computers. Sampling still provides an
+approximate representation of the data without computation strain.
+
+The code is not evaluated here to keep the vignette compact.
+
+```{r, eval = FALSE}
+sc_dge <- DGEList(
+    counts = sce_counts,
+    group = colData(sce)$level1class
+)
+
+sc_dge <- sc_dge[, colData(sce)$level1class %in% c("pyramidal CA1", "pyramidal SS")]
+
+glimmaMA(
+    pb_lrt,
+    dge = sc_dge[, sample(1:ncol(sc_dge), 100)]
+)
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```

@@ -6,14 +6,7 @@
 #'
 #' @return hex codes for colours
 #'
-#' @examples
-#' as.hexcol(c(1, 2, 3))
-#' as.hexcol(c("red", "black", "green"))
-#'
 #' @importFrom grDevices palette col2rgb
-#'
-#' @export
-
 as.hexcol <- function(x) {
     charToHexCol <- function(x) {
         requireNamespace("grDevices")
@@ -66,7 +59,6 @@ as.hexcol <- function(x) {
 #' @param x the colour value(s) to check.
 #'
 #' @return Logical vector indicating if strings(s) are valid hex representations
-
 is.hex <- function(x) {
     isHex <- grepl("^#[[:xdigit:]]{6}$", x)
     isHexWithAlpha <- grepl("^#[[:xdigit:]]{8}$", x)
