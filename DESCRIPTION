@@ -64,7 +64,11 @@ Suggests:
     BiocStyle,
     IRanges,
     GenomicRanges,
-    pryr
+    pryr,
+    AnnotationHub,
+    scRNAseq,
+    scater,
+    scran
 License: GPL-3
 URL: https://github.com/hasaru-k/GlimmaV2
 BugReports: https://github.com/hasaru-k/GlimmaV2/issues
