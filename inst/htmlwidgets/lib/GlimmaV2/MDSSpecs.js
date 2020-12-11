@@ -181,9 +181,9 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
             "size": { "scale": "size", "field": { "signal": "scale_by" }},
             "shape": { "scale": "shape", "field": { "signal": "shape_by" } },
             "fill": { "scale": "color", "field": { "signal": "colour_by" } },
-            "strokeWidth": { "value": 2 },
+            "strokeWidth": { "value": 0.5 },
             "opacity": { "value": 0.7 },
-            "stroke": { "value": "#4682b4" },
+            "stroke": { "value": "black" },
             "tooltip": tooltip
           }
         }
