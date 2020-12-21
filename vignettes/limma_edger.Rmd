@@ -145,17 +145,19 @@ Some customisations to the plot include:
     + These need to be valid CSS colour strings.
 + `glimmaMA(efit, dge=dge, sample.cols=c("yellow", "yellow", "yellow", "red", "red", "red", "purple", "purple", "purple")`, which changes the colour of each sample in the expression plot. The colours used here reflect differences in sequencing lane.  
     + The vector of colours need to be valid CSS colour strings, and of length `ncol(dge$counts)` or `ncol(counts)`.
-+ <<Can you add a comment on `counts` and `transform.counts`? - comment by Charity>>
++ <<Can you add a comment `transform.counts`, maybe use "rpkm" just to prompt users to see the options for that argument? - comment by Charity>>
++ <<Can you add a comment `counts` to show how you would use other counts? - comment by Charity>>
++ <<Can you add a comment on `anno` and `display.columns`? - comment by Charity>>
 
 ## Saving widgets
 
-The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can significantly slow down the page. It is instead recommended to save the plots and link to them via markdown hyperlinks. Plots can be saved either by providing the `html` argument a filename, or by using `htmlwidgets::saveWidget`, which also provides further customisation options.
+The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can significantly slow down the page. It is instead recommended to save the plots and link to them via markdown hyperlinks. Plots can be saved either by providing the `html` argument a filename, or by using `htmlwidgets::saveWidget`, which also provides further customisation options. Let us now create a html file named "ma-plot.html" in our working directory.
 
 ```{r, eval = FALSE}
-# creates ma-plot.html in working directory
-# link to it in Rmarkdown using [MA-plot](ma-plot.html)
 htmlwidgets::saveWidget(glimmaMA(efit, dge = dge), "ma-plot.html")
+# you can link to it in Rmarkdown using [MA-plot](ma-plot.html)
 ```
+
 
 ## Session Info
 
