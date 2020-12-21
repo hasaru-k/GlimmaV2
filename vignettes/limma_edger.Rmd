@@ -53,24 +53,24 @@ glimmaMDS(dge)
 ### Interactions with the plot
 In the plot above, try:
 
-+ Scaling the points by library size (lib_size).
-+ Changing the colour of points by group using the colour_by field.
-+ Changing the colour scheme using to colour points using the colourscheme field.
-+ Altering the shape of points by sample sequencing lane using the shape_by field.
-+ Changing the dimensions plotted on the x-axis (x_axis) to dim2 and y-axis (y_axis) to dim3.
++ Scaling the points by library size (lib_size) using the `scale_by` field.
++ Changing the colour of points by group using the `colour_by` field.
++ Altering the shape of points by sample sequencing lane using the `shape_by` field.
++ Changing to a different colour scheme using the `colourscheme` field.
++ Changing the dimensions plotted on the x-axis to dim2 and y-axis to dim3 using the `x_axis` and `y_axis` fields.
 + Saving the plots in either PNG or SVG formats using the "Save Plot" button.
 
 ### Modifications to the plot
 Some customisations to the plot include:
 
 + `glimmaMDS(dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget - default width and height are 900 and 500 respectively.
-+ `glimmaMDS(dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required.
-+ `glimmaMDS(dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by`.
++ `glimmaMDS(dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required. <<Not sure what differential selections refer to - comment by Charity>>
++ `glimmaMDS(dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by` fields.
 
 
 ## MA Plot
 
-The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the mean expression across all the samples (A) for each gene.
+The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the average expression across all the samples (A) for each gene.
 
 The Glimma MA plot contains two main components:
 
