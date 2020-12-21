@@ -158,6 +158,11 @@ htmlwidgets::saveWidget(glimmaMA(efit, dge = dge), "ma-plot.html")
 # you can link to it in Rmarkdown using [MA-plot](ma-plot.html)
 ```
 
+## Volcano Plot
+<< Add section on volcano plot. Can be brief and refer to MA plot for most things. - comment by Charity>>
+
+## XY Plot
+<< Add section on the general XY plot. Use this to show how to make a different plot. Perhaps an interactive version of t-stats and log-odds that are available in limma e.g. plot(efit$t, efit$lods) with DE genes highlighted. Add a comment at the end, with some code, to show how one would go about reproducing the above MA and volcano plots. Not sure what example you could use for the DESeq2 version of the vignette. - comment by Charity>>
 
 ## Session Info
 
