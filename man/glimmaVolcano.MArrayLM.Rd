@@ -78,7 +78,7 @@ should be included in the file name e.g. "file.html".}
 
 \item{height}{numeric value indicating width of height in pixels.}
 
-\item{...}{addition unused arguments.}
+\item{...}{additional unused arguments.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.
