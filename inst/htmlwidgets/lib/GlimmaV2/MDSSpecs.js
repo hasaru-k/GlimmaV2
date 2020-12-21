@@ -147,25 +147,25 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
         "size": "size",
         "title": "Scale",
         "format": "s",
-        "symbolStrokeColor": "#4682b4",
-        "symbolStrokeWidth": 2,
-        "symbolOpacity": 0.7,
+        "symbolStrokeColor": "black",
+        "symbolStrokeWidth": 0.5,
+        "symbolOpacity": 0.9,
         "symbolType": "circle"
       },
       {
         "fill": "color",
         "title": "Colour",
-        "symbolStrokeColor": "#4682b4",
-        "symbolStrokeWidth": 2,
-        "symbolOpacity": 0.7,
+        "symbolStrokeColor": "black",
+        "symbolStrokeWidth": 0.5,
+        "symbolOpacity": 0.9,
         "symbolType": "circle"
       },
       {
         "shape": "shape",
         "title": "Shape",
-        "symbolStrokeColor": "#4682b4",
-        "symbolStrokeWidth": 2,
-        "symbolOpacity": 0.7,
+        "symbolStrokeColor": "black",
+        "symbolStrokeWidth": 0.5,
+        "symbolOpacity": 0.9,
       },
     ],
 
@@ -182,7 +182,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
             "shape": { "scale": "shape", "field": { "signal": "shape_by" } },
             "fill": { "scale": "color", "field": { "signal": "colour_by" } },
             "strokeWidth": { "value": 0.5 },
-            "opacity": { "value": 0.7 },
+            "opacity": { "value": 0.9 },
             "stroke": { "value": "black" },
             "tooltip": tooltip
           }
@@ -264,7 +264,7 @@ function createEigenSpec(eigenData, width, height)
             "y2": {"scale": "yscale", "value": 0}
           },
           "update": {
-            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "LightSlateGray"}, {"value":  "LightGrey"} ]
+            "fill": [ {"test": "datum.name == external_select_x || datum.name == external_select_y", "value": "#3d3f46"}, {"value":  "#afafaf"} ]
           }
         }
       },

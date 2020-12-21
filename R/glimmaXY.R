@@ -5,6 +5,9 @@
 #' @inheritParams glimmaMA.MArrayLM
 #' @param x numeric vector of values to plot on the x-axis of the summary plot.
 #' @param y numeric vector of values to plot on the y-axis of the summary plot.
+#' @param dge \code{DGEList} object with \code{length(x)} rows from which expression values are
+#' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
+#' and sample groups from \code{dge$samples$group}.
 #' @param status vector of length \code{length(x)} indicating the status of each gene.
 #' A value of -1 marks a down-regulated gene, 0 marks a gene with no expression difference, and
 #' 1 marks an up-regulated gene.
@@ -35,8 +38,9 @@ glimmaXY <- function(
   y,
   xlab="x",
   ylab="y",
-  counts=NULL,
-  groups=NULL,
+  dge=NULL,
+  counts=dge$counts,
+  groups=dge$samples$group,
   status=rep(0, length(x)),
   anno=NULL,
   display.columns = NULL,

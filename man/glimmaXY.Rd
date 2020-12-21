@@ -9,8 +9,9 @@ glimmaXY(
   y,
   xlab = "x",
   ylab = "y",
-  counts = NULL,
-  groups = NULL,
+  dge = NULL,
+  counts = dge$counts,
+  groups = dge$samples$group,
   status = rep(0, length(x)),
   anno = NULL,
   display.columns = NULL,
@@ -31,6 +32,10 @@ glimmaXY(
 \item{xlab}{character string for the x-axis label of summary plot.}
 
 \item{ylab}{character string for the y-axis label of summary plot.}
+
+\item{dge}{\code{DGEList} object with \code{length(x)} rows from which expression values are
+extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
+and sample groups from \code{dge$samples$group}.}
 
 \item{counts}{numeric matrix with \code{length(x)} rows containing gene expression values. This can be used to replace
 raw gene counts from dge$counts with transformed counts e.g. logCPM or logRPKM values.}
