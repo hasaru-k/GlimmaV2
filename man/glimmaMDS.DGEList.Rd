@@ -35,7 +35,7 @@ and \code{shape_by} drop-down boxes of the widget.}
 samples,  or "common" to select the same genes for all comparisons.}
 
 \item{prior.count}{integer indicating the average count to be added to each observation to avoid taking log of zero when
-raw counts are transformed to log-counts-per-million values.}
+raw counts are transformed to log-counts-per-million values (using \code{edgeR::cpm} function).}
 
 \item{html}{character string for naming HTML file or exportation of widget. The extension should be included in the file name e.g. "file.hml".}
 

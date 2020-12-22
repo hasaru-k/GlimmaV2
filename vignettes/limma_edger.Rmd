@@ -53,24 +53,24 @@ glimmaMDS(dge)
 ### Interactions with the plot
 In the plot above, try:
 
-+ Scaling the points by library size (lib_size).
-+ Changing the colour of points by group using the colour_by field.
-+ Changing the colour scheme using to colour points using the colourscheme field.
-+ Altering the shape of points by sample sequencing lane using the shape_by field.
-+ Changing the dimensions plotted on the x-axis (x_axis) to dim2 and y-axis (y_axis) to dim3.
++ Scaling the points by library size (lib_size) using the `scale_by` field.
++ Changing the colour of points by group using the `colour_by` field.
++ Altering the shape of points by sample sequencing lane using the `shape_by` field.
++ Changing to a different colour scheme using the `colourscheme` field.
++ Changing the dimensions plotted on the x-axis to dim2 and y-axis to dim3 using the `x_axis` and `y_axis` fields.
 + Saving the plots in either PNG or SVG formats using the "Save Plot" button.
 
 ### Modifications to the plot
 Some customisations to the plot include:
 
 + `glimmaMDS(dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget - default width and height are 900 and 500 respectively.
-+ `glimmaMDS(dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required.
-+ `glimmaMDS(dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by`.
++ `glimmaMDS(dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required. <<Not sure what differential selections refer to - comment by Charity>>
++ `glimmaMDS(dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by` fields.
 
 
 ## MA Plot
 
-The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the mean expression across all the samples (A) for each gene.
+The MA plot is a visualisation that plots the log-fold-change between experimental groups (M) against the average expression across all the samples (A) for each gene.
 
 The Glimma MA plot contains two main components:
 
@@ -79,7 +79,7 @@ The Glimma MA plot contains two main components:
 
 The second plot shows gene expression from the last selected sample, which can be selected from the table or directly from the summary plot.
 
-To create this plot we first need to run differential expression (DE) analysis for our data. We load in design and contrast matrices generated from the RNAseq123 workflow.
+To create this plot we need to run differential expression (DE) analysis for our data using either the `limma` package or the `edgeR` package (both are shown below). First, we load in design and contrast matrices generated from the RNAseq123 workflow.
 
 ```{r}
 design <- readRDS(
@@ -90,7 +90,7 @@ contr.matrix <- readRDS(
 
 ### Using limma
 
-We fit our DE analysis using `voom`, this leaves us with an object that contains test statistics for each gene.
+We fit our DE analysis using `limma` to give us an object that contains test statistics for each gene.
 
 ```{r}
 v <- voom(dge, design)
@@ -101,54 +101,68 @@ efit <- eBayes(vfit)
 
 ### Using edgeR
 
+Alternatively, we can fit our DE analysis using `edgeR`. 
+
 ```{r}
 dge <- estimateDisp(dge, design)
 gfit <- glmFit(dge, design)
 glrt <- glmLRT(gfit, design, contrast = contr.matrix)
 ```
 
-The MA plot can then be created using the fitted object containing the statistics about the genes, and the `dge` object containing information about the samples and raw counts.
+The MA plot can then be created using the fitted object containing the statistics about the genes  (either `efit` or `glrt`), and the `dge` object containing raw counts and information about the samples. We use results from `limma` in the following example:
 
 ```{r}
-glimmaMA(efit, dge = dge) # swap efit for glrt to use edgeR results
+glimmaMA(efit, dge = dge) # glimmaMA(glrt, dge = dge) to use edgeR results
 ```
 
 ### Interactions with the plot
 In the plot above, try:
 
-+ Clicking points in the summary plot or rows in the table to plot the gene expression of the selection.
-    + Clicking genes in the table after selecting individual points will remove the previous selection.
-+ Searching for individual genes using the search box. The search results are displayed in the table.
++ Clicking points in the summary plot to plot the gene expression of the last selected gene.
+    + The selected genes will be listed in the bar below the plots, as well as in the table. 
+    + Select "Clear" button to clear all selected genes.
++ Clicking rows in the table to plot the gene expression of the last selected gene.
+    + Clicking a row in the table after it has been selected will it from the list of selected genes.
+    + Select "Clear" button to clear all selected genes. 
++ Using the "Search" bar to reduce the number of genes shown in the table, e.g. search for "Tnf" or "Ifn".
     + If genes are currently selected, the search box will not function.
-+ Setting a maximum value for the y-axis of the expression plot using the max_y_axis field. 
++ Setting a maximum value for the y-axis of the expression plot using the `max_y_axis` field. 
     + This allows for comparison of gene expression between genes on a comparable scale.
-+ Saving the currently selected genes using the Save Data dropdown. 
++ Saving the all selected genes using the "Save Data" dropdown button. 
     + From here, you can also choose to save the entire table.
-+ Saving the summary plot or expression plot in either PNG or SVG formats, using the "Save Data" dropdown.
++ Saving the summary plot or expression plot in either PNG or SVG formats, using the "Save Data" dropdown button.
 
 ### Modifications to the plot
 Some customisations to the plot include:
 
-+ `glimmaMA(efit, dge=dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget
++ `glimmaMA(efit, dge=dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget.
     + Default width and height is 920px.
 + `glimmaMA(efit, dge=dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used
-    + Useful for when a large number of differential selections are required.
-+ `glimmaMA(efit, dge=dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups
-    + This information is displayed in mouseover tooltips and can be used to adjust the plot using scale_by, colour_by and shape_by.
-+ `glimmaMA(efit, dge=dge, status.cols=c("powderblue", "seashell", "salmon")`, which customises the colours associated with the status of each gene
+    + Useful for when a large number of differential selections are required. <<Is this really available? - comment by Charity>>
++ `glimmaMA(efit, dge=dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups <<Is this really available? - comment by Charity>>
+    + This information is displayed in mouseover tooltips and can be used to adjust the plot using scale_by, colour_by and shape_by. <<Is this really available? - comment by Charity>>
++ `glimmaMA(efit, dge=dge, status.cols=c("powderblue", "seashell", "salmon")`, which customises the colours associated with the `Status` of each gene.
     + These need to be valid CSS colour strings.
-+ `glimmaMA(efit, dge=dge, sample.cols=colours)`, which colours each sample based on the character vector of valid CSS colour strings `colours`
-    + This vector needs to be of length `ncol(dge$counts)` or `ncol(counts)` if specified.
++ `glimmaMA(efit, dge=dge, sample.cols=c("yellow", "yellow", "yellow", "red", "red", "red", "purple", "purple", "purple")`, which changes the colour of each sample in the expression plot. The colours used here reflect differences in sequencing lane.  
+    + The vector of colours need to be valid CSS colour strings, and of length `ncol(dge$counts)` or `ncol(counts)`.
++ <<Can you add a comment `transform.counts`, maybe use "rpkm" just to prompt users to see the options for that argument? - comment by Charity>>
++ <<Can you add a comment `counts` to show how you would use other counts? - comment by Charity>>
++ <<Can you add a comment on `anno` and `display.columns`? - comment by Charity>>
 
 ## Saving widgets
 
-The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can significantly slow down the page. It is instead recommended to save the plots and link to them via markdown hyperlinks. Plots can be saved either by providing the `html` argument a filename, or by using `htmlwidgets::saveWidget`, which also provides further customisation options.
+The plots created are automatically embedded into Rmarkdown reports, but having many interactive plots can significantly slow down the page. It is instead recommended to save the plots and link to them via markdown hyperlinks. Plots can be saved either by providing the `html` argument a filename, or by using `htmlwidgets::saveWidget`, which also provides further customisation options. Let us now create a html file named "ma-plot.html" in our working directory.
 
 ```{r, eval = FALSE}
-# creates ma-plot.html in working directory
-# link to it in Rmarkdown using [MA-plot](ma-plot.html)
 htmlwidgets::saveWidget(glimmaMA(efit, dge = dge), "ma-plot.html")
+# you can link to it in Rmarkdown using [MA-plot](ma-plot.html)
 ```
+
+## Volcano Plot
+<< Add section on volcano plot. Can be brief and refer to MA plot for most things. - comment by Charity>>
+
+## XY Plot
+<< Add section on the general XY plot. Use this to show how to make a different plot. Perhaps an interactive version of t-stats and log-odds that are available in limma e.g. plot(efit$t, efit$lods) with DE genes highlighted. Add a comment at the end, with some code, to show how one would go about reproducing the above MA and volcano plots. Not sure what example you could use for the DESeq2 version of the vignette. - comment by Charity>>
 
 ## Session Info
 
