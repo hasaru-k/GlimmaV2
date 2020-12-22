@@ -52,6 +52,12 @@ glimmaXY <- function(
   width = 920,
   height = 920)
 {
+
+  # check if user counts are given
+  if (is.null(dge) && !is.null(counts)) {
+    message("External counts supplied using counts argument will be transformed to log-cpm by default. Specify transform.counts='none' to override transformation.")
+  }
+
   transform.counts <- match.arg(transform.counts)
   if (length(x)!=length(y)) stop("Error: x and y args must have the same length.")
   table <- data.frame(signif(x, digits=4), signif(y, digits=4))
