@@ -44,7 +44,8 @@ with \code{status}  in the order of -1, 0 and 1.}
 for colours associated with each sample to be displayed on the expression plot. If left
 unspecified, samples will be coloured according to \code{groups}.}
 
-\item{transform.counts}{the type of transform used on the counts. defaults to log-cpm using \code{edgeR::cpm(counts, log=TRUE)}.}
+\item{transform.counts}{the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)}; 
+"cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; and "none" for no transformation). Defaults to "logcpm".}
 
 \item{main}{character string for the main title of summary plot.}
 
@@ -59,7 +60,7 @@ should be included in the file name e.g. "file.html".}
 
 \item{height}{numeric value indicating width of height in pixels.}
 
-\item{...}{addition unused arguments.}
+\item{...}{additional unused arguments.}
 }
 \value{
 htmlwidget object or \code{NULL} if \code{html} argument is specified.

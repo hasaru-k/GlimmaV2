@@ -74,8 +74,8 @@ glimmaMD <- function(x, ...) {
 #' unspecified, samples will be coloured according to \code{groups}.
 #'
 #' @param p.adj.method character string specifying p-value adjustment method.
-#' @param transform.counts the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE); 
-#' "cpm" for \code{edgeR::cpm(counts); "rpkm" for \code{edgeR::rpkm(counts); and "none" for no transformation). Defaults to "logcpm".
+#' @param transform.counts the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)}; 
+#' "cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; and "none" for no transformation). Defaults to "logcpm".
 #'
 #' @param main character string for the main title of summary plot.
 #' @param xlab character string for the x-axis label of summary plot.
@@ -84,7 +84,7 @@ glimmaMD <- function(x, ...) {
 #' should be included in the file name e.g. "file.html".
 #' @param width numeric value indicating width of widget in pixels.
 #' @param height numeric value indicating width of height in pixels.
-#' @param ... addition unused arguments.
+#' @param ... additional unused arguments.
 #' @seealso \code{\link{glimmaMA}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 #' @eval MA_details()
 #'

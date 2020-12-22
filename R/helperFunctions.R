@@ -66,7 +66,7 @@ MDS_details <- function()
      (with the default of \\code{continous.colour=FALSE}), then sample points will have no scaling options, but can only be adjusted
      in colour and shape by \\code{groups} and \\code{labels}. Instead, if \\code{groups} is a numeric vector (e.g. library size or
      expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with
-     \\code{continous.colour=TRUE}.",
+     \\code{continous.colour=TRUE}. For more details, refer to \\code{limma::plotMDS} .",
     "@return htmlwidget object or \\code{NULL} if \\code{html} argument is specified."
   )
 }

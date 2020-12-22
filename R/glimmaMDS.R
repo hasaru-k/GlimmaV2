@@ -225,7 +225,7 @@ glimmaMDS.default <- function(
 #' @inheritParams glimmaMDS.default
 #' @param x \code{DGEList} object containing gene counts in \code{x$counts}.
 #' @param prior.count integer indicating the average count to be added to each observation to avoid taking log of zero when
-#' raw counts are transformed to log-counts-per-million values.
+#' raw counts are transformed to log-counts-per-million values (using \code{edgeR::cpm} function).
 #'
 #' @eval MDS_details()
 #'

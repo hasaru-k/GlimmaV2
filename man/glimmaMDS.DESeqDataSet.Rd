@@ -35,7 +35,7 @@ and \code{shape_by} drop-down boxes of the widget.}
 samples,  or "common" to select the same genes for all comparisons.}
 
 \item{prior.count}{integer indicating the average count to be added to each observation to avoid taking log of zero when
-raw counts are transformed to log-counts-per-million values.}
+raw counts are transformed to log-counts-per-million values (using \code{edgeR::cpm} function).}
 
 \item{html}{character string for naming HTML file or exportation of widget. The extension should be included in the file name e.g. "file.hml".}
 
@@ -62,7 +62,7 @@ The left plot shows two MDS dimensions, with sample annotations displayed on hov
      (with the default of \code{continous.colour=FALSE}), then sample points will have no scaling options, but can only be adjusted
      in colour and shape by \code{groups} and \code{labels}. Instead, if \code{groups} is a numeric vector (e.g. library size or
      expression level of a specific gene), then the plot can be scaled and coloured by the numeric values with
-     \code{continous.colour=TRUE}.
+     \code{continous.colour=TRUE}. For more details, refer to \code{limma::plotMDS} .
 }
 \examples{
 dge <- readRDS(system.file("RNAseq123/dge.rds", package = "Glimma"))
