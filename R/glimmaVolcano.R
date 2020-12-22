@@ -71,6 +71,8 @@ glimmaVolcano.MArrayLM <- function(
     message("External counts supplied using counts argument will be transformed to log-cpm by default. Specify transform.counts='none' to override transformation.")
   }
 
+  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
+
   transform.counts <- match.arg(transform.counts)
   table <- data.frame(signif(unname(x$coefficients[, coef]), digits=4),
                       signif( -log10(x$p.value[, coef]), digits=4))
@@ -135,6 +137,8 @@ glimmaVolcano.DGEExact <- function(
   if (is.null(dge) && !is.null(counts)) {
     message("External counts supplied using counts argument will be transformed to log-cpm by default. Specify transform.counts='none' to override transformation.")
   }
+
+  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
 
   transform.counts <- match.arg(transform.counts)
   # create initial table with -log10(pvalue) and logFC features
