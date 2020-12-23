@@ -57,3 +57,14 @@ test_that("Saving volcano plot works",
     expect_equal(file.exists(testname), TRUE)
     unlink(testname)
 })
+
+
+test_that("DGE argument must have same length as limma/edgeR objects",
+{
+    sample <- 1:(nrow(dge)-10)
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        expect_error(glimmaVolcano(x, counts=dge[sample,]))
+    }
+})

@@ -133,7 +133,7 @@ glimmaMA.MArrayLM <- function(
 
   transform.counts <- match.arg(transform.counts)
   # check if the number of rows of x and the dge object are equal
-  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
+  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("MArrayLM object must have equal rows/genes to DGEList.")
 
   # create initial table with logCPM and logFC features
   table <- data.frame(signif(unname(x$Amean), digits=4),
@@ -207,7 +207,7 @@ glimmaMA.DGEExact <- function(
 
   transform.counts <- match.arg(transform.counts)
   # check if the number of rows of x and the dge object are equal
-  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("Summary object must have equal rows/genes to expression object.")
+  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("DGEExact/DGELRT object must have equal rows/genes to DGEList.")
 
   table <- data.frame(signif(x$table$logCPM, digits=4),
                       signif(x$table$logFC, digits=4))

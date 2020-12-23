@@ -40,7 +40,7 @@ test_that("MA Plot returns widget",
     expect_equal(is.null(result), FALSE)
 })
 
-test_that("Saving MA plot works",
+test_that("HTML arg exports the MA plot",
 {
     testname <- "testMAabc.html"
     # MArrayLM, DGEExact/DGELRT
@@ -83,11 +83,12 @@ test_that("Length of status vector must match the other args",
     expect_message(glimmaMA(dds, status=rep(0, nrow(dds))), "genes were filtered out in DESeq2 tests")
 })
 
-test_that("User cannot provide counts argument without groups argument for edgeR/limma objects",
+test_that("DGE argument must have same length as limma/edgeR objects",
 {
+    sample <- 1:(nrow(dge)-10)
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
     {
-        expect_error(glimmaMA(x, counts=dge$counts))
+        expect_error(glimmaMA(x, counts=dge[sample,]))
     }
 })
