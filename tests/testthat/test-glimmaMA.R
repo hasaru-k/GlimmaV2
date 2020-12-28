@@ -89,7 +89,7 @@ test_that("DGE argument must have same length as limma/edgeR objects",
     # MArrayLM, DGEExact/DGELRT
     for (x in list(limmaFit, dgeexact))
     {
-        expect_error(glimmaMA(x, counts=dge[sample,]))
+        expect_error(glimmaMA(x, dge=dge[sample,]))
     }
 })
 
