@@ -92,3 +92,12 @@ test_that("DGE argument must have same length as limma/edgeR objects",
         expect_error(glimmaMA(x, counts=dge[sample,]))
     }
 })
+
+test_that("Providing counts warns the user of log transformation",
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        expect_message(glimmaMA(x, counts=dge$counts, groups=dge$samples$group))
+    }
+})
