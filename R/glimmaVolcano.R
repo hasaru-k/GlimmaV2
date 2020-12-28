@@ -65,6 +65,14 @@ glimmaVolcano.MArrayLM <- function(
   height = 920,
   ...)
 {
+
+  # check if user counts are given
+  if (is.null(dge) && !is.null(counts)) {
+    message("External counts supplied using counts argument will be transformed to log-cpm by default. Specify transform.counts='none' to override transformation.")
+  }
+
+  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("MArrayLM object must have equal rows/genes to DGEList.")
+
   transform.counts <- match.arg(transform.counts)
   table <- data.frame(signif(unname(x$coefficients[, coef]), digits=4),
                       signif( -log10(x$p.value[, coef]), digits=4))
@@ -124,6 +132,14 @@ glimmaVolcano.DGEExact <- function(
   height = 920,
   ...)
 {
+
+  # check if user counts are given
+  if (is.null(dge) && !is.null(counts)) {
+    message("External counts supplied using counts argument will be transformed to log-cpm by default. Specify transform.counts='none' to override transformation.")
+  }
+
+  if (!is.null(dge) && nrow(x) != nrow(dge)) stop("DGEExact/DGELRT object must have equal rows/genes to DGEList.")
+
   transform.counts <- match.arg(transform.counts)
   # create initial table with -log10(pvalue) and logFC features
   table <- data.frame(signif(x$table$logFC, digits=4),
