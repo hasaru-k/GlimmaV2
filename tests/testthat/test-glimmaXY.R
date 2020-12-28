@@ -35,3 +35,14 @@ test_that("X and Y args must have the same length",
     expect_error(glimmaXY(x=1:3, y=1:4))
     expect_silent(glimmaXY(x=1:4, y=1:4))
 })
+
+test_that("Groups arg can be omitted without error",
+{
+    result <- glimmaXY(x=fc, y =sig, counts=dge$counts)
+    expect_equal(is.null(result), FALSE)
+})
+
+test_that("Length of groups must match the no. of columns in counts",
+{
+    expect_error(glimmaXY(x=fc, y =sig, counts=dge$counts, groups=1:(ncol(lymphomaRNAseq)-1)))
+})
