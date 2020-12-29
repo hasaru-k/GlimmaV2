@@ -13,11 +13,11 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 #### Available on [Bioconductor](https://bioconductor.org/packages/release/bioc/html/Glimma.html).
 
 Feedback is welcome, please feel free to open an issue for any enhancements you would like to see in future.
-### MA Plot
+## *glimmaMA*: MA plot
 ![MA plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/maplot.gif "MA Plot")
-### Volcano Plot
+## *glimmaVolcano*: Volcano plot
 ![Volcano plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/volcano_plot.gif "Volcano Plot")
-### MDS Plot
+## *glimmaMDS*: Multidimensional scaling plot
 ![MDS plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/MDS_numeric.gif "MDS Plot")
 ## Installation
 You can install the development version of GlimmaV2 using devtools from the R command line.
