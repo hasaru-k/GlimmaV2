@@ -13,11 +13,11 @@ GlimmaV2 is an interactive R widget for creating plots for differential expressi
 #### Available on [Bioconductor](https://bioconductor.org/packages/release/bioc/html/Glimma.html).
 
 Feedback is welcome, please feel free to open an issue for any enhancements you would like to see in future.
-### MA Plot
+## *glimmaMA*: MA plot
 ![MA plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/maplot.gif "MA Plot")
-### Volcano Plot
-![Volcano plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/Volcano_select.gif "Volcano Plot")
-### MDS Plot
+## *glimmaVolcano*: Volcano plot
+![Volcano plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/volcano_plot.gif "Volcano Plot")
+## *glimmaMDS*: Multidimensional scaling plot
 ![MDS plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/MDS_numeric.gif "MDS Plot")
 ## Installation
 You can install the development version of GlimmaV2 using devtools from the R command line.
@@ -28,9 +28,9 @@ devtools::install_github("hasaru-k/GlimmaV2")
 ### Plot Colouring (MA/Volcano/XY)
 The default mapping between the status vector and color of the gene is given below:
 ```
--1 (downreg) => "dodgerblue"
-0 (not DE) => "silver"
-1 (upreg) => "firebrick"
+-1 (downreg)   =>  blue
+ 0 (not DE)    =>  silver
+ 1 (upreg)     =>  red
 ```
 Accordingly, the default status.colours argument is ```c("dodgerblue", "silver", "firebrick")```. If no status vector is provided, all genes are given a status value of 0. The colour mapping can be changed by varying the status.colours argument which must be a vector of three valid CSS strings (for example: ```#f304d3```, ```#fff```, ```rgb(253, 12, 134)```, ```steelblue```):
 ```R
@@ -40,7 +40,7 @@ glimmaMA(fit, dge=rnaseq, status.colours=c("#3977db","#3d3f42","#db0d4e"))
 glimmaVolcano(fit, dge=rnaseq, status.colours=c("blue", "darkgrey", "red"))
 ```
 ```R
-glimmaXY(x=fit$coef, y=fit$lod, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
+glimmaXY(x=fit$coef, y=fit$lod, dge=rnaseq, status=dtFit, status.colours=c("cyan", "grey", "hotpink"))
 ```
 ### Gene Symbol Text (MA/Volcano/XY)
 Gene symbol text will be displayed above selected points if there is a ```symbol``` column (case-insensitive) within the gene annotation supplied as per the example plots shown above. The gene annotation is the ```anno``` argument. 
