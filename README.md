@@ -16,7 +16,7 @@ Feedback is welcome, please feel free to open an issue for any enhancements you 
 ### MA Plot
 ![MA plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/maplot.gif "MA Plot")
 ### Volcano Plot
-![Volcano plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/Volcano_select.gif "Volcano Plot")
+![Volcano plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/volcano_plot.gif "Volcano Plot")
 ### MDS Plot
 ![MDS plot](https://github.com/hasaru-k/GlimmaV2-docs/blob/master/documentation/MDS_numeric.gif "MDS Plot")
 ## Installation
