@@ -61,12 +61,26 @@ In the plot above, try:
 + Saving the plots in either PNG or SVG formats using the "Save Plot" button.
 
 ### Modifications to the plot
-Some customisations to the plot include:
 
-+ `glimmaMDS(dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget - default width and height are 900 and 500 respectively.
-+ `glimmaMDS(dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used - useful for when a large number of differential selections are required. <<Not sure what differential selections refer to - comment by Charity>>
-+ `glimmaMDS(dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups - this information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by` fields.
+***Adjusting plot size***
 
+*Usage:* `glimmaMDS(dge, width=1200, height=1200)`
+
+Users can specify the width and height of the MDS plot widget in pixels. The default width and height are 900 and 500 respectively.
+
+***Continuous colour schemes***
+
+*Usage:* `glimmaMDS(dge, continuous.color=TRUE)`
+
+This argument specifies that continuous colour schemes should be used, which can be useful for colouring samples by their expression for a particular gene.
+
+***Custom experimental groups***
+
+*Usage:* `glimmaMDS(dge, groups=[vector or data frame])`
+
+This allows the user to change the associated sample information such as experimental groups. This information is displayed in mouseover tooltips and can be used to adjust the plot using `scale_by`, `colour_by` and `shape_by` fields.
+
+<!-- Not sure what differential selections refer to - comment by Charity - continuous colour bit-->
 
 ## MA Plot
 
@@ -133,20 +147,34 @@ In the plot above, try:
 + Saving the summary plot or expression plot in either PNG or SVG formats, using the "Save Data" dropdown button.
 
 ### Modifications to the plot
-Some customisations to the plot include:
 
-+ `glimmaMA(efit, dge=dge, width=1200, height=1200)`, which will adjust the dimensions in pixels of the created widget.
-    + Default width and height is 920px.
-+ `glimmaMA(efit, dge=dge, continuous.color=TRUE)`, which specifies that continuous colour schemes should be used
-    + Useful for when a large number of differential selections are required. <<Is this really available? - comment by Charity>>
-+ `glimmaMA(efit, dge=dge, groups=[vector or data frame])`, which allows changing the associated sample information such as experimental groups <<Is this really available? - comment by Charity>>
-    + This information is displayed in mouseover tooltips and can be used to adjust the plot using scale_by, colour_by and shape_by. <<Is this really available? - comment by Charity>>
-+ `glimmaMA(efit, dge=dge, status.cols=c("powderblue", "seashell", "salmon")`, which customises the colours associated with the `Status` of each gene.
-    + These need to be valid CSS colour strings.
-+ `glimmaMA(efit, dge=dge, sample.cols=c("yellow", "yellow", "yellow", "red", "red", "red", "purple", "purple", "purple")`, which changes the colour of each sample in the expression plot. The colours used here reflect differences in sequencing lane.  
-    + The vector of colours need to be valid CSS colour strings, and of length `ncol(dge$counts)` or `ncol(counts)`.
+***Adjusting plot size***
+
+*Usage:* `glimmaMA(efit, dge=dge, width=1200, height=1200)`
+
+Users can specify the width and height of the MA plot widget in pixels. The default width and height are both 920px.
+
+***Changing DE status colouring***
+
+*Usage:* `glimmaMA(efit, dge=dge, status.cols=c("blue", "grey", "red")`
+
+Users can customise the colours associated with the differential expression status of a gene using the `status.cols` argument. A vector of length three should be passed in, where each element must be a valid CSS colour string. 
+
+***Changing sample colours in expression plot***
+
+*Usage:* `glimmaMA(efit, dge=dge, sample.cols=c("yellow", "yellow", "yellow", "red", "red", "red", "purple", "purple", "purple")`
+
+Users can provide a vector of valid CSS colour strings of length `ncol(dge$counts)` or `ncol(counts)` which correspond to sample colours. The colours used in the example here reflect the sequencing lane.  
+
+***Overriding counts and groups***
+
+*Usage:* `glimmaMA(efit, counts=counts, groups=groups)`
+
+Glimma extracts counts and experimental data from the `dge` argument for limma
+and edgeR data types. However, users can optionally supply their own counts and
+experimental groups using the `counts` and `groups` arguments.
+
 + <<Can you add a comment `transform.counts`, maybe use "rpkm" just to prompt users to see the options for that argument? - comment by Charity>>
-+ <<Can you add a comment `counts` to show how you would use other counts? - comment by Charity>>
 + <<Can you add a comment on `anno` and `display.columns`? - comment by Charity>>
 
 ## Saving widgets
