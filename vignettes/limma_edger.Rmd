@@ -174,7 +174,19 @@ Glimma extracts counts and experimental data from the `dge` argument for limma
 and edgeR data types. However, users can optionally supply their own counts and
 experimental groups using the `counts` and `groups` arguments.
 
+***Transforming counts values***
+
+*Usage:* `glimmaMA(efit, dge=dge, transform.counts="rpkm")`
+
+The `transform.counts` argument allows users to choose between strategies for
+transforming counts data displayed on the expression plot. 
+The default argument is `"logcpm"` which log-transforms counts using
+`edgeR::cpm(counts, log=TRUE)`. Other options are "`rpkm"` for
+`edgeR::rpkm(counts)`, `cpm` for `edgeR::cpm(counts)` and `none` for no
+transformation.
+
 + <<Can you add a comment `transform.counts`, maybe use "rpkm" just to prompt users to see the options for that argument? - comment by Charity>>
+<!-- added - has -->
 + <<Can you add a comment on `anno` and `display.columns`? - comment by Charity>>
 
 ## Saving widgets
