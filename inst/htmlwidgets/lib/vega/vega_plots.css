@@ -56,10 +56,6 @@
 
 /* custom styling for some inputs */
 
-.signal select {}
-
-/* custom styling for some inputs */
-
 .display-block {
 	display: block;
 }
@@ -165,14 +161,7 @@ button.save-button:active {
 	display: block;
 }
 
-/* vega max y axis setting */
-input .max_y_axis 
-{
-	margin-bottom: 5px;
-    margin-left: 5px;
-    border: solid 1px #b5b5b5;
-    border-radius: 2px;
-}
+
 
 .alertBox 
 {
@@ -203,4 +192,19 @@ input .max_y_axis
 	color: #721c24;
 	background-color: #f8d7da;
 	border: 1px solid #f5c6cb;
+}
+
+/* vega max y axis setting */
+input.max_y_axis
+{
+	margin-bottom: 5px;
+	margin-right: 10px;
+	border: solid 1px #b5b5b5;
+	border-radius: 2px;
+	display: block;
+}
+
+select
+{
+	display: block;
 }

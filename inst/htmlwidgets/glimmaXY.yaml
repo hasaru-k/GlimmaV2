@@ -1,4 +1,11 @@
 dependencies:
+  - name: datatables
+    version: 1.0
+    src: htmlwidgets/lib/datatables
+    script:
+      - datatables.min.js
+    stylesheet:
+      - datatables.css
   - name: vega
     version: 1.0
     src: htmlwidgets/lib/vega
@@ -13,13 +20,6 @@ dependencies:
       - vega-tooltip.js
     stylesheet:
       - vega-tooltip.css
-  - name: datatables
-    version: 1.0
-    src: htmlwidgets/lib/datatables
-    script:
-      - datatables.min.js
-    stylesheet:
-      - datatables.css
   - name: FileSaver
     version: 1.0
     src: htmlwidgets/lib/FileSaver
