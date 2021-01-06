@@ -67,7 +67,6 @@ HTMLWidgets.widget({
         addSavePlotButton(controlContainer, mdsView, eigenView, text="Save Plot",
                           summaryText="MDS", expressionText="VAR");
 
-        reformatElementsMDS(controlContainer);
       },
 
       resize: function(width, height)
@@ -83,7 +82,6 @@ function addBlockElement(controlContainer)
   blockElement.setAttribute("class", "display-block");
   controlContainer.appendChild(blockElement);
 }
-
 
 function processDataMDS(x)
 {
@@ -118,20 +116,6 @@ function linkPlotsMDS(mdsView, eigenView)
     eigenView.runAsync();
   });
 
-}
-
-/* arranges vega-bind elements so that x_dim, y_dim are on their
-   own line */
-function reformatElementsMDS(controlContainer)
-{
-  var binds = controlContainer.getElementsByClassName("vega-bind");
-  for (var i = 0; i < binds.length; i++)
-  {
-    // the separator input signal is a dummy invisible signal after x_axis, y_axis
-    if (i == 2) binds[i].className += " separator_signal";
-    // it is used to display all signals after x_axis, y_axis to display on a different line
-    else if (i > 2) binds[i].className += " signal";
-  }
 }
 
 function addColourMessage(data, view, container)

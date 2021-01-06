@@ -42,12 +42,6 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
           "value": dimList[1],
           "bind": { "input": "select", "options": dimList }
         },
-        /* dummy_signal is used for CSS styling */
-        {
-          "name": "dummy_signal",
-          "value": {},
-          "bind": { "input": "select", "options": [] }
-        },
         {
           "name": "scale_by",
           "value": features["numeric"][0],

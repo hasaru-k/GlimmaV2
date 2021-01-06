@@ -1,5 +1,19 @@
 function createExpressionSpec(width, height, expColumns, sampleColours, samples)
 {
+
+    let colourscheme_signal = 
+    {
+        "name": "colourscheme",
+        "value": "category10",
+        "bind": { 
+                    "input": "select", 
+                    "options": [ "category10", "accent", "category20", "category20b", "category20c", "dark2", "paired", "pastel1", "pastel2", "set1", "set2", "set3", "tableau10", "tableau20"] 
+                }
+    };
+
+    /* need an empty signal if sample.cols argument has been supplied */
+    let samplecols_signal = { "name": "samplecols_active" };
+
     /* must match counts term in processExpression */
     expColumns.push("count");
     let tooltip = makeVegaTooltip(expColumns);
@@ -26,12 +40,13 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                     },
                     {
                         "name": "max_count",
-                        "value": 0,
+                        "value": 0
                     },
                     {
                         "name": "max_y",
                         "update": " (max_y_axis < max_count) ? null : max_y_axis"
-                    }
+                    },
+                    sampleColours == -1 ? colourscheme_signal : samplecols_signal
                 ],
         "data": [ {"name": "table"} ],
         "scales": 
@@ -53,8 +68,8 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                 "name": "color",
                 "type": "ordinal",
                 "domain": sampleColours == -1 ? { "data": "table", "field": "group" } : samples,
-                "range": sampleColours == -1 ? { "scheme": "category10" } : sampleColours
-            },
+                "range": sampleColours == -1 ? { "scheme": { "signal": "colourscheme" } } : sampleColours
+            }
         ],
         "axes": 
         [
@@ -86,7 +101,7 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                         "shape": {"value": "circle"},
                         "fill": { "scale": "color", "field": sampleColours == -1 ? "group" : "sample" },
                         "strokeWidth": {"value": 1},
-                        "opacity": {"value": 0.6},
+                        "opacity": {"value": 0.8},
                         "size": {"value": 100},
                         "stroke": {"value": "#575757"},
                         "tooltip": tooltip
