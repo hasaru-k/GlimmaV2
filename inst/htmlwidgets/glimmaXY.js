@@ -332,7 +332,8 @@ function updateExpressionPlot(countsRow, data, geneName)
   }
   data.expressionView.data("table", result);
   data.expressionView.signal("title_signal", "Gene " + geneName.toString());
-  data.expressionView.signal("max_count", Math.max(...result.map(x => x.count)));
+  let max_value = Math.max(...result.map(x => x.count));
+  data.expressionView.signal("max_count", Math.round(max_value*100)/100 );
   data.expressionView.runAsync();
   updateAxisMessage(data);
 }
