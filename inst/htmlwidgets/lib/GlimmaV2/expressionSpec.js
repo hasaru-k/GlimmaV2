@@ -17,7 +17,7 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
     /* must match counts term in processExpression */
     expColumns.push("count");
     let tooltip = makeVegaTooltip(expColumns);
-    let spec = {
+    return {
         "$schema": "https://vega.github.io/schema/vega/v5.json",
         "width": width*0.40,
         "height": height*0.35,
@@ -109,8 +109,5 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                 }
             }]
     };
-
-    console.log(spec);
-    return spec;
 
 }
