@@ -173,3 +173,16 @@ test_that("Setting transform.counts = rpkm transforms accordingly",
     }
     # can't test DESeq2 because some genes are filtered out
 })
+
+test_that("Display.columns arg provides a minimal set of [xlab, ylab, geneID]",
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        xData <- glimmaMA(x, dge=dge, xlab="x", ylab="y", display.columns=c("SYMBOL"))$x$data
+        expect_true(setequal(xData$cols, c("x", "y", "gene", "SYMBOL")))
+    }
+    # can't test DESeq2 because some genes are filtered out
+    xData <- glimmaMA(dds, xlab="x", ylab="y", display.columns=c("SYMBOL"))$x$data
+    expect_true(setequal(xData$cols, c("x", "y", "gene", "SYMBOL")))
+})
