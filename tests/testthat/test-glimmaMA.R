@@ -101,3 +101,75 @@ test_that("Providing counts warns the user of log transformation",
         expect_message(glimmaMA(x, counts=dge$counts, groups=dge$samples$group))
     }
 })
+
+test_that("NULL sample.colours arg leads to -1 transmitted to JS frontend",
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        xData <- glimmaMA(x, dge=dge)$x$data
+        expect_equal(xData$sampleColours, -1)
+    }
+    xData <- glimmaMA(dds)$x$data
+    expect_equal(xData$sampleColours, -1)
+})
+
+test_that("Vector sample.colours arg leads to vector transmitted to JS frontend",
+{
+    testcols <- rep("red", ncol(dge))
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        xData <- glimmaMA(x, dge=dge, sample.cols=testcols)$x$data
+        expect_equal(xData$sampleColours, testcols)
+    }
+    xData <- glimmaMA(dds, sample.cols=testcols)$x$data
+    expect_equal(xData$sampleColours, testcols)
+})
+
+test_that("Setting transform.counts = cpm transforms accordingly",
+{
+    expected_counts <- edgeR::cpm(dge$counts, log=FALSE)
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        xData <- glimmaMA(x, dge=dge, transform.counts="cpm")$x$data
+        expect_true(all(xData$counts==expected_counts))
+    }
+    # can't test DESeq2 because some genes are filtered out
+})
+
+test_that("Specifying RPKM transformation without length column gives error",
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        expect_error(glimmaMA(x, dge=dge, transform.counts="rpkm"))
+    }
+    expect_error(glimmaMA(dds, transform.counts="rpkm"))
+})
+
+
+test_that("Specifying RPKM transformation with non-numeric length gives an error",
+{
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        x$genes$length <- "123abc"
+        expect_error(glimmaMA(x, dge=dge, transform.counts="rpkm"))
+        x$genes$length <- NULL
+    }
+})
+
+test_that("Setting transform.counts = rpkm transforms accordingly",
+{
+    expected_counts <- edgeR::rpkm(dge$counts, gene.length=1234)
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        x$genes$length <- 1234
+        xData <- glimmaMA(x, dge=dge, transform.counts="rpkm")$x$data
+        expect_true(all(xData$counts==expected_counts))
+    }
+    # can't test DESeq2 because some genes are filtered out
+})
