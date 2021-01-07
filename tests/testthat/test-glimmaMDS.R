@@ -44,3 +44,23 @@ test_that("Saving MDS works",
         unlink(testname)
     }
 })
+
+test_that("If groups is a vector, length of vector must be the
+          same as ncol(dge)",
+{
+    expect_error(glimmaMDS(dge, groups=1:5))
+})
+
+test_that("If groups is a dataframe, its row no. must be the
+          same as ncol(dge)",
+{
+    expect_error(glimmaMDS(dge, groups=dge$samples[1:5,]))
+})
+
+test_that("common gene.selection arg executes silently",
+{
+    for (x in list(dge, dds))
+    {
+        expect_silent(glimmaMDS(x, gene.selection="common"))
+    }
+})

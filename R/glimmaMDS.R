@@ -256,10 +256,8 @@ glimmaMDS.DGEList <- function(
     stop("number of rows in groups argument must equal the number of columns in the DGE object")
   }
 
-  if (is.null(labels))
-  {
-    labels <- as.character(seq_len(ncol(x)))
-  }
+  if (is.null(labels)) labels <- as.character(seq_len(ncol(x)))
+  
   transformed_counts <- edgeR::cpm(x, log=TRUE, prior.count = prior.count)
   # call main processing function
   return(glimmaMDS.default(
@@ -312,14 +310,11 @@ glimmaMDS.DESeqDataSet <- function(
   height = 500,
   ...)
 {
-  if (is.null(labels))
-  {
-    labels <- as.character(seq_len(ncol(x)))
-  }
-  if (is.null(groups))
-  {
-    groups <- as.character(rep(1, ncol(x)))
-  }
+  
+  if (is.null(labels)) labels <- as.character(seq_len(ncol(x)))
+
+  if (is.null(groups)) groups <- as.character(rep(1, ncol(x)))
+
   transformed_counts <- edgeR::cpm(
       DESeq2::counts(x),
       log = TRUE,
