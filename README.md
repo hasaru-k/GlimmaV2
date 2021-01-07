@@ -6,9 +6,9 @@
 [![codecov](https://codecov.io/gh/hasaru-k/GlimmaV2/branch/master/graph/badge.svg)](https://codecov.io/gh/hasaru-k/GlimmaV2)
 # 
 Glimma 2,0 is an interactive R widget for creating plots for differential expression analysis, created using the [Vega](https://vega.github.io/vega/) and [htmlwidgets](https://www.htmlwidgets.org/) frameworks. It's an update/reimplementation of [Glimma 1.0](https://github.com/Shians/Glimma)! New features include:
-- multiple gene selections 🧬
-- full integration with R markdown 📓
-- exporting plots to PNG/SVG/CSV formats 🖼
+- 🧬 multiple gene selections
+- 📓 full integration with R markdown
+- 🖼 exporting plots to PNG/SVG/CSV formats
 
 #### Available on [Bioconductor](https://bioconductor.org/packages/release/bioc/html/Glimma.html).
 
