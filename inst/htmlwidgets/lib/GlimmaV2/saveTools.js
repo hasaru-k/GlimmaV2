@@ -13,7 +13,7 @@ function addSavePlotButton(controlContainer, xy_obj, exp_obj=null,
   dropdownContent.setAttribute("class", "dropdown-content");
   
   var pngSummaryBtn = addSaveButtonElement(xy_obj, text=summaryText+" (PNG)", type='png');
-  var svgSummaryBtn = addSaveButtonElement(xy_obj, text=summaryText+" (SVG)", type='png');
+  var svgSummaryBtn = addSaveButtonElement(xy_obj, text=summaryText+" (SVG)", type='svg');
   
   // add elements to container
   dropdownDiv.appendChild(dropdownButton);
