@@ -102,3 +102,6 @@ glimmaMA(dds)
 \seealso{
 \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DGELRT}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

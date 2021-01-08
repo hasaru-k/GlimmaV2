@@ -47,3 +47,6 @@ The summary plot on the left represents gene-wise log-fold-change (logFC) on the
 methods(glimmaMA) # show methods for glimmaMA
 
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

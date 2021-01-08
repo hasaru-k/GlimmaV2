@@ -113,3 +113,6 @@ glimmaVolcano(glrt, dge = dge)
 \seealso{
 \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGELRT}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

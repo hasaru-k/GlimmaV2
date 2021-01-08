@@ -51,3 +51,6 @@ efit <- limma::eBayes(vfit)
 glimmaVolcano(efit, dge = dge)
 
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

@@ -98,3 +98,6 @@ The summary plot on the left represents gene-wise log-fold-change (logFC) on the
 \seealso{
 \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

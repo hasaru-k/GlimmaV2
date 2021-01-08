@@ -103,3 +103,6 @@ efit <- limma::eBayes(vfit)
 glimmaXY(efit$Amean, efit$coefficients)
 
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}
