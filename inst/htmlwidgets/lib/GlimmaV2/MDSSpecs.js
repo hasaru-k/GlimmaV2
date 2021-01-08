@@ -2,7 +2,6 @@
 // parametrise graph encoding for MDS plot
 function createMDSSpec(mdsData, dimList, features, width, height, continuousColour) 
 {
-  console.log(features);
 
   // generate tooltip object for embedding in spec
   var tooltipString = "{'x':datum[x_axis], 'y':datum[y_axis]";
@@ -15,7 +14,6 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
     }  
   });
   tooltipString += "}";
-  console.log(tooltipString)
   var tooltip = { "signal" : tooltipString };
   
   // generate colorscheme options
@@ -35,32 +33,42 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
         {
           "name": "x_axis",
           "value": dimList[0],
-          "bind": { "input": "select", "options": dimList }
+          "bind": { "name": "X-axis", "input": "select", "options": dimList }
         },
         {
           "name": "y_axis",
           "value": dimList[1],
-          "bind": { "input": "select", "options": dimList }
+          "bind": { "name": "Y-axis", "input": "select", "options": dimList }
         },
         {
           "name": "scale_by",
           "value": features["numeric"][0],
-          "bind": { "input": "select", "options": features["numeric"] }
+          "bind": { "name": "Scale by", "input": "select", "options": features["numeric"] }
         },
         {
           "name": "colour_by",
           "value": features["discrete"][0],
-          "bind": { "input": "select", "options": continuousColour ? features["numeric"] : features["discrete"] }
+          "bind": { "name": "Colour by", "input": "select", "options": continuousColour ? features["numeric"] : features["discrete"] }
         },
         {
           "name": "shape_by",
           "value": features["discrete"][0],
-          "bind": { "input": "select", "options": features["discrete"] }
+          "bind": { "name": "Shape by", "input": "select", "options": features["discrete"] }
+        },
+        {
+          "name": "text_by",
+          "value": features["discrete"][0],
+          "bind": { "name": "Text by", "input": "select", "options": features["discrete"] }
         },
         {
           "name": "colourscheme",
           "value": colourschemes[1],
-          "bind": { "input": "select", "options": colourschemes }
+          "bind": { "name": "Colour palette", "input": "select", "options": colourschemes }
+        },
+        {
+          "name": "colour_text",
+          "value": false,
+          "bind": { "name": "Colour text:", "input": "checkbox" }
         }
       ],
     "data": 
@@ -160,7 +168,7 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
         "symbolStrokeColor": "black",
         "symbolStrokeWidth": 0.5,
         "symbolOpacity": 0.9,
-      },
+      }
     ],
 
     "marks": [
@@ -179,6 +187,21 @@ function createMDSSpec(mdsData, dimList, features, width, height, continuousColo
             "opacity": { "value": 0.9 },
             "stroke": { "value": "black" },
             "tooltip": tooltip
+          }
+        }
+      },
+      {
+        "name": "selected_text",
+        "type": "text",
+        "from": { "data": "source" },
+        "encode": {
+          "update": {
+            "x": { "scale": "x", "field": { "signal": "x_axis" }, "offset": -10 },
+            "y": { "scale": "y", "field": { "signal": "y_axis" }, "offset": -10 },
+            "fill": [ {"test": "!colour_text", "value": "black"}, { "scale": "color", "field": { "signal": "colour_by" } } ],
+            "opacity": [ {"test": "text_by == '-'", "value": 0}, {"value": 1} ],
+            "text": {"field": {"signal": "text_by"} },
+            "fontSize": {"value": 12}
           }
         }
       }

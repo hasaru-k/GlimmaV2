@@ -44,6 +44,7 @@
 
 .vega-bind {
 	display: inline-block;
+	margin-right: 8px;
 }
 
 /* custom styling for some inputs */
@@ -66,6 +67,7 @@
 	margin-right: 2px;
 	margin-bottom: 5px;
 	font-size: 12px;
+	font-style: italic;
 	font-family: sans-serif;
 	color: #404040;
 }
@@ -75,6 +77,8 @@
 .vega-bind select {
 	margin-bottom: 7px;
 	margin-right: 7px;
+	margin-top: 2px;
+	display: block;
 }
 
 /* Datatables button container styling */
@@ -206,5 +210,4 @@ input.max_y_axis
 
 select
 {
-	display: block;
 }
