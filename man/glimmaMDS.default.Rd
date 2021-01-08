@@ -68,3 +68,6 @@ glimmaMDS(expr)
 \seealso{
 \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.DGEList}}, \code{\link{glimmaMDS.DESeqDataSet}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

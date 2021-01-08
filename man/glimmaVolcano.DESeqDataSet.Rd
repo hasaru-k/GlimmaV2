@@ -98,3 +98,6 @@ glimmaVolcano(dds)
 \seealso{
 \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DGELRT}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

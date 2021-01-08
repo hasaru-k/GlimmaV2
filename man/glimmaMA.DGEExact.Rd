@@ -117,3 +117,6 @@ glimmaMA(glrt, dge = dge)
 \seealso{
 \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGELRT}}, \code{\link{glimmaMA.DESeqDataSet}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

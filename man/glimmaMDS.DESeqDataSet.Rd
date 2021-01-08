@@ -78,3 +78,6 @@ glimmaMDS(dds)
 \seealso{
 \code{\link{glimmaMDS}}, \code{\link{glimmaMDS.default}}, \code{\link{glimmaMDS.DGEList}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}

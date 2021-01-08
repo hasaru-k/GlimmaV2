@@ -102,3 +102,6 @@ The summary plot on the left represents gene-wise log-fold-change (logFC) on the
 \seealso{
 \code{\link{glimmaMA}}, \code{\link{glimmaMA.MArrayLM}}, \code{\link{glimmaMA.DGEExact}}, \code{\link{glimmaMA.DESeqDataSet}}
 }
+\author{
+Hasaru Kariyawasam, Shian Su and Oliver Voogd
+}
