@@ -30,11 +30,11 @@
 
 \item{dge}{\code{DGEList} object with \code{nrow(x)} rows from which expression values are
 extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
-and sample groups from \code{dge$samples$group}. By default raw counts are transformed to 
+and sample groups from \code{dge$samples$group}. By default raw counts are transformed to
 log-cpm values (see more in the \code{transform.counts} argument).}
 
 \item{counts}{numeric matrix with \code{nrow(x)} rows containing gene expression values.
-This can be used to replace the gene counts from \code{dge$counts}, i.e. you may have 
+This can be used to replace the gene counts from \code{dge$counts}, i.e. you may have
 log-rpkm values stored in a different object that you wish to use.}
 
 \item{groups}{vector of length \code{ncol(dge)} representing categorisation of samples in
@@ -59,8 +59,8 @@ unspecified, samples will be coloured according to \code{groups}.}
 
 \item{p.adj.method}{character string specifying p-value adjustment method.}
 
-\item{transform.counts}{the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)}; 
-"cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; and "none" for no transformation). Defaults to "logcpm".}
+\item{transform.counts}{the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)};
+"cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; "logrpkm" for \code{edgeR::rpkm(counts, log=TRUE)}; and "none" for no transformation). Defaults to "logcpm".}
 
 \item{main}{character string for the main title of summary plot.}
 
