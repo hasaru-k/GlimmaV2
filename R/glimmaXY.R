@@ -118,7 +118,7 @@ buildXYData <- function(
         counts <- edgeR::cpm(counts, log=TRUE)
       } else if (transform.counts == "cpm") {
         counts <- edgeR::cpm(counts, log=FALSE)
-      } else if (transform.counts == "rpkm") {
+      } else if (transform.counts == "rpkm" || transform.counts == "logrpkm") {
         if (is.null(anno$length)) {
           stop("no 'length' column in gene annotation, rpkm cannot be computed")
         }
@@ -126,7 +126,12 @@ buildXYData <- function(
         if (!is.numeric(anno$length)) {
           stop("'length' column of gene annotation must be numeric values")
         }
-        counts <- edgeR::rpkm(counts, gene.length = anno$length)
+
+        if (transform.counts == "rpkm") {
+          counts <- edgeR::rpkm(counts, gene.length = anno$length)
+        } else {
+          counts <- edgeR::rpkm(counts, gene.length = anno$length, log = TRUE)
+        }
       }
     }
 
