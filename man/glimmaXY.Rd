@@ -58,8 +58,8 @@ with \code{status}  in the order of -1, 0 and 1.}
 for colours associated with each sample to be displayed on the expression plot. If left
 unspecified, samples will be coloured according to \code{groups}.}
 
-\item{transform.counts}{the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)}; 
-"cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; and "none" for no transformation). Defaults to "logcpm".}
+\item{transform.counts}{the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)};
+"cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; "logrpkm" for \code{edgeR::rpkm(counts, log=TRUE)}; and "none" for no transformation). Defaults to "logcpm".}
 
 \item{main}{character string for the main title of summary plot.}
 

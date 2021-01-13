@@ -43,11 +43,11 @@ glimmaMD <- function(x, ...) {
 #'
 #' @param dge \code{DGEList} object with \code{nrow(x)} rows from which expression values are
 #' extracted from to create expression (right) plot. Gene counts are taken from \code{dge$counts}
-#' and sample groups from \code{dge$samples$group}. By default raw counts are transformed to 
+#' and sample groups from \code{dge$samples$group}. By default raw counts are transformed to
 #' log-cpm values (see more in the \code{transform.counts} argument).
 #'
 #' @param counts numeric matrix with \code{nrow(x)} rows containing gene expression values.
-#' This can be used to replace the gene counts from \code{dge$counts}, i.e. you may have 
+#' This can be used to replace the gene counts from \code{dge$counts}, i.e. you may have
 #' log-rpkm values stored in a different object that you wish to use.
 #'
 #' @param groups vector of length \code{ncol(dge)} representing categorisation of samples in
@@ -74,8 +74,8 @@ glimmaMD <- function(x, ...) {
 #' unspecified, samples will be coloured according to \code{groups}.
 #'
 #' @param p.adj.method character string specifying p-value adjustment method.
-#' @param transform.counts the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)}; 
-#' "cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; and "none" for no transformation). Defaults to "logcpm".
+#' @param transform.counts the type of transformation used on the counts - "logcpm" for using \code{edgeR::cpm(counts, log=TRUE)};
+#' "cpm" for \code{edgeR::cpm(counts)}; "rpkm" for \code{edgeR::rpkm(counts)}; "logrpkm" for \code{edgeR::rpkm(counts, log=TRUE)}; and "none" for no transformation). Defaults to "logcpm".
 #'
 #' @param main character string for the main title of summary plot.
 #' @param xlab character string for the x-axis label of summary plot.
@@ -116,7 +116,7 @@ glimmaMA.MArrayLM <- function(
   status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
   p.adj.method = "BH",
-  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
+  transform.counts = c("logcpm", "cpm", "rpkm", "logrpkm", "none"),
   main=colnames(x)[coef],
   xlab="logCPM",
   ylab="logFC",
@@ -190,7 +190,7 @@ glimmaMA.DGEExact <- function(
   status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
   p.adj.method = "BH",
-  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
+  transform.counts = c("logcpm", "cpm", "rpkm", "logrpkm", "none"),
   main=paste(x$comparison[2],"vs",x$comparison[1]),
   xlab="logCPM",
   ylab="logFC",
@@ -274,7 +274,7 @@ glimmaMA.DESeqDataSet  <- function(
   display.columns = NULL,
   status.cols=c("#1052bd", "silver", "#cc212f"),
   sample.cols=NULL,
-  transform.counts = c("logcpm", "cpm", "rpkm", "none"),
+  transform.counts = c("logcpm", "cpm", "rpkm", "logrpkm", "none"),
   main="MA Plot",
   xlab="logCPM",
   ylab="logFC",

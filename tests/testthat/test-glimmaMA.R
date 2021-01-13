@@ -174,6 +174,19 @@ test_that("Setting transform.counts = rpkm transforms accordingly",
     # can't test DESeq2 because some genes are filtered out
 })
 
+test_that("Setting transform.counts = logrpkm transforms accordingly",
+{
+    expected_counts <- edgeR::rpkm(dge$counts, gene.length=1234, log = TRUE)
+    # MArrayLM, DGEExact/DGELRT
+    for (x in list(limmaFit, dgeexact))
+    {
+        x$genes$length <- 1234
+        xData <- glimmaMA(x, dge=dge, transform.counts="logrpkm")$x$data
+        expect_true(all(xData$counts==expected_counts))
+    }
+    # can't test DESeq2 because some genes are filtered out
+})
+
 test_that("Display.columns arg provides a minimal set of [xlab, ylab, geneID]",
 {
     # MArrayLM, DGEExact/DGELRT
