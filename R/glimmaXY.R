@@ -110,7 +110,7 @@ buildXYData <- function(
   } else {
     # df format for serialisation
     if (transform.counts != "none") {
-      if (!all.equal(counts, round(counts))) {
+      if (isTRUE(all.equal(counts, round(counts)))) {
         warning("count transform requested but not all count values are integers.")
       }
 
