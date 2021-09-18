@@ -62,7 +62,8 @@ function createXYSpec(xyData, xyTable, width, height)
       {
         "name": "colour_scale",
         "type": "ordinal",
-        "domain": [-1, 0, 1],
+        // co-ordinate w/ domain of status
+        "domain": ["downReg", "nonDE", "upReg"],
         "range": xyData.statusColours
       }
     ],
