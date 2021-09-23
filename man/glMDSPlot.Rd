@@ -22,14 +22,6 @@ Draws a two-panel interactive MDS plot in an html page. The left
 Draw an interactive MD plot from a DGEList object with distances calculated
 from most variable genes.
 }
-\examples{
-data(lymphomaRNAseq)
-genotype <- relevel(lymphomaRNAseq$samples$group, "Smchd1-null")
-\donttest{
-glMDSPlot(lymphomaRNAseq, labels=1:7, groups=genotype)
-}
-
-}
 \seealso{
 \code{\link{glMDSPlot.default}}, \code{\link{glMDSPlot.DGEList}}
 }

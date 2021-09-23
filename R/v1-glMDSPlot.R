@@ -16,13 +16,6 @@
 #'
 #' @seealso \code{\link{glMDSPlot.default}}, \code{\link{glMDSPlot.DGEList}}
 #'
-#' @examples
-#' data(lymphomaRNAseq)
-#' genotype <- relevel(lymphomaRNAseq$samples$group, "Smchd1-null")
-#' \donttest{
-#' glMDSPlot(lymphomaRNAseq, labels=1:7, groups=genotype)
-#' }
-#'
 #' @export
 
 glMDSPlot <- function(x, ...) {

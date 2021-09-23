@@ -19,36 +19,6 @@
 #'   points will fix the expression plot to gene. Clicking on rows on the table
 #'   has the same effect as clicking on the corresponding gene in the plot.
 #'
-#' @examples
-#' library(limma)
-#' library(edgeR)
-#'
-#' data(lymphomaRNAseq)
-#' x <- lymphomaRNAseq
-#'
-#' sel <- rowSums(cpm(x$counts)>0.5)>=3
-#' x <- x[sel,]
-#'
-#' genotype <- relevel(x$samples$group, "Smchd1-null")
-#' x <- calcNormFactors(x, method="TMM")
-#' des <- model.matrix(~genotype)
-#'
-#' ## Apply voom with sample quality weights and fit linear model
-#' v <- voomWithQualityWeights(x, design=des, plot=FALSE)
-#' vfit <- lmFit(v,des)
-#'
-#' ## Apply treat relative to a fold-change of 1.5
-#' vtfit <- treat(vfit,lfc=log2(1.5))
-#' vfit <- eBayes(vfit)
-#' results <- decideTests(vfit,p.value=0.01)
-#'
-#' \donttest{
-#' glMDPlot(vfit, counts=x$counts, anno=x$genes, groups=genotype, samples=1:7,
-#'          status=results[,2], main="MD plot: Wild-type vs Smchd1",
-#'          display.columns=c("Symbols", "GeneID", "GeneName"),
-#'          folder="Smchd1-Lymphoma")
-#' }
-#'
 #' @export
 
 glMDPlot <- function(x, ...) {
@@ -374,38 +344,6 @@ glMDPlot.DGEExact <- glMDPlot.DGELRT
 #'   on left plot will plot expression level for corresponding gene, clicking on
 #'   points will fix the expression plot to gene. Clicking on rows on the table
 #'   has the same effect as clicking on the corresponding gene in the plot.
-#'
-#' @examples
-#' \donttest{
-#' library(limma)
-#' library(edgeR)
-#'
-#' data(lymphomaRNAseq)
-#' x <- lymphomaRNAseq
-#'
-#' sel <- rowSums(cpm(x$counts)>0.5)>=3
-#' x <- x[sel,]
-#'
-#' genotype <- relevel(x$samples$group, "Smchd1-null")
-#' x <- calcNormFactors(x, method="TMM")
-#' des <- model.matrix(~genotype)
-#'
-#' ## Apply voom with sample quality weights and fit linear model
-#' v <- voomWithQualityWeights(x, design=des, plot=FALSE)
-#' vfit <- lmFit(v,des)
-#'
-#' ## Apply treat relative to a fold-change of 1.5
-#' vtfit <- treat(vfit,lfc=log2(1.5))
-#' vfit <- eBayes(vfit)
-#' results <- decideTests(vfit,p.value=0.01)
-#'
-#' \donttest{
-#' glMDPlot(vfit, counts=x$counts, anno=x$genes, groups=genotype, samples=1:7,
-#'          status=results[,2], main="MD plot: Wild-type vs Smchd1",
-#'          display.columns=c("Symbols", "GeneID", "GeneName"),
-#'          folder="Smchd1-Lymphoma")
-#' }
-#' }
 #'
 #' @method glMDPlot MArrayLM
 #'
