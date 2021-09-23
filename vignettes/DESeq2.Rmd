@@ -21,8 +21,6 @@ library(DESeq2)
 
 ## Introduction
 
-<<Shian, can you include any relevant suggestions I made to the limma/edgeR version of the vignette here please? - comment by Charity>>
-
 In this vignette we present the basic features of Glimma. 
 Glimma is an interactive R widget for creating plots for differential expression analysis, created using the Vega and htmlwidgets frameworks. The created plots can be embedded in R Markdown, or exported as standalone HTML documents.
 The data presented here is slightly modified from the [RNAseq123](https://bioconductor.org/packages/release/workflows/html/RNAseq123.html) workflow with only a single contrast has been performed for simplicity. Here we use DESeq2 to fit the model.
@@ -112,7 +110,6 @@ The MA plot can then be created using the `dds` object that now contains fitted 
 ```{r}
 glimmaMA(dds)
 ```
-<<Can you check the code? I stumbled on gene 244895 (Peak1) and the limma/edgeR version of the plot has the gene downregulated (blue and status=-1) but the deseq2 version of the plot has the same gene upregulated (red and status=1). The expression plots look the same in both plots though. Has there been a switch in directionality (if so make it consistent), or is deseq2 doing something totally different to limma/edgeR in terms of DE analysis (if so keep as is)? - comment by Charity>>
 
 ### Interactions with the plot
 In the plot above, try:
@@ -170,7 +167,14 @@ The default argument is `"logcpm"` which log-transforms counts using
 `edgeR::rpkm(counts)`, `cpm` for `edgeR::cpm(counts)` and `none` for no
 transformation.
 
-+ <<add a comment on `anno` and `display.columns`>>
+***Changing displayed columns in gene annotation***
+The gene annotations are pulled from the `DGEList` object by default. This can be overwritten by providing a different
+table of annotations via the `anno` argument, the substitute annotations must have the same number of rows as the
+counts matrix and the genes must be in the same order as in the counts.
+
+Some annotations may contain too many columsn to be sensibly displayed. The `display.columns` argument can be used to
+control the columns displayed in the plot. A vector of column names are to be provided for selecting the columns that
+will be displayed in the interactive plot.
 
 ## Saving widgets
 

@@ -44,5 +44,5 @@ test_that("Groups arg can be omitted without error",
 
 test_that("Length of groups must match the no. of columns in counts",
 {
-    expect_error(glimmaXY(x=fc, y =sig, counts=dge$counts, groups=1:(ncol(lymphomaRNAseq)-1)))
+    expect_error(glimmaXY(x=fc, y =sig, counts=dge$counts, groups=1:(ncol(dge)-1)))
 })

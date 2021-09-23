@@ -185,9 +185,22 @@ The default argument is `"logcpm"` which log-transforms counts using
 `edgeR::rpkm(counts)`, `cpm` for `edgeR::cpm(counts)` and `none` for no
 transformation.
 
-+ <<Can you add a comment `transform.counts`, maybe use "rpkm" just to prompt users to see the options for that argument? - comment by Charity>>
-<!-- added - has -->
-+ <<Can you add a comment on `anno` and `display.columns`? - comment by Charity>>
+***Changing displayed columns in gene annotation***
+The gene annotations are pulled from the `DGEList` object by default. This can be overwritten by providing a different
+table of annotations via the `anno` argument, the substitute annotations must have the same number of rows as the
+counts matrix and the genes must be in the same order as in the counts.
+
+Some annotations may contain too many columsn to be sensibly displayed. The `display.columns` argument can be used to
+control the columns displayed in the plot. A vector of column names are to be provided for selecting the columns that
+will be displayed in the interactive plot.
+
+## Volcano Plot
+
+A popular alternative to the MA plot for plotting the output of differential expression analysis the the volcano plot. This can be produced using the `glimmaVolcano` function and the same arguments as the `glimmaMA`.
+
+```{r}
+glimmaVolcano(efit, dge = dge)
+```
 
 ## Saving widgets
 
@@ -197,12 +210,6 @@ The plots created are automatically embedded into Rmarkdown reports, but having 
 htmlwidgets::saveWidget(glimmaMA(efit, dge = dge), "ma-plot.html")
 # you can link to it in Rmarkdown using [MA-plot](ma-plot.html)
 ```
-
-## Volcano Plot
-<< Add section on volcano plot. Can be brief and refer to MA plot for most things. - comment by Charity>>
-
-## XY Plot
-<< Add section on the general XY plot. Use this to show how to make a different plot. Perhaps an interactive version of t-stats and log-odds that are available in limma e.g. plot(efit$t, efit$lods) with DE genes highlighted. Add a comment at the end, with some code, to show how one would go about reproducing the above MA and volcano plots. Not sure what example you could use for the DESeq2 version of the vignette. - comment by Charity>>
 
 ## Session Info
 
