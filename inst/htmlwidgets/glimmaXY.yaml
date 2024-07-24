@@ -1,4 +1,9 @@
 dependencies:
+  - name: jquery
+    version: 3.6.1
+    src: htmlwidgets/lib/jquery
+    script:
+      - jquery-3.6.1.min.js
   - name: datatables
     version: 1.0
     src: htmlwidgets/lib/datatables

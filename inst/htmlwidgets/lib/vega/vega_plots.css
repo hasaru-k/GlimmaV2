@@ -84,16 +84,13 @@
 
 button.save-button {
     box-sizing: border-box;
-    margin-top: 0.333em;
-    margin-right: 0.333em;
-    margin-bottom: 0.333em;
     padding: 0.3em 0.5em;
     font-size: 9pt;
-    border: 1px solid #888888;
-    border-radius: 2px;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
     cursor: pointer;
     line-height: 1.6em;
-    color: #4c4c4c;
+    color: #505050;
     white-space: nowrap;
     overflow: hidden;
     background-color: #ffffff;
@@ -109,9 +106,9 @@ button.save-button {
 }
 button.save-button:hover 
 {
-    background-color: #888888;
+    background-color: #aaaaaa;
     color: white;
-    border-color: #888888;
+    border-color: #aaaaaa;
 }
 button.save-button:active {
     color: rgba(255, 255, 255, 1);

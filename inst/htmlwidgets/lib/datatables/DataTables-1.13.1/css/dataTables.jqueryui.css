@@ -1,16 +1,30 @@
-/*
- * This combined file was created by the DataTables downloader builder:
- *   https://datatables.net/download
- *
- * To rebuild or modify this file with the latest versions of the included
- * software please visit:
- *   https://datatables.net/download/#dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-html5-2.3.3/sc-2.0.7
- *
- * Included libraries:
- *   JSZip 2.5.0, DataTables 1.13.1, Buttons 2.3.3, HTML5 export 2.3.3, Scroller 2.0.7
- */
-
 @charset "UTF-8";
+table.dataTable td.dt-control {
+  text-align: center;
+  cursor: pointer;
+}
+table.dataTable td.dt-control:before {
+  height: 1em;
+  width: 1em;
+  margin-top: -9px;
+  display: inline-block;
+  color: white;
+  border: 0.15em solid white;
+  border-radius: 1em;
+  box-shadow: 0 0 0.2em #444;
+  box-sizing: content-box;
+  text-align: center;
+  text-indent: 0 !important;
+  font-family: "Courier New", Courier, monospace;
+  line-height: 1em;
+  content: "+";
+  background-color: #31b131;
+}
+table.dataTable tr.dt-hasChild td.dt-control:before {
+  content: "-";
+  background-color: #d33333;
+}
+
 table.dataTable td.dt-control {
   text-align: center;
   cursor: pointer;
@@ -274,7 +288,6 @@ table.dataTable tfoot th {
 table.dataTable thead th,
 table.dataTable thead td {
   padding: 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 table.dataTable thead th:active,
 table.dataTable thead td:active {
@@ -283,7 +296,6 @@ table.dataTable thead td:active {
 table.dataTable tfoot th,
 table.dataTable tfoot td {
   padding: 10px 10px 6px 10px;
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
 }
 table.dataTable tbody tr {
   background-color: transparent;
@@ -587,779 +599,62 @@ table.dataTable td {
     margin-top: 0.5em;
   }
 }
-
-
-@keyframes dtb-spinner {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@-o-keyframes dtb-spinner {
-  100% {
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@-ms-keyframes dtb-spinner {
-  100% {
-    -ms-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes dtb-spinner {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@-moz-keyframes dtb-spinner {
-  100% {
-    -moz-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-div.dataTables_wrapper {
+table.dataTable thead th div.DataTables_sort_wrapper {
   position: relative;
 }
-
-div.dt-buttons {
-  position: initial;
-}
-div.dt-buttons .dt-button {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-div.dt-button-info {
-  position: fixed;
+table.dataTable thead th div.DataTables_sort_wrapper span {
+  position: absolute;
   top: 50%;
-  left: 50%;
-  width: 400px;
-  margin-top: -100px;
-  margin-left: -200px;
-  background-color: white;
-  border: 2px solid #111;
-  box-shadow: 3px 4px 10px 1px rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-  text-align: center;
-  z-index: 21;
+  margin-top: -8px;
+  right: -18px;
 }
-div.dt-button-info h2 {
+table.dataTable thead th.ui-state-default,
+table.dataTable tfoot th.ui-state-default {
+  border-left-width: 0;
+}
+table.dataTable thead th.ui-state-default:first-child,
+table.dataTable tfoot th.ui-state-default:first-child {
+  border-left-width: 1px;
+}
+
+/*
+ * Control feature layout
+ */
+.dataTables_wrapper .dataTables_paginate .fg-button {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
   padding: 0.5em;
-  margin: 0;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.dataTables_wrapper .dataTables_paginate .fg-button:active {
+  outline: none;
+}
+.dataTables_wrapper .dataTables_paginate .fg-button:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.dataTables_wrapper .dataTables_paginate .fg-button:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.dataTables_wrapper .ui-widget-header {
   font-weight: normal;
-  border-bottom: 1px solid #ddd;
-  background-color: #f3f3f3;
 }
-div.dt-button-info > div {
-  padding: 1em;
-}
-
-div.dtb-popover-close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
-  border: 1px solid #eaeaea;
-  background-color: #f9f9f9;
-  text-align: center;
-  border-radius: 3px;
-  cursor: pointer;
-  z-index: 2003;
-}
-
-button.dtb-hide-drop {
-  display: none !important;
-}
-
-div.dt-button-collection-title {
-  text-align: center;
-  padding: 0.3em 0 0.5em;
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-  font-size: 0.9em;
-}
-
-div.dt-button-collection-title:empty {
-  display: none;
-}
-
-span.dt-button-spacer {
-  display: inline-block;
-  margin: 0.5em;
-  white-space: nowrap;
-}
-span.dt-button-spacer.bar {
-  border-left: 1px solid rgba(0, 0, 0, 0.3);
-  vertical-align: middle;
-  padding-left: 0.5em;
-}
-span.dt-button-spacer.bar:empty {
-  height: 1em;
-  width: 1px;
-  padding-left: 0;
-}
-
-div.dt-button-collection span.dt-button-spacer {
-  width: 100%;
-  font-size: 0.9em;
-  text-align: center;
-  margin: 0.5em 0;
-}
-div.dt-button-collection span.dt-button-spacer:empty {
-  height: 0;
-  width: 100%;
-}
-div.dt-button-collection span.dt-button-spacer.bar {
-  border-left: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  padding-left: 0;
-}
-
-button.dt-button,
-div.dt-button,
-a.dt-button,
-input.dt-button {
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  margin-left: 0.167em;
-  margin-right: 0.167em;
-  margin-bottom: 0.333em;
-  padding: 0.5em 1em;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: 0.88em;
-  line-height: 1.6em;
-  color: black;
-  white-space: nowrap;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.1);
-  /* Fallback */
-  background: linear-gradient(to bottom, rgba(230, 230, 230, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="rgba(230, 230, 230, 0.1)", EndColorStr="rgba(0, 0, 0, 0.1)");
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  text-decoration: none;
-  outline: none;
-  text-overflow: ellipsis;
-}
-button.dt-button:first-child,
-div.dt-button:first-child,
-a.dt-button:first-child,
-input.dt-button:first-child {
-  margin-left: 0;
-}
-button.dt-button.disabled,
-div.dt-button.disabled,
-a.dt-button.disabled,
-input.dt-button.disabled {
-  cursor: default;
-  opacity: 0.4;
-}
-button.dt-button:active:not(.disabled),
-div.dt-button:active:not(.disabled),
-a.dt-button:active:not(.disabled),
-input.dt-button:active:not(.disabled) {
-  background-color: rgba(0, 0, 0, 0.1);
-  /* Fallback */
-  background: linear-gradient(to bottom, rgba(179, 179, 179, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="rgba(179, 179, 179, 0.1)", EndColorStr="rgba(0, 0, 0, 0.1)");
-  box-shadow: inset 1px 1px 3px #999999;
-}
-button.dt-button:active:not(.disabled):hover:not(.disabled),
-div.dt-button:active:not(.disabled):hover:not(.disabled),
-a.dt-button:active:not(.disabled):hover:not(.disabled),
-input.dt-button:active:not(.disabled):hover:not(.disabled) {
-  box-shadow: inset 1px 1px 3px #999999;
-  background-color: rgba(0, 0, 0, 0.1);
-  /* Fallback */
-  background: linear-gradient(to bottom, rgba(128, 128, 128, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="rgba(128, 128, 128, 0.1)", EndColorStr="rgba(0, 0, 0, 0.1)");
-}
-button.dt-button:hover,
-div.dt-button:hover,
-a.dt-button:hover,
-input.dt-button:hover {
-  text-decoration: none;
-}
-button.dt-button:hover:not(.disabled),
-div.dt-button:hover:not(.disabled),
-a.dt-button:hover:not(.disabled),
-input.dt-button:hover:not(.disabled) {
-  border: 1px solid #666;
-  background-color: rgba(0, 0, 0, 0.1);
-  /* Fallback */
-  background: linear-gradient(to bottom, rgba(153, 153, 153, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="rgba(153, 153, 153, 0.1)", EndColorStr="rgba(0, 0, 0, 0.1)");
-}
-button.dt-button:focus:not(.disabled),
-div.dt-button:focus:not(.disabled),
-a.dt-button:focus:not(.disabled),
-input.dt-button:focus:not(.disabled) {
-  border: 1px solid #426c9e;
-  text-shadow: 0 1px 0 #c4def1;
-  outline: none;
-  background-color: #79ace9;
-  /* Fallback */
-  background: linear-gradient(to bottom, #d1e2f7 0%, #79ace9 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="#d1e2f7", EndColorStr="#79ace9");
-}
-button.dt-button.active:focus:not(.disabled),
-div.dt-button.active:focus:not(.disabled),
-a.dt-button.active:focus:not(.disabled),
-input.dt-button.active:focus:not(.disabled) {
-  background: linear-gradient(to bottom, #d1e2f7 0%, #79ace9 100%) !important;
-}
-button.dt-button span.dt-down-arrow,
-div.dt-button span.dt-down-arrow,
-a.dt-button span.dt-down-arrow,
-input.dt-button span.dt-down-arrow {
-  position: relative;
-  top: -2px;
-  color: rgba(70, 70, 70, 0.75);
-  font-size: 8px;
-  padding-left: 10px;
-  line-height: 1em;
-}
-
-.dt-button embed {
-  outline: none;
-}
-
-div.dt-buttons {
-  float: left;
-}
-div.dt-buttons.buttons-right {
-  float: right;
-}
-
-div.dataTables_layout_cell div.dt-buttons {
-  float: none;
-}
-div.dataTables_layout_cell div.dt-buttons.buttons-right {
-  float: none;
-}
-
-div.dt-btn-split-wrapper {
-  display: inline-block;
-}
-
-div.dt-button-collection {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  padding: 4px 4px 2px 4px;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  background-color: white;
-  overflow: hidden;
-  z-index: 2002;
-  border-radius: 5px;
-  box-shadow: 3px 4px 10px 1px rgba(0, 0, 0, 0.3);
-  box-sizing: border-box;
-}
-div.dt-button-collection button.dt-button,
-div.dt-button-collection div.dt-button,
-div.dt-button-collection a.dt-button {
-  position: relative;
-  left: 0;
-  right: 0;
-  width: 100%;
-  display: block;
-  float: none;
-  margin: 4px 0 2px 0;
-}
-div.dt-button-collection button.dt-button:active:not(.disabled), div.dt-button-collection button.dt-button.active:not(.disabled),
-div.dt-button-collection div.dt-button:active:not(.disabled),
-div.dt-button-collection div.dt-button.active:not(.disabled),
-div.dt-button-collection a.dt-button:active:not(.disabled),
-div.dt-button-collection a.dt-button.active:not(.disabled) {
-  background-color: #dadada;
-  /* Fallback */
-  background: linear-gradient(to bottom, #f0f0f0 0%, #dadada 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="#f0f0f0", EndColorStr="#dadada");
-  box-shadow: inset 1px 1px 3px #666;
-}
-div.dt-button-collection button.dt-button:first-child,
-div.dt-button-collection div.dt-button:first-child,
-div.dt-button-collection a.dt-button:first-child {
-  margin-top: 0;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-div.dt-button-collection button.dt-button:last-child,
-div.dt-button-collection div.dt-button:last-child,
-div.dt-button-collection a.dt-button:last-child {
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-div.dt-button-collection div.dt-btn-split-wrapper {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-content: flex-start;
-  align-items: stretch;
-  margin: 4px 0 2px 0;
-}
-div.dt-button-collection div.dt-btn-split-wrapper button.dt-button {
-  margin: 0;
-  display: inline-block;
-  width: 0;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 50px;
-  border-radius: 0;
-}
-div.dt-button-collection div.dt-btn-split-wrapper button.dt-btn-split-drop {
-  min-width: 20px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 0;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:first-child {
-  margin-top: 0;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:first-child button.dt-button {
-  border-top-left-radius: 3px;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:first-child button.dt-btn-split-drop {
-  border-top-right-radius: 3px;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:last-child button.dt-button {
-  border-bottom-left-radius: 3px;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:last-child button.dt-btn-split-drop {
-  border-bottom-right-radius: 3px;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:active:not(.disabled) button.dt-button, div.dt-button-collection div.dt-btn-split-wrapper.active:not(.disabled) button.dt-button {
-  background-color: #dadada;
-  /* Fallback */
-  background: linear-gradient(to bottom, #f0f0f0 0%, #dadada 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr="#f0f0f0", EndColorStr="#dadada");
-  box-shadow: inset 0px 0px 4px #666;
-}
-div.dt-button-collection div.dt-btn-split-wrapper:active:not(.disabled) button.dt-btn-split-drop, div.dt-button-collection div.dt-btn-split-wrapper.active:not(.disabled) button.dt-btn-split-drop {
-  box-shadow: none;
-}
-div.dt-button-collection.fixed .dt-button:first-child {
-  margin-top: 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-div.dt-button-collection.fixed .dt-button:last-child {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-div.dt-button-collection.fixed {
-  position: fixed;
-  display: block;
-  top: 50%;
-  left: 50%;
-  margin-left: -75px;
-  border-radius: 5px;
-  background-color: white;
-}
-div.dt-button-collection.fixed.two-column {
-  margin-left: -200px;
-}
-div.dt-button-collection.fixed.three-column {
-  margin-left: -225px;
-}
-div.dt-button-collection.fixed.four-column {
-  margin-left: -300px;
-}
-div.dt-button-collection.fixed.columns {
-  margin-left: -409px;
-}
-@media screen and (max-width: 1024px) {
-  div.dt-button-collection.fixed.columns {
-    margin-left: -308px;
-  }
-}
-@media screen and (max-width: 640px) {
-  div.dt-button-collection.fixed.columns {
-    margin-left: -203px;
-  }
-}
-@media screen and (max-width: 460px) {
-  div.dt-button-collection.fixed.columns {
-    margin-left: -100px;
-  }
-}
-div.dt-button-collection.fixed > :last-child {
-  max-height: 100vh;
-  overflow: auto;
-}
-div.dt-button-collection.two-column > :last-child, div.dt-button-collection.three-column > :last-child, div.dt-button-collection.four-column > :last-child {
-  display: block !important;
-  -webkit-column-gap: 8px;
-  -moz-column-gap: 8px;
-  -ms-column-gap: 8px;
-  -o-column-gap: 8px;
-  column-gap: 8px;
-}
-div.dt-button-collection.two-column > :last-child > *, div.dt-button-collection.three-column > :last-child > *, div.dt-button-collection.four-column > :last-child > * {
-  -webkit-column-break-inside: avoid;
-  break-inside: avoid;
-}
-div.dt-button-collection.two-column {
-  width: 400px;
-}
-div.dt-button-collection.two-column > :last-child {
-  padding-bottom: 1px;
-  column-count: 2;
-}
-div.dt-button-collection.three-column {
-  width: 450px;
-}
-div.dt-button-collection.three-column > :last-child {
-  padding-bottom: 1px;
-  column-count: 3;
-}
-div.dt-button-collection.four-column {
-  width: 600px;
-}
-div.dt-button-collection.four-column > :last-child {
-  padding-bottom: 1px;
-  column-count: 4;
-}
-div.dt-button-collection .dt-button {
-  border-radius: 0;
-}
-div.dt-button-collection.columns {
-  width: auto;
-}
-div.dt-button-collection.columns > :last-child {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 6px;
-  width: 818px;
-  padding-bottom: 1px;
-}
-div.dt-button-collection.columns > :last-child .dt-button {
-  min-width: 200px;
-  flex: 0 1;
-  margin: 0;
-}
-div.dt-button-collection.columns.dtb-b3 > :last-child, div.dt-button-collection.columns.dtb-b2 > :last-child, div.dt-button-collection.columns.dtb-b1 > :last-child {
-  justify-content: space-between;
-}
-div.dt-button-collection.columns.dtb-b3 .dt-button {
-  flex: 1 1 32%;
-}
-div.dt-button-collection.columns.dtb-b2 .dt-button {
-  flex: 1 1 48%;
-}
-div.dt-button-collection.columns.dtb-b1 .dt-button {
-  flex: 1 1 100%;
-}
-@media screen and (max-width: 1024px) {
-  div.dt-button-collection.columns > :last-child {
-    width: 612px;
-  }
-}
-@media screen and (max-width: 640px) {
-  div.dt-button-collection.columns > :last-child {
-    width: 406px;
-  }
-  div.dt-button-collection.columns.dtb-b3 .dt-button {
-    flex: 0 1 32%;
-  }
-}
-@media screen and (max-width: 460px) {
-  div.dt-button-collection.columns > :last-child {
-    width: 200px;
-  }
-}
-
-div.dt-button-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  /* Fallback */
-  background: radial-gradient(ellipse farthest-corner at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
-  /* W3C Markup, IE10 Release Preview */
-  z-index: 2001;
-}
-
-@media screen and (max-width: 640px) {
-  div.dt-buttons {
-    float: none !important;
-    text-align: center;
-  }
-}
-button.dt-button.processing,
-div.dt-button.processing,
-a.dt-button.processing {
-  color: rgba(0, 0, 0, 0.2);
-}
-button.dt-button.processing:after,
-div.dt-button.processing:after,
-a.dt-button.processing:after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
-  box-sizing: border-box;
-  display: block;
-  content: " ";
-  border: 2px solid #282828;
-  border-radius: 50%;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  animation: dtb-spinner 1500ms infinite linear;
-  -o-animation: dtb-spinner 1500ms infinite linear;
-  -ms-animation: dtb-spinner 1500ms infinite linear;
-  -webkit-animation: dtb-spinner 1500ms infinite linear;
-  -moz-animation: dtb-spinner 1500ms infinite linear;
-}
-
-button.dt-btn-split-drop {
-  margin-left: calc(-1px - 0.333em);
-  padding-bottom: calc(0.5em - 1px);
-  border-radius: 0px 1px 1px 0px;
-  color: rgba(70, 70, 70, 0.9);
-  border-left: none;
-}
-button.dt-btn-split-drop span.dt-btn-split-drop-arrow {
-  position: relative;
-  top: -1px;
-  left: -2px;
-  font-size: 8px;
-}
-button.dt-btn-split-drop:hover {
-  z-index: 2;
-}
-
-button.buttons-split {
-  border-right: 1px solid rgba(70, 70, 70, 0);
-  border-radius: 1px 0px 0px 1px;
-}
-
-button.dt-btn-split-drop-button {
-  background-color: white;
-}
-button.dt-btn-split-drop-button:hover {
-  background-color: white;
-}
-
-
-div.dts {
-  display: block !important;
-}
-div.dts tbody th,
-div.dts tbody td {
-  white-space: nowrap;
-}
-div.dts div.dts_loading {
-  z-index: 1;
-}
-div.dts div.dts_label {
-  position: absolute;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-  text-align: right;
-  border-radius: 3px;
-  padding: 0.4em;
-  z-index: 2;
-  display: none;
-}
-div.dts div.dataTables_scrollBody {
-  background: repeating-linear-gradient(45deg, #edeeff, #edeeff 10px, white 10px, white 20px);
-}
-div.dts div.dataTables_scrollBody table {
-  background-color: white;
-  z-index: 2;
-}
-div.dts div.dataTables_paginate,
-div.dts div.dataTables_length {
-  display: none;
-}
-
-
-/* CUSTOM GLIMMA CSS BELOW */
-
-th { font-size: 11px; }
-td { font-size: 10px; }
-
-table.dataTable tbody tr.stripe1 {
-  background-color: #ffffff;
-}
-table.dataTable tbody tr.stripe1:hover {
-  background-color: #ebf0fa;
-}
-table.dataTable tbody tr.stripe1.selected {
-  background-color: #e4ecff;
-}
-table.dataTable tbody tr.stripe2 {
-  background-color: #f6f6f6;
-  border-bottom: solid #c0c0c0;
-}
-table.dataTable tbody tr.stripe2:hover {
-  background-color: #ebf0fa;
-}
-table.dataTable tbody tr.stripe2.selected {
-  background-color: #e4ecff;
-  border-bottom: solid #c0c0c0;
-}
-
-div.container {
-  width: 80%;
-}
-
-/* dt buttons */
-button.dt-button,
-div.dt-button,
-a.dt-button {
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  margin-right: 0px;
-  margin-bottom: 0.333em;
-  padding: 0.3em 0.5em;
-  font-size: 8pt;
-  border: 1px solid #999;
-  border-radius: 2px;
-  cursor: pointer;
-  line-height: 1.6em;
-  color: #252525;
-  white-space: nowrap;
-  overflow: hidden;
-  background-color: #e9e9e9;
-  /* Fallback */
-  background-image: -webkit-linear-gradient(top, white 0%, #e9e9e9 100%);
-  /* Chrome 10+, Saf5.1+, iOS 5+ */
-  background-image: -moz-linear-gradient(top, white 0%, #e9e9e9 100%);
-  /* FF3.6 */
-  background-image: -ms-linear-gradient(top, white 0%, #e9e9e9 100%);
-  /* IE10 */
-  background-image: -o-linear-gradient(top, white 0%, #e9e9e9 100%);
-  /* Opera 11.10+ */
-  background-image: linear-gradient(to bottom, white 0%, #e9e9e9 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='white', EndColorStr='#e9e9e9');
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  text-decoration: none;
-  outline: none;
-  text-overflow: ellipsis;
-}
-
-/* border colours */
-table.dataTable tbody th, table.dataTable tbody td {
-  padding: 8px 8px;
-  border-right: 1px solid #d8d8d8;
-  border-bottom: 1px solid #d8d8d8;
-}
-
-table.dataTable tbody td:first-child {
-  border-left: 1px solid #d8d8d8;
-}
-
-table.dataTable thead th,
-table.dataTable tfoot th {
-  font-weight: bold;
-  border-bottom: 1px solid #d8d8d8;
-}
-
-.dataTables_wrapper.no-footer .dataTables_scrollBody 
-{
-  border-bottom: 1px solid #d8d8d8;
-}
-
-table.dataTable 
-{
-  border-spacing: 0px;
-}
-
-
-/* search filter */
-label 
-{ 
-  font-size: 9pt;
-  color: #4c4c4c;
-  font-family: sans-serif;
-}
-
-/* search input border */
-.dataTables_wrapper .dataTables_filter input {
-  border: solid 1px #d8d8d8;
-  border-radius: 2px;
-  height: 23px;
-}
-
-/* selected genes display  */
-.geneDisplay 
-{
-  width: 100%;
-  margin-bottom: 10px;
-  min-height: 20px;
-  height: 100%;
-  border-radius: 2px;
-  border: solid 1px #d8d8d8;
-  overflow: hidden;
-  padding: 1px;
-}
-
-.geneDisplay span 
-{
-  padding: 2px 6px;
-  font-size: 8pt;
-  background-color: #313131;
-  border-radius: 4px;
-  margin: 0px 3px;
-  color: white;
-  user-select: none;
-}
-
-.fade-in span {
-animation: fadeIn ease 0.5s;
--webkit-animation: fadeIn ease 0.5s;
--moz-animation: fadeIn ease 0.5s;
--o-animation: fadeIn ease 0.5s;
--ms-animation: fadeIn ease 0.5s;
-}
-
-@keyframes fadeIn {
-0% {opacity:0.5;}
-100% {opacity:1;}
-}
-
-@-moz-keyframes fadeIn {
-0% {opacity:0.5;}
-100% {opacity:1;}
-}
-
-@-webkit-keyframes fadeIn {
-0% {opacity:0.5;}
-100% {opacity:1;}
-}
-
-@-o-keyframes fadeIn {
-0% {opacity:0.5;}
-100% {opacity:1;}
-}
-
-@-ms-keyframes fadeIn {
-0% {opacity:0.5;}
-100% {opacity:1;}
+.dataTables_wrapper .ui-toolbar {
+  padding: 8px;
+}
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: none;
+}
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+  color: inherit;
 }
