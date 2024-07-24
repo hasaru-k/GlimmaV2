@@ -39,12 +39,24 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                                 }
                     },
                     {
+                        "name": "min_y_axis", 
+                        "value": null,
+                        "bind": { 
+                                  "input": "number",
+                                  "class": "min_y_axis"
+                                }
+                    },
+                    {
                         "name": "max_count",
                         "value": 0
                     },
                     {
                         "name": "max_y",
                         "update": " (max_y_axis < max_count) ? null : max_y_axis"
+                    },
+                    {
+                        "name": "min_y",
+                        "update": " (min_y_axis > max_count) ? null : min_y_axis"
                     },
                     sampleColours == -1 ? colourscheme_signal : samplecols_signal
                 ],
@@ -62,7 +74,8 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                 "name": "y",
                 "domain": {"data": "table", "field": "count"},
                 "range": "height",
-                "domainMax": {"signal": "max_y"}
+                "domainMax": {"signal": "max_y"},
+                "domainMin": {"signal": "min_y"},
             },
             {
                 "name": "color",
