@@ -192,7 +192,7 @@ button.save-button:active {
 }
 
 /* vega max y axis setting */
-input.max_y_axis
+input.max_y_axis, input.min_y_axis
 {
 	margin-bottom: 5px;
 	margin-right: 10px;
