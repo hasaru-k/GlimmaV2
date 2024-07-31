@@ -21,7 +21,6 @@ HTMLWidgets.widget({
       renderValue: function(x) 
       {
         
-        console.log(x);
         var handler = new vegaTooltip.Handler();
 
         // create container elements
@@ -154,7 +153,7 @@ class State {
       await updateExpressionPlot(countsRow, this.data, last.gene);
     }
     else {
-      clearExpressionPlot(this.data);
+      await clearExpressionPlot(this.data);
     }
   }
 
@@ -228,7 +227,7 @@ function showDataDropdown() {
  * @param  {State} state state machine object returned by getStateMachine()
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  */
-function clearTableListener(datatable, state, data)
+async function clearTableListener(datatable, state, data)
 {
   state.graphMode = false;
   state.selected = [];
@@ -236,8 +235,7 @@ function clearTableListener(datatable, state, data)
   datatable.search('').columns().search('').draw();       
   data.xyView.data("selected_points", state.selected);
   data.xyView.runAsync();
-  clearExpressionPlot(data);
-  console.log(state);
+  await clearExpressionPlot(data);
 }
 
 /**
@@ -292,13 +290,15 @@ async function XYSignalListener(datatable, state, datum, data)
  * Resets expression plot to a blank slate
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  */
-function clearExpressionPlot(data)
+async function clearExpressionPlot(data)
 {
   if (!data.expressionView)
     return;
   data.expressionView.data("table", []);
   data.expressionView.signal("title_signal", "");
-  data.expressionView.runAsync();
+  await data.expressionView.runAsync();
+  // clear axis message
+  updateAxisMessage(data);
 }
 
 /**
@@ -329,6 +329,8 @@ async function updateExpressionPlot(countsRow, data, geneName)
   data.expressionView.data("table", result);
   data.expressionView.signal("title_signal", "Gene " + geneName.toString());
   await data.expressionView.runAsync();
+  // expression data has changed so we might need to update axis message
+  updateAxisMessage(data);
 }
 
 /**
@@ -337,14 +339,13 @@ async function updateExpressionPlot(countsRow, data, geneName)
  */
 function addAxisMessage(data)
 {
-  var bindings = data.expressionContainer.getElementsByClassName("vega-bindings")[0];
   var alertBox = document.createElement("div");
   alertBox.setAttribute("class", "alertBox invisible");
   data.expressionView.addSignalListener('min_y_input', 
     function(name, value) { updateAxisMessage(data) });
   data.expressionView.addSignalListener('max_y_input', 
     function(name, value) { updateAxisMessage(data) });
-  bindings.appendChild(alertBox);
+  data.expressionContainer.appendChild(alertBox);
 }
 
 /**
@@ -353,13 +354,12 @@ function addAxisMessage(data)
  */
 function updateAxisMessage(data)
 {
-  console.log('updating axis message');
   var alertBox = data.expressionContainer.getElementsByClassName("alertBox")[0];
   let min_extent = data.expressionView.signal("min_extent");
   let max_extent = data.expressionView.signal("max_extent");
   let minInput = data.expressionView.signal("min_y_input");
   let maxInput = data.expressionView.signal("max_y_input");
-  console.log(`minInput ${minInput} maxInput ${maxInput} min_extent ${min_extent} max_extent ${max_extent}`);
+  // display warning message if Y min or Y max are out of bounds for the current plot
   if (!(minInput == null) && !(minInput == "") && (Number(minInput) > min_extent))
   {
     alertBox.innerHTML = `Y min out of bounds`;

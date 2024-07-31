@@ -42,8 +42,9 @@
 
 /* container for vega signal inputs */
 
-.vega-bind {
-	display: inline-block;
+.vega-bindings {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 }
 
 /* custom styling for some inputs */
@@ -162,16 +163,17 @@ button.save-button:active {
 
 .alertBox 
 {
-	display: inline;
-	margin-left: 10px;
+	text-align: center;
 	font-family: sans-serif;
-	padding: 1px 1px;
+	padding: 2px;
+	margin: 10px;
 	font-size: 10pt;
 	color: #383d41;
 	background-color: #e2e3e5;
 	border: 1px solid #d6d8db;
 	border-radius: .25rem;
 }
+
 .danger 
 {
 	color: #721c24;
