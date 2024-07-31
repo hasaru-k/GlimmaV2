@@ -7,7 +7,8 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
         "value": "category10",
         "bind": { 
                     "input": "select", 
-                    "options": [ "category10", "accent", "category20", "category20b", "category20c", "dark2", "paired", "pastel1", "pastel2", "set1", "set2", "set3", "tableau10", "tableau20"] 
+                    "options": [ "category10", "accent", "category20", "category20b", "category20c", "dark2", "paired", "pastel1", "pastel2", "set1", "set2", "set3", "tableau10", "tableau20"],
+                    "name": "colourscheme" 
                 }
     };
 
@@ -31,24 +32,50 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                         "value": "" 
                     },
                     {
-                        "name": "max_y_axis", 
+                        "name": "min_extent",
+                        "update": "extent[0]"
+                    },
+                    {
+                        "name": "max_extent",
+                        "update": "extent[1]"
+                    },
+                    {
+                        "name": "min_y_input", 
                         "value": null,
                         "bind": { 
                                   "input": "number",
-                                  "class": "max_y_axis"
-                                }
+                                  "class": "min_extent_input",
+                                  "name": "Y min",
+                                },
                     },
                     {
-                        "name": "max_count",
-                        "value": 0
+                        "name": "max_y_input", 
+                        "value": null,
+                        "bind": { 
+                                  "input": "number",
+                                  "class": "max_extent_input",
+                                  "name": "Y max",
+                                },
+                    },
+                    {
+                        "name": "min_y",
+                        // min Y value must be less than the range minimum
+                        "update": " (min_y_input > extent[0]) ? null : min_y_input"
                     },
                     {
                         "name": "max_y",
-                        "update": " (max_y_axis < max_count) ? null : max_y_axis"
+                        // max Y value must be greater than the range maximum
+                        "update": " (max_y_input < extent[1]) ? null : max_y_input"
                     },
                     sampleColours == -1 ? colourscheme_signal : samplecols_signal
                 ],
-        "data": [ {"name": "table"} ],
+        "data": [ 
+            {   "name": "table",
+                "transform": [
+                    {"type": "extent", "field": "count", "signal": "extent"} 
+                ]
+            } 
+        ],
         "scales": 
         [
             {
@@ -62,7 +89,8 @@ function createExpressionSpec(width, height, expColumns, sampleColours, samples)
                 "name": "y",
                 "domain": {"data": "table", "field": "count"},
                 "range": "height",
-                "domainMax": {"signal": "max_y"}
+                "domainMin": {"signal": "min_y"},
+                "domainMax": {"signal": "max_y"},
             },
             {
                 "name": "color",

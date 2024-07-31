@@ -21,7 +21,6 @@ HTMLWidgets.widget({
       renderValue: function(x) 
       {
         
-        console.log(x);
         var handler = new vegaTooltip.Handler();
 
         // create container elements
@@ -131,7 +130,7 @@ class State {
    * Adds a gene to the selection if it's not already selected, or remove it otherwise
    * @param  {Gene} gene Gene data object which has been clicked on
    */
-  toggleGene(gene) {
+  async toggleGene(gene) {
     let loc = containsGene(this.selected, gene);
     this.selected = loc >= 0 ? remove(this.selected, loc) : this.selected.concat(gene);
     this._expressionUpdateHandler(loc < 0, gene);
@@ -142,19 +141,19 @@ class State {
    * @param {Boolean} selectionOccurred True if a gene was selected, false if it was de-selected
    * @param  {Gene} gene Gene data object which has been clicked on
    */
-  _expressionUpdateHandler(selectionOccurred, gene) {
+  async _expressionUpdateHandler(selectionOccurred, gene) {
     if (!this.data.expressionView) return;
     if (selectionOccurred) {
       let countsRow = this.data.countsMatrix[gene.index];
-      updateExpressionPlot(countsRow, this.data, gene.gene);
+      await updateExpressionPlot(countsRow, this.data, gene.gene);
     }
     else if (this.selected.length > 0) {
       let last = this.selected[this.selected.length-1];
       let countsRow = this.data.countsMatrix[last.index];
-      updateExpressionPlot(countsRow, this.data, last.gene);
+      await updateExpressionPlot(countsRow, this.data, last.gene);
     }
     else {
-      clearExpressionPlot(this.data);
+      await clearExpressionPlot(this.data);
     }
   }
 
@@ -228,7 +227,7 @@ function showDataDropdown() {
  * @param  {State} state state machine object returned by getStateMachine()
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  */
-function clearTableListener(datatable, state, data)
+async function clearTableListener(datatable, state, data)
 {
   state.graphMode = false;
   state.selected = [];
@@ -236,8 +235,7 @@ function clearTableListener(datatable, state, data)
   datatable.search('').columns().search('').draw();       
   data.xyView.data("selected_points", state.selected);
   data.xyView.runAsync();
-  clearExpressionPlot(data);
-  console.log(state);
+  await clearExpressionPlot(data);
 }
 
 /**
@@ -247,12 +245,12 @@ function clearTableListener(datatable, state, data)
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  * @param  {Row} row row object in the table clicked on by the user
  */
-function tableClickListener(datatable, state, data, row)
+async function tableClickListener(datatable, state, data, row)
 {
   if (state.graphMode) return;
   row.toggleClass('selected');
   let datum = datatable.row(row).data();
-  state.toggleGene(datum);
+  await state.toggleGene(datum);
   data.xyView.data("selected_points", state.selected);
   data.xyView.runAsync();
 }
@@ -264,7 +262,7 @@ function tableClickListener(datatable, state, data, row)
  * @param  {Datum} datum point on the graph clicked on by the user
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  */
-function XYSignalListener(datatable, state, datum, data)
+async function XYSignalListener(datatable, state, datum, data)
 {
   if (datum == null) return;
   if (!state.graphMode)
@@ -274,7 +272,7 @@ function XYSignalListener(datatable, state, datum, data)
     state.selected = [];
   }
 
-  state.toggleGene(datum);
+  await state.toggleGene(datum);
 
   // edge case: deselecting last point
   if (state.selected.length == 0)
@@ -292,16 +290,14 @@ function XYSignalListener(datatable, state, datum, data)
  * Resets expression plot to a blank slate
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  */
-function clearExpressionPlot(data)
+async function clearExpressionPlot(data)
 {
-  
   if (!data.expressionView)
     return;
-  
   data.expressionView.data("table", []);
   data.expressionView.signal("title_signal", "");
-  data.expressionView.signal("max_count", 0);
-  data.expressionView.runAsync();
+  await data.expressionView.runAsync();
+  // clear axis message
   updateAxisMessage(data);
 }
 
@@ -311,7 +307,7 @@ function clearExpressionPlot(data)
  * @param  {Data} data encapsulated data object containing references to Vega graphs and DOM elements
  * @param  {String} geneName name of gene being displayed
  */
-function updateExpressionPlot(countsRow, data, geneName)
+async function updateExpressionPlot(countsRow, data, geneName)
 {
   let groups = data.groups.group;
   let samples = data.groups.sample;
@@ -332,9 +328,8 @@ function updateExpressionPlot(countsRow, data, geneName)
   }
   data.expressionView.data("table", result);
   data.expressionView.signal("title_signal", "Gene " + geneName.toString());
-  let max_value = Math.max(...result.map(x => x.count));
-  data.expressionView.signal("max_count", Math.round(max_value*100)/100 );
-  data.expressionView.runAsync();
+  await data.expressionView.runAsync();
+  // expression data has changed so we might need to update axis message
   updateAxisMessage(data);
 }
 
@@ -344,12 +339,13 @@ function updateExpressionPlot(countsRow, data, geneName)
  */
 function addAxisMessage(data)
 {
-  var bindings = data.expressionContainer.getElementsByClassName("vega-bindings")[0];
   var alertBox = document.createElement("div");
   alertBox.setAttribute("class", "alertBox invisible");
-  data.expressionView.addSignalListener('max_y_axis', 
+  data.expressionView.addSignalListener('min_y_input', 
     function(name, value) { updateAxisMessage(data) });
-  bindings.appendChild(alertBox);
+  data.expressionView.addSignalListener('max_y_input', 
+    function(name, value) { updateAxisMessage(data) });
+  data.expressionContainer.appendChild(alertBox);
 }
 
 /**
@@ -359,18 +355,26 @@ function addAxisMessage(data)
 function updateAxisMessage(data)
 {
   var alertBox = data.expressionContainer.getElementsByClassName("alertBox")[0];
-  let maxCount = data.expressionView.signal("max_count");
-  let userValue = data.expressionView.signal("max_y_axis");
-  if (userValue == null || userValue == "" || Number(userValue) >= maxCount)
+  let min_extent = data.expressionView.signal("min_extent");
+  let max_extent = data.expressionView.signal("max_extent");
+  let minInput = data.expressionView.signal("min_y_input");
+  let maxInput = data.expressionView.signal("max_y_input");
+  // display warning message if Y min or Y max are out of bounds for the current plot
+  if (!(minInput == null) && !(minInput == "") && (Number(minInput) > min_extent))
   {
-    alertBox.setAttribute("class", "alertBox invisible");
-  }
-  else
-  {
-    alertBox.innerHTML = `Max count value is ${maxCount}`;
+    alertBox.innerHTML = `Y min out of bounds`;
     alertBox.setAttribute("class", "alertBox danger");
+    return;
   }
+  if (!(maxInput == null) && !(maxInput == "") && (Number(maxInput) < max_extent))
+  {
+    alertBox.innerHTML = `Y max out of bounds`;
+    alertBox.setAttribute("class", "alertBox danger");
+    return;
+  }
+  alertBox.setAttribute("class", "alertBox invisible");
 }
+
 
 /**
  * Searches an array gene data objects to determine if it contains a given gene.
