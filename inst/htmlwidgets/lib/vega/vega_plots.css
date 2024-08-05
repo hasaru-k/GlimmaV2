@@ -69,6 +69,7 @@
 	font-size: 12px;
 	font-family: sans-serif;
 	color: #404040;
+	display: block;
 }
 
 /* dropdown controls */
@@ -76,6 +77,11 @@
 .vega-bind select {
 	margin-bottom: 7px;
 	margin-right: 7px;
+}
+
+/* input width */
+.min_extent_input, .max_extent_input {
+	width: 90%;
 }
 
 /* Datatables button container styling */
