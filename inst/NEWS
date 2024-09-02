@@ -1,3 +1,6 @@
+Changes in Glimma 2.6.0
+  * Fixed glimmaMA creating blank plots when gene annotation contains "gene" column
+
 Changes in Glimma 2.0.0
   * Brand new backend and API with major changes
   * Plots can now be embedded in html reports

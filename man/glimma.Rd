@@ -2,6 +2,8 @@
 % Please edit documentation in R/v1-package.R
 \docType{package}
 \name{glimma}
+\alias{Glimma}
+\alias{Glimma-package}
 \alias{glimma}
 \title{Glimma: interactive graphics from limma}
 \description{
@@ -16,3 +18,29 @@ functions can be used with both limma, edgeR and DESeq objecs.
 \code{\link{glXYPlot}}
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/hasaru-k/GlimmaV2}
+  \item Report bugs at \url{https://github.com/hasaru-k/GlimmaV2/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Shian Su \email{su.s@wehi.edu.au}
+
+Authors:
+\itemize{
+  \item Hasaru Kariyawasam
+  \item Oliver Voogd
+  \item Matthew Ritchie
+  \item Charity Law
+}
+
+Other contributors:
+\itemize{
+  \item Stuart Lee [contributor]
+  \item Isaac Virshup [contributor]
+}
+
+}

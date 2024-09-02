@@ -1,11 +1,25 @@
 citEntry(
-   entry = "article",
-   title = "Glimma: interactive graphics for gene expression analysis",
-   author = "Shian Su and Charity W. Law and Casey Ah-Cann and Marie-Liesse Asselin-Labat and Marnie E. Blewitt and Matthew E. Ritchie",
-   journal = "Bioinformatics",
-   volume = "33",
-   number = "13",
-   pages = "2050-2052",
-   year = "2017",
-   textVersion = "Su, S., Law, C. W., Ah-Cann, C., Asselin-Labat, M. L., Blewitt, M. E., & Ritchie, M. E. (2017). Glimma: interactive graphics for gene expression analysis. Bioinformatics, 33(13), 2050-2052."
+    entry = "article",
+    title = "Glimma: interactive graphics for gene expression analysis",
+    author = "Shian Su and Charity W. Law and Casey Ah-Cann and Marie-Liesse Asselin-Labat and Marnie E. Blewitt and Matthew E. Ritchie",
+    journal = "Bioinformatics",
+    volume = "33",
+    number = "13",
+    pages = "2050-2052",
+    year = "2017",
+    textVersion = "Shian Su, Charity W Law, Casey Ah-Cann, Marie-Liesse Asselin-Labat, Marnie E Blewitt, Matthew E Ritchie, Glimma: interactive graphics for gene expression analysis, Bioinformatics, Volume 33, Issue 13, July 2017, Pages 2050-2052, https://doi.org/10.1093/bioinformatics/btx094"
+)
+
+citEntry(
+    entry = "article",
+    title = "Dashboard-style interactive plots for RNA-seq analysis are R Markdown ready with Glimma 2.0",
+    author = "Hasaru Kariyawasam and Shian Su and Oliver Voogd and Matthew E. Ritchie and Charity W. Law",
+    journal = "NAR Genomics and Bioinformatics",
+    volume = "3",
+    number = "4",
+    pages = "lqab116",
+    year = "2021",
+    month = "12",
+    doi = "10.1093/nargab/lqab116",
+    textVersion = "Hasaru Kariyawasam, Shian Su, Oliver Voogd, Matthew E Ritchie, Charity W Law, Dashboard-style interactive plots for RNA-seq analysis are R Markdown ready with Glimma 2.0, NAR Genomics and Bioinformatics, Volume 3, Issue 4, December 2021, lqab116, https://doi.org/10.1093/nargab/lqab116"
 )
