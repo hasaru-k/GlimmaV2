@@ -10,7 +10,7 @@
 as.hexcol <- function(x) {
     charToHexCol <- function(x) {
         requireNamespace("grDevices")
-        temp <- as.character(as.hexmode(col2rgb(x, alpha=FALSE)))
+        temp <- format(as.hexmode(col2rgb(x, alpha=FALSE)), width = 2)
         out <- apply(temp, 2, function(x) {paste0("#", paste0(x, collapse=""))})
 
         sapply(out, function(x) { ifelse(x=="#000", "#000000", x) })

@@ -9,7 +9,7 @@
   dge = NULL,
   counts = dge$counts,
   groups = dge$samples$group,
-  status = edgeR::decideTestsDGE(x),
+  status = edgeR::decideTests.DGEExact(x),
   anno = x$genes,
   display.columns = NULL,
   status.cols = c("#1052bd", "silver", "#cc212f"),
@@ -42,7 +42,7 @@ expression plot.}
 
 \item{status}{vector of length nrow(x) indicating the status of each gene. By default genes in the summary plot are
 coloured based on its differential expression status using an adjusted p-value cutoff of 0.05
-by calling the \code{edgeR::decideTestsDGE()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no
+by calling the \code{edgeR::decideTests()} function, where the value of -1 marks down-regulated genes, 0 marks genes with no
 expression difference, and 1 marks up-regulated genes.}
 
 \item{anno}{dataframe with \code{nrow(x)} rows containing gene annotations.}

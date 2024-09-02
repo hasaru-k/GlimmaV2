@@ -80,7 +80,13 @@ glimmaVolcano.MArrayLM <- function(
   logCPM <- signif(unname(x$Amean), digits=4)
   AdjPValue <- signif(stats::p.adjust(x$p.value[, coef], method=p.adj.method), digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
-  table <- cbind(gene=rownames(x), table)
+  if (!any(colnames(anno) == "gene")) {
+    table <- cbind(gene=rownames(x), table)
+  } else {
+    table <- cbind(gene=anno$gene, table)
+    table$gene[is.na(table$gene)] <- "N/A"
+    anno$gene <- NULL
+  }
   if (is.matrix(status)) status <- status[, coef]
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
@@ -109,7 +115,7 @@ glimmaVolcano.MArrayLM <- function(
 #'
 #' glimmaVolcano(glrt, dge = dge)
 #'
-#' @importFrom edgeR decideTestsDGE
+#' @importFrom edgeR decideTests.DGELRT
 #' @importFrom stats p.adjust
 #' @export
 glimmaVolcano.DGEExact <- function(
@@ -117,7 +123,7 @@ glimmaVolcano.DGEExact <- function(
   dge=NULL,
   counts=dge$counts,
   groups=dge$samples$group,
-  status=edgeR::decideTestsDGE(x),
+  status=edgeR::decideTests.DGEExact(x),
   anno=x$genes,
   display.columns = NULL,
   status.cols=c("#1052bd", "silver", "#cc212f"),
@@ -148,7 +154,13 @@ glimmaVolcano.DGEExact <- function(
   AdjPValue <- signif(stats::p.adjust(x$table$PValue, method=p.adj.method), digits=4)
   logCPM <- signif(x$table$logCPM, digits=4)
   table <- cbind(table, logCPM=logCPM, AdjPValue=AdjPValue)
-  table <- cbind(gene=rownames(x), table)
+  if (!any(colnames(anno) == "gene")) {
+    table <- cbind(gene=rownames(x), table)
+  } else {
+    table <- cbind(gene=anno$gene, table)
+    table$gene[is.na(table$gene)] <- "N/A"
+    anno$gene <- NULL
+  }
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }
@@ -161,7 +173,7 @@ glimmaVolcano.DGEExact <- function(
 #' @inheritParams glimmaMA.DGELRT
 #' @seealso \code{\link{glimmaVolcano}}, \code{\link{glimmaVolcano.MArrayLM}}, \code{\link{glimmaVolcano.DGEExact}}, \code{\link{glimmaVolcano.DESeqDataSet}}
 #' @eval volcano_details()
-#' @importFrom edgeR decideTestsDGE
+#' @importFrom edgeR decideTests.DGELRT
 #' @importFrom stats p.adjust
 #' @export
 glimmaVolcano.DGELRT <- glimmaVolcano.DGEExact
@@ -241,7 +253,13 @@ glimmaVolcano.DESeqDataSet  <- function(
   colnames(table) <- c(xlab, ylab)
   table <- cbind(table, logCPM=signif(log(res.df$baseMean + 0.5), digits=4),
                         AdjPValue=signif(res.df$padj, digits=4))
-  table <- cbind(gene=rownames(x), table)
+  if (!any(colnames(anno) == "gene")) {
+    table <- cbind(gene=rownames(x), table)
+  } else {
+    table <- cbind(gene=anno$gene, table)
+    table$gene[is.na(table$gene)] <- "N/A"
+    anno$gene <- NULL
+  }
   xData <- buildXYData(table, status, main, display.columns, anno, counts, xlab, ylab, status.cols, sample.cols, groups, transform.counts)
   return(glimmaXYWidget(xData, width, height, html))
 }

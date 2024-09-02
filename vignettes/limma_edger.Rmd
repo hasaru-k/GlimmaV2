@@ -2,7 +2,7 @@
 title: "Introduction using limma or edgeR"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{limma}
+  %\VignetteIndexEntry{Introduction using limma or edgeR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

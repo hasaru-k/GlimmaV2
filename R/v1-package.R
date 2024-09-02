@@ -9,6 +9,5 @@
 #' \code{\link{glMDPlot}},
 #' \code{\link{glXYPlot}}
 #'
-#' @docType package
 #' @name glimma
-NULL
+"_PACKAGE"

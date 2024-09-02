@@ -2,7 +2,7 @@
 title: "Single Cells with edgeR"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{singlecell}
+  %\VignetteIndexEntry{Single Cells with edgeR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
