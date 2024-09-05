@@ -9,7 +9,7 @@
   dge = NULL,
   counts = dge$counts,
   groups = dge$samples$group,
-  status = edgeR::decideTests(x),
+  status = edgeR::decideTests.DGEExact(x),
   anno = x$genes,
   display.columns = NULL,
   status.cols = c("#1052bd", "silver", "#cc212f"),
