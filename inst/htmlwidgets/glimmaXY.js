@@ -10,7 +10,7 @@ HTMLWidgets.widget({
     var plotContainer = document.createElement("div");
     var controlContainer = document.createElement("div");
     plotContainer.setAttribute("class", "plotContainer");
-    controlContainer.setAttribute("class", "controlContainer");
+    controlContainer.setAttribute("class", "controlContainerXY");
 
     var widget = document.getElementById(el.id);
     widget.appendChild(plotContainer);
