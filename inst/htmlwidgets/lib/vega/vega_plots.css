@@ -32,7 +32,16 @@
 
 /* contains everything that is not a plot */
 
-.controlContainer {
+.controlContainerMDS {
+	padding: 10px;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	font-family: sans-serif;
+	color: #353535;
+	font-size: 9;
+}
+
+.controlContainerXY {
 	padding: 10px;
 	display: block;
 	font-family: sans-serif;
@@ -212,4 +221,5 @@ input.max_y_axis, input.min_y_axis
 select
 {
 	display: block;
+	width: 90%;
 }

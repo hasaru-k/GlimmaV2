@@ -10,7 +10,7 @@ HTMLWidgets.widget({
     var plotContainer = document.createElement("div");
     var controlContainer = document.createElement("div");
     plotContainer.setAttribute("class", "plotContainer");
-    controlContainer.setAttribute("class", "controlContainer");
+    controlContainer.setAttribute("class", "controlContainerMDS");
 
     var widget = document.getElementById(el.id);
     widget.appendChild(plotContainer);
@@ -62,8 +62,6 @@ HTMLWidgets.widget({
         linkPlotsMDS(mdsView, eigenView);
 
         addColourMessage(x.data, mdsView, controlContainer);
-
-        addBlockElement(controlContainer);
         addSavePlotButton(controlContainer, mdsView, eigenView, text="Save Plot",
                           summaryText="MDS", expressionText="VAR");
 
@@ -75,13 +73,6 @@ HTMLWidgets.widget({
     };
   }
 });
-
-function addBlockElement(controlContainer)
-{
-  var blockElement = document.createElement("DIV");
-  blockElement.setAttribute("class", "display-block");
-  controlContainer.appendChild(blockElement);
-}
 
 function processDataMDS(x)
 {
