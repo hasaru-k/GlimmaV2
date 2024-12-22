@@ -6,6 +6,13 @@ function createXYSpec(xyData, xyTable, width, height)
 
   // if an annotation is given, search for a symbol column (case insensitive)
   if (xyData.annoCols != -1) {
+
+    // single element vectors in the R xyData object are converted to strings
+    // when embedded as a HTML widget
+    if (typeof xyData.annoCols === "string") {
+      xyData.annoCols = [xyData.annoCols];
+    }
+
     var symbolIndex = xyData.annoCols.map(x => x.toLowerCase()).indexOf("symbol");
     var symbolField = symbolIndex >= 0 ? xyData.annoCols[symbolIndex] : "symbol";
   }
