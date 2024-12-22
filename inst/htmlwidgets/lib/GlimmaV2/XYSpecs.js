@@ -17,9 +17,6 @@ function createXYSpec(xyData, xyTable, width, height)
     var symbolField = symbolIndex >= 0 ? xyData.annoCols[symbolIndex] : "symbol";
   }
 
-  console.log(xyData);
-
-
   return {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "Testing ground for GlimmaV2",
